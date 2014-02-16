@@ -25,3 +25,23 @@ App.createButton = function(obj, spriteFilename, tag, position, anchorPoint, mov
 	return button;
 };
 
+Soomla.CCSoomlaNdkBridge.buy = function(productId, callback) {
+	if (App.getSocialPlugin().isCanvasMode()) {
+		//
+		// https://developers.facebook.com/docs/concepts/payments/dialog/
+		//
+		FB.ui({
+			method: "pay",
+			action: "purchaseitem",
+			product: productId,
+			//test_currency: "GBP",
+			//quantity: 1, // optional, defaults to 1
+			//request_id: 'YOUR_REQUEST_ID' // optional, must be unique for each payment
+		}, callback);
+	}
+	else {
+		alert("Haven't implemented non-Facebook web purchasing yet...");
+	}
+};
+
+

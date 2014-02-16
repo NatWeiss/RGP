@@ -113,7 +113,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			}
 			private.log("Payment response: " + JSON.stringify(response));
 
-			if (response.status == "completed") {
+			if (response.status === "completed" || response.status === "initiated") {
 				if (private.purchasingItem) {
 					// give the amount
 					Soomla.storeInventory.giveItem(
@@ -133,40 +133,6 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			} else {
 				private.log("Not handling response status: " + response.status);
 			}
-
-/*
-[Log] Soomla NDK onPayment stringified: {
-"payment_id":424558851007650,
-"amount":"0.99",
-"currency":"USD",
-"quantity":"1",
-"status":"completed",
-"signed_request":"imvy6IdOWY-lfMfxF9fX-FSGqZxNK4NMtzieJLWyU_k.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImFtb3VudCI6IjAuOTkiLCJjdXJyZW5jeSI6IlVTRCIsImlzc3VlZF9hdCI6MTM5MjUxNzkwOSwicGF5bWVudF9pZCI6NDI0NTU4ODUxMDA3NjUwLCJxdWFudGl0eSI6IjEiLCJzdGF0dXMiOiJjb21wbGV0ZWQifQ"
-}
-*/
-/*
-[Log] Currency pack: {
-"name":"50 bux",
-"description":"Money!",
-"itemId":"small_bux_pack",
-"currency_amount":50,
-"currency_itemId":"currency_bux",
-"purchasableItem":{
-	"marketItem":{
-		"productId":"com.wizardfu.lemonadex.small_lemonades_pack",
-		"consumable":1,
-		"price":0.99,
-		"className":"MarketItem"
-	},
-	"purchaseType":"market",
-	"className":"PurchaseWithMarket"
-},
-"facebook_itemId":"http://wizardfu.com/lemonadex/tipjar.html",
-"className":"v"
-}
-*/
-
-
 		};
 		
 		// call "native" method
@@ -230,14 +196,11 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 					private.log("Buying: " + JSON.stringify(x));
 					private.purchasingItem = JSON.parse(JSON.stringify(x));
 					
-					// params.productId
-					FB.ui({
-						method: "pay",
-						action: "purchaseitem",
-						product: private.purchasingItem.facebookProductUrl,
-						//quantity: 1, // optional, defaults to 1
-						//request_id: 'YOUR_REQUEST_ID' // optional, must be unique for each payment
-					}, private.onPayment);
+					if (self.buy) {
+						self.buy(private.purchasingItem.facebookProductUrl, private.onPayment);
+					} else {
+						private.log("App has not implemented CCSoomlaNdkBridge.buy method");
+					}
 				}
 			}
 			else if(params.method === "CCStoreController::restoreTransactions") {

@@ -75,23 +75,35 @@ App.getStoreAssets = function() {
 
 	// currency packs
 	var smallBuxPack = Soomla.Models.VirtualCurrencyPack.create({
-		name: "50 bux",
-		description: "Money!",
+		name: "Small Bux Pack",
+		description: "50 bux!",
 		itemId: "small_bux_pack",
 		currency_amount: 50,
 		currency_itemId: BUX_CURRENCY_ITEM_ID,
 		purchasableItem: Soomla.Models.PurchaseWithMarket.createWithMarketItem(
-			"com.wizardfu.lemonadex.small_lemonades_pack",
-			0.99
+			"com.wizardfu.lemonadex.small_bux_pack", // currencyPack.purchasableItem.marketItem.productId
+			0.99 // currencyPack.purchasableItem.marketItem.price
 		),
-		facebookProductUrl: "http://wizardfu.com/lemonadex/tipjar.html"
+		facebookProductUrl: "http://wizardfu.com/lemonadex/res/small_bux_pack.html"
+	});
+	var mediumBuxPack = Soomla.Models.VirtualCurrencyPack.create({
+		name: "Medium Bux Pack",
+		description: "300 bux!",
+		itemId: "medium_bux_pack",
+		currency_amount: 300,
+		currency_itemId: BUX_CURRENCY_ITEM_ID,
+		purchasableItem: Soomla.Models.PurchaseWithMarket.createWithMarketItem(
+			"com.wizardfu.lemonadex.medium_bux_pack", // currencyPack.purchasableItem.marketItem.productId
+			4.99 // currencyPack.purchasableItem.marketItem.price
+		),
+		facebookProductUrl: "http://wizardfu.com/lemonadex/res/medium_bux_pack.html"
 	});
 
 	// assets
 	var assets = {
 		categories: [],
 		currencies: [lemonadeCurrency, buxCurrency],
-		currencyPacks: [smallBuxPack],
+		currencyPacks: [smallBuxPack, mediumBuxPack],
 		goods: {
 			singleUse: [],
 			lifetime: [],
