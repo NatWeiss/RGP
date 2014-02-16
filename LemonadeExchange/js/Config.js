@@ -2,7 +2,7 @@ App.config = {
 	"flurry-api-key": "PBSGR7SV59JZN2RQQW96",
 	
 	"social-plugin-name": "Facebook",
-	"social-plugin-debug": false,
+	"social-plugin-debug": true,
 	"social-plugin-init": {
 		appId: "641151319281152",
 		xfbml: false,
@@ -13,7 +13,8 @@ App.config = {
 		//scope:'email'
 	},
 
-	"economy-plugin-debug": false,
+	"economy-plugin-name": "Soomla",
+	"economy-plugin-debug": true,
 	"economy-plugin-init": {
 		// only use soomla highway and your don't need these...
 		soomSec: "77yMfv8l1yyYq4WoKJ0cVTEa3FU2zuSp",
@@ -80,9 +81,10 @@ App.getStoreAssets = function() {
 		currency_amount: 50,
 		currency_itemId: BUX_CURRENCY_ITEM_ID,
 		purchasableItem: Soomla.Models.PurchaseWithMarket.createWithMarketItem(
-			"com.wizardfu.lemonadex.small_bux_pack",
+			"com.wizardfu.lemonadex.small_lemonades_pack",
 			0.99
-		)
+		),
+		facebookProductUrl: "http://wizardfu.com/lemonadex/tipjar.html"
 	});
 
 	// assets

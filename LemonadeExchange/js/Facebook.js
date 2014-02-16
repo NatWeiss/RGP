@@ -29,7 +29,7 @@ plugin.Facebook = (function(){
 		}
 		
 		if (response.status === "connected") {
-			private.debugLog("Facebook user is authorized, access Token: " + response.authResponse.accessToken);
+			private.debugLog("Facebook user is authorized, access Token: " + response.authResponse.accessToken.substring(0,4) + "...");
 
 			FB.api("/me", function(response) {
 				private.playerName = response.name;
@@ -48,15 +48,6 @@ plugin.Facebook = (function(){
 		private.callRunningLayer("onGetLoginStatus", private.loggedIn);
 	};
 	
-	window.fbAsyncInit = function() {
-		// init
-		FB.init(private.devInfo);
-		private.debugLog("Initialized Facebook app ID: " + private.devInfo.appId);
-
-		// subscribe to authorization changes
-		FB.Event.subscribe("auth.authResponseChange", private.onCheckLoginStatus);
-	};
-	
 	private.checkForFB = function() {
 		if (typeof FB === "undefined") {
 			private.debugLog("Facebook JS SDK unavailable. Please ensure that all.js is loaded from HTML.");
@@ -65,12 +56,31 @@ plugin.Facebook = (function(){
 		return true;
 	};
 
+	private.init = function() {
+		if (typeof FB !== "undefined" && !private.initialized) {
+			// init
+			FB.init(private.devInfo);
+			private.debugLog("Initialized Facebook app ID: " + private.devInfo.appId);
+
+			// subscribe to authorization changes
+			FB.Event.subscribe("auth.authResponseChange", private.onCheckLoginStatus);
+			
+			private.initialized = true;
+		}
+	};
+	
+	window.fbAsyncInit = function() {
+		private.debugLog("fbAsyncInit");
+		private.init();
+	};
+	
 	return cc.Class.extend({
 		init: function() {
 		},
 		
 		configDeveloperInfo: function(devInfo) {
 			private.devInfo = devInfo;
+			private.init();
 		},
 		
 		login: function(loginInfo) {

@@ -12,7 +12,7 @@ App.getInitialScene = function() {
 };
 
 App.getInitialLayer = function() {
-	return (this.isHtml5() ? LayerMenu : LayerMenu);
+	return (this.isHtml5() ? LayerGame : LayerMenu);
 };
 
 App.getJSFiles = function() {
@@ -88,7 +88,7 @@ App.setupResources = function() {
 
 	// set resource directories
 	dirs.push("jsb");
-	cc.log("Setting resource directories: " + App.logify(dirs));
+	//cc.log("Setting resource directories: " + App.logify(dirs));
 	cc.FileUtils.getInstance().setSearchPaths(dirs);
 
 	// load spritesheets
@@ -317,7 +317,7 @@ App.loadEconomyPlugin = function() {
 	// set initial balances
 	// todo: make sure this only happens on first run...
 	var currencies = Soomla.storeInfo.getVirtualCurrencies();
-	cc.log("Currencies: " + JSON.stringify(currencies));
+	//cc.log("Currencies: " + JSON.stringify(currencies));
 	_.forEach(currencies, function(vc) {
 		var balance = Soomla.storeInventory.getItemBalance(vc.itemId);
 		cc.log("User has " + balance + " of " + vc.itemId);

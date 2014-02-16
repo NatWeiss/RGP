@@ -23,7 +23,11 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			TAG = "SoomlaNDK:";
 
 		var self = {},
-			private = {soomSec: DEFAULT_SOOM_SEC, customSec: DEFAULT_CUSTOM_SEC},
+			private = {
+				soomSec: DEFAULT_SOOM_SEC,
+				customSec: DEFAULT_CUSTOM_SEC,
+				purchasingItem: null
+			},
 			hasCrypto = (typeof CryptoJS !== "undefined" && CryptoJS.AES),
 			hasBase64 = (typeof btoa !== "undefined");
 		
@@ -102,6 +106,69 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			return "";
 		};
 		
+		// handle payment
+		private.onPayment = function(response) {
+			if (!response) {
+				return;
+			}
+			private.log("Payment response: " + JSON.stringify(response));
+
+			if (response.status == "completed") {
+				if (private.purchasingItem) {
+					// give the amount
+					Soomla.storeInventory.giveItem(
+						private.purchasingItem["currency_itemId"],
+						private.purchasingItem["currency_amount"]
+					);
+
+					// callback for running scene.layer
+					scene = cc.Director.getInstance().getRunningScene();
+					if (scene && scene.layer && scene.layer.onCurrencyUpdate()) {
+						scene.layer.onCurrencyUpdate();
+					}
+				} else {
+					private.log("Invalid purchasing item");
+				}
+				private.purchasingItem = null;
+			} else {
+				private.log("Not handling response status: " + response.status);
+			}
+
+/*
+[Log] Soomla NDK onPayment stringified: {
+"payment_id":424558851007650,
+"amount":"0.99",
+"currency":"USD",
+"quantity":"1",
+"status":"completed",
+"signed_request":"imvy6IdOWY-lfMfxF9fX-FSGqZxNK4NMtzieJLWyU_k.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImFtb3VudCI6IjAuOTkiLCJjdXJyZW5jeSI6IlVTRCIsImlzc3VlZF9hdCI6MTM5MjUxNzkwOSwicGF5bWVudF9pZCI6NDI0NTU4ODUxMDA3NjUwLCJxdWFudGl0eSI6IjEiLCJzdGF0dXMiOiJjb21wbGV0ZWQifQ"
+}
+*/
+/*
+[Log] Currency pack: {
+"name":"50 bux",
+"description":"Money!",
+"itemId":"small_bux_pack",
+"currency_amount":50,
+"currency_itemId":"currency_bux",
+"purchasableItem":{
+	"marketItem":{
+		"productId":"com.wizardfu.lemonadex.small_lemonades_pack",
+		"consumable":1,
+		"price":0.99,
+		"className":"MarketItem"
+	},
+	"purchaseType":"market",
+	"className":"PurchaseWithMarket"
+},
+"facebook_itemId":"http://wizardfu.com/lemonadex/tipjar.html",
+"className":"v"
+}
+*/
+
+
+		};
+		
 		// call "native" method
 		self.callNative = function(paramsString) {
 			var i,
@@ -130,12 +197,12 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			//
 			else if(params.method === "CCStoreController::init") {
 				private.customSec = params.customSecret + "";
-				private.log("Custom secret: " + private.customSec);
+				private.log("Custom secret: " + private.customSec.substring(0,4) + "...");
 				private.loadInventory();
 			}
 			else if (params.method === "CCStoreController::setSoomSec") {
 				private.soomSec = params.soomSec + "";
-				private.log("Soomla secret: " + private.soomSec);
+				private.log("Soomla secret: " + private.soomSec.substring(0,4) + "...");
 				private.loadInventory();
 			}
 			else if (params.method === "CCStoreController::setSSV") {
@@ -144,10 +211,34 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			}
 			else if(params.method === "CCStoreController::setAndroidPublicKey") {
 				private.androidPublicKey = params.androidPublicKey + "";
-				private.log("Android public key: " + private.androidPublicKey);
+				private.log("Android public key: " + private.androidPublicKey.substring(0,4) + "...");
 			}
 			else if(params.method === "CCStoreController::buyMarketItem") {
-				// params.productId
+				// find productId
+				len = private.storeAssets.currencyPacks.length;
+				for (i = 0; i < len; i += 1) {
+					x = private.storeAssets.currencyPacks[i];
+					if (x.itemId === params.productId) {
+						break;
+					}
+				}
+				
+				// buy item
+				if (typeof x === "undefined") {
+					private.log("Unable to find productId: " + params.productId);
+				} else {
+					private.log("Buying: " + JSON.stringify(x));
+					private.purchasingItem = JSON.parse(JSON.stringify(x));
+					
+					// params.productId
+					FB.ui({
+						method: "pay",
+						action: "purchaseitem",
+						product: private.purchasingItem.facebookProductUrl,
+						//quantity: 1, // optional, defaults to 1
+						//request_id: 'YOUR_REQUEST_ID' // optional, must be unique for each payment
+					}, private.onPayment);
+				}
 			}
 			else if(params.method === "CCStoreController::restoreTransactions") {
 			}

@@ -485,6 +485,7 @@ var LayerGame = (function(){
 				App.requestUrl("api/sell", this.onSellLemonade);
 			}
 			else if (tag == TAG_PURCHASE_BUX) {
+				Soomla.storeController.buyMarketItem("small_bux_pack");
 			}
 			else if (tag == TAG_EARN_BUX) {
 				this.watchVideo();
@@ -493,6 +494,11 @@ var LayerGame = (function(){
 		
 		onGetPlayerName: function(name) {
 			this.playerNameLabel.setString(name);
+		},
+		
+		onCurrencyUpdate: function() {
+			this.lemonadesLabel.setString(Soomla.storeInventory.getItemBalance("currency_lemonades"));
+			this.buxLabel.setString(Soomla.storeInventory.getItemBalance("currency_bux"));
 		},
 
 		onAdsResult: function(code, msg) {
@@ -503,14 +509,9 @@ var LayerGame = (function(){
 				Soomla.storeInventory.giveItem("currency_bux", 5);
 				scene = cc.Director.getInstance().getRunningScene();
 				if (scene && scene.layer) {
-					scene.layer.buxLabel.setString(Soomla.storeInventory.getItemBalance("currency_bux"));
+					scene.layer.onCurrencyUpdate();
 				}
 			}
-		},
-		
-		onPayment: function(response) {
-			cc.log("Payment: " + response);
-			cc.log("Payment: " + App.logify(response));
 		}
 
 	}); // end layer extend
