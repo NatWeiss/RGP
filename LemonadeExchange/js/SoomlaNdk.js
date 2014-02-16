@@ -106,33 +106,30 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			return "";
 		};
 		
-		// handle payment
-		private.onPayment = function(response) {
-			if (!response) {
-				return;
-			}
-			private.log("Payment response: " + JSON.stringify(response));
+		// handle payments
+		private.onPaymentSuccess = function() {
+			if (private.purchasingItem) {
+				private.log("Purchased " + private.purchasingItem["currency_amount"]
+					+ " x " + private.purchasingItem["currency_itemId"]);
 
-			if (response.status === "completed" || response.status === "initiated") {
-				if (private.purchasingItem) {
-					// give the amount
-					Soomla.storeInventory.giveItem(
-						private.purchasingItem["currency_itemId"],
-						private.purchasingItem["currency_amount"]
-					);
+				// give the amount
+				Soomla.storeInventory.giveItem(
+					private.purchasingItem["currency_itemId"],
+					private.purchasingItem["currency_amount"]
+				);
 
-					// callback for running scene.layer
-					scene = cc.Director.getInstance().getRunningScene();
-					if (scene && scene.layer && scene.layer.onCurrencyUpdate()) {
-						scene.layer.onCurrencyUpdate();
-					}
-				} else {
-					private.log("Invalid purchasing item");
+				// callback for running scene.layer
+				if (typeof self.onCurrencyUpdate === "function") {
+					self.onCurrencyUpdate();
 				}
-				private.purchasingItem = null;
 			} else {
-				private.log("Not handling response status: " + response.status);
+				private.log("Invalid purchasing item");
 			}
+			private.purchasingItem = null;
+		};
+		private.onPaymentFailure = function() {
+			private.log("Purchase failed");
+			private.purchasingItem = null;
 		};
 		
 		// call "native" method
@@ -193,11 +190,11 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 				if (typeof x === "undefined") {
 					private.log("Unable to find productId: " + params.productId);
 				} else {
-					private.log("Buying: " + JSON.stringify(x));
+					private.log("Buying " + x.itemId);
 					private.purchasingItem = JSON.parse(JSON.stringify(x));
 					
 					if (self.buy) {
-						self.buy(private.purchasingItem.facebookProductUrl, private.onPayment);
+						self.buy(private.purchasingItem.facebookProductUrl, private.onPaymentSuccess, private.onPaymentFailure);
 					} else {
 						private.log("App has not implemented CCSoomlaNdkBridge.buy method");
 					}

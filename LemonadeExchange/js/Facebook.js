@@ -119,6 +119,53 @@ plugin.Facebook = (function(){
 			return private.isCanvas;
 		},
 		
+		buy: function(productUrl, successCallback, failureCallback) {
+			var responseReceived = false,
+				responseTimeout = 35;
+			
+			//
+			// https://developers.facebook.com/docs/concepts/payments/dialog/
+			//
+			FB.ui({
+				method: "pay",
+				action: "purchaseitem",
+				product: productUrl,
+				//test_currency: "GBP",
+				//quantity: 1, // optional, defaults to 1
+				//request_id: 'YOUR_REQUEST_ID' // optional, must be unique for each payment
+			}, function(response){
+				if (!response) {
+					return;
+				}
+				private.log("Payment response: " + JSON.stringify(response).substring(0,64) + "...");
+
+				if (response.status === "completed") {
+					private.log("Payment success");
+					successCallback();
+					responseReceived = true;
+				} else if(response.status === "initiated") {
+					// TBD: check payments graph api if this truly succeeded
+					private.log("Payment initiated, granting success");
+					successCallback();
+					// note: responseReceived = false;
+				} else if(response.error_code) {
+					private.log("Payment failure: " + response.error_message);
+					failureCallback();
+					responseReceived = true;
+				} else {
+					private.log("Not handling payment response status: " + response.status);
+					failureCallback();
+					responseReceived = true;
+				}
+			});
+
+			setTimeout(function(){
+				if (!responseReceived){
+					private.log("Did not receive a payment response after " + responseTimeout + "s");
+				}
+			}, responseTimeout * 1000);
+		},
+		
 		resetProductCache: function() {
 			// to reset FB's product cache, request a URL like this:
 			// https://graph.facebook.com/?id=http%3A%2F%2Fnatweiss.com%2Flemonadex%2Ftipjar.html&scrape=true&method=post

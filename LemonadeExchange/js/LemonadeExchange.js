@@ -25,23 +25,19 @@ App.createButton = function(obj, spriteFilename, tag, position, anchorPoint, mov
 	return button;
 };
 
-Soomla.CCSoomlaNdkBridge.buy = function(productId, callback) {
-	if (App.getSocialPlugin().isCanvasMode()) {
-		//
-		// https://developers.facebook.com/docs/concepts/payments/dialog/
-		//
-		FB.ui({
-			method: "pay",
-			action: "purchaseitem",
-			product: productId,
-			//test_currency: "GBP",
-			//quantity: 1, // optional, defaults to 1
-			//request_id: 'YOUR_REQUEST_ID' // optional, must be unique for each payment
-		}, callback);
+Soomla.CCSoomlaNdkBridge.buy = function(productId, successCallback, failureCallback) {
+	var social = App.getSocialPlugin();
+	if (social.isCanvasMode()) {
+		social.buy(productId, successCallback, failureCallback);
 	}
 	else {
 		alert("Haven't implemented non-Facebook web purchasing yet...");
 	}
 };
 
-
+Soomla.CCSoomlaNdkBridge.onCurrencyUpdate = function() {
+	scene = cc.Director.getInstance().getRunningScene();
+	if (scene && scene.layer && scene.layer.onCurrencyUpdate()) {
+		scene.layer.onCurrencyUpdate();
+	}
+};
