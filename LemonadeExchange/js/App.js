@@ -289,8 +289,21 @@ App.getSocialPlugin = function() {
 	var name = this.getString("social-plugin-name");
 	
 	if (typeof this._socialPlugin === "undefined") {
-		this._socialPlugin = new plugin[name]();
-		this._socialPlugin.init();
+		if (plugin[name]) {
+			this._socialPlugin = new plugin[name]();
+			this._socialPlugin.init();
+		} else {
+			this._socialPlugin = {
+				isLoggedIn: function() {return true;},
+				isCanvasMode: function() {return false;},
+				getPlayerName: function() {return "Anonymous";},
+				setDebugMode: function() {},
+				configDeveloperInfo: function() {},
+				buy: function() {},
+				login: function() {},
+				logout: function() {}
+			};
+		}
 	}
 
 	return this._socialPlugin;
@@ -311,7 +324,9 @@ App.loadSocialPlugin = function() {
 }
 
 App.loadEconomyPlugin = function() {
-	Soomla.CCSoomlaNdkBridge.setDebug(App.getConfig("economy-plugin-debug"));
+	if (Soomla.CCSoomlaNdkBridge.setDebug) {
+		Soomla.CCSoomlaNdkBridge.setDebug(App.getConfig("economy-plugin-debug"));
+	}
 	Soomla.StoreController.createShared(App.getStoreAssets(), App.getConfig("economy-plugin-init"));
 
 	// set initial balances

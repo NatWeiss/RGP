@@ -106,6 +106,13 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			return "";
 		};
 		
+		// call a dynamically prototyped function
+		private.callMy = function(method) {
+			if (typeof self[method] === "function") {
+				self[method]();
+			}
+		};
+		
 		// handle payments
 		private.onPaymentSuccess = function() {
 			if (private.purchasingItem) {
@@ -118,18 +125,17 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 					private.purchasingItem["currency_amount"]
 				);
 
-				// callback for running scene.layer
-				if (typeof self.onCurrencyUpdate === "function") {
-					self.onCurrencyUpdate();
-				}
+				private.callMy("onCurrencyUpdate");
 			} else {
 				private.log("Invalid purchasing item");
 			}
 			private.purchasingItem = null;
+			private.callMy("onPaymentComplete");
 		};
 		private.onPaymentFailure = function() {
 			private.log("Purchase failed");
 			private.purchasingItem = null;
+			private.callMy("onPaymentComplete");
 		};
 		
 		// call "native" method

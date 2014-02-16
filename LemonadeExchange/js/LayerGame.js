@@ -9,7 +9,9 @@ var LayerGame = (function(){
 		TAG_BUY_LEMONADE = 3,
 		TAG_SELL_LEMONADE = 4,
 		TAG_EARN_BUX = 5,
-		TAG_PURCHASE_BUX = 6;
+		TAG_PURCHASE_BUX = 6,
+		TAG_SMALL_BUX_PACK = 7,
+		TAG_MEDIUM_BUX_PACK = 8;
 
 	return cc.Layer.extend( {
 		menu: null,
@@ -20,53 +22,91 @@ var LayerGame = (function(){
 		rateIcon: null,
 
 		init: function() {
+			var winSize = App.getWinSize();
 			this._super();
-			this.showOptions();
+
+			// menu
+			this.menu = cc.Menu.create();
+			this.menu.setPosition(cc.PointZero());
+			this.addChild(this.menu, 1);
+
+			// everything else
+			this.createBg();
+			this.createExchangeRate();
+			this.createPlayerDetails();
+			this.createGameMenu();
+
+			// back
+			App.createButton(this, "ButtonBack.png", TAG_PAUSE,
+				cc.p(App.scale(50), App.scale(30)),
+				cc.p(0, 0), cc.p(winSize.width * .5, winSize.height), 0.5, 0.25, 1.5);
+
+			// listen for when ads are finished
+			App.getAdsPlugin().setAdsListener(this);
+
+			//this.setTouchEnabled(true);
+
 			return true;
 		},
 		
-		addButton: function(text, tag, pos) {
-			var font = App.getString("font"),
-				label = cc.LabelTTF.create(text, font, 60),
-				button = cc.MenuItemLabel.create(label, this.menuButtonCallback, this);
-
-			button.setTag(tag);
-			button.setAnchorPoint(cc.p(0.0, 0.5));
-			button.setPosition(pos);
-			this.menu.addChild(button);
-		},
-		
-		setRateIconPos: function() {
-			var x = this.rateLabel.getPositionX();
-			x += this.rateLabel.getContentSize().width;
-			this.rateIcon.setPositionX(x);
-		},
-		
-		showOptions: function() {
-			var self = this,
-				winSize = App.getWinSize(),
-				audio = cc.AudioEngine.getInstance(),
-				i,
-				label,
-				font = App.getString("font"),
-				sprite,
-				layer,
-				x,
-				y,
-				ySpacing,
-				delayPer;
-
+		createBg: function() {
+			var layer,
+				winSize = App.getWinSize();
+			
 			// color stripe
 			layer = cc.LayerColor.create(cc.c4b(0,0,0,202), winSize.width * 0.6, winSize.height * 1.2);
 			layer.setPosition(winSize.width * 1.35, winSize.height * -.1);
 			layer.setRotation(-2);
-			this.addChild(layer, 1);
+			this.addChild(layer);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseOut.create(cc.RotateBy.create(1.5, 1), 1.2),
 				cc.EaseOut.create(cc.RotateBy.create(1.7, -1), 1.2)
 			)));
 			layer.runAction(cc.EaseOut.create(cc.MoveBy.create(0.5, cc.p(-winSize.width, 0)), 1.5));
+		},
+		
+		createExchangeRate: function() {
+			var x,
+				y,
+				font = App.getString("font"),
+				label,
+				sprite,
+				winSize = App.getWinSize();
+			
+			// exchange rate
+			x = winSize.width * .425;
+			y = winSize.height - App.scale(100);
+			label = cc.LabelTTF.create("1", font, 80);
+			label.setAnchorPoint(0, .5);
+			label.setPosition(x, y);
+			this.addChild(label, 1);
 
+			x += App.scale(50);
+			sprite = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
+			sprite.setAnchorPoint(0, .5);
+			sprite.setPosition(x, y);
+			sprite.setScale(0.5);
+			this.addChild(sprite, 1);
+
+			x += App.scale(80);
+			this.rateLabel = cc.LabelTTF.create(" = ", font, 80);
+			this.rateLabel.setAnchorPoint(0, .5);
+			this.rateLabel.setPosition(x, y);
+			this.addChild(this.rateLabel, 1);
+
+			this.rateIcon = cc.Sprite.createWithSpriteFrameName("Bux.png");
+			this.rateIcon.setAnchorPoint(0, .5);
+			this.rateIcon.setPosition(x, y);
+			this.setRateIconPos();
+			this.rateIcon.setScale(0.55	);
+			this.addChild(this.rateIcon, 1);
+		},
+		
+		createPlayerDetails: function() {
+			var sprite,
+				font = App.getString("font"),
+				winSize = App.getWinSize();
+			
 			// player name
 			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, 48);
 			this.playerNameLabel.setAnchorPoint(0, .5);
@@ -101,46 +141,19 @@ var LayerGame = (function(){
 			this.buxLabel.setAnchorPoint(0, .5);
 			this.buxLabel.setPosition(App.scale(170), winSize.height - App.scale(340));
 			this.addChild(this.buxLabel, 1);
-
-			// exchange rate
-			x = winSize.width * .45;
-			y = winSize.height - App.scale(100);
-			label = cc.LabelTTF.create("1", font, 80);
-			label.setAnchorPoint(0, .5);
-			label.setPosition(x, y);
-			this.addChild(label, 1);
-
-			x += App.scale(50);
-			sprite = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
-			sprite.setAnchorPoint(0, .5);
-			sprite.setPosition(x, y);
-			sprite.setScale(0.5);
-			this.addChild(sprite, 1);
-
-			x += App.scale(80);
-			this.rateLabel = cc.LabelTTF.create(" = ", font, 80);
-			this.rateLabel.setAnchorPoint(0, .5);
-			this.rateLabel.setPosition(x, y);
-			this.addChild(this.rateLabel, 1);
-
-			this.rateIcon = cc.Sprite.createWithSpriteFrameName("Bux.png");
-			this.rateIcon.setAnchorPoint(0, .5);
-			this.rateIcon.setPosition(x, y);
-			this.setRateIconPos();
-			this.rateIcon.setScale(0.55	);
-			this.addChild(this.rateIcon, 1);
-
-			// menu
-			if (this.menu === null) {
-				this.menu = cc.Menu.create();
-				this.menu.setPosition(cc.PointZero());
-				this.addChild(this.menu, 1);
-			}
+		},
+		
+		createGameMenu: function() {
+			var x,
+				y,
+				ySpacing,
+				delayPer,
+				winSize = App.getWinSize();
 
 			// buttons
 			delayPer = 0.25;
 			ySpacing = App.scale(115);
-			x = winSize.width * .425;
+			x = winSize.width * .4;
 			y = winSize.height - App.scale(250);
 			App.createButton(this, "ButtonDrink.png", TAG_DRINK_LEMONADE, cc.p(x, y),
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 1, 1.5);
@@ -151,7 +164,7 @@ var LayerGame = (function(){
 			App.createButton(this, "ButtonEarn.png", TAG_EARN_BUX, cc.p(x, y),
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 3, 1.5);
 
-			x = winSize.width * .65;
+			x = winSize.width * .66;
 			y = winSize.height - App.scale(250);
 			App.createButton(this, "ButtonBuy.png", TAG_BUY_LEMONADE, cc.p(x, y),
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 4, 1.5);
@@ -161,21 +174,54 @@ var LayerGame = (function(){
 			y -= ySpacing;
 			App.createButton(this, "ButtonPurchase.png", TAG_PURCHASE_BUX, cc.p(x, y),
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 6, 1.5);
+		},
+		
+		removeMenuItems: function(tags) {
+			var i,
+				button;
+			for (i = 0; i < tags.length; i += 1) {
+				button = this.menu.getChildByTag(tags[i]);
+				if (button) {
+					button.removeFromParent();
+				}
+			}
+		},
+		
+		removeGameMenu: function() {
+			this.removeMenuItems([
+				TAG_DRINK_LEMONADE,
+				TAG_GIVE_LEMONADE,
+				TAG_EARN_BUX,
+				TAG_BUY_LEMONADE,
+				TAG_SELL_LEMONADE,
+				TAG_PURCHASE_BUX
+			]);
+		},
+		
+		createPurchaseMenu: function() {
+			var x,
+				y,
+				delayPer,
+				winSize = App.getWinSize();
 
-			// back
-			this.buttonSound = App.createButton(this, "ButtonBack.png", TAG_PAUSE,
-				cc.p(App.scale(50), App.scale(30)),
-				cc.p(0, 0), cc.p(winSize.width * .5, winSize.height), 0.5, 0.25, 1.5);
+			// buttons
+			delayPer = 0.25;
+			x = winSize.width * .4;
+			y = winSize.height - App.scale(250);
+			App.createButton(this, "ButtonBuy.png", TAG_SMALL_BUX_PACK, cc.p(x, y),
+				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 1, 1.5);
 
-			// set ads listener for finished watching video
-
-	// need to re-implement this in the protocol...
-
-			App.getAdsPlugin().setAdsListener(this);
-
-			this.setTouchEnabled(true);
-
-			return true;
+			x = winSize.width * .66;
+			y = winSize.height - App.scale(250);
+			App.createButton(this, "ButtonBuy.png", TAG_MEDIUM_BUX_PACK, cc.p(x, y),
+				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 2, 1.5);
+		},
+		
+		removePurchaseMenu: function() {
+			this.removeMenuItems([
+				TAG_SMALL_BUX_PACK,
+				TAG_MEDIUM_BUX_PACK
+			]);
 		},
 		
 		onEnter: function() {
@@ -183,10 +229,13 @@ var LayerGame = (function(){
 			App.requestUrl("api/exchange-rate", this.onGetExchangeRate);
 		},
 		
+		setRateIconPos: function() {
+			var x = this.rateLabel.getPositionX();
+			x += this.rateLabel.getContentSize().width;
+			this.rateIcon.setPositionX(x);
+		},
+		
 		giveLemonade: function() {
-	//
-	// how to prevent rapid clicking?
-	//
 			var self = this,
 				sprite,
 				audio = cc.AudioEngine.getInstance();
@@ -485,10 +534,17 @@ var LayerGame = (function(){
 				App.requestUrl("api/sell", this.onSellLemonade);
 			}
 			else if (tag == TAG_PURCHASE_BUX) {
-				Soomla.storeController.buyMarketItem("small_bux_pack");
+				this.removeGameMenu();
+				this.createPurchaseMenu();
 			}
 			else if (tag == TAG_EARN_BUX) {
 				this.watchVideo();
+			}
+			else if (tag == TAG_SMALL_BUX_PACK) {
+				Soomla.storeController.buyMarketItem("small_bux_pack");
+			}
+			else if (tag == TAG_MEDIUM_BUX_PACK) {
+				Soomla.storeController.buyMarketItem("medium_bux_pack");
 			}
 		},
 		
@@ -499,6 +555,11 @@ var LayerGame = (function(){
 		onCurrencyUpdate: function() {
 			this.lemonadesLabel.setString(Soomla.storeInventory.getItemBalance("currency_lemonades"));
 			this.buxLabel.setString(Soomla.storeInventory.getItemBalance("currency_bux"));
+		},
+		
+		onPaymentComplete: function() {
+			this.removePurchaseMenu();
+			this.createGameMenu();
 		},
 
 		onAdsResult: function(code, msg) {

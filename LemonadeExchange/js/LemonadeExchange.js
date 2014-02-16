@@ -32,6 +32,7 @@ Soomla.CCSoomlaNdkBridge.buy = function(productId, successCallback, failureCallb
 	}
 	else {
 		alert("Haven't implemented non-Facebook web purchasing yet...");
+		Soomla.CCSoomlaNdkBridge.onPaymentComplete();
 	}
 };
 
@@ -39,5 +40,12 @@ Soomla.CCSoomlaNdkBridge.onCurrencyUpdate = function() {
 	scene = cc.Director.getInstance().getRunningScene();
 	if (scene && scene.layer && scene.layer.onCurrencyUpdate()) {
 		scene.layer.onCurrencyUpdate();
+	}
+};
+
+Soomla.CCSoomlaNdkBridge.onPaymentComplete = function() {
+	scene = cc.Director.getInstance().getRunningScene();
+	if (scene && scene.layer && scene.layer.onPaymentComplete()) {
+		scene.layer.onPaymentComplete();
 	}
 };
