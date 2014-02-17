@@ -12,6 +12,7 @@ var LayerMenu = (function(){
 		TAG_INFO = 4;
 
 	return cc.Layer.extend({
+		songNumber: 0,
 		logo: null,
 		menu: null,
 		buttonLogin: null,
@@ -29,6 +30,8 @@ var LayerMenu = (function(){
 				button,
 				loggedIn;
 			this._super();
+
+			this.playMusic();
 
 			// menu
 			this.menu = cc.Menu.create();
@@ -80,7 +83,6 @@ var LayerMenu = (function(){
 			loggedIn = App.getSocialPlugin().isLoggedIn();
 			this.buttonLogin.setVisible(!loggedIn);
 			this.buttonLogout.setVisible(loggedIn);
-			//cc.log("Menu layer created login buttons");
 
 			button = App.createButton(this, "ButtonAbout.png", TAG_INFO, cc.p(winSize.width * .8, App.scale(157)),
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.4, 1.5);
@@ -91,7 +93,8 @@ var LayerMenu = (function(){
 			this.buttonNoSound = App.createButton(this, "ButtonNoSound.png", TAG_TOGGLE_SOUND,
 				cc.p(App.scale(75), winSize.height - App.scale(90)),
 				cc.p(.5, .5), cc.p(winSize.width * .5, -winSize.height), 0.5, 0.25, 1.5);
-			this.buttonNoSound.setVisible(false);
+			this.buttonSound.setVisible(App.isSoundEnabled());
+			this.buttonNoSound.setVisible(!App.isSoundEnabled());
 
 			this.buttonFullscreen = App.createButton(this, "ButtonFullscreen.png", TAG_TOGGLE_FULLSCREEN,
 				cc.p(winSize.width - App.scale(75), winSize.height - App.scale(90)),
@@ -103,10 +106,9 @@ var LayerMenu = (function(){
 			
 			this.scheduleUpdate();
 
+			this.setTouchEnabled(true);
+
 			return true;
-		},
-		
-		showTouchCircle: function() {
 		},
 		
 		onGetLoginStatus: function(loggedIn) {
@@ -114,7 +116,22 @@ var LayerMenu = (function(){
 			this.buttonLogout.setVisible(loggedIn);
 			this.buttonLogin.setEnabled(true);
 			this.buttonLogout.setEnabled(true);
-			//cc.log("Menu layer got login status: " + loggedIn);
+		},
+		
+		playMusic: function() {
+			var song = App.getConfig("songs")[this.songNumber]
+			
+			if (!cc.AudioEngine.getInstance().isMusicPlaying()) {
+				App.playEffect("res/music-start.wav");
+				App.playMusic(song.file);
+				this.songNumber = (this.songNumber + 1) % App.getConfig("songs").length;
+			}
+		},
+		
+		onTouchesBegan: function(touches, event) {
+			if (touches) {
+				App.showTouchCircle(this, touches[0].getLocation());
+			}
 		},
 		
 		menuButtonCallback: function(sender) {
@@ -124,7 +141,8 @@ var LayerMenu = (function(){
 				audio = cc.AudioEngine.getInstance(),
 				socialPlugin;
 			
-			this.showTouchCircle();
+			App.playClickSound();
+			App.showTouchCircle(this);
 			
 			// play
 			if (tag == TAG_PLAY_RESUME) {
@@ -150,7 +168,13 @@ var LayerMenu = (function(){
 			
 			// toggle sound
 			else if (tag == TAG_TOGGLE_SOUND) {
+				if (App.isSoundEnabled()) {
+					App.playEffect("res/music-stop.wav");
+				}
 				App.toggleSoundEnabled();
+				if (App.isSoundEnabled()) {
+					this.playMusic();
+				}
 				this.buttonSound.setVisible(App.isSoundEnabled());
 				this.buttonNoSound.setVisible(!App.isSoundEnabled());
 			}

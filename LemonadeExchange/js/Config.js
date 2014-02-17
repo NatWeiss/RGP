@@ -41,9 +41,15 @@ App.config = {
 	"font": "Arial",
 	
 	"songs": [
-		{file: "res/1 Island Mystery.mp3", bpm: 120, intro: 12.0},
+		{file: "res/3 Ragga C Jump Beat.mp3", bpm: 113, intro: 4.437},
 		{file: "res/2 Beat One.mp3", bpm: 120},
-		{file: "res/3 Ragga C Jump Beat.mp3", bpm: 113, intro: 4.437}
+		{file: "res/1 Island Mystery.mp3", bpm: 120, intro: 12.0}
+	],
+	
+	"click-sounds": [
+		"res/Drop1.wav",
+		"res/Drop2.wav",
+		"res/Drop3.wav"
 	],
 
 	"total-drinking-streaks": 25,

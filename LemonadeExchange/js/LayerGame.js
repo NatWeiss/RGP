@@ -11,7 +11,8 @@ var LayerGame = (function(){
 		TAG_EARN_BUX = 5,
 		TAG_PURCHASE_BUX = 6,
 		TAG_SMALL_BUX_PACK = 7,
-		TAG_MEDIUM_BUX_PACK = 8;
+		TAG_MEDIUM_BUX_PACK = 8,
+		TAG_LEMONADE = 9;
 
 	return cc.Layer.extend( {
 		menu: null,
@@ -20,6 +21,11 @@ var LayerGame = (function(){
 		buxLabel: null,
 		rateLabel: null,
 		rateIcon: null,
+		glass: null,
+		lemonade: null,
+		exchangeRate: 10,
+		drinkCount: 0,
+		breakCount: 0,
 
 		init: function() {
 			var winSize = App.getWinSize();
@@ -44,7 +50,7 @@ var LayerGame = (function(){
 			// listen for when ads are finished
 			App.getAdsPlugin().setAdsListener(this);
 
-			//this.setTouchEnabled(true);
+			this.setTouchEnabled(true);
 
 			return true;
 		},
@@ -105,7 +111,9 @@ var LayerGame = (function(){
 		createPlayerDetails: function() {
 			var sprite,
 				font = App.getString("font"),
-				winSize = App.getWinSize();
+				winSize = App.getWinSize(),
+				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
+				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
 			
 			// player name
 			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, 48);
@@ -122,7 +130,7 @@ var LayerGame = (function(){
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 4), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -4), 3.0)
 			)));
-			this.lemonadesLabel = cc.LabelTTF.create("" + Soomla.storeInventory.getItemBalance("currency_lemonades"), font, 80);
+			this.lemonadesLabel = cc.LabelTTF.create("" + numLemonades, font, 80);
 			this.lemonadesLabel.setAnchorPoint(0, .5);
 			this.lemonadesLabel.setPosition(App.scale(150), winSize.height - App.scale(190));
 			this.addChild(this.lemonadesLabel, 1);
@@ -137,7 +145,7 @@ var LayerGame = (function(){
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 8), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -8), 3.0)
 			)));
-			this.buxLabel = cc.LabelTTF.create("" + Soomla.storeInventory.getItemBalance("currency_bux"), font, 60);
+			this.buxLabel = cc.LabelTTF.create("" + numBux, font, 60);
 			this.buxLabel.setAnchorPoint(0, .5);
 			this.buxLabel.setPosition(App.scale(170), winSize.height - App.scale(340));
 			this.addChild(this.buxLabel, 1);
@@ -148,7 +156,9 @@ var LayerGame = (function(){
 				y,
 				ySpacing,
 				delayPer,
-				winSize = App.getWinSize();
+				winSize = App.getWinSize(),
+				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
+				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
 
 			// buttons
 			delayPer = 0.25;
@@ -174,6 +184,8 @@ var LayerGame = (function(){
 			y -= ySpacing;
 			App.createButton(this, "ButtonPurchase.png", TAG_PURCHASE_BUX, cc.p(x, y),
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 6, 1.5);
+			
+			this.enableButtons();
 		},
 		
 		removeMenuItems: function(tags) {
@@ -236,71 +248,54 @@ var LayerGame = (function(){
 		},
 		
 		giveLemonade: function() {
-			var self = this,
-				sprite,
-				audio = cc.AudioEngine.getInstance();
-			
-			if (!audio.isMusicPlaying()) {
-				cc.log("Would give lemonade but music isn't playing");
+			var numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
+			if (numLemonades <= 0) {
+				App.playEffect("res/music-stop.wav");
 				return;
 			}
-			if (this.glass !== null) {
-				if (this.glass.isVisible()) {
-					cc.log("Would give lemonade but glass is visible");
-					return;
-				} else {
-					this.glass.removeFromParent();
-					this.glass = null;
-				}
-			}
-			this.glass = cc.MenuItem.create(this.menuButtonCallback, this);
-			this.glass.setVisible(false);
-			sprite = cc.Sprite.createWithSpriteFrameName("glass.png");
-			sprite.setAnchorPoint(0,0);
-			this.glass.setContentSize(sprite.getContentSize());
-			this.glass.addChild(sprite);
-			this.menu.addChild(this.glass, 1);
-			
-			// play lemonade sound
-			audio.stopAllEffects();
-			audio.playEffect("res/lemonade" + (1 + this.lemonadeCount) + ".wav");
-			
-			//this.unscheduleAllCallbacks();
-			this.schedule(function(){self.slideGlass()}, this.lemonadeCount == 0 ? 4 : 2.5, 0);
 
-			this.lemonadeCount = (this.lemonadeCount + 1) % App.getInt("total-lemonade-sounds");
+			this.slideGlass();
 		},
 		
 		slideGlass: function() {
 			var self = this,
-				glassSize = this.glass.getContentSize(),
-				audio = cc.AudioEngine.getInstance(),
-				func;
+				glassSize,
+				winSize = App.getWinSize();
 
-			audio.playEffect("res/glass-sliding.wav");
+			App.playEffect("res/glass-sliding.wav");
+
+			this.addCurrencies(-1, 0);
+
+			if (this.glass !== null) {
+				this.glass.removeFromParent();
+				this.glass = null;
+			}
 
 			// glass
-			this.glass.setVisible(true);
-			this.glass.setAnchorPoint(.5, .5);
+			this.glass = cc.Sprite.createWithSpriteFrameName("GlassEmpty.png");
+			glassSize = this.glass.getContentSize()
 			this.glass.setTag(TAG_LEMONADE);
-			this.glass.setPosition(this.winSize.width * .5 + glassSize.width * .5, this.winSize.height * .5 - 210);
+			this.glass.setPosition(winSize.width * .5, winSize.height * .5);
 			this.glass.setScale(0.35);
+			this.addChild(this.glass, 2);
+
 			this.slideIn(this.glass);
-			func = function(){
+			this.schedule(function(){
 				self.showTouchArea(self.glass.getPosition());
-			};
-			this.schedule(func, 1.0, 0);
+			}, 1.0, 0);
 			
 			// lemonade
-			this.lemonade = cc.Sprite.createWithSpriteFrameName("lemonade.png");
+			this.lemonade = cc.Sprite.createWithSpriteFrameName("GlassFull.png");
 			this.lemonade.setAnchorPoint(.5, .5);
 			this.lemonade.setPosition(glassSize.width * .5, glassSize.height * .5);
 			this.glass.addChild(this.lemonade, 1);
+			
+			this.schedule(function(){self.drinkLemonade();}, 1.0, 0);
 		},
 		
 		slideIn: function(node) {
-			var movement = cc.p(-this.winSize.width * .5, 0),
-				audio = cc.AudioEngine.getInstance();
+			var winSize = App.getWinSize(),
+				movement = cc.p(-winSize.width, 0);
 			
 			node.setPosition(cc.pSub(node.getPosition(), movement));
 			node.runAction(cc.Sequence.create(
@@ -308,40 +303,35 @@ var LayerGame = (function(){
 				cc.RotateBy.create(0.08, -5, 0),
 				cc.RotateBy.create(0.08, 5, 0)
 			));
-
 		},
 		
 		drinkLemonade: function() {
 			var self = this,
+				winSize = App.getWinSize(),
 				audio = cc.AudioEngine.getInstance();
 
-			if (this.glass === null) {
-				return;
-			}
-			
 			audio.setMusicVolume(0.75);
 
 			this.glass.runAction(cc.Spawn.create(
 				cc.ScaleTo.create(1.0, 1, 1),
-				cc.MoveTo.create(1.0, cc.p(self.winSize.width * .5, self.winSize.height * .5))
+				cc.MoveTo.create(1.0, cc.p(winSize.width * .5, winSize.height * .5))
 			));
 
-			this.schedule(function(){self.drinkingLemonade()}, 1.0, 0);
+			this.schedule(function(){self.drinkingLemonade();}, 1.0, 0);
 		},
 		
 		drinkingLemonade: function() {
 			var self = this,
+				winSize = App.getWinSize(),
 				streak,
 				i,
-				len = App.getInt("total-drinking-streaks"),
-				audio = cc.AudioEngine.getInstance();
+				len = App.getInt("total-drinking-streaks");
 
-			audio.playEffect("res/drink.wav");
-			this.schedule(function(){self.saySmooth()}, 4.0, 0);
+			App.playEffect("res/drink.wav");
 
 			this.glass.runAction(cc.Sequence.create(
 				cc.DelayTime.create(3.2),
-				cc.MoveBy.create(0.2, cc.p(0, -this.winSize.height * 2)),
+				cc.MoveBy.create(0.2, cc.p(0, -winSize.height * 2)),
 				cc.RemoveSelf.create()
 			));
 			
@@ -351,9 +341,9 @@ var LayerGame = (function(){
 			
 			// streaks
 			for (i = 0; i < len; i += 1) {
-				streak = cc.Sprite.createWithSpriteFrameName("streak.png");
-				streak.setAnchorPoint(.5, -1);
-				streak.setPosition(this.winSize.width * .5, this.winSize.height * .5);
+				streak = cc.Sprite.createWithSpriteFrameName("Streak.png");
+				streak.setAnchorPoint(.5, -.5);
+				streak.setPosition(winSize.width * .5, winSize.height * .5);
 				streak.setRotation((i / len) * 360);
 				streak.setOpacity(0);
 				streak.runAction(cc.RotateBy.create(3, 360, 360));
@@ -363,7 +353,7 @@ var LayerGame = (function(){
 					cc.EaseOut.create(cc.FadeOut.create(1), 3.0),
 					cc.RemoveSelf.create()
 				));
-				this.fg.addChild(streak, 25);
+				this.addChild(streak, 25);
 			}
 
 			this.schedule(function(){self.smashGlass()}, 3.5, 0);
@@ -378,56 +368,23 @@ var LayerGame = (function(){
 			this.lemonade = null;
 			this.glass = null;
 			
-			audio.playEffect("res/glass-breaking" + (1 + this.breakCount) + ".wav");
-		
-			this.schedule(function(){self.commentOnBrokenGlass()}, this.saidSmooth ? 1 : 3, 0);
+			App.playEffect("res/glass-breaking" + (1 + this.breakCount) + ".wav");
+			audio.setMusicVolume(1);
 
+			App.requestUrl("api/drink", this.onGetExchangeRate);
+			this.createGameMenu();
+		
 			this.breakCount = (this.breakCount + 1) % App.getInt("total-glass-breaking-sounds");
-		},
-		
-		watchVideoComment: function() {
-			var self = this,
-				audio = cc.AudioEngine.getInstance();
-
-			audio.playEffect("res/watch-a-video" + (1 + this.videoCount) + ".wav");
-
-			this.videoCount = (this.videoCount + 1) % App.getInt("total-watch-a-video-sounds");
-
-			this.schedule(function(){self.watchVideo()}, 2, 0);
 		},
 		
 		watchVideo: function() {
 			App.getAdsPlugin().showAds(plugin.AdsType.FullScreenAd, 0, plugin.AdsPos.Center);
 		},
 		
-		showTouchCircle: function(pos) {
-	return;
-			if (typeof pos === 'undefined') {
-				if (this.menu && this.menu._selectedItem) {
-					pos = this.menu._selectedItem.getPosition();
-				} else {
-					return;
-				}
-			}
-			
-			var circle = cc.Sprite.createWithSpriteFrameName("touch-circle.png");
-			if (!circle) {
-				return;
-			}
-			circle.setPosition(pos);
-			circle.setScale(0.5);
-			circle.runAction(cc.Sequence.create(
-				cc.DelayTime.create(0.5),
-				cc.FadeOut.create(1),
-				cc.RemoveSelf.create()
-			));
-			this.fg.addChild(circle, 10);
-		},
-
 		showTouchArea: function(pos) {
 			var circle;
 			
-			if (typeof pos === 'undefined') {
+			if (typeof pos === "undefined") {
 				if (this.menu && this.menu._selectedItem) {
 					pos = this.menu._selectedItem.getPosition();
 				} else {
@@ -435,7 +392,7 @@ var LayerGame = (function(){
 				}
 			}
 			
-			circle = cc.Sprite.createWithSpriteFrameName("touch-circle.png");
+			circle = cc.Sprite.createWithSpriteFrameName("TouchCircle.png");
 			circle.setPosition(pos);
 			circle.setScale(2);
 			circle.setOpacity(96);
@@ -446,92 +403,66 @@ var LayerGame = (function(){
 				),
 				cc.RemoveSelf.create()
 			));
-			this.fg.addChild(circle, 10);
+			this.addChild(circle, 10);
 		},
 		
 		onTouchesBegan: function(touches, event) {
-			var self = this;
-			
 			if (touches) {
-				this.showTouchCircle(touches[0].getLocation());
-				
-				this.schedule(function(){self.giveLemonade()}, 1, 0);
+				App.showTouchCircle(this, touches[0].getLocation());
 			}
 		},
 		
-		onTouchesMoved: function(touches, event) {
-		},
+		addCurrencies: function(lemonades, bux) {
+			lemonades = parseInt(lemonades);
+			bux = parseInt(bux);
 
-		onTouchesEnded: function(touches, event) {
-		},
-
-		onTouchesCancelled: function(touches, event) {
-		},
-		
-		onGetExchangeRate: function(response) {
-			var scene = cc.Director.getInstance().getRunningScene(),
-				multiplier = 100,
-				value;
-			//cc.log("Got exchange rate " + response + ", scene " + scene + ", layer " + scene.layer);
-			
-			if (scene && scene.layer) {
-				if ((parseInt(response) + "").length >= 3) {
-					multiplier = 1;
-				} else if (parseFloat(response) > 50) {
-					multiplier = 10;
-				}
-
-				value = parseInt(parseFloat(response) * multiplier) / multiplier;
-				if (multiplier == 100) {
-					value = value.toFixed(2);
-				}
-				if (value < 0.01) {
-					value = 0.01;
-				}
-				scene.layer.rateLabel.setString(" = " + value);
-				scene.layer.setRateIconPos();
+			if (lemonades) {
+				App.giveItem("currency_lemonades", lemonades);
 			}
-		},
-		
-		onDrinkLemonade: function(response) {
-			cc.Director.getInstance().getRunningScene().layer.onGetExchangeRate(response);
-		},
-		
-		onGiveLemonade: function(response) {
-			cc.Director.getInstance().getRunningScene().layer.onGetExchangeRate(response);
-		},
-
-		onBuyLemonade: function(response) {
-			cc.Director.getInstance().getRunningScene().layer.onGetExchangeRate(response);
-		},
-
-		onSellLemonade: function(response) {
-			cc.Director.getInstance().getRunningScene().layer.onGetExchangeRate(response);
+			if (bux) {
+				App.giveItem("currency_bux", bux);
+			}
+			if (lemonades || bux) {
+				this.onCurrencyUpdate();
+			}
 		},
 		
 		menuButtonCallback: function(sender) {
 			var self = this,
 				tag = sender.getTag(),
-				director = cc.Director.getInstance(),
-				audio = cc.AudioEngine.getInstance();
+				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
+				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades"),
+				director = cc.Director.getInstance();
 			
-			this.showTouchCircle();
+			App.playClickSound();
+			App.showTouchCircle(this);
 			
 			if (tag == TAG_PAUSE) {
 				this.getParent().createLayer(LayerMenu, true);
 			}
 			else if (tag == TAG_DRINK_LEMONADE) {
-				//self.drinkLemonade();
-				App.requestUrl("api/drink", this.onDrinkLemonade);
+				if (numLemonades > 0) {
+					this.removeGameMenu();
+					this.giveLemonade();
+				}
 			}
 			else if (tag == TAG_GIVE_LEMONADE) {
-				App.requestUrl("api/give", this.onGiveLemonade);
+				if (numLemonades > 0) {
+					this.addCurrencies(-1, 0);
+					App.requestUrl("api/give", this.onGetExchangeRate);
+				}
 			}
 			else if (tag == TAG_BUY_LEMONADE) {
-				App.requestUrl("api/buy", this.onBuyLemonade);
+				if (numBux > this.exchangeRate) {
+					this.addCurrencies(1, -this.exchangeRate);
+					App.requestUrl("api/buy", this.onGetExchangeRate);
+				}
 			}
 			else if (tag == TAG_SELL_LEMONADE) {
-				App.requestUrl("api/sell", this.onSellLemonade);
+				if (numLemonades > 0) {
+					this.addCurrencies(-1, this.exchangeRate);
+					App.requestUrl("api/sell", this.onGetExchangeRate);
+				}
 			}
 			else if (tag == TAG_PURCHASE_BUX) {
 				this.removeGameMenu();
@@ -552,9 +483,32 @@ var LayerGame = (function(){
 			this.playerNameLabel.setString(name);
 		},
 		
+		enableButton: function(tag, enabled) {
+			var button = this.menu.getChildByTag(tag);
+			if (button) {
+				button.getNormalImage().setColor(enabled ? cc.c3b(255,255,255) : cc.c3b(128,128,128));
+				button.setEnabled(enabled);
+			}
+		},
+		
 		onCurrencyUpdate: function() {
-			this.lemonadesLabel.setString(Soomla.storeInventory.getItemBalance("currency_lemonades"));
-			this.buxLabel.setString(Soomla.storeInventory.getItemBalance("currency_bux"));
+			var numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
+				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
+
+			this.lemonadesLabel.setString(numLemonades);
+			this.buxLabel.setString(numBux);
+			
+			this.enableButtons();
+		},
+		
+		enableButtons: function() {
+			var numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
+				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
+
+			this.enableButton(TAG_DRINK_LEMONADE, numLemonades > 0);
+			this.enableButton(TAG_GIVE_LEMONADE, numLemonades > 0);
+			this.enableButton(TAG_BUY_LEMONADE, numBux > this.exchangeRate);
+			this.enableButton(TAG_SELL_LEMONADE, numLemonades > 0);
 		},
 		
 		onPaymentComplete: function() {
@@ -567,11 +521,36 @@ var LayerGame = (function(){
 			
 			cc.log("Got ads result code: " + code + ", message: " + msg);
 			if (code == plugin.AdsResultCode.FullScreenViewDismissed) {
-				Soomla.storeInventory.giveItem("currency_bux", 5);
 				scene = cc.Director.getInstance().getRunningScene();
 				if (scene && scene.layer) {
-					scene.layer.onCurrencyUpdate();
+					scene.layer.addCurrencies(0, parseInt(scene.layer.exchangeRate * .5));
 				}
+			}
+		},
+
+		onGetExchangeRate: function(response) {
+			var scene = cc.Director.getInstance().getRunningScene(),
+				multiplier = 100,
+				value;
+			
+			if (scene && scene.layer) {
+				if ((parseInt(response) + "").length >= 3) {
+					multiplier = 1;
+				} else if (parseFloat(response) > 50) {
+					multiplier = 10;
+				}
+
+				value = parseInt(parseFloat(response) * multiplier) / multiplier;
+				if (multiplier == 100) {
+					value = value.toFixed(2);
+				}
+				if (value < 0.01) {
+					value = 0.01;
+				}
+				scene.layer.exchangeRate = parseInt(value);
+				scene.layer.rateLabel.setString(" = " + value);
+				scene.layer.setRateIconPos();
+				scene.layer.enableButtons();
 			}
 		}
 

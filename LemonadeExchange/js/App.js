@@ -195,7 +195,6 @@ App.enableSound = function(enabled) {
 	this._soundEnabled = enabled ? true : false;
 	if (!this.isSoundEnabled()) {
 		audio = cc.AudioEngine.getInstance();
-		audio.stopAllEffects();
 		audio.stopMusic();
 	}
 };
@@ -208,7 +207,7 @@ App.isSoundEnabled = function() {
 	return this._soundEnabled ? true : false;
 };
 
-App.playSound = function(filename) {
+App.playEffect = function(filename) {
 	var audio;
 	if (this.isSoundEnabled()) {
 		audio = cc.AudioEngine.getInstance();
