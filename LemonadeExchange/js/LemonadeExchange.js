@@ -18,6 +18,10 @@ App.playClickSound = function() {
 	this.clickSound = (this.clickSound + 1) % sounds.length;
 };
 
+App.localizeCurrency = function(amount) {
+	return "$" + parseFloat(amount).toFixed(2);
+};
+
 App.createButton = function(obj, spriteFilename, tag, position, anchorPoint, movement, duration, delay, easeRate) {
 	var winSize = App.getWinSize(),
 		normalSprite = cc.Sprite.createWithSpriteFrameName(spriteFilename),
@@ -40,6 +44,42 @@ App.createButton = function(obj, spriteFilename, tag, position, anchorPoint, mov
 	obj.menu.addChild(button);
 
 	return button;
+};
+
+App.addCurrencyToButton = function(button, amount, currencyAmount, spriteFrameName) {
+	var label,
+		sprite,
+		margin = App.scale(12),
+		shadowDistance = App.scale(4),
+		buttonSize = button.getContentSize(),
+		font = App.getString("font");
+
+	sprite = cc.Sprite.createWithSpriteFrameName(spriteFrameName);
+	sprite.setPosition(buttonSize.width * .5, buttonSize.height * .5);
+	sprite.setScale(0.9);
+	button.addChild(sprite);
+
+	label = cc.LabelTTF.create(amount, font, 50);
+	label.setAnchorPoint(0, 1);
+	label.setPosition(margin * 1.5, buttonSize.height - margin);
+	button.addChild(label, 1);
+
+	label = cc.LabelTTF.create(amount, font, 50);
+	label.setAnchorPoint(0, 1);
+	label.setColor(App.getConfig("font-shadow-color"));
+	label.setPosition(margin * 1.5, buttonSize.height - margin - shadowDistance);
+	button.addChild(label);
+
+	label = cc.LabelTTF.create(currencyAmount, font, 50);
+	label.setAnchorPoint(1, 0);
+	label.setPosition(buttonSize.width - margin * 1.5, margin);
+	button.addChild(label, 1);
+
+	label = cc.LabelTTF.create(currencyAmount, font, 50);
+	label.setAnchorPoint(1, 0);
+	label.setColor(App.getConfig("font-shadow-color"));
+	label.setPosition(buttonSize.width - margin * 1.5, margin - shadowDistance);
+	button.addChild(label);
 };
 
 App.showTouchCircle = function(self, pos) {

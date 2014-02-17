@@ -39,6 +39,7 @@ App.config = {
 	],
 	
 	"font": "Arial",
+	"font-shadow-color": cc.c3b(35,168, 20),
 	
 	"songs": [
 		{file: "res/3 Ragga C Jump Beat.mp3", bpm: 113, intro: 4.437},

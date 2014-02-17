@@ -5,13 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>E9D117FF-979C-463D-BAE1-AC1DE2F1094C</string>
+	<string>B88FD8DF-91B5-446E-AF29-51109D01A04B</string>
 	<key>IDESourceControlProjectName</key>
 	<string>cocos2dx-plugins</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>25FDE121-046A-4430-801F-A30F04B2FD72</key>
+		<string>ssh://github.com/vedi/jansson.git</string>
+		<key>39B09385-2CF2-4DB1-9BBD-42BD1BF588B4</key>
+		<string>ssh://github.com/NatWeiss/cocos2dx-store.git</string>
 		<key>74163B41-5F1F-4303-824D-32371D04A745</key>
 		<string>http://natweiss.com/git/rapidgame.git</string>
+		<key>E777B1FC-A663-4A07-A599-44034AB86514</key>
+		<string>http://natweiss.com/git/rapidgamepro.git</string>
 		<key>EF1AF739-F19A-456D-9522-634929E3BA78</key>
 		<string>ssh://github.com/soomla/ios-store.git</string>
 	</dict>
@@ -19,19 +25,33 @@
 	<string>cocos2dx-plugins.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>25FDE121-046A-4430-801F-A30F04B2FD72</key>
+		<string>../../plugins/lib/jansson</string>
+		<key>39B09385-2CF2-4DB1-9BBD-42BD1BF588B4</key>
+		<string>../../plugins/soomla/cocos2dx-store</string>
 		<key>74163B41-5F1F-4303-824D-32371D04A745</key>
+		<string>../../RapidGame</string>
+		<key>E777B1FC-A663-4A07-A599-44034AB86514</key>
 		<string>../..</string>
 		<key>EF1AF739-F19A-456D-9522-634929E3BA78</key>
 		<string>../../plugins/soomla/cocos2dx-store/submodules/ios-store</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>http://natweiss.com/git/rapidgame.git</string>
+	<string>http://natweiss.com/git/rapidgamepro.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>74163B41-5F1F-4303-824D-32371D04A745</string>
+	<string>E777B1FC-A663-4A07-A599-44034AB86514</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>39B09385-2CF2-4DB1-9BBD-42BD1BF588B4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>cocos2dx-store</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
@@ -39,6 +59,22 @@
 			<string>EF1AF739-F19A-456D-9522-634929E3BA78</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ios-store</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>25FDE121-046A-4430-801F-A30F04B2FD72</string>
+			<key>IDESourceControlWCCName</key>
+			<string>jansson</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E777B1FC-A663-4A07-A599-44034AB86514</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RapidGamePro</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>

@@ -213,20 +213,32 @@ var LayerGame = (function(){
 		createPurchaseMenu: function() {
 			var x,
 				y,
+				item,
 				delayPer,
+				button,
 				winSize = App.getWinSize();
 
 			// buttons
 			delayPer = 0.25;
-			x = winSize.width * .4;
-			y = winSize.height - App.scale(250);
-			App.createButton(this, "ButtonBuy.png", TAG_SMALL_BUX_PACK, cc.p(x, y),
+			x = winSize.width * .39;
+			y = winSize.height - App.scale(350);
+			item = Soomla.storeInfo.getItemByItemId("small_bux_pack");
+			button = App.createButton(this, "ButtonProduct.png", TAG_SMALL_BUX_PACK, cc.p(x, y),
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 1, 1.5);
+			App.addCurrencyToButton(button,
+				item.currency_amount,
+				App.localizeCurrency(item.purchasableItem.marketItem.price),
+				"small_bux_pack.png");
 
 			x = winSize.width * .66;
-			y = winSize.height - App.scale(250);
-			App.createButton(this, "ButtonBuy.png", TAG_MEDIUM_BUX_PACK, cc.p(x, y),
+			y = winSize.height - App.scale(350);
+			item = Soomla.storeInfo.getItemByItemId("medium_bux_pack");
+			button = App.createButton(this, "ButtonProduct.png", TAG_MEDIUM_BUX_PACK, cc.p(x, y),
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 2, 1.5);
+			App.addCurrencyToButton(button,
+				item.currency_amount,
+				App.localizeCurrency(item.purchasableItem.marketItem.price),
+				"medium_bux_pack.png");
 		},
 		
 		removePurchaseMenu: function() {
@@ -436,6 +448,7 @@ var LayerGame = (function(){
 			
 			App.playClickSound();
 			App.showTouchCircle(this);
+			this.enableButton(tag, false);
 			
 			if (tag == TAG_PAUSE) {
 				this.getParent().createLayer(LayerMenu, true);
@@ -509,6 +522,8 @@ var LayerGame = (function(){
 			this.enableButton(TAG_GIVE_LEMONADE, numLemonades > 0);
 			this.enableButton(TAG_BUY_LEMONADE, numBux > this.exchangeRate);
 			this.enableButton(TAG_SELL_LEMONADE, numLemonades > 0);
+			this.enableButton(TAG_EARN_BUX, true);
+			this.enableButton(TAG_PURCHASE_BUX, true);
 		},
 		
 		onPaymentComplete: function() {

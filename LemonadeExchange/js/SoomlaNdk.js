@@ -106,6 +106,36 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			return "";
 		};
 		
+		// find an item id
+		private.findItemId = function(root, key, id, depth) {
+			var key,
+				ret;
+			depth = depth || 0;
+			if (depth > 7) {
+				return;
+			}
+			
+			for (k in root) {
+				if (root.hasOwnProperty(k)) {
+					// try this child
+					if (typeof root[k][key] !== "undefined") {
+						//private.log("id: " + root[k][key] + ", depth: " + depth);
+						if (root[k][key] === id) {
+							return root[k];
+						}
+					}
+					
+					// search child's children
+					if (typeof root[k] === "object") {
+						ret = private.findItemId(root[k], key, id, depth + 1);
+						if (typeof ret !== "undefined") {
+							return ret;
+						}
+					}
+				}
+			}
+		};
+		
 		// call a dynamically prototyped function
 		private.callMy = function(method) {
 			if (typeof self[method] === "function") {
@@ -218,10 +248,15 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			// CCStoreInfo
 			//
 			else if(params.method === "CCStoreInfo::getItemByItemId") {
-				// params.itemId
+				x = private.findItemId(private.storeAssets, "itemId", params.itemId) || {};
+				ret = {item: x, className: x.className || ""};
 			}
 			else if(params.method === "CCStoreInfo::getPurchasableItemWithProductId") {
-				// params.productId
+				x = private.findItemId(private.storeAssets, "itemId", params.productId) || {};
+				if (typeof x.purchasableItem === "undefined" || !x.purchasableItem) {
+					x = {};
+				}
+				ret = {item: x, className: x.className || ""};
 			}
 			else if(params.method === "CCStoreInfo::getCategoryForVirtualGood") {
 				// params.goodItemId
