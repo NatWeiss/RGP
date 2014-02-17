@@ -19,6 +19,8 @@ var LayerGame = (function(){
 		playerNameLabel: null,
 		lemonadesLabel: null,
 		buxLabel: null,
+		lemonadesIcon: null,
+		buxIcon: null,
 		rateLabel: null,
 		rateIcon: null,
 		glass: null,
@@ -26,6 +28,9 @@ var LayerGame = (function(){
 		exchangeRate: 10,
 		drinkCount: 0,
 		breakCount: 0,
+		newLemonadesAmount: 0,
+		newBuxAmount: 0,
+		animateCurrencyAmountRate: 200, // ms
 
 		init: function() {
 			var winSize = App.getWinSize();
@@ -115,6 +120,10 @@ var LayerGame = (function(){
 				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
 				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
 			
+			this.newLemonadesAmount = numLemonades;
+			this.newBuxAmount = numBux;
+			this.animateCurrencyAmountRate = 200; // ms
+			
 			// player name
 			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, 48);
 			this.playerNameLabel.setAnchorPoint(0, .5);
@@ -122,11 +131,11 @@ var LayerGame = (function(){
 			this.addChild(this.playerNameLabel, 1);
 			
 			// lemonades
-			sprite = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
-			sprite.setPosition(App.scale(85), winSize.height - App.scale(190));
-			this.addChild(sprite, 1);
-			sprite.setRotation(-2);
-			sprite.runAction(cc.RepeatForever.create(cc.Sequence.create(
+			this.lemonadesIcon = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
+			this.lemonadesIcon.setPosition(App.scale(85), winSize.height - App.scale(190));
+			this.addChild(this.lemonadesIcon, 1);
+			this.lemonadesIcon.setRotation(-2);
+			this.lemonadesIcon.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 4), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -4), 3.0)
 			)));
@@ -136,12 +145,12 @@ var LayerGame = (function(){
 			this.addChild(this.lemonadesLabel, 1);
 
 			// bux
-			sprite = cc.Sprite.createWithSpriteFrameName("Bux.png");
-			sprite.setPosition(App.scale(85), winSize.height - App.scale(340));
-			sprite.setScale(0.65);
-			this.addChild(sprite, 1);
-			sprite.setRotation(-4);
-			sprite.runAction(cc.RepeatForever.create(cc.Sequence.create(
+			this.buxIcon = cc.Sprite.createWithSpriteFrameName("Bux.png");
+			this.buxIcon.setPosition(App.scale(85), winSize.height - App.scale(340));
+			this.buxIcon.setScale(0.65);
+			this.addChild(this.buxIcon, 1);
+			this.buxIcon.setRotation(-4);
+			this.buxIcon.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 8), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -8), 3.0)
 			)));
@@ -159,7 +168,7 @@ var LayerGame = (function(){
 				winSize = App.getWinSize(),
 				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
 				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
-
+			
 			// buttons
 			delayPer = 0.25;
 			ySpacing = App.scale(115);
@@ -505,13 +514,66 @@ var LayerGame = (function(){
 		},
 		
 		onCurrencyUpdate: function() {
-			var numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
-				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
-
-			this.lemonadesLabel.setString(numLemonades);
-			this.buxLabel.setString(numBux);
+			var self = this,
+				numAnimations;
 			
+			this.newBuxAmount = Soomla.storeInventory.getItemBalance("currency_bux"),
+			this.newLemonadesAmount = Soomla.storeInventory.getItemBalance("currency_lemonades");
+			
+			numAnimations = Math.max(
+				Math.abs(this.newBuxAmount - parseInt(this.buxLabel.getString())),
+				Math.abs(this.newLemonadesAmount - parseInt(this.lemonadesLabel.getString()))
+			);
+
 			this.enableButtons();
+			
+			this.schedule(function(){
+				self.animateCurrencyAmounts();
+			}, this.animateCurrencyAmountRate / 1000, numAnimations);
+		},
+		
+		animateCurrencyAmounts: function() {
+			var sprite,
+				currentBux = parseInt(this.buxLabel.getString()),
+				currentLemonades = parseInt(this.lemonadesLabel.getString());
+			//cc.log("current bux " + currentBux + " current lemonades " + currentLemonades + " new bux " + this.newBuxAmount + " new lemonades " + this.newLemonadesAmount);
+			
+			if (currentBux !== this.newBuxAmount) {
+				if (currentBux < this.newBuxAmount) {
+					this.animateCurrencyAdd(this.buxIcon, "Bux.png");
+				}
+				currentBux += (currentBux < this.newBuxAmount ? 1 : -1);
+				this.buxLabel.setString(currentBux);
+			}
+			if (currentLemonades !== this.newLemonadesAmount) {
+				if (currentLemonades < this.newLemonadesAmount) {
+					this.animateCurrencyAdd(this.lemonadesIcon, "Lemonade.png");
+				}
+				currentLemonades += (currentLemonades < this.newLemonadesAmount ? 1 : -1);
+				this.lemonadesLabel.setString(currentLemonades);
+			}
+		},
+		
+		animateCurrencyAdd: function(destNode, filename) {
+			var sprite = cc.Sprite.createWithSpriteFrameName(filename);
+			sprite.setPosition(cc.pAdd(
+				destNode.getPosition(),
+				cc.p(App.rand(App.scale(200)), App.rand(App.scale(400)) - App.scale(200))
+			));
+			sprite.setRotation(App.rand(360 * 2));
+			sprite.setScale(destNode.getScale());
+			sprite.setOpacity(0);
+			sprite.runAction(cc.Sequence.create(
+				cc.FadeIn.create(1.0),
+				cc.FadeOut.create(0.2)
+			));
+			sprite.runAction(cc.EaseOut.create(cc.RotateTo.create(1.0, 0), 1.5));
+			sprite.runAction(cc.MoveTo.create(1.0, destNode.getPosition()));
+			sprite.runAction(cc.Sequence.create(
+				cc.DelayTime.create(1.2),
+				cc.RemoveSelf.create()
+			));
+			this.addChild(sprite, 10);
 		},
 		
 		enableButtons: function() {
