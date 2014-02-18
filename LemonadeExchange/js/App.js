@@ -130,6 +130,7 @@ App.rand = function(mod) {
 	var r = Math.random();
 	if (typeof mod !== 'undefined') {
 		r *= 0xffffff;
+		r = parseInt(r);
 		r %= mod;
 	}
 	return r;

@@ -30,7 +30,9 @@ var LayerGame = (function(){
 		breakCount: 0,
 		newLemonadesAmount: 0,
 		newBuxAmount: 0,
-		animateCurrencyAmountRate: 200, // ms
+		animateLemonadesIncrement: 1,
+		animateBuxIncrement: 5,
+		animateCurrencyAmountRate: 400,
 
 		init: function() {
 			var winSize = App.getWinSize();
@@ -122,7 +124,6 @@ var LayerGame = (function(){
 			
 			this.newLemonadesAmount = numLemonades;
 			this.newBuxAmount = numBux;
-			this.animateCurrencyAmountRate = 200; // ms
 			
 			// player name
 			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, 48);
@@ -515,59 +516,90 @@ var LayerGame = (function(){
 		
 		onCurrencyUpdate: function() {
 			var self = this,
-				numAnimations;
+				numAnimations,
+				numBux = parseInt(this.buxLabel.getString()),
+				numLemonades = parseInt(this.lemonadesLabel.getString());
+			
+			if (this.newBuxAmount || this.newLemonadesAmount) {
+				this.unscheduleAllCallbacks();
+				this.buxLabel.setString(this.newBuxAmount);
+				this.lemonadesLabel.setString(this.newLemonadesAmount);
+			}
 			
 			this.newBuxAmount = Soomla.storeInventory.getItemBalance("currency_bux"),
 			this.newLemonadesAmount = Soomla.storeInventory.getItemBalance("currency_lemonades");
 			
-			numAnimations = Math.max(
-				Math.abs(this.newBuxAmount - parseInt(this.buxLabel.getString())),
-				Math.abs(this.newLemonadesAmount - parseInt(this.lemonadesLabel.getString()))
-			);
+			this.animateBuxIncrement = Math.max(parseInt(Math.abs(this.newBuxAmount - numBux) / 10), 1);
+			if (this.newBuxAmount < numBux) {
+				this.animateBuxIncrement = -this.animateBuxIncrement;
+			}
+			this.animateLemonadesIncrement = 1;
+			if (this.newLemonadesAmount < numLemonades) {
+				this.animateLemonadesIncrement = -this.animateLemonadesIncrement;
+			}
+
+			numAnimations = parseInt(Math.max(
+				Math.abs((this.newBuxAmount - numBux) / this.animateBuxIncrement),
+				Math.abs((this.newLemonadesAmount - numLemonades) / this.animateLemonadesIncrement)
+			)) - 1;
 
 			this.enableButtons();
 			
-			this.schedule(function(){
-				self.animateCurrencyAmounts();
-			}, this.animateCurrencyAmountRate / 1000, numAnimations);
+			self.animateCurrencyAmounts();
+			if (numAnimations > 0) {
+				this.schedule(function(){
+					self.animateCurrencyAmounts();
+				}, self.animateCurrencyAmountRate / 1000, numAnimations);
+			}
 		},
 		
 		animateCurrencyAmounts: function() {
 			var sprite,
 				currentBux = parseInt(this.buxLabel.getString()),
-				currentLemonades = parseInt(this.lemonadesLabel.getString());
-			//cc.log("current bux " + currentBux + " current lemonades " + currentLemonades + " new bux " + this.newBuxAmount + " new lemonades " + this.newLemonadesAmount);
+				currentLemonades = parseInt(this.lemonadesLabel.getString()),
+				sounds;
 			
 			if (currentBux !== this.newBuxAmount) {
 				if (currentBux < this.newBuxAmount) {
 					this.animateCurrencyAdd(this.buxIcon, "Bux.png");
+
+					sounds = App.getConfig("bux-sounds");
+					App.playEffect(sounds[App.rand(sounds.length)]);
 				}
-				currentBux += (currentBux < this.newBuxAmount ? 1 : -1);
+				currentBux += this.animateBuxIncrement;
+				currentBux = Math[this.animateBuxIncrement > 0 ? "min" : "max"](currentBux, this.newBuxAmount);
 				this.buxLabel.setString(currentBux);
 			}
 			if (currentLemonades !== this.newLemonadesAmount) {
 				if (currentLemonades < this.newLemonadesAmount) {
 					this.animateCurrencyAdd(this.lemonadesIcon, "Lemonade.png");
+
+					sounds = App.getConfig("glass-sounds");
+					App.playEffect(sounds[App.rand(sounds.length)]);
 				}
-				currentLemonades += (currentLemonades < this.newLemonadesAmount ? 1 : -1);
+				currentLemonades += this.animateLemonadesIncrement;
+				currentLemonades = Math[this.animateLemonadesIncrement > 0 ? "min" : "max"](currentLemonades, this.newLemonadesAmount);
 				this.lemonadesLabel.setString(currentLemonades);
 			}
 		},
 		
 		animateCurrencyAdd: function(destNode, filename) {
-			var sprite = cc.Sprite.createWithSpriteFrameName(filename);
+			var angle = cc.DEGREES_TO_RADIANS(App.rand(180)),
+				radius = App.scale(300),
+				sprite = cc.Sprite.createWithSpriteFrameName(filename),
+				rotation = App.rand(360 * 2);
 			sprite.setPosition(cc.pAdd(
 				destNode.getPosition(),
-				cc.p(App.rand(App.scale(200)), App.rand(App.scale(400)) - App.scale(200))
+				cc.p(Math.sin(angle) * radius, Math.cos(angle) * radius)
 			));
-			sprite.setRotation(App.rand(360 * 2));
+			sprite.setRotation(rotation);
 			sprite.setScale(destNode.getScale());
 			sprite.setOpacity(0);
 			sprite.runAction(cc.Sequence.create(
 				cc.FadeIn.create(1.0),
 				cc.FadeOut.create(0.2)
 			));
-			sprite.runAction(cc.EaseOut.create(cc.RotateTo.create(1.0, 0), 1.5));
+			sprite.runAction(cc.EaseOut.create(cc.RotateBy.create(1.0, -rotation), 1.5));
 			sprite.runAction(cc.MoveTo.create(1.0, destNode.getPosition()));
 			sprite.runAction(cc.Sequence.create(
 				cc.DelayTime.create(1.2),

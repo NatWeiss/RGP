@@ -52,6 +52,14 @@ App.config = {
 		"res/Drop2.wav",
 		"res/Drop3.wav"
 	],
+	"bux-sounds": [
+		"res/Bux1.wav",
+		"res/Bux2.wav",
+		"res/Bux3.wav"
+	],
+	"glass-sounds": [
+		"res/Glass1.wav"
+	],
 
 	"total-drinking-streaks": 25,
 
