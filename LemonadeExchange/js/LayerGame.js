@@ -258,6 +258,131 @@ var LayerGame = (function(){
 			]);
 		},
 		
+		createExchangeItems: function(verb) {
+			var self = this,
+				label,
+				sprite,
+				font = App.getConfig("font"),
+				winSize = App.getWinSize(),
+				fontSize = 50,
+				ySpacing = App.scale(70),
+				x = winSize.width * .625,
+				y = winSize.height * .5 + App.scale(120);
+			
+			this.exchangeVerb = verb;
+			this.exchangeLayer = cc.Layer.create();
+			this.addChild(this.exchangeLayer, 1);
+			
+			label = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, fontSize);
+			label.setAnchorPoint(.5, .5);
+			label.setPosition(x, y);
+			this.exchangeLayer.addChild(label, 1);
+
+			y -= ySpacing;
+			label = cc.LabelTTF.create("wants to " + this.exchangeVerb + " 1 ", font, fontSize);
+			label.setAnchorPoint(.5, .5);
+			label.setPosition(x, y);
+			this.exchangeLayer.addChild(label, 1);
+
+			sprite = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
+			sprite.setAnchorPoint(0, .5);
+			sprite.setPosition(label.getPositionX() + label.getContentSize().width * .5, label.getPositionY());
+			sprite.setScale(0.55);
+			this.exchangeLayer.addChild(sprite, 1);
+
+			y -= ySpacing;
+			this.finishExchangeSprite1 = cc.Sprite.createWithSpriteFrameName("Bux.png");
+			this.finishExchangeSprite1.setAnchorPoint(.5, .5);
+			this.finishExchangeSprite1.setPosition(x, y);
+			this.finishExchangeSprite1.setScale(0.25);
+			this.finishExchangeSprite1.runAction(cc.RepeatForever.create(
+				cc.RotateBy.create(1.0, 360)
+			));
+			this.exchangeLayer.addChild(this.finishExchangeSprite1, 1);
+			
+			y -= ySpacing;
+			this.finishExchangeLabel1 = cc.LabelTTF.create(this.exchangeVerb === "buy" ? "Bought by" : "Sold to", font, fontSize);
+			this.finishExchangeLabel1.setPosition(x, y);
+			this.exchangeLayer.addChild(this.finishExchangeLabel1, 1);
+
+			y -= ySpacing;
+			this.finishExchangeLabel2 = cc.LabelTTF.create("Bruce Lee", font, fontSize);
+			this.finishExchangeLabel2.setPosition(x, y);
+			this.exchangeLayer.addChild(this.finishExchangeLabel2, 1);
+
+			y -= ySpacing;
+			this.finishExchangeLabel3 = cc.LabelTTF.create("for " + this.exchangeRate + " ", font, fontSize);
+			this.finishExchangeLabel3.setPosition(x, y);
+			this.exchangeLayer.addChild(this.finishExchangeLabel3, 1);
+			
+			this.finishExchangeSprite2 = cc.Sprite.createWithSpriteFrameName("Bux.png");
+			this.finishExchangeSprite2.setAnchorPoint(0, .5);
+			this.finishExchangeSprite2.setPosition(this.finishExchangeLabel3.getPositionX() + this.finishExchangeLabel3.getContentSize().width * .5, this.finishExchangeLabel3.getPositionY());
+			this.finishExchangeSprite2.setScale(0.55);
+			this.exchangeLayer.addChild(this.finishExchangeSprite2, 1);
+			
+			this.finishExchangeLabel1.setVisible(false);
+			this.finishExchangeLabel2.setVisible(false);
+			this.finishExchangeLabel3.setVisible(false);
+			this.finishExchangeSprite2.setVisible(false);
+			
+			this.schedule(function(){self.finishExchange();}, 5.0, 0);
+		},
+		
+		finishExchange: function() {
+			var self = this;
+			
+			this.finishExchangeLabel1.setVisible(true);
+			this.finishExchangeLabel2.setVisible(true);
+			this.finishExchangeLabel3.setVisible(true);
+			this.finishExchangeSprite2.setVisible(true);
+			this.finishExchangeSprite1.setVisible(false);
+			
+			if (this.exchangeVerb === "buy") {
+				this.addCurrencies(1, -this.exchangeRate);
+				App.requestUrl("api/buy", this.onGetExchangeRate);
+			} else {
+				this.addCurrencies(-1, this.exchangeRate);
+				App.requestUrl("api/sell", this.onGetExchangeRate);
+			}
+
+			this.schedule(function(){
+				self.exchangeLayer.removeFromParent();
+				self.createGameMenu();
+			}, 5.0, 0);
+		},
+		
+		createLemonadeGiver: function() {
+			//
+			// https://developers.facebook.com/docs/reference/dialogs/requests/
+			// https://developers.facebook.com/docs/games/requests
+			//
+			var self = this;
+			
+			FB.ui({
+				method: "apprequests",
+				message: "You've been gifted some lemonade!",
+				max_recipients: 1,
+				title: "Give Some Lemonade"
+			}, function(response){
+				var i,
+					len;
+				cc.log("Friend picker response: " + JSON.stringify(response));
+
+				if (response && response.request && response.to.length) {
+					len = response.to.length;
+					for (i = 0; i < len; i += 1) {
+						cc.log(response.request + "_" + response.to[i]);
+					}
+					
+					self.addCurrencies(-1, 0);
+					App.requestUrl("api/give", self.onGetExchangeRate);
+				}
+				
+				self.enableButtons();
+			});
+		},
+		
 		onEnter: function() {
 			this._super();
 			App.requestUrl("api/exchange-rate", this.onGetExchangeRate);
@@ -471,20 +596,19 @@ var LayerGame = (function(){
 			}
 			else if (tag == TAG_GIVE_LEMONADE) {
 				if (numLemonades > 0) {
-					this.addCurrencies(-1, 0);
-					App.requestUrl("api/give", this.onGetExchangeRate);
+					this.createLemonadeGiver();
 				}
 			}
 			else if (tag == TAG_BUY_LEMONADE) {
 				if (numBux > this.exchangeRate) {
-					this.addCurrencies(1, -this.exchangeRate);
-					App.requestUrl("api/buy", this.onGetExchangeRate);
+					this.removeGameMenu();
+					this.createExchangeItems("buy");
 				}
 			}
 			else if (tag == TAG_SELL_LEMONADE) {
 				if (numLemonades > 0) {
-					this.addCurrencies(-1, this.exchangeRate);
-					App.requestUrl("api/sell", this.onGetExchangeRate);
+					this.removeGameMenu();
+					this.createExchangeItems("sell");
 				}
 			}
 			else if (tag == TAG_PURCHASE_BUX) {

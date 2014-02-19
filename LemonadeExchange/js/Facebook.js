@@ -37,6 +37,8 @@ if (typeof window !== "undefined") {
 
 				FB.api("/me", function(response) {
 					private.playerName = response.name;
+					private.userId = response.id;
+					private.deleteRequests();
 					private.callRunningLayer("onGetPlayerName", private.playerName);
 				});
 				private.loggedIn = true;
@@ -83,6 +85,32 @@ if (typeof window !== "undefined") {
 				}
 				
 				private.initialized = true;
+			}
+		};
+		
+		private.deleteRequests = function() {
+			var i,
+				len,
+				gets,
+				requestIds;
+
+			// delete request id
+			// https://apps.facebook.com/lemonadex/?fb_source=notification&request_ids=221921991333209&ref=notif&app_request_type=user_to_user&notif_t=app_invite
+			// https://apps.facebook.com/lemonadex/?fb_source=notification&request_ids=221921991333209%2C1426088330967926&ref=notif&app_request_type=user_to_user&notif_t=app_invite
+			gets = App.getHttpQueryParams();
+			cc.log("GET: " + JSON.stringify(gets));
+			
+			if (gets.request_ids) {
+				requestIds = gets.request_ids.split(",");
+				if (requestIds) {
+					len = requestIds.length;
+					for (i = 0; i < len; i += 1) {
+						private.log("Deleting request ID: " + requestIds[i]);
+						FB.api(requestIds[i] + "_" + private.userId, "delete", function(response) {
+							private.log("Delete request response " + JSON.stringify(response));
+						});
+					}
+				}
 			}
 		};
 		

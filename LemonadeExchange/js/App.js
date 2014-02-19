@@ -88,7 +88,7 @@ App.setupResources = function() {
 
 	// set resource directories
 	dirs.push("jsb");
-	//cc.log("Setting resource directories: " + App.logify(dirs));
+	//cc.log("Setting resource directories: " + JSON.stringify(dirs));
 	cc.FileUtils.getInstance().setSearchPaths(dirs);
 
 	// load spritesheets
@@ -224,6 +224,31 @@ App.playMusic = function(filename) {
 	}
 };
 
+App.getHttpQueryParams = function() {
+	var loc,
+		i,
+		len,
+		query,
+		aux;
+	
+	if (typeof this._GET === "undefined") {
+		this._GET = {};
+		loc = window.location.toString() || "";
+		
+		if (loc.indexOf("?") !== -1) {
+			query = loc.replace(/^.*?\?/, "").split("&");
+			len = query.length;
+
+			for (i = 0; i < len; i += 1) {
+				aux = decodeURIComponent(query[i]).split("=");
+				this._GET[aux[0]] = aux[1];
+			}
+		}
+	}
+	
+	return this._GET;
+};
+
 App.loadAnalyticsPlugin = function(key) {
 	var flurryApiKey = this.getString("flurry-api-key");
 	if (flurryApiKey) {
@@ -342,24 +367,10 @@ App.loadEconomyPlugin = function() {
 	});
 };
 
-App.logify = function(o) {
-	var text = '';
-	for (var p in o) {
-		text += (text.length ? ', ' : '') + p + ': ';
-		if (typeof o[p] == 'object') {
-			text += this.logify(o[p]);
-		} else if(typeof o[p] == 'function') {
-			text += 'function';
-		} else {
-			text += o[p];
-		}
-	}
-	text = '{' + text + '}';
-	return text;
-};
-
 App.requestUrl = function(url, callback, binary) {
-	var x;
+	var x,
+		loc,
+		pos;
 	if (XMLHttpRequest) {
 		x = new XMLHttpRequest();
 	} else {
@@ -367,7 +378,12 @@ App.requestUrl = function(url, callback, binary) {
 	}
 	
 	if (url.indexOf("://") <= 0) {
-		url = window.location + url;
+		loc = window.location.toString() || "";
+		pos = loc.indexOf("?");
+		if (pos > 0) {
+			loc = loc.substring(0, pos);
+		}
+		url = loc + url;
 	}
 	cc.log("Requesting URL: " + url);
 

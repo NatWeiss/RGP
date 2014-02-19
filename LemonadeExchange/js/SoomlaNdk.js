@@ -26,7 +26,8 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			private = {
 				soomSec: DEFAULT_SOOM_SEC,
 				customSec: DEFAULT_CUSTOM_SEC,
-				purchasingItem: null
+				purchasingItem: null,
+				storeInventory: {}
 			},
 			hasCrypto = (typeof CryptoJS !== "undefined" && CryptoJS.AES),
 			hasBase64 = (typeof btoa !== "undefined");
@@ -352,7 +353,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 				// params.nonConsItemId
 			}
 			else {
-				private.log("Unknown native call method: " + App.logify(params));
+				private.log("Unknown native call method: " + JSON.stringify(params));
 			}
 
 			// assign return value

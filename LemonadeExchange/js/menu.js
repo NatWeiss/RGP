@@ -673,7 +673,7 @@ this.tipjarItem.runAction(n);
 	
 	onPayment: function(response) {
 		cc.log("Payment: " + response);
-		cc.log("Payment: " + App.logify(response));
+		cc.log("Payment: " + JSON.stringify(response));
 	}
 
 });
