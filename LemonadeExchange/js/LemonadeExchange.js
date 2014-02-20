@@ -59,42 +59,38 @@ App.addCurrencyToButton = function(button, amount, currencyAmount, spriteFrameNa
 	sprite.setScale(0.9);
 	button.addChild(sprite);
 
-	label = cc.LabelTTF.create(amount, font, 50);
+	label = cc.LabelTTF.create(amount, font, App.scale(50));
 	label.setAnchorPoint(0, 1);
 	label.setPosition(margin * 1.5, buttonSize.height - margin);
 	button.addChild(label, 1);
 
-	label = cc.LabelTTF.create(amount, font, 50);
+	label = cc.LabelTTF.create(amount, font, App.scale(50));
 	label.setAnchorPoint(0, 1);
 	label.setColor(App.getConfig("font-shadow-color"));
 	label.setPosition(margin * 1.5, buttonSize.height - margin - shadowDistance);
 	button.addChild(label);
 
-	label = cc.LabelTTF.create(currencyAmount, font, 50);
+	label = cc.LabelTTF.create(currencyAmount, font, App.scale(50));
 	label.setAnchorPoint(1, 0);
 	label.setPosition(buttonSize.width - margin * 1.5, margin);
 	button.addChild(label, 1);
 
-	label = cc.LabelTTF.create(currencyAmount, font, 50);
+	label = cc.LabelTTF.create(currencyAmount, font, App.scale(50));
 	label.setAnchorPoint(1, 0);
 	label.setColor(App.getConfig("font-shadow-color"));
 	label.setPosition(buttonSize.width - margin * 1.5, margin - shadowDistance);
 	button.addChild(label);
 };
 
-App.showTouchCircle = function(self, pos) {
-	var item,
-		circle;
+App.showTouchCircle = function(self, pos, item) {
+	var circle;
 	
-	if (typeof pos === "undefined") {
-		if (self.menu) {
-			item = self.menu._selectedItem;
-			if (item) {
-				pos = cc.p(
-					item.getPositionX() + (item.getAnchorPoint().x ? 0 : item.getContentSize().width * .5),
-					item.getPositionY() + (item.getAnchorPoint().y ? 0 : item.getContentSize().height * .5)
-				);
-			}
+	if (typeof pos === "undefined" || pos === null) {
+		if (item) {
+			pos = cc.p(
+				item.getPositionX() + (item.getAnchorPoint().x ? 0 : item.getContentSize().width * .5),
+				item.getPositionY() + (item.getAnchorPoint().y ? 0 : item.getContentSize().height * .5)
+			);
 		} else {
 			return;
 		}
@@ -130,7 +126,7 @@ Soomla.CCSoomlaNdkBridge.buy = function(productId, successCallback, failureCallb
 		social.buy(productId, successCallback, failureCallback);
 	}
 	else {
-		alert("Haven't implemented non-Facebook web purchasing yet...");
+		alert("Please play the game from within Facebook to enable purchasing.");
 		Soomla.CCSoomlaNdkBridge.onPaymentComplete();
 	}
 };

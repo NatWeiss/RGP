@@ -2,7 +2,7 @@ App.config = {
 	"flurry-api-key": "PBSGR7SV59JZN2RQQW96",
 	
 	"social-plugin-name": "Facebook",
-	"social-plugin-debug": true,
+	"social-plugin-debug": false,
 	"social-plugin-init": {
 		appId: "641151319281152",
 		xfbml: false,
@@ -14,7 +14,7 @@ App.config = {
 	},
 
 	"economy-plugin-name": "Soomla",
-	"economy-plugin-debug": true,
+	"economy-plugin-debug": false,
 	"economy-plugin-init": {
 		// only use soomla highway and your don't need these...
 		soomSec: "77yMfv8l1yyYq4WoKJ0cVTEa3FU2zuSp",

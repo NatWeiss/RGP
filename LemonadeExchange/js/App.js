@@ -45,18 +45,26 @@ App.getResourcesToPreload = function() {
 
 App.getResourceDir = function() {
 	var winSize,
-		maxDimension;
+		maxDimension,
+		minDimension;
 
 	if (typeof this._resourceDir === 'undefined') {
 		winSize = this.getWinSize();
 		maxDimension = Math.max(winSize.width, winSize.height);
-		cc.log("Max dimension: " + maxDimension);
+		minDimension = Math.min(winSize.width, winSize.height);
+		cc.log(maxDimension + " x " + minDimension);
 		
 		// set resource directories
 		if (this.isHtml5()) {
-			this._resourceDir = "res/hd";
-			this._contentScaleFactor = 1;
-			this._scaleFactor = 1;
+			if (minDimension > 500) {
+				this._resourceDir = "res/hd";
+				this._contentScaleFactor = 1;
+				this._scaleFactor = 1;
+			} else {
+				this._resourceDir = "res/sd";
+				this._contentScaleFactor = 1;
+				this._scaleFactor = .5;
+			}
 		} else {
 			if (maxDimension > 1600) {
 				this._resourceDir = "res/hdr";
@@ -113,6 +121,11 @@ App.scale = function(floatValue) {
 	return floatValue * this._scaleFactor;
 };
 
+// make a point relative to the center of the screen and scaled
+App.centralize = function(x, y) {
+	var winSize = this.getWinSize();
+	return cc.p(this.scale(x) + winSize.width * .5, this.scale(y) + winSize.height * .5);
+}
 
 App.getConfig = function(key) {
 	return this.config[key];
@@ -360,7 +373,7 @@ App.loadEconomyPlugin = function() {
 	//cc.log("Currencies: " + JSON.stringify(currencies));
 	_.forEach(currencies, function(vc) {
 		var balance = Soomla.storeInventory.getItemBalance(vc.itemId);
-		cc.log("User has " + balance + " of " + vc.itemId);
+		//cc.log("User has " + balance + " of " + vc.itemId);
 		if (balance == 0) {
 			Soomla.storeInventory.giveItem(vc.itemId, App.getConfig("initial-balances")[vc.itemId]);
 		}
@@ -471,20 +484,15 @@ App.bootHtml5 = function() {
 
 App.bootX = function(global) {
 	require("jsb.js");
-	//require("jsb_pluginx.js"); // why are these even necessary?
+	//require("jsb_pluginx.js");
 	//require("jsb_pluginx_protocols_auto_api.js");
 	require("jsb_cocos2dx_auto_api.js");
-
-	// mimic window.location
-//	global.location = "";
 
 	// implement timers
 	require("js/timers.js");
 	this.timerLoop = makeWindowTimer(global, function(ms){});
 	cc.Director.getInstance().getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
-	setTimeout(function(){
-		cc.log("YEP! Timer works!!!!!!!!");
-		}, 3333);
+	//setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);
 
 	// load js files
 	var files = this.getJSFiles();
@@ -539,7 +547,6 @@ App.mainHtml5 = function() {
 
 			cc.EGLView.getInstance().resizeWithBrowserSize( true );
 			//cc.EGLView.getInstance().setDesignResolutionSize(screenSize.width, screenSize.height, cc.RESOLUTION_POLICY.SHOW_ALL);
-			//cc.EGLView.getInstance().setDesignResolutionSize( 800, 450, cc.RESOLUTION_POLICY.SHOW_ALL );
 			cc.EGLView.getInstance().setResolutionPolicy(cc.RESOLUTION_POLICY.SHOW_ALL);
 
 			cc.LoaderScene.preload(App.getResourcesToPreload(), function() {
@@ -594,26 +601,20 @@ App.main = function() {
 	if (this.isHtml5()) {
 		this._fullscreenEnabled = (this.runPrefixMethod(document, "FullScreen")
 			|| this.runPrefixMethod(document, "IsFullScreen"));
-		cc.log("Initially fullscreen? " + this.isFullscreenEnabled());
+		if (this._fullscreenEnabled) {
+			cc.log("Initially fullscreen? " + this.isFullscreenEnabled());
+		}
 	}
 
 	director = cc.Director.getInstance();
 	director.setDisplayStats(this.showFPS);
 	director.setAnimationInterval(1.0 / this.getFrameRate());
 
-	//cc.Director.getInstance().enableRetinaDisplay();
-//var bytes = new Uint8Array();
-//App.addImageRaw("somefile", bytes);
-
-	//doSoomlaStoreTest();
-	
 	// load
 	this.loadAnalyticsPlugin();
 	this.loadAdsPlugin();
 	this.loadSocialPlugin();
 	this.loadEconomyPlugin();
-
-//	startApplication(director);
 }
 
 App.boot = function(global) {

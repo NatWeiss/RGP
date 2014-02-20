@@ -40,7 +40,7 @@ var LayerMenu = (function(){
 
 			// logo
 			this.logo = cc.Sprite.createWithSpriteFrameName("Logo.png");
-			this.logo.setPosition(winSize.width * .5, winSize.height * .7);
+			this.logo.setPosition(App.centralize(0, 114));
 			this.addChild(this.logo, 1);
 			//if (!canResume) {
 				this.logo.setPositionY(this.logo.getPositionY() + winSize.height);
@@ -58,7 +58,7 @@ var LayerMenu = (function(){
 			
 			// button layer
 			layer = cc.LayerColor.create(cc.c4b(0,0,0,202), winSize.width * 1.2, App.scale(215));
-			layer.setPosition(App.scale(-20), App.scale(50) - winSize.height);
+			layer.setPosition(App.scale(-20), winSize.height * .5 - App.scale(290) - winSize.height);
 			layer.setRotation(-2);
 			this.addChild(layer, 1);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
@@ -68,7 +68,7 @@ var LayerMenu = (function(){
 			layer.runAction(cc.EaseOut.create(cc.MoveBy.create(0.5, cc.p(0, winSize.height)), 1.5));
 			
 			// buttons
-			button = App.createButton(this, "ButtonPlay.png", TAG_PLAY_RESUME, cc.p(winSize.width * .2, App.scale(157)),
+			button = App.createButton(this, "ButtonPlay.png", TAG_PLAY_RESUME, App.centralize(-300, -183),
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 1.0, 1.5);
 			button.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.DelayTime.create(1.5),
@@ -76,32 +76,36 @@ var LayerMenu = (function(){
 				cc.ScaleBy.create(0.1, 1 / 1.02)
 			)));
 
-			this.buttonLogin = App.createButton(this, "ButtonLogin.png", TAG_LOGIN_LOGOUT, cc.p(winSize.width * .5, App.scale(157)),
+			this.buttonLogin = App.createButton(this, "ButtonLogin.png", TAG_LOGIN_LOGOUT, App.centralize(0, -183),
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.7, 1.5);
-			this.buttonLogout = App.createButton(this, "ButtonLogout.png", TAG_LOGIN_LOGOUT, cc.p(winSize.width * .5, App.scale(157)),
+			this.buttonLogout = App.createButton(this, "ButtonLogout.png", TAG_LOGIN_LOGOUT, App.centralize(0, -183),
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.7, 1.5);
 			loggedIn = App.getSocialPlugin().isLoggedIn();
 			this.buttonLogin.setVisible(!loggedIn);
 			this.buttonLogout.setVisible(loggedIn);
 
-			button = App.createButton(this, "ButtonAbout.png", TAG_INFO, cc.p(winSize.width * .8, App.scale(157)),
+			button = App.createButton(this, "ButtonAbout.png", TAG_INFO, App.centralize(300, -183),
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.4, 1.5);
 
 			this.buttonSound = App.createButton(this, "ButtonSound.png", TAG_TOGGLE_SOUND,
-				cc.p(App.scale(75), winSize.height - App.scale(90)),
+				App.centralize(-420, 260),
 				cc.p(.5, .5), cc.p(winSize.width * .5, -winSize.height), 0.5, 0.25, 1.5);
 			this.buttonNoSound = App.createButton(this, "ButtonNoSound.png", TAG_TOGGLE_SOUND,
-				cc.p(App.scale(75), winSize.height - App.scale(90)),
+				App.centralize(-420, 260),
 				cc.p(.5, .5), cc.p(winSize.width * .5, -winSize.height), 0.5, 0.25, 1.5);
+			this.buttonSound.setScale(0.8);
+			this.buttonNoSound.setScale(0.8);
 			this.buttonSound.setVisible(App.isSoundEnabled());
 			this.buttonNoSound.setVisible(!App.isSoundEnabled());
 
 			this.buttonFullscreen = App.createButton(this, "ButtonFullscreen.png", TAG_TOGGLE_FULLSCREEN,
-				cc.p(winSize.width - App.scale(75), winSize.height - App.scale(90)),
+				App.centralize(420, 260),
 				cc.p(.5, .5), cc.p(-winSize.width * .5, -winSize.height), 0.5, 0.25, 1.5);
 			this.buttonMinimize = App.createButton(this, "ButtonMinimize.png", TAG_TOGGLE_FULLSCREEN,
-				cc.p(winSize.width - App.scale(75), winSize.height - App.scale(90)),
+				App.centralize(420, 260),
 				cc.p(.5, .5), cc.p(-winSize.width * .5, -winSize.height), 0.5, 0.25, 1.5);
+			this.buttonFullscreen.setScale(0.8);
+			this.buttonMinimize.setScale(0.8);
 			this.buttonMinimize.setVisible(false);
 			
 			this.scheduleUpdate();
@@ -142,7 +146,7 @@ var LayerMenu = (function(){
 				socialPlugin;
 			
 			App.playClickSound();
-			App.showTouchCircle(this);
+			App.showTouchCircle(this, null, sender);
 			
 			// play
 			if (tag == TAG_PLAY_RESUME) {

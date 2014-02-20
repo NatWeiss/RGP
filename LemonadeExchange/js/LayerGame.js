@@ -89,7 +89,7 @@ var LayerGame = (function(){
 			// exchange rate
 			x = winSize.width * .425;
 			y = winSize.height - App.scale(100);
-			label = cc.LabelTTF.create("1", font, 80);
+			label = cc.LabelTTF.create("1", font, App.scale(80));
 			label.setAnchorPoint(0, .5);
 			label.setPosition(x, y);
 			this.addChild(label, 1);
@@ -102,7 +102,7 @@ var LayerGame = (function(){
 			this.addChild(sprite, 1);
 
 			x += App.scale(80);
-			this.rateLabel = cc.LabelTTF.create(" = ", font, 80);
+			this.rateLabel = cc.LabelTTF.create(" = ", font, App.scale(80));
 			this.rateLabel.setAnchorPoint(0, .5);
 			this.rateLabel.setPosition(x, y);
 			this.addChild(this.rateLabel, 1);
@@ -126,7 +126,7 @@ var LayerGame = (function(){
 			this.newBuxAmount = numBux;
 			
 			// player name
-			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, 48);
+			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, App.scale(48));
 			this.playerNameLabel.setAnchorPoint(0, .5);
 			this.playerNameLabel.setPosition(App.scale(60), winSize.height - App.scale(60));
 			this.addChild(this.playerNameLabel, 1);
@@ -140,7 +140,7 @@ var LayerGame = (function(){
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 4), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -4), 3.0)
 			)));
-			this.lemonadesLabel = cc.LabelTTF.create("" + numLemonades, font, 80);
+			this.lemonadesLabel = cc.LabelTTF.create("" + numLemonades, font, App.scale(80));
 			this.lemonadesLabel.setAnchorPoint(0, .5);
 			this.lemonadesLabel.setPosition(App.scale(150), winSize.height - App.scale(190));
 			this.addChild(this.lemonadesLabel, 1);
@@ -155,7 +155,7 @@ var LayerGame = (function(){
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 8), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -8), 3.0)
 			)));
-			this.buxLabel = cc.LabelTTF.create("" + numBux, font, 60);
+			this.buxLabel = cc.LabelTTF.create("" + numBux, font, App.scale(60));
 			this.buxLabel.setAnchorPoint(0, .5);
 			this.buxLabel.setPosition(App.scale(170), winSize.height - App.scale(340));
 			this.addChild(this.buxLabel, 1);
@@ -264,7 +264,7 @@ var LayerGame = (function(){
 				sprite,
 				font = App.getConfig("font"),
 				winSize = App.getWinSize(),
-				fontSize = 50,
+				fontSize = App.scale(50),
 				ySpacing = App.scale(70),
 				x = winSize.width * .625,
 				y = winSize.height * .5 + App.scale(120);
@@ -582,7 +582,7 @@ var LayerGame = (function(){
 				director = cc.Director.getInstance();
 			
 			App.playClickSound();
-			App.showTouchCircle(this);
+			App.showTouchCircle(this, null, sender);
 			this.enableButton(tag, false);
 			
 			if (tag == TAG_PAUSE) {
