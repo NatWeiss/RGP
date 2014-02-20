@@ -126,7 +126,7 @@ Soomla.CCSoomlaNdkBridge.buy = function(productId, successCallback, failureCallb
 		social.buy(productId, successCallback, failureCallback);
 	}
 	else {
-		alert("Please play the game from within Facebook to enable purchasing.");
+		alert("Please play within Facebook to enable purchasing.");
 		Soomla.CCSoomlaNdkBridge.onPaymentComplete();
 	}
 };

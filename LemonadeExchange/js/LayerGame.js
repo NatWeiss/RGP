@@ -50,8 +50,7 @@ var LayerGame = (function(){
 			this.createGameMenu();
 
 			// back
-			App.createButton(this, "ButtonBack.png", TAG_PAUSE,
-				cc.p(App.scale(50), App.scale(30)),
+			App.createButton(this, "ButtonBack.png", TAG_PAUSE, App.centralize(-430, -290),
 				cc.p(0, 0), cc.p(winSize.width * .5, winSize.height), 0.5, 0.25, 1.5);
 
 			// listen for when ads are finished
@@ -67,49 +66,47 @@ var LayerGame = (function(){
 				winSize = App.getWinSize();
 			
 			// color stripe
-			layer = cc.LayerColor.create(cc.c4b(0,0,0,202), winSize.width * 0.6, winSize.height * 1.2);
-			layer.setPosition(winSize.width * 1.35, winSize.height * -.1);
+			layer = cc.LayerColor.create(cc.c4b(0,0,0,202), App.scale(590), winSize.height * 1.2);
+			layer.setPosition(winSize.width * .5 + App.scale(-144), winSize.height * -.1);
 			layer.setRotation(-2);
 			this.addChild(layer);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseOut.create(cc.RotateBy.create(1.5, 1), 1.2),
 				cc.EaseOut.create(cc.RotateBy.create(1.7, -1), 1.2)
 			)));
+			layer.setPositionX(layer.getPositionX() + winSize.width);
 			layer.runAction(cc.EaseOut.create(cc.MoveBy.create(0.5, cc.p(-winSize.width, 0)), 1.5));
 		},
 		
 		createExchangeRate: function() {
-			var x,
-				y,
+			var pos = App.centralize(-72, 220),
 				font = App.getString("font"),
 				label,
 				sprite,
 				winSize = App.getWinSize();
 			
 			// exchange rate
-			x = winSize.width * .425;
-			y = winSize.height - App.scale(100);
 			label = cc.LabelTTF.create("1", font, App.scale(80));
 			label.setAnchorPoint(0, .5);
-			label.setPosition(x, y);
+			label.setPosition(pos);
 			this.addChild(label, 1);
 
-			x += App.scale(50);
+			pos.x += App.scale(50);
 			sprite = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
 			sprite.setAnchorPoint(0, .5);
-			sprite.setPosition(x, y);
+			sprite.setPosition(pos);
 			sprite.setScale(0.5);
 			this.addChild(sprite, 1);
 
-			x += App.scale(80);
+			pos.x += App.scale(80);
 			this.rateLabel = cc.LabelTTF.create(" = ", font, App.scale(80));
 			this.rateLabel.setAnchorPoint(0, .5);
-			this.rateLabel.setPosition(x, y);
+			this.rateLabel.setPosition(pos);
 			this.addChild(this.rateLabel, 1);
 
 			this.rateIcon = cc.Sprite.createWithSpriteFrameName("Bux.png");
 			this.rateIcon.setAnchorPoint(0, .5);
-			this.rateIcon.setPosition(x, y);
+			this.rateIcon.setPosition(pos);
 			this.setRateIconPos();
 			this.rateIcon.setScale(0.55	);
 			this.addChild(this.rateIcon, 1);
@@ -128,12 +125,12 @@ var LayerGame = (function(){
 			// player name
 			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, App.scale(48));
 			this.playerNameLabel.setAnchorPoint(0, .5);
-			this.playerNameLabel.setPosition(App.scale(60), winSize.height - App.scale(60));
+			this.playerNameLabel.setPosition(App.centralize(-420, 260));
 			this.addChild(this.playerNameLabel, 1);
 			
 			// lemonades
 			this.lemonadesIcon = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
-			this.lemonadesIcon.setPosition(App.scale(85), winSize.height - App.scale(190));
+			this.lemonadesIcon.setPosition(App.centralize(-395, 130));
 			this.addChild(this.lemonadesIcon, 1);
 			this.lemonadesIcon.setRotation(-2);
 			this.lemonadesIcon.runAction(cc.RepeatForever.create(cc.Sequence.create(
@@ -142,12 +139,12 @@ var LayerGame = (function(){
 			)));
 			this.lemonadesLabel = cc.LabelTTF.create("" + numLemonades, font, App.scale(80));
 			this.lemonadesLabel.setAnchorPoint(0, .5);
-			this.lemonadesLabel.setPosition(App.scale(150), winSize.height - App.scale(190));
+			this.lemonadesLabel.setPosition(App.centralize(-330, 130));
 			this.addChild(this.lemonadesLabel, 1);
 
 			// bux
 			this.buxIcon = cc.Sprite.createWithSpriteFrameName("Bux.png");
-			this.buxIcon.setPosition(App.scale(85), winSize.height - App.scale(340));
+			this.buxIcon.setPosition(App.centralize(-395, -20));
 			this.buxIcon.setScale(0.65);
 			this.addChild(this.buxIcon, 1);
 			this.buxIcon.setRotation(-4);
@@ -157,13 +154,12 @@ var LayerGame = (function(){
 			)));
 			this.buxLabel = cc.LabelTTF.create("" + numBux, font, App.scale(60));
 			this.buxLabel.setAnchorPoint(0, .5);
-			this.buxLabel.setPosition(App.scale(170), winSize.height - App.scale(340));
+			this.buxLabel.setPosition(App.centralize(-310, -20));
 			this.addChild(this.buxLabel, 1);
 		},
 		
 		createGameMenu: function() {
-			var x,
-				y,
+			var pos = App.centralize(-120, 70),
 				ySpacing,
 				delayPer,
 				winSize = App.getWinSize(),
@@ -173,26 +169,23 @@ var LayerGame = (function(){
 			// buttons
 			delayPer = 0.25;
 			ySpacing = App.scale(115);
-			x = winSize.width * .4;
-			y = winSize.height - App.scale(250);
-			App.createButton(this, "ButtonDrink.png", TAG_DRINK_LEMONADE, cc.p(x, y),
+			App.createButton(this, "ButtonDrink.png", TAG_DRINK_LEMONADE, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 1, 1.5);
-			y -= ySpacing;
-			App.createButton(this, "ButtonGive.png", TAG_GIVE_LEMONADE, cc.p(x, y),
+			pos.y -= ySpacing;
+			App.createButton(this, "ButtonGive.png", TAG_GIVE_LEMONADE, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 2, 1.5);
-			y -= ySpacing;
-			App.createButton(this, "ButtonEarn.png", TAG_EARN_BUX, cc.p(x, y),
+			pos.y -= ySpacing;
+			App.createButton(this, "ButtonEarn.png", TAG_EARN_BUX, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 3, 1.5);
 
-			x = winSize.width * .66;
-			y = winSize.height - App.scale(250);
-			App.createButton(this, "ButtonBuy.png", TAG_BUY_LEMONADE, cc.p(x, y),
+			pos = App.centralize(154, 70);
+			App.createButton(this, "ButtonBuy.png", TAG_BUY_LEMONADE, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 4, 1.5);
-			y -= ySpacing;
-			App.createButton(this, "ButtonSell.png", TAG_SELL_LEMONADE, cc.p(x, y),
+			pos.y -= ySpacing;
+			App.createButton(this, "ButtonSell.png", TAG_SELL_LEMONADE, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 5, 1.5);
-			y -= ySpacing;
-			App.createButton(this, "ButtonPurchase.png", TAG_PURCHASE_BUX, cc.p(x, y),
+			pos.y -= ySpacing;
+			App.createButton(this, "ButtonPurchase.png", TAG_PURCHASE_BUX, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 6, 1.5);
 			
 			this.enableButtons();
@@ -221,8 +214,7 @@ var LayerGame = (function(){
 		},
 		
 		createPurchaseMenu: function() {
-			var x,
-				y,
+			var pos = App.centralize(-130, -30),
 				item,
 				delayPer,
 				button,
@@ -230,20 +222,17 @@ var LayerGame = (function(){
 
 			// buttons
 			delayPer = 0.25;
-			x = winSize.width * .39;
-			y = winSize.height - App.scale(350);
 			item = Soomla.storeInfo.getItemByItemId("small_bux_pack");
-			button = App.createButton(this, "ButtonProduct.png", TAG_SMALL_BUX_PACK, cc.p(x, y),
+			button = App.createButton(this, "ButtonProduct.png", TAG_SMALL_BUX_PACK, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 1, 1.5);
 			App.addCurrencyToButton(button,
 				item.currency_amount,
 				App.localizeCurrency(item.purchasableItem.marketItem.price),
 				"small_bux_pack.png");
 
-			x = winSize.width * .66;
-			y = winSize.height - App.scale(350);
+			pos = App.centralize(154, -30);
 			item = Soomla.storeInfo.getItemByItemId("medium_bux_pack");
-			button = App.createButton(this, "ButtonProduct.png", TAG_MEDIUM_BUX_PACK, cc.p(x, y),
+			button = App.createButton(this, "ButtonProduct.png", TAG_MEDIUM_BUX_PACK, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 2, 1.5);
 			App.addCurrencyToButton(button,
 				item.currency_amount,
@@ -266,8 +255,7 @@ var LayerGame = (function(){
 				winSize = App.getWinSize(),
 				fontSize = App.scale(50),
 				ySpacing = App.scale(70),
-				x = winSize.width * .625,
-				y = winSize.height * .5 + App.scale(120);
+				pos = App.centralize(120, 120);
 			
 			this.exchangeVerb = verb;
 			this.exchangeLayer = cc.Layer.create();
@@ -275,13 +263,13 @@ var LayerGame = (function(){
 			
 			label = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, fontSize);
 			label.setAnchorPoint(.5, .5);
-			label.setPosition(x, y);
+			label.setPosition(pos);
 			this.exchangeLayer.addChild(label, 1);
 
-			y -= ySpacing;
+			pos.y -= ySpacing;
 			label = cc.LabelTTF.create("wants to " + this.exchangeVerb + " 1 ", font, fontSize);
 			label.setAnchorPoint(.5, .5);
-			label.setPosition(x, y);
+			label.setPosition(pos);
 			this.exchangeLayer.addChild(label, 1);
 
 			sprite = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
@@ -290,29 +278,29 @@ var LayerGame = (function(){
 			sprite.setScale(0.55);
 			this.exchangeLayer.addChild(sprite, 1);
 
-			y -= ySpacing;
+			pos.y -= ySpacing;
 			this.finishExchangeSprite1 = cc.Sprite.createWithSpriteFrameName("Bux.png");
 			this.finishExchangeSprite1.setAnchorPoint(.5, .5);
-			this.finishExchangeSprite1.setPosition(x, y);
+			this.finishExchangeSprite1.setPosition(pos);
 			this.finishExchangeSprite1.setScale(0.25);
 			this.finishExchangeSprite1.runAction(cc.RepeatForever.create(
 				cc.RotateBy.create(1.0, 360)
 			));
 			this.exchangeLayer.addChild(this.finishExchangeSprite1, 1);
 			
-			y -= ySpacing;
+			pos.y -= ySpacing;
 			this.finishExchangeLabel1 = cc.LabelTTF.create(this.exchangeVerb === "buy" ? "Bought by" : "Sold to", font, fontSize);
-			this.finishExchangeLabel1.setPosition(x, y);
+			this.finishExchangeLabel1.setPosition(pos);
 			this.exchangeLayer.addChild(this.finishExchangeLabel1, 1);
 
-			y -= ySpacing;
+			pos.y -= ySpacing;
 			this.finishExchangeLabel2 = cc.LabelTTF.create("Bruce Lee", font, fontSize);
-			this.finishExchangeLabel2.setPosition(x, y);
+			this.finishExchangeLabel2.setPosition(pos);
 			this.exchangeLayer.addChild(this.finishExchangeLabel2, 1);
 
-			y -= ySpacing;
+			pos.y -= ySpacing;
 			this.finishExchangeLabel3 = cc.LabelTTF.create("for " + this.exchangeRate + " ", font, fontSize);
-			this.finishExchangeLabel3.setPosition(x, y);
+			this.finishExchangeLabel3.setPosition(pos);
 			this.exchangeLayer.addChild(this.finishExchangeLabel3, 1);
 			
 			this.finishExchangeSprite2 = cc.Sprite.createWithSpriteFrameName("Bux.png");
@@ -422,7 +410,7 @@ var LayerGame = (function(){
 			this.glass = cc.Sprite.createWithSpriteFrameName("GlassEmpty.png");
 			glassSize = this.glass.getContentSize()
 			this.glass.setTag(TAG_LEMONADE);
-			this.glass.setPosition(winSize.width * .5, winSize.height * .5);
+			this.glass.setPosition(App.centralize(100, 0));
 			this.glass.setScale(0.35);
 			this.addChild(this.glass, 2);
 

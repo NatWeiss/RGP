@@ -56,7 +56,7 @@ App.getResourceDir = function() {
 		
 		// set resource directories
 		if (this.isHtml5()) {
-			if (minDimension > 500) {
+			if (minDimension >= 600) { // 640 would be more accurate, 600 is a litte more lenient
 				this._resourceDir = "res/hd";
 				this._contentScaleFactor = 1;
 				this._scaleFactor = 1;
