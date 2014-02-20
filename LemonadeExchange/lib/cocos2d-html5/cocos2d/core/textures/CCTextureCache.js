@@ -444,7 +444,6 @@ cc.TextureCache = cc.Class.extend(/** @lends cc.TextureCache# */{
      * @param {Image|HTMLImageElement|HTMLCanvasElement} texture
      */
     cacheImage:function (path, texture) {
-debugger;
         if(texture instanceof  cc.Texture2D){
             this._textures[path] = texture;
             return ;

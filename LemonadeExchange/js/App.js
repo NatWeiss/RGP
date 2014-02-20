@@ -12,7 +12,7 @@ App.getInitialScene = function() {
 };
 
 App.getInitialLayer = function() {
-	return (this.isHtml5() ? LayerGame : LayerMenu);
+	return (this.isHtml5() ? LayerMenu : LayerMenu);
 };
 
 App.getJSFiles = function() {
@@ -204,9 +204,20 @@ App.runPrefixMethod = function(obj, method) {
 	}
 };
 
+App.loadSoundEnabled = function() {
+	this._soundEnabled = sys.localStorage.getItem("soundEnabled");
+	//cc.log("Loaded sound enabled: " + this._soundEnabled);
+	if (this._soundEnabled === null || this._soundEnabled === "") {
+		this._soundEnabled = true;
+	}
+	this._soundEnabled = (this._soundEnabled === "true" || this._soundEnabled === true) ? true : false;
+	//cc.log("Loaded sound enabled: " + this._soundEnabled);
+};
+
 App.enableSound = function(enabled) {
 	var audio;
 	this._soundEnabled = enabled ? true : false;
+	sys.localStorage.setItem("soundEnabled", this._soundEnabled);
 	if (!this.isSoundEnabled()) {
 		audio = cc.AudioEngine.getInstance();
 		audio.stopMusic();
@@ -589,6 +600,8 @@ App.main = function() {
 		cacher,
 		dirs = [];
 
+	this.loadSoundEnabled();
+
 	if (this.isHtml5())
 		this.mainHtml5();
 	else
@@ -596,8 +609,6 @@ App.main = function() {
 	
 	cc.log("Resource directory: " + App.getResourceDir());
 	
-	this._soundEnabled = true; // load this from settings...
-
 	if (this.isHtml5()) {
 		this._fullscreenEnabled = (this.runPrefixMethod(document, "FullScreen")
 			|| this.runPrefixMethod(document, "IsFullScreen"));

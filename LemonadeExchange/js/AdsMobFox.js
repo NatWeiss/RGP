@@ -137,10 +137,15 @@ plugin.AdsMobFox = cc.Class.extend({
 				// cocos2d-x jsb lacks xmlhttpresponse.xml, so we parse the raw html string
 				var html = adResponse,
 					imageUrl = self.between(html, "src=\"", "\"");
+
+				self.debugLog("MobFox ad response: " + html);
+				if (!imageUrl.length) {
+					self.debugLog("MobFox: no ad url found");
+					return;
+				}
 				imageUrl = self.insert(imageUrl, "://", "www.corsproxy.com/");
 				self.adUrl = self.between(html, "href=\"", "\"");
 				
-				self.debugLog("MobFox ad response: " + html);
 				self.debugLog("MobFox image: " + imageUrl + ", click URL:" + self.adUrl);
 				if( this.listener ) {
 					this.listener.onAdsResult(plugin.AdsResultCode.AdsReceived, "MobFox ad data received");
@@ -207,9 +212,10 @@ plugin.AdsMobFox = cc.Class.extend({
 	},
 	
 	between: function(string, prefix, suffix) {
-		var startPos = string.indexOf(prefix) + prefix.length,
-			endPos = string.indexOf(suffix, startPos);
+		var startPos = string.indexOf(prefix),
+			endPos = string.indexOf(suffix, startPos + prefix.length);
 		if (startPos > 0 && endPos > 0) {
+			startPos += prefix.length;
 			return string.substring(startPos, endPos);
 		}
 		return "";

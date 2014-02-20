@@ -107,6 +107,9 @@ var LayerMenu = (function(){
 			this.buttonFullscreen.setScale(0.8);
 			this.buttonMinimize.setScale(0.8);
 			this.buttonMinimize.setVisible(false);
+			if (!App.isHtml5()) {
+				this.buttonFullscreen.setVisible(false);
+			}
 			
 			this.scheduleUpdate();
 

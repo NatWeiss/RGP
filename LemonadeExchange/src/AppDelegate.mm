@@ -97,12 +97,12 @@ bool AppDelegate::applicationDidFinishLaunching()
 	#endif
 
 	ScriptEngineManager::getInstance()->setScriptEngine(sc);
-	ScriptingCore::getInstance()->runScript("js/App.js");
+	sc->runScript("js/App.js");
 
-//	if( NSClassFromString(@"AdsMobFox") == nil )
-//	{
-//		ScriptingCore::getInstance()->runScript("AdsMobFox.js");
-//	}
+	if( NSClassFromString(@"AdsMobFox") == nil )
+	{
+		sc->runScript("AdsMobFox.js");
+	}
 
 	return true;
 }
