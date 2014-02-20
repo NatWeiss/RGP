@@ -29,7 +29,8 @@ App.getJSFiles = function() {
 		"js/AdsMobFox.js",
 		"js/SceneMain.js",
 		"js/LayerMenu.js",
-		"js/LayerGame.js"
+		"js/LayerGame.js",
+		"js/Loader.js"
 		];
 	return files;
 };
