@@ -10,7 +10,7 @@ plugin.AdsPos = {
 	TopRight: 3,
 	Bottom: 4,
 	BottomLeft: 5,
-	BottomRight: 6,
+	BottomRight: 6
 };
 
 
@@ -324,7 +324,6 @@ plugin.AdsMobFox = cc.Class.extend({
 		
 		// create layer + sprite
 		this.layer = cc.Layer.create();
-		debugger;
 		sprite = cc.MenuItemImage.create(imageUrl, imageUrl, this.clickAdCallback, this);
 		
 		// set sprite position

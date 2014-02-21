@@ -1,11 +1,15 @@
 
+// why do we get these warnings when loading minified?
+// [Warning] Invalid App Id: Must be a number or numeric string representing the application id. (all.js, line 56)
+// [Warning] FB.getLoginStatus() called before calling FB.init(). (all.js, line 56)
+
 //
 // begin module
 //
 if (typeof window !== "undefined") {
 	plugin.Facebook = (function(){
 		var TAG = "Facebook:",
-			private = {
+			module = {
 				devInfo: {},
 				debug: false,
 				loggedIn: false,
@@ -13,82 +17,82 @@ if (typeof window !== "undefined") {
 				playerName: "Anonymous"
 			};
 		
-		private.log = function() {
-			if (private.debug) {
+		module.log = function() {
+			if (module.debug) {
 				[].unshift.call(arguments, TAG);
 				cc.log.apply(self, arguments);
 			}
 		};
 		
-		private.callRunningLayer = function(method, param1, param2, param3) {
+		module.callRunningLayer = function(method, param1, param2, param3) {
 			scene = cc.Director.getInstance().getRunningScene();
 			if (scene && scene.layer && scene.layer[method]) {
 				scene.layer[method](param1, param2, param3);
 			}
 		};
 
-		private.onCheckLoginStatus = function(response) {
+		module.onCheckLoginStatus = function(response) {
 			if (!response) {
 				return;
 			}
 			
 			if (response.status === "connected") {
-				private.log("User is authorized, token: " + response.authResponse.accessToken.substring(0,4) + "...");
+				module.log("User is authorized, token: " + response.authResponse.accessToken.substring(0,4) + "...");
 
 				FB.api("/me", function(response) {
-					private.playerName = response.name;
-					private.userId = response.id;
-					private.deleteRequests();
-					private.callRunningLayer("onGetPlayerName", private.playerName);
+					module.playerName = response.name;
+					module.userId = response.id;
+					module.deleteRequests();
+					module.callRunningLayer("onGetPlayerName", module.playerName);
 				});
-				private.loggedIn = true;
+				module.loggedIn = true;
 			}
 			else if (response.status === "not_authorized") {
 				cc.log("FB user is not authorized yet");
-				private.loggedIn = false;
+				module.loggedIn = false;
 			}
 			else {
 				cc.log("FB user is not logged in to Facebook");
-				private.loggedIn = false;
+				module.loggedIn = false;
 			}
-			private.log("Logged in? " + private.loggedIn);
+			module.log("Logged in? " + module.loggedIn);
 			
-			private.callRunningLayer("onGetLoginStatus", private.loggedIn);
+			module.callRunningLayer("onGetLoginStatus", module.loggedIn);
 		};
 		
-		private.checkForFB = function() {
+		module.checkForFB = function() {
 			if (typeof FB === "undefined") {
-				private.log("JS unavailable. Please ensure that all.js is loaded from HTML.");
+				module.log("JS unavailable. Please ensure that all.js is loaded from HTML.");
 				return false;
 			}
 			return true;
 		};
 
-		private.init = function() {
-			if (typeof FB !== "undefined" && !private.initialized) {
+		module.init = function() {
+			if (typeof FB !== "undefined" && !module.initialized) {
 				// init
-				FB.init(private.devInfo);
-				private.log("Initialized app ID: " + private.devInfo.appId);
+				FB.init(module.devInfo);
+				module.log("Initialized app ID: " + module.devInfo.appId);
 
 				// subscribe to authorization changes
-				FB.Event.subscribe("auth.authResponseChange", private.onCheckLoginStatus);
+				FB.Event.subscribe("auth.authResponseChange", module.onCheckLoginStatus);
 				
 				// detect if running as a facebook canvas
 				if (window.name && window.name.length > 0) {
 					FB.Canvas.getPageInfo(function(info){
 						if (info && info.clientWidth) {
-							private.isCanvas = true;
-							private.canvasInfo = info;
-							private.log("Canvas mode");
+							module.isCanvas = true;
+							module.canvasInfo = info;
+							module.log("Canvas mode");
 						}
 					});
 				}
 				
-				private.initialized = true;
+				module.initialized = true;
 			}
 		};
 		
-		private.deleteRequests = function() {
+		module.deleteRequests = function() {
 			var i,
 				len,
 				gets,
@@ -105,9 +109,9 @@ if (typeof window !== "undefined") {
 				if (requestIds) {
 					len = requestIds.length;
 					for (i = 0; i < len; i += 1) {
-						private.log("Deleting request ID: " + requestIds[i]);
-						FB.api(requestIds[i] + "_" + private.userId, "delete", function(response) {
-							private.log("Delete request response " + JSON.stringify(response));
+						module.log("Deleting request ID: " + requestIds[i]);
+						FB.api(requestIds[i] + "_" + module.userId, "delete", function(response) {
+							module.log("Delete request response " + JSON.stringify(response));
 						});
 					}
 				}
@@ -115,8 +119,8 @@ if (typeof window !== "undefined") {
 		};
 		
 		window.fbAsyncInit = function() {
-			private.log("fbAsyncInit");
-			private.init();
+			module.log("fbAsyncInit");
+			module.init();
 		};
 		
 		return cc.Class.extend({
@@ -124,28 +128,28 @@ if (typeof window !== "undefined") {
 			},
 			
 			configDeveloperInfo: function(devInfo) {
-				private.devInfo = devInfo;
-				private.init();
+				module.devInfo = devInfo;
+				module.init();
 			},
 			
 			login: function(loginInfo) {
-				if (private.checkForFB()) {
+				if (module.checkForFB()) {
 					FB.login(null, loginInfo);
 				}
 			},
 			
 			logout: function() {
-				if (private.checkForFB()) {
+				if (module.checkForFB()) {
 					FB.logout(null);
 				}
 			},
 			
 			isLoggedIn: function() {
-				return private.loggedIn;
+				return module.loggedIn;
 			},
 			
 			isCanvasMode: function() {
-				return private.isCanvas;
+				return module.isCanvas;
 			},
 			
 			buy: function(productUrl, successCallback, failureCallback) {
@@ -158,7 +162,7 @@ if (typeof window !== "undefined") {
 				FB.ui({
 					method: "pay",
 					action: "purchaseitem",
-					product: productUrl,
+					product: productUrl
 					//test_currency: "GBP",
 					//quantity: 1, // optional, defaults to 1
 					//request_id: 'YOUR_REQUEST_ID' // optional, must be unique for each payment
@@ -166,23 +170,23 @@ if (typeof window !== "undefined") {
 					if (!response) {
 						return;
 					}
-					private.log("Payment response: " + JSON.stringify(response).substring(0,64) + "...");
+					module.log("Payment response: " + JSON.stringify(response).substring(0,64) + "...");
 
 					if (response.status === "completed") {
-						private.log("Payment success");
+						module.log("Payment success");
 						successCallback();
 						responseReceived = true;
 					} else if(response.status === "initiated") {
 						// TBD: check payments graph api if this truly succeeded
-						private.log("Payment initiated, granting success");
+						module.log("Payment initiated, granting success");
 						successCallback();
 						// note: responseReceived = false;
 					} else if(response.error_code) {
-						private.log("Payment failure: " + response.error_message);
+						module.log("Payment failure: " + response.error_message);
 						failureCallback();
 						responseReceived = true;
 					} else {
-						private.log("Not handling payment response status: " + response.status);
+						module.log("Not handling payment response status: " + response.status);
 						failureCallback();
 						responseReceived = true;
 					}
@@ -190,7 +194,7 @@ if (typeof window !== "undefined") {
 
 				setTimeout(function(){
 					if (!responseReceived){
-						private.log("Did not receive a payment response after " + responseTimeout + "s");
+						module.log("Did not receive a payment response after " + responseTimeout + "s");
 					}
 				}, responseTimeout * 1000);
 			},
@@ -201,11 +205,11 @@ if (typeof window !== "undefined") {
 			},
 			
 			getPlayerName: function() {
-				return private.playerName;
+				return module.playerName;
 			},
 
 			setDebugMode: function (debug) {
-				private.debug = (debug ? true : false);
+				module.debug = (debug ? true : false);
 			},
 			
 			getSDKVersion: function () {

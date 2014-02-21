@@ -2,12 +2,12 @@ App.config = {
 	"flurry-api-key": "PBSGR7SV59JZN2RQQW96",
 	
 	"social-plugin-name": "Facebook",
-	"social-plugin-debug": false,
+	"social-plugin-debug": true,
 	"social-plugin-init": {
 		appId: "641151319281152",
 		xfbml: false,
 		status: true,
-		cookie: true,
+		cookie: true
 	},
 	"social-plugin-login": {
 		//scope:'email'
@@ -89,6 +89,9 @@ App.config = {
 	//	cc.c3b(255, 156, 26),
 	//	cc.c3b(36,  255, 249)
 	//]
+	
+	// so closure compiler doesn't complain about trailing comma
+	unused: null
 };
 
 App.getStoreAssets = function() {

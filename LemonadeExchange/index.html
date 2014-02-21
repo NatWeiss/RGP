@@ -6,9 +6,7 @@
     <title>Lemonade Exchange</title>
 
 	<script src="js/App.js"></script>
-	<script src="https://cdn.flurry.com/js/flurry.js"></script>
-	<script src="https://connect.facebook.net/en_US/all.js"></script>
-	<script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+	<!--<script src="LemonadeExchange-min.js"></script>-->
 	<script>
 		window.JSON || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/json3/3.2.4/json3.min.js"><\/script>');
 	</script>
@@ -39,9 +37,9 @@
 			canvas.style.height = window.innerHeight + "px";
 		</script>
 	</div>
-<!--
+
 	<script type="text/javascript">
-	// Load the SDK asynchronously
+	// load facebook asynchronously
 	(function(d){
 		var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
 		if (d.getElementById(id)) {return;}
@@ -49,7 +47,22 @@
 		js.src = "https://connect.facebook.net/en_US/all.js";
 		ref.parentNode.insertBefore(js, ref);
 	}(document));
+
+	// load flurry asynchronously
+	(function(d){
+		var js, id = 'flurry-jssdk', ref = d.getElementsByTagName('script')[0];
+		if (d.getElementById(id)) {return;}
+		js = d.createElement('script'); js.id = id; js.async = true;
+		js.src = "https://cdn.flurry.com/js/flurry.js";
+		js.addEventListener("load", function () {
+			if (typeof window.flurryAsyncInit !== "undefined") {
+				window.flurryAsyncInit();
+			}
+			this.removeEventListener("load", arguments.callee, false);
+		}, false);
+		ref.parentNode.insertBefore(js, ref);
+	}(document));
 	</script>
--->
+
 </body>
 </html>

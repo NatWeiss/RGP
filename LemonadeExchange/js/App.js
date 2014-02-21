@@ -1,6 +1,8 @@
 
 var App = App || {};
 
+App.singleEngineFile = "LemonadeExchange-min.js";
+
 App.showFPS = false;
 
 App.getFrameRate = function() {
@@ -17,6 +19,7 @@ App.getInitialLayer = function() {
 
 App.getJSFiles = function() {
 	var files = [
+		"js/aes.js",
 		"js/underscore.js",
 		"js/soomla.js",
 		"js/SoomlaNdk.js",
@@ -39,7 +42,7 @@ App.getResourcesToPreload = function() {
 	var dir = this.getResourceDir(),
 		files = [
 			{src:dir + "/spritesheet.plist"},
-			{src:dir + "/spritesheet.png"},
+			{src:dir + "/spritesheet.png"}
 		];
 	return files;
 };
@@ -274,12 +277,23 @@ App.getHttpQueryParams = function() {
 	return this._GET;
 };
 
-App.loadAnalyticsPlugin = function(key) {
-	var flurryApiKey = this.getString("flurry-api-key");
-	if (flurryApiKey) {
-		var flurry = plugin.PluginManager.getInstance().loadPlugin("AnalyticsFlurry");
-		if (flurry) {
-			flurry.startSession(flurryApiKey);
+window.flurryAsyncInit = function() {
+	App.loadAnalyticsPlugin();
+};
+
+App.loadAnalyticsPlugin = function() {
+	var flurryApiKey,
+		flurry;
+	
+	if (typeof FlurryAgent !== "undefined" && typeof App.config !== "undefined" && !this._initializedFlurry) {
+		this._initializedFlurry = true;
+		flurryApiKey = App.getString("flurry-api-key");
+		cc.log("Loading Flurry");
+		if (flurryApiKey) {
+			flurry = plugin.PluginManager.getInstance().loadPlugin("AnalyticsFlurry");
+			if (flurry) {
+				flurry.startSession(flurryApiKey);
+			}
 		}
 	}
 
@@ -442,19 +456,24 @@ App.requestUrl = function(url, callback, binary) {
 App.bootHtml5 = function() {
 	var d = document;
 	var c = {
-		COCOS2D_DEBUG: 2, //0 to turn debug off, 1 for basic debug, and 2 for full debug
+		COCOS2D_DEBUG: 2, // 0 to turn debug off, 1 for basic debug, and 2 for full debug
 		box2d: false,
 		chipmunk: false,
 		showFPS: this.showFPS,
 		frameRate: this.getFrameRate(),
 		loadExtension: true,
 		loadPluginx: true,
-		renderMode: 0,       //Choose of RenderMode: 0(default), 1(Canvas only), 2(WebGL only)
-		tag: 'gameCanvas', //the dom element to run cocos2d on
-		engineDir: 'lib/cocos2d-html5/cocos2d/',
-		//SingleEngineFile:'',
-		appFiles: this.getJSFiles()
+		renderMode: 0, // 0 (default), 1 (Canvas only), 2 (WebGL only)
+		tag: "gameCanvas" // the dom element to run cocos2d on
 	};
+	
+	if (typeof this.singleEngineFile !== "undefined" && this.singleEngineFile.length) {
+		c.SingleEngineFile = this.singleEngineFile;
+		c.appFiles = [];
+	} else {
+		c.engineDir = "lib/cocos2d-html5/cocos2d/";
+		c.appFiles = this.getJSFiles();
+	}
 
 	// require canvas element
 	if (!d.createElement('canvas').getContext) {
@@ -522,7 +541,7 @@ App.bootX = function(global) {
 	};
 	global.navigator = {
 		// http://stackoverflow.com/questions/8579019/how-to-get-the-user-agent-on-ios
-		userAgent: "Apple-iPhone5C1/1001.525", // how to apply this from C++??
+		userAgent: "Apple-iPhone5C1/1001.525" // how to apply this from C++??
 	};
 	
 	// add some functionality to cc

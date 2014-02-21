@@ -23,7 +23,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			TAG = "SoomlaNDK:";
 
 		var self = {},
-			private = {
+			module = {
 				soomSec: DEFAULT_SOOM_SEC,
 				customSec: DEFAULT_CUSTOM_SEC,
 				purchasingItem: null,
@@ -33,7 +33,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			hasBase64 = (typeof btoa !== "undefined");
 		
 		// log
-		private.log = function() {
+		module.log = function() {
 			if (DEBUG) {
 				[].unshift.call(arguments, TAG);
 				cc.log.apply(self, arguments);
@@ -41,10 +41,10 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 		};
 		
 		// encrypt
-		private.encrypt = function(str) {
+		module.encrypt = function(str) {
 			str += ""; // ensure it's a string
 			if (hasCrypto) {
-				return CryptoJS.AES.encrypt(str, private.soomSec + private.customSec);
+				return CryptoJS.AES.encrypt(str, module.soomSec + module.customSec);
 			} else if (hasBase64) {
 				return btoa(str);
 			}
@@ -52,10 +52,10 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 		};
 
 		// decrypt
-		private.decrypt = function(str) {
+		module.decrypt = function(str) {
 			str += ""; // ensure it's a string
 			if (hasCrypto) {
-				return CryptoJS.AES.decrypt(str, private.soomSec + private.customSec).toString(CryptoJS.enc.Utf8);
+				return CryptoJS.AES.decrypt(str, module.soomSec + module.customSec).toString(CryptoJS.enc.Utf8);
 			} else if (hasBase64) {
 				return atob(str);
 			}
@@ -63,10 +63,10 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 		};
 		
 		// load inventory
-		private.loadInventory = function() {
+		module.loadInventory = function() {
 			var inventory;
-			if (private.soomSec === DEFAULT_SOOM_SEC || private.customSec === DEFAULT_CUSTOM_SEC) {
-				private.log("Cannot load inventory yet because one or two secrets have not been set");
+			if (module.soomSec === DEFAULT_SOOM_SEC || module.customSec === DEFAULT_CUSTOM_SEC) {
+				module.log("Cannot load inventory yet because one or two secrets have not been set");
 				return;
 			}
 			if (ALWAYS_RESET_INVENTORY) {
@@ -76,27 +76,27 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			inventory = sys.localStorage.getItem(INVENTORY_ID);
 			if (inventory) {
 				try {
-					inventory = JSON.parse(private.decrypt(inventory));
+					inventory = JSON.parse(module.decrypt(inventory));
 				} catch (e) {
-					private.log("ERROR parsing inventory! Hack attempt? Starting clean.");
+					module.log("ERROR parsing inventory! Hack attempt? Starting clean.");
 					inventory = "";
 				}
 			}
 			
-			private.storeInventory = inventory || {
+			module.storeInventory = inventory || {
 				currencies: {}
 			};
-			private.log("Loaded Soomla store inventory: " + JSON.stringify(private.storeInventory));
+			module.log("Loaded Soomla store inventory: " + JSON.stringify(module.storeInventory));
 		};
 		
 		// save inventory
-		private.saveInventory = function() {
-			var inventory = private.encrypt(JSON.stringify(private.storeInventory));
+		module.saveInventory = function() {
+			var inventory = module.encrypt(JSON.stringify(module.storeInventory));
 			sys.localStorage.setItem(INVENTORY_ID, inventory);
 		};
 		
 		// get class name of goods key
-		private.goodsKeyToClassName = function(key) {
+		module.goodsKeyToClassName = function(key) {
 			switch (key) {
 				case "singleUse": return "SingleUseVG";
 				case "lifetime": return "LifetimeVG";
@@ -108,7 +108,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 		};
 		
 		// find an item id
-		private.findItemId = function(root, key, id, depth) {
+		module.findItemId = function(root, key, id, depth) {
 			var key,
 				ret;
 			depth = depth || 0;
@@ -120,7 +120,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 				if (root.hasOwnProperty(k)) {
 					// try this child
 					if (typeof root[k][key] !== "undefined") {
-						//private.log("id: " + root[k][key] + ", depth: " + depth);
+						//module.log("id: " + root[k][key] + ", depth: " + depth);
 						if (root[k][key] === id) {
 							return root[k];
 						}
@@ -128,7 +128,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 					
 					// search child's children
 					if (typeof root[k] === "object") {
-						ret = private.findItemId(root[k], key, id, depth + 1);
+						ret = module.findItemId(root[k], key, id, depth + 1);
 						if (typeof ret !== "undefined") {
 							return ret;
 						}
@@ -138,35 +138,35 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 		};
 		
 		// call a dynamically prototyped function
-		private.callMy = function(method) {
+		module.callMy = function(method) {
 			if (typeof self[method] === "function") {
 				self[method]();
 			}
 		};
 		
 		// handle payments
-		private.onPaymentSuccess = function() {
-			if (private.purchasingItem) {
-				private.log("Purchased " + private.purchasingItem["currency_amount"]
-					+ " x " + private.purchasingItem["currency_itemId"]);
+		module.onPaymentSuccess = function() {
+			if (module.purchasingItem) {
+				module.log("Purchased " + module.purchasingItem["currency_amount"]
+					+ " x " + module.purchasingItem["currency_itemId"]);
 
 				// give the amount
 				Soomla.storeInventory.giveItem(
-					private.purchasingItem["currency_itemId"],
-					private.purchasingItem["currency_amount"]
+					module.purchasingItem["currency_itemId"],
+					module.purchasingItem["currency_amount"]
 				);
 
-				private.callMy("onCurrencyUpdate");
+				module.callMy("onCurrencyUpdate");
 			} else {
-				private.log("Invalid purchasing item");
+				module.log("Invalid purchasing item");
 			}
-			private.purchasingItem = null;
-			private.callMy("onPaymentComplete");
+			module.purchasingItem = null;
+			module.callMy("onPaymentComplete");
 		};
-		private.onPaymentFailure = function() {
-			private.log("Purchase failed");
-			private.purchasingItem = null;
-			private.callMy("onPaymentComplete");
+		module.onPaymentFailure = function() {
+			module.log("Purchase failed");
+			module.purchasingItem = null;
+			module.callMy("onPaymentComplete");
 		};
 		
 		// call "native" method
@@ -188,36 +188,36 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			// CCStoreAssets
 			//
 			if (params.method === "CCStoreAssets::init") {
-				private.version = params.version;
-				private.storeAssets = params.storeAssets;
-				//private.log("Init Soomla store assets: " + JSON.stringify(private.storeAssets));
+				module.version = params.version;
+				module.storeAssets = params.storeAssets;
+				//module.log("Init Soomla store assets: " + JSON.stringify(module.storeAssets));
 			}
 			//
 			// CCStoreController
 			//
 			else if(params.method === "CCStoreController::init") {
-				private.customSec = params.customSecret + "";
-				private.log("Custom secret: " + private.customSec.substring(0,4) + "...");
-				private.loadInventory();
+				module.customSec = params.customSecret + "";
+				module.log("Custom secret: " + module.customSec.substring(0,4) + "...");
+				module.loadInventory();
 			}
 			else if (params.method === "CCStoreController::setSoomSec") {
-				private.soomSec = params.soomSec + "";
-				private.log("Soomla secret: " + private.soomSec.substring(0,4) + "...");
-				private.loadInventory();
+				module.soomSec = params.soomSec + "";
+				module.log("Soomla secret: " + module.soomSec.substring(0,4) + "...");
+				module.loadInventory();
 			}
 			else if (params.method === "CCStoreController::setSSV") {
-				private.ssv = params.ssv;
-				private.log("SSV: " + private.ssv);
+				module.ssv = params.ssv;
+				module.log("SSV: " + module.ssv);
 			}
 			else if(params.method === "CCStoreController::setAndroidPublicKey") {
-				private.androidPublicKey = params.androidPublicKey + "";
-				private.log("Android public key: " + private.androidPublicKey.substring(0,4) + "...");
+				module.androidPublicKey = params.androidPublicKey + "";
+				module.log("Android public key: " + module.androidPublicKey.substring(0,4) + "...");
 			}
 			else if(params.method === "CCStoreController::buyMarketItem") {
 				// find productId
-				len = private.storeAssets.currencyPacks.length;
+				len = module.storeAssets.currencyPacks.length;
 				for (i = 0; i < len; i += 1) {
-					x = private.storeAssets.currencyPacks[i];
+					x = module.storeAssets.currencyPacks[i];
 					if (x.itemId === params.productId) {
 						break;
 					}
@@ -225,15 +225,15 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 				
 				// buy item
 				if (typeof x === "undefined") {
-					private.log("Unable to find productId: " + params.productId);
+					module.log("Unable to find productId: " + params.productId);
 				} else {
-					private.log("Buying " + x.itemId);
-					private.purchasingItem = JSON.parse(JSON.stringify(x));
+					module.log("Buying " + x.itemId);
+					module.purchasingItem = JSON.parse(JSON.stringify(x));
 					
 					if (self.buy) {
-						self.buy(private.purchasingItem.facebookProductUrl, private.onPaymentSuccess, private.onPaymentFailure);
+						self.buy(module.purchasingItem.facebookProductUrl, module.onPaymentSuccess, module.onPaymentFailure);
 					} else {
-						private.log("App has not implemented CCSoomlaNdkBridge.buy method");
+						module.log("App has not implemented CCSoomlaNdkBridge.buy method");
 					}
 				}
 			}
@@ -249,11 +249,11 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			// CCStoreInfo
 			//
 			else if(params.method === "CCStoreInfo::getItemByItemId") {
-				x = private.findItemId(private.storeAssets, "itemId", params.itemId) || {};
+				x = module.findItemId(module.storeAssets, "itemId", params.itemId) || {};
 				ret = {item: x, className: x.className || ""};
 			}
 			else if(params.method === "CCStoreInfo::getPurchasableItemWithProductId") {
-				x = private.findItemId(private.storeAssets, "itemId", params.productId) || {};
+				x = module.findItemId(module.storeAssets, "itemId", params.productId) || {};
 				if (typeof x.purchasableItem === "undefined" || !x.purchasableItem) {
 					x = {};
 				}
@@ -273,24 +273,24 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			}
 			else if (params.method === "CCStoreInfo::getVirtualCurrencies") {
 				ret = [];
-				len = private.storeAssets.currencies.length;
+				len = module.storeAssets.currencies.length;
 				for (i = 0; i < len; i += 1) {
 					ret.push({
-						item: private.storeAssets.currencies[i],
-						className: private.storeAssets.currencies[i].className
+						item: module.storeAssets.currencies[i],
+						className: module.storeAssets.currencies[i].className
 					});
 				}
 			}
 			else if(params.method === "CCStoreInfo::getVirtualGoods") {
 				ret = [];
-				for (key in private.storeAssets.goods) {
-					if (private.storeAssets.goods.hasOwnProperty(key)) {
-						x = private.storeAssets.goods[key];
+				for (key in module.storeAssets.goods) {
+					if (module.storeAssets.goods.hasOwnProperty(key)) {
+						x = module.storeAssets.goods[key];
 						if (typeof x !== "undefined") {
 							for (i = 0; i < x.length; i += 1) {
 								ret.push({
 									item: x[i],
-									className: private.goodsKeyToClassName(key)
+									className: module.goodsKeyToClassName(key)
 								});
 							}
 						}
@@ -309,15 +309,15 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			else if(params.method === "CCStoreInventory::buyItem") {
 			}
 			else if(params.method === "CCStoreInventory::getItemBalance") {
-				ret = private.storeInventory.currencies[params.itemId] || 0;
+				ret = module.storeInventory.currencies[params.itemId] || 0;
 			}
 			else if(params.method === "CCStoreInventory::giveItem") {
-				private.storeInventory.currencies[params.itemId] += params.amount;
-				private.saveInventory();
+				module.storeInventory.currencies[params.itemId] += params.amount;
+				module.saveInventory();
 			}
 			else if(params.method === "CCStoreInventory::takeItem") {
-				private.storeInventory.currencies[params.itemId] -= params.amount;
-				private.saveInventory();
+				module.storeInventory.currencies[params.itemId] -= params.amount;
+				module.saveInventory();
 			}
 			else if(params.method === "CCStoreInventory::equipVirtualGood") {
 				// params.itemId
@@ -353,7 +353,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 				// params.nonConsItemId
 			}
 			else {
-				private.log("Unknown native call method: " + JSON.stringify(params));
+				module.log("Unknown native call method: " + JSON.stringify(params));
 			}
 
 			// assign return value
@@ -368,20 +368,20 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 		};
 
 		// test encrypt / decrypt
-		private.testEncryption = function() {
+		module.testEncryption = function() {
 			var original = "something",
-				encrypted = private.encrypt(original);
-			private.log("Encrypt(" + original + "): " + encrypted);
-			private.log("Decrypt(" + encrypted + "): " + private.decrypt(encrypted));
+				encrypted = module.encrypt(original);
+			module.log("Encrypt(" + original + "): " + encrypted);
+			module.log("Decrypt(" + encrypted + "): " + module.decrypt(encrypted));
 		};
 
 		// do some tests
 		//if (DEBUG) {
-		//	private.testEncryption();
+		//	module.testEncryption();
 		//}
 		
 		// self now becomes Soomla.CCSoomlaNdkBridge whilst
-		// all our private variables remain private
+		// all our module variables remain private
 		return self;
 	}()); // end of CCSoomlaNdkBridge module closure
 
