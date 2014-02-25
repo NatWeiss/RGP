@@ -1,7 +1,7 @@
 
 var App = App || {};
 
-App.singleEngineFile = "LemonadeExchange-min.js";
+//App.singleEngineFile = "LemonadeExchange-min.js";
 
 App.showFPS = false;
 
@@ -23,8 +23,6 @@ App.getJSFiles = function() {
 		"js/underscore.js",
 		"js/soomla.js",
 		"js/SoomlaNdk.js",
-		//"js/MuffinRushAssets.js",
-		//"js/SoomlaTest.js",
 		"js/Config.js",
 		"js/Facebook.js",
 		"js/LemonadeExchange.js",
@@ -208,11 +206,17 @@ App.runPrefixMethod = function(obj, method) {
 	}
 };
 
+App.isInitialLaunch = function() {
+	// use soundEnabled as an indicator of if we have previously launched the app
+	var v = sys.localStorage.getItem("soundEnabled");
+	return (typeof v === "undefined" || v === null || v === "");
+};
+
 App.loadSoundEnabled = function() {
 	this._soundEnabled = sys.localStorage.getItem("soundEnabled");
 	//cc.log("Loaded sound enabled: " + this._soundEnabled);
 	if (this._soundEnabled === null || this._soundEnabled === "") {
-		this._soundEnabled = true;
+		this.enableSound(true);
 	}
 	this._soundEnabled = (this._soundEnabled === "true" || this._soundEnabled === true) ? true : false;
 	//cc.log("Loaded sound enabled: " + this._soundEnabled);
@@ -392,18 +396,38 @@ App.loadEconomyPlugin = function() {
 		Soomla.CCSoomlaNdkBridge.setDebug(App.getConfig("economy-plugin-debug"));
 	}
 	Soomla.StoreController.createShared(App.getStoreAssets(), App.getConfig("economy-plugin-init"));
+};
 
+App.onInitialLaunch = function() {
 	// set initial balances
-	// todo: make sure this only happens on first run...
-	var currencies = Soomla.storeInfo.getVirtualCurrencies();
-	//cc.log("Currencies: " + JSON.stringify(currencies));
-	_.forEach(currencies, function(vc) {
-		var balance = Soomla.storeInventory.getItemBalance(vc.itemId);
-		//cc.log("User has " + balance + " of " + vc.itemId);
-		if (balance == 0) {
-			Soomla.storeInventory.giveItem(vc.itemId, App.getConfig("initial-balances")[vc.itemId]);
+	var i,
+		itemId,
+		balance,
+		initialBalances = App.getConfig("economy-plugin-initial-balances"),
+		currencies = Soomla.storeInfo.getVirtualCurrencies(),
+		len = currencies.length || 0,
+		allZero = true;
+
+	// determine if inventory is all at zero
+	for (i = 0; i < len; i += 1) {
+		itemId = currencies[i].itemId;
+		balance = Soomla.storeInventory.getItemBalance(itemId);
+		if (balance > 0) {
+			cc.log("User has " + balance + " of " + itemId);
+			allZero = false;
+			break;
 		}
-	});
+	}
+	
+	// set initial balances
+	if (allZero) {
+		for (i = 0; i < len; i += 1) {
+			itemId = currencies[i].itemId;
+			balance = (initialBalances ? initialBalances[itemId] : 0);
+			cc.log("Setting initial balance " + balance + " for " + itemId);
+			Soomla.storeInventory.giveItem(itemId, balance);
+		}
+	}
 };
 
 App.requestUrl = function(url, callback, binary) {
@@ -493,7 +517,6 @@ App.bootHtml5 = function() {
 	window.addEventListener('DOMContentLoaded', function() {
 		this.removeEventListener('DOMContentLoaded', arguments.callee, false);
 		var s = d.createElement('script');
-		/*********Delete this section if you have packed all files into one*******/
 		if (c.SingleEngineFile && !c.engineDir) {
 			s.src = c.SingleEngineFile;
 		}
@@ -503,9 +526,6 @@ App.bootHtml5 = function() {
 		else {
 			alert('You must specify either the single engine file OR the engine directory in "cocos2d.js"');
 		}
-		/*********Delete this section if you have packed all files into one*******/
-
-		//s.src = 'Packed_Release_File.js'; //IMPORTANT: Un-comment this line if you have packed all files into one
 
 		document.ccConfig = c;
 		s.id = 'cocos2d-html5';
@@ -618,7 +638,8 @@ App.main = function() {
 		director,
 		sheets,
 		cacher,
-		dirs = [];
+		dirs = [],
+		initialLaunch = this.isInitialLaunch();
 
 	this.loadSoundEnabled();
 
@@ -646,6 +667,12 @@ App.main = function() {
 	this.loadAdsPlugin();
 	this.loadSocialPlugin();
 	this.loadEconomyPlugin();
+	
+	// handle initial launch
+	//cc.log("Initial launch: " + initialLaunch);
+	if (initialLaunch) {
+		this.onInitialLaunch();
+	}
 }
 
 App.boot = function(global) {

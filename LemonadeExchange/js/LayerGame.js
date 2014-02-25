@@ -79,7 +79,7 @@ var LayerGame = (function(){
 		},
 		
 		createExchangeRate: function() {
-			var pos = App.centralize(-72, 220),
+			var pos = App.centralize(-120, 220),
 				font = App.getString("font"),
 				label,
 				sprite,
@@ -337,7 +337,7 @@ var LayerGame = (function(){
 			this.schedule(function(){
 				self.exchangeLayer.removeFromParent();
 				self.createGameMenu();
-			}, 5.0, 0);
+			}, 4.0, 0);
 		},
 		
 		createLemonadeGiver: function() {

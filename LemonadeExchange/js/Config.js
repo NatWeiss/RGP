@@ -23,6 +23,10 @@ App.config = {
 		// put this only in the android build...
 		androidPublicKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlYZHeBm9l52JwNB9s6j9z3lbZN6O4ydWctIin1gJFUrEILtJpIGb5z6ER+F9DsOYphmin0QXu1TF1S78BfAKUNzJbJzcKIi85B/IQPgRpSIKx+Y2k5m9dECXwbSVcJgwndUQnBGbxz7EJIJtrY+hPVhN5DCRM4FZSE0rRLA6niWzKwbZOlGrHYr9q/H/a6zKho9/JJtimVTtE8KhoVIjKBhFBUQYhCIkkKRZfzUc4pXgmtv+7G9o77XhE5sPvcZZfZN2EFPjXXl4BdeRtpytZ6b72OhRpzlkciNb8e8cnobe2zviPggM8HzNv3YwTEPbyS9Vez4UcslW/wmrekuQuwIDAQAB"
 	},
+	"economy-plugin-initial-balances": {
+		"currency_lemonades": 10,
+		"currency_bux": 100
+	},
 
 	"ads-plugin-name": "AdsMobFox",
 	"ads-plugin-debug": false,
@@ -31,11 +35,6 @@ App.config = {
 	//"ads-plugin-api-key": "928212dab22e3c4cc7774cc26532100c", // lemonade exchange ios
 	"ads-plugin-mode": "test", // "test" or "live"
 	
-	"initial-balances": {
-		"currency_lemonades": 10,
-		"currency_bux": 100
-	},
-
 	"spritesheets": [
 		"spritesheet.plist"
 	],

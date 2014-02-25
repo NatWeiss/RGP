@@ -78,7 +78,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 				try {
 					inventory = JSON.parse(module.decrypt(inventory));
 				} catch (e) {
-					module.log("ERROR parsing inventory! Hack attempt? Starting clean.");
+					module.log("ERROR parsing inventory. Possible tampering. Starting clean.");
 					inventory = "";
 				}
 			}
@@ -93,6 +93,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 		module.saveInventory = function() {
 			var inventory = module.encrypt(JSON.stringify(module.storeInventory));
 			sys.localStorage.setItem(INVENTORY_ID, inventory);
+			module.log("Saved Soomla store inventory: " + JSON.stringify(module.storeInventory));
 		};
 		
 		// get class name of goods key
@@ -312,11 +313,15 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 				ret = module.storeInventory.currencies[params.itemId] || 0;
 			}
 			else if(params.method === "CCStoreInventory::giveItem") {
-				module.storeInventory.currencies[params.itemId] += params.amount;
+				x = module.storeInventory.currencies[params.itemId] || 0;
+				x += params.amount;
+				module.storeInventory.currencies[params.itemId] = x;
 				module.saveInventory();
 			}
 			else if(params.method === "CCStoreInventory::takeItem") {
-				module.storeInventory.currencies[params.itemId] -= params.amount;
+				x = module.storeInventory.currencies[params.itemId] || 0;
+				x -= params.amount;
+				module.storeInventory.currencies[params.itemId] = x;
 				module.saveInventory();
 			}
 			else if(params.method === "CCStoreInventory::equipVirtualGood") {
