@@ -114,6 +114,7 @@ var LayerGame = (function(){
 		
 		createPlayerDetails: function() {
 			var sprite,
+				playerImageUrl = App.getSocialPlugin().getPlayerImageUrl(),
 				font = App.getString("font"),
 				winSize = App.getWinSize(),
 				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
@@ -122,10 +123,21 @@ var LayerGame = (function(){
 			this.newLemonadesAmount = numLemonades;
 			this.newBuxAmount = numBux;
 			
+			// player image
+			if (playerImageUrl) {
+				sprite = cc.Sprite.create(playerImageUrl);
+			} else {
+				sprite = cc.Sprite.createWithSpriteFrameName("BlankAvatar.png");
+			}
+			sprite.setAnchorPoint(0, .5);
+			sprite.setPosition(App.centralize(-420, 260));
+			sprite.setScale(App.scale(60) / sprite.getContentSize().width);
+			this.addChild(sprite, 1);
+			
 			// player name
-			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, App.scale(48));
+			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerFirstName(), font, App.scale(48));
 			this.playerNameLabel.setAnchorPoint(0, .5);
-			this.playerNameLabel.setPosition(App.centralize(-420, 260));
+			this.playerNameLabel.setPosition(App.centralize(-330, 260));
 			this.addChild(this.playerNameLabel, 1);
 			
 			// lemonades

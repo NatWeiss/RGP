@@ -58,7 +58,8 @@ cc.LoaderScene.prototype.init = function(){
 };
 
 cc.LoaderScene.prototype._updatePercent = function (){
-	var percent = cc.Loader.getInstance().getPercentage(),
+	var width,
+		percent = cc.Loader.getInstance().getPercentage(),
 		xSpacing;
 
 	if (percent >= 100) {
@@ -73,7 +74,8 @@ cc.LoaderScene.prototype._updatePercent = function (){
 		}
 	}
 
-	this._loadingBar.setContentSize(this._loadingBarSize.width * (percent / 100), this._loadingBarSize.height);
+	width = Math.max(2, this._loadingBarSize.width * (percent / 100));
+	this._loadingBar.setContentSize(width, this._loadingBarSize.height);
 
 	this._currentColor = Math.min(this._currentColor + 1, this._colors.length - 1);
 

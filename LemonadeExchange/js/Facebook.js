@@ -13,9 +13,16 @@ if (typeof window !== "undefined") {
 				devInfo: {},
 				debug: false,
 				loggedIn: false,
-				isCanvas: false,
-				playerName: "Anonymous"
+				isCanvas: false
 			};
+
+		module.reset = function() {
+			module.playerNames = {"me": "Me"};
+			module.playerFirstNames = {"me": "Me"};
+			module.playerImageUrls = {"me": ""};
+		};
+		
+		module.reset();
 		
 		module.log = function() {
 			if (module.debug) {
@@ -32,6 +39,7 @@ if (typeof window !== "undefined") {
 		};
 
 		module.onCheckLoginStatus = function(response) {
+			var x;
 			if (!response) {
 				return;
 			}
@@ -40,10 +48,21 @@ if (typeof window !== "undefined") {
 				module.log("User is authorized, token: " + response.authResponse.accessToken.substring(0,4) + "...");
 
 				FB.api("/me", function(response) {
-					module.playerName = response.name;
+					//module.log("Got /me response: " + JSON.stringify(response));
+					module.playerNames["me"] = response.name;
+					module.playerFirstNames["me"] = response.first_name;
 					module.userId = response.id;
 					module.deleteRequests();
-					module.callRunningLayer("onGetPlayerName", module.playerName);
+					module.callRunningLayer("onGetPlayerName", module.playerNames["me"]);
+				});
+				x = App.scale(App.getConfig("social-plugin-image-width") || 20);
+				FB.api("/me/picture?width=" + x + "&height=" + x, function(response) {
+					//module.log("Got picture response: " + JSON.stringify(response));
+					if (response.data.url) {
+						App.loadImage(response.data.url, function(){
+							module.playerImageUrls["me"] = response.data.url;
+						});
+					}
 				});
 				module.loggedIn = true;
 			}
@@ -56,6 +75,10 @@ if (typeof window !== "undefined") {
 				module.loggedIn = false;
 			}
 			module.log("Logged in? " + module.loggedIn);
+			
+			if (!module.loggedIn) {
+				module.reset();
+			}
 			
 			module.callRunningLayer("onGetLoginStatus", module.loggedIn);
 		};
@@ -70,6 +93,8 @@ if (typeof window !== "undefined") {
 
 		module.init = function() {
 			if (typeof FB !== "undefined" && !module.initialized) {
+				module.initialized = true;
+
 				// init
 				FB.init(module.devInfo);
 				module.log("Initialized app ID: " + module.devInfo.appId);
@@ -87,8 +112,6 @@ if (typeof window !== "undefined") {
 						}
 					});
 				}
-				
-				module.initialized = true;
 			}
 		};
 		
@@ -102,9 +125,8 @@ if (typeof window !== "undefined") {
 			// https://apps.facebook.com/lemonadex/?fb_source=notification&request_ids=221921991333209&ref=notif&app_request_type=user_to_user&notif_t=app_invite
 			// https://apps.facebook.com/lemonadex/?fb_source=notification&request_ids=221921991333209%2C1426088330967926&ref=notif&app_request_type=user_to_user&notif_t=app_invite
 			gets = App.getHttpQueryParams();
-			cc.log("GET: " + JSON.stringify(gets));
-			
 			if (gets.request_ids) {
+				cc.log("GET: " + JSON.stringify(gets));
 				requestIds = gets.request_ids.split(",");
 				if (requestIds) {
 					len = requestIds.length;
@@ -150,6 +172,27 @@ if (typeof window !== "undefined") {
 			
 			isCanvasMode: function() {
 				return module.isCanvas;
+			},
+			
+			getPlayerName: function(id) {
+				if (!id) {
+					id = "me";
+				}
+				return module.playerNames[id];
+			},
+
+			getPlayerFirstName: function(id) {
+				if (!id) {
+					id = "me";
+				}
+				return module.playerFirstNames[id];
+			},
+
+			getPlayerImageUrl: function(id) {
+				if (!id) {
+					id = "me";
+				}
+				return module.playerImageUrls[id];
 			},
 			
 			buy: function(productUrl, successCallback, failureCallback) {
@@ -204,10 +247,6 @@ if (typeof window !== "undefined") {
 				// https://graph.facebook.com/?id=http%3A%2F%2Fnatweiss.com%2Flemonadex%2Ftipjar.html&scrape=true&method=post
 			},
 			
-			getPlayerName: function() {
-				return module.playerName;
-			},
-
 			setDebugMode: function (debug) {
 				module.debug = (debug ? true : false);
 			},

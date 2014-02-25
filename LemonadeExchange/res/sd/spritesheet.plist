@@ -17,6 +17,19 @@
                 <key>sourceSize</key>
                 <string>{683,384}</string>
             </dict>
+            <key>BlankAvatar.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1414,336},{50,50}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{50,50}}</string>
+                <key>sourceSize</key>
+                <string>{50,50}</string>
+            </dict>
             <key>ButtonAbout.png</key>
             <dict>
                 <key>frame</key>
@@ -33,7 +46,7 @@
             <key>ButtonBack.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1414,336},{41,41}}</string>
+                <string>{{1571,115},{41,41}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -98,15 +111,15 @@
             <key>ButtonGive.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{689,324},{137,49}}</string>
+                <string>{{689,324},{137,48}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{137,49}}</string>
+                <string>{{0,0},{137,48}}</string>
                 <key>sourceSize</key>
-                <string>{137,49}</string>
+                <string>{137,48}</string>
             </dict>
             <key>ButtonLogin.png</key>
             <dict>
@@ -137,7 +150,7 @@
             <key>ButtonMinimize.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1571,115},{39,41}}</string>
+                <string>{{1571,160},{39,41}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -228,7 +241,7 @@
             <key>ButtonSound.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{1571,160},{37,29}}</string>
+                <string>{{1571,205},{37,29}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -376,9 +389,9 @@
             <key>realTextureFileName</key>
             <string>spritesheet.png</string>
             <key>size</key>
-            <string>{1612,388}</string>
+            <string>{1615,388}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:963b09114fd9b1486a8820407c1f9f59:115a7fc64f977e1b8d33b643cf8e882c:94563296262a30b4f0b9cd48ec7e5860$</string>
+            <string>$TexturePacker:SmartUpdate:bd6938ad48fcaa256392daba5e2a658c:331736c11ea2d42b3b0c792bc3facbda:94563296262a30b4f0b9cd48ec7e5860$</string>
             <key>textureFileName</key>
             <string>spritesheet.png</string>
         </dict>

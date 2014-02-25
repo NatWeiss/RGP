@@ -477,6 +477,33 @@ App.requestUrl = function(url, callback, binary) {
 	}
 };
 
+App.loadImage = function(url, callback) {
+	if (url.indexOf("://") == 0) {
+		return;
+	}
+	
+	// load image the cocos2d-html5 way
+	if (typeof Image !== "undefined") {
+		var image = new Image();
+		//image.crossOrigin = "Anonymous";
+		image.src = url;
+		//cc.log("Loading image: " + url);
+		image.addEventListener("load", function(){
+			cc.TextureCache.getInstance().cacheImage(url, image);
+			this.removeEventListener("load", arguments.callee, false);
+			callback();
+		}, false);
+	// load image from raw file data the cocos2d-x way
+	} else {
+		//cc.log("Loading image from raw data: " + url);
+		this.requestURL(url, function(response, status) {
+			var bytes = new Uint8Array(response);
+			cc.TextureCache.getInstance().addImage(url, bytes);
+			callback();
+		}, true);
+	}
+};
+
 App.bootHtml5 = function() {
 	var d = document;
 	var c = {

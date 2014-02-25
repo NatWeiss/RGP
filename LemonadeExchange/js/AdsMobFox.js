@@ -151,7 +151,7 @@ plugin.AdsMobFox = cc.Class.extend({
 					this.listener.onAdsResult(plugin.AdsResultCode.AdsReceived, "MobFox ad data received");
 				}
 				
-				self.loadImage(imageUrl, function() {
+				App.loadImage(imageUrl, function() {
 					self.showImage(imageUrl, typeEnum, sizeEnum, posEnum);
 				});
 			} else {
@@ -275,43 +275,6 @@ plugin.AdsMobFox = cc.Class.extend({
 			}
 		}
 		return ret;
-	},
-	
-	loadImage: function(url, callback) {
-		if (url.indexOf("://") == 0) {
-			return;
-		}
-		
-		// load image the html5 way
-		if (typeof Image !== "undefined") {
-			var image = new Image();
-			//image.crossOrigin = "Anonymous";
-			image.src = url;
-			cc.log("Loading image: " + url);
-			image.addEventListener("load", function(){
-				cc.TextureCache.getInstance().cacheImage(url, image);
-				this.removeEventListener("load", arguments.callee, false);
-				callback();
-				/*var texture,
-					cacher = cc.TextureCache.getInstance();
-				cc.log("On image load " + url + ", image " + image);
-				debugger;
-				texture = cacher.addUIImage(image, url);
-				cacher.cacheImage(url, texture);
-				callback();
-				image.removeEventListener("load", arguments.callee, false);*/
-			}, false);
-		// load image from raw file data
-		// (note: arguments were added to CCTextureCache::addImage()
-		// which accept an array buffer of raw file data)
-		} else {
-			cc.log("Loading image from raw data: " + url);
-			this.requestURL(url, function(response, status) {
-				var bytes = new Uint8Array(response);
-				cc.TextureCache.getInstance().addImage(url, bytes);
-				callback();
-			}, true);
-		}
 	},
 	
 	showImage: function(imageUrl, typeEnum, sizeEnum, posEnum) {

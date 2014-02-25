@@ -12,6 +12,7 @@ App.config = {
 	"social-plugin-login": {
 		//scope:'email'
 	},
+	"social-plugin-image-width": 100,
 
 	"economy-plugin-name": "Soomla",
 	"economy-plugin-debug": false,
