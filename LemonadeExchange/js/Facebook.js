@@ -44,7 +44,6 @@ if (typeof window !== "undefined") {
 		};
 
 		module.onCheckLoginStatus = function(response) {
-			var x;
 			if (!response) {
 				return;
 			}
@@ -63,15 +62,7 @@ if (typeof window !== "undefined") {
 				});
 				
 				// get my profile image
-				x = App.scale(App.getConfig("social-plugin-image-width") || 20);
-				FB.api("/me/picture?width=" + x + "&height=" + x, function(response) {
-					//module.log("Got picture response: " + JSON.stringify(response));
-					if (response.data.url) {
-						App.loadImage(response.data.url, function(){
-							module.playerImageUrls["me"] = response.data.url;
-						});
-					}
-				});
+				module.loadPlayerImage("me");
 				
 				// get my friends
 				FB.api("/me/friends?fields=id,name,first_name", function(response) {
@@ -94,6 +85,21 @@ if (typeof window !== "undefined") {
 			module.log("Logged in? " + module.loggedIn);
 			
 			module.callRunningLayer("onGetLoginStatus", module.loggedIn);
+		};
+		
+		module.loadPlayerImage = function(id, callback) {
+			var dim = App.scale(App.getConfig("social-plugin-image-width") || 100);
+			FB.api("/" + id + "/picture?width=" + dim + "&height=" + dim, function(response) {
+				if (response.data.url) {
+					module.log("Got image url " + response.data.url + " for " + id);
+					App.loadImage(response.data.url, function(){
+						module.playerImageUrls[id] = response.data.url;
+						if (typeof callback === "function"){
+							callback(response.data.url);
+						}
+					});
+				}
+			});
 		};
 		
 		module.onGetFriends = function(friends) {
@@ -221,9 +227,12 @@ if (typeof window !== "undefined") {
 				return module.playerFirstNames[id];
 			},
 
-			getPlayerImageUrl: function(id) {
+			getPlayerImageUrl: function(id, callback) {
 				if (!id) {
 					id = "me";
+				}
+				if (!module.playerImageUrls[id]) {
+					module.loadPlayerImage(id, callback);
 				}
 				return module.playerImageUrls[id];
 			},
