@@ -259,10 +259,26 @@ var LayerGame = (function(){
 			]);
 		},
 		
+		getFriendName: function() {
+			var plugin = App.getSocialPlugin(),
+				id = plugin.getRandomFriendId(),
+				friends;
+			if (id && id > 0) {
+				return plugin.getPlayerName(id);
+			}
+			friends = App.getConfig("anonymous-friends");
+			if (friends) {
+				id = App.rand(friends.length);
+				return friends[id];
+			}
+			return "Bruce Lee";
+		},
+		
 		createExchangeItems: function(verb) {
 			var self = this,
 				label,
 				sprite,
+				friendName = this.getFriendName(),
 				font = App.getConfig("font"),
 				winSize = App.getWinSize(),
 				fontSize = App.scale(50),
@@ -306,7 +322,7 @@ var LayerGame = (function(){
 			this.exchangeLayer.addChild(this.finishExchangeLabel1, 1);
 
 			pos.y -= ySpacing;
-			this.finishExchangeLabel2 = cc.LabelTTF.create("Bruce Lee", font, fontSize);
+			this.finishExchangeLabel2 = cc.LabelTTF.create(friendName, font, fontSize);
 			this.finishExchangeLabel2.setPosition(pos);
 			this.exchangeLayer.addChild(this.finishExchangeLabel2, 1);
 

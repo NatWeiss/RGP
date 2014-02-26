@@ -3,6 +3,10 @@
 // [Warning] Invalid App Id: Must be a number or numeric string representing the application id. (all.js, line 56)
 // [Warning] FB.getLoginStatus() called before calling FB.init(). (all.js, line 56)
 
+// scores:
+// https://developers.facebook.com/docs/games/scores/
+
+
 //
 // begin module
 //
@@ -20,6 +24,7 @@ if (typeof window !== "undefined") {
 			module.playerNames = {"me": "Me"};
 			module.playerFirstNames = {"me": "Me"};
 			module.playerImageUrls = {"me": ""};
+			module.friendIds = [];
 		};
 		
 		module.reset();
@@ -47,6 +52,7 @@ if (typeof window !== "undefined") {
 			if (response.status === "connected") {
 				module.log("User is authorized, token: " + response.authResponse.accessToken.substring(0,4) + "...");
 
+				// get my info
 				FB.api("/me", function(response) {
 					//module.log("Got /me response: " + JSON.stringify(response));
 					module.playerNames["me"] = response.name;
@@ -55,6 +61,8 @@ if (typeof window !== "undefined") {
 					module.deleteRequests();
 					module.callRunningLayer("onGetPlayerName", module.playerNames["me"]);
 				});
+				
+				// get my profile image
 				x = App.scale(App.getConfig("social-plugin-image-width") || 20);
 				FB.api("/me/picture?width=" + x + "&height=" + x, function(response) {
 					//module.log("Got picture response: " + JSON.stringify(response));
@@ -64,23 +72,48 @@ if (typeof window !== "undefined") {
 						});
 					}
 				});
+				
+				// get my friends
+				FB.api("/me/friends?fields=id,name,first_name", function(response) {
+					if (response.data && response.data.length) {
+						module.onGetFriends(response.data);
+					}
+				});
 				module.loggedIn = true;
 			}
 			else if (response.status === "not_authorized") {
 				cc.log("FB user is not authorized yet");
 				module.loggedIn = false;
+				module.reset();
 			}
 			else {
 				cc.log("FB user is not logged in to Facebook");
 				module.loggedIn = false;
+				module.reset();
 			}
 			module.log("Logged in? " + module.loggedIn);
 			
-			if (!module.loggedIn) {
-				module.reset();
-			}
-			
 			module.callRunningLayer("onGetLoginStatus", module.loggedIn);
+		};
+		
+		module.onGetFriends = function(friends) {
+			var i,
+				len = friends.length,
+				friend;
+			
+			for (i = 0; i < len; i += 1){
+				friend = friends[i];
+				if (friend.id) {
+					module.friendIds.push(friend.id);
+					if (friend.name) {
+						module.playerNames[friend.id] = friend.name;
+					}
+					if (friend.first_name) {
+						module.playerFirstNames[friend.id] = friend.first_name;
+					}
+				}
+			}
+			module.log("Parsed " + module.friendIds.length + " friends");
 		};
 		
 		module.checkForFB = function() {
@@ -193,6 +226,11 @@ if (typeof window !== "undefined") {
 					id = "me";
 				}
 				return module.playerImageUrls[id];
+			},
+			
+			getRandomFriendId: function() {
+				var index = App.rand(module.friendIds.length);
+				return module.friendIds[index];
 			},
 			
 			buy: function(productUrl, successCallback, failureCallback) {

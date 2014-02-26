@@ -13,7 +13,7 @@ App.config = {
 		//scope:'email'
 	},
 	"social-plugin-image-width": 100,
-
+	
 	"economy-plugin-name": "Soomla",
 	"economy-plugin-debug": false,
 	"economy-plugin-init": {
@@ -42,6 +42,29 @@ App.config = {
 	
 	"font": "Arial",
 	"font-shadow-color": cc.c3b(35,168, 20),
+
+	"anonymous-friends": [
+		"Bruce Lee",
+		"Samwise Gamgee",
+		"Peter Parker",
+		"Lex Luthor",
+		"David Banner",
+		"Clark Kent",
+		"Austin Powers",
+		"James Bond",
+		"Ricky Ricardo",
+		"Johnny Knoxville",
+		"G.R.R. Martin",
+		"Mr. T",
+		"Robin Hood",
+		"Barbara Streisand",
+		"Coffee Brown",
+		"Janis Joplin",
+		"Michelle Obama",
+		"Grandma Moses",
+		"Harriet Tubman",
+		"Joan of Arc",
+	],
 	
 	"songs": [
 		{file: "res/3 Ragga C Jump Beat.mp3", bpm: 113, intro: 4.437},
