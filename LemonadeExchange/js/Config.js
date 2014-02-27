@@ -63,7 +63,7 @@ App.config = {
 		"Michelle Obama",
 		"Grandma Moses",
 		"Harriet Tubman",
-		"Joan of Arc",
+		"Joan of Arc"
 	],
 	
 	"songs": [

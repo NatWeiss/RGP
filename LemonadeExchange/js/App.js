@@ -1,7 +1,7 @@
 
 var App = App || {};
 
-//App.singleEngineFile = "LemonadeExchange-min.js";
+App.singleEngineFile = "LemonadeExchange-min.js";
 
 App.showFPS = false;
 
@@ -26,7 +26,7 @@ App.getJSFiles = function() {
 		"js/Config.js",
 		"js/Facebook.js",
 		"js/LemonadeExchange.js",
-		//"js/ActionDrink.js",
+		"js/ActionDrink.js",
 		"js/AdsMobFox.js",
 		"js/SceneMain.js",
 		"js/LayerMenu.js",
