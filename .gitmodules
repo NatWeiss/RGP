@@ -1,9 +1,6 @@
-[submodule "RapidGame"]
-	path = RapidGame
-	url = http://natweiss.com/git/rapidgame.git
-[submodule "plugins/lib/jansson"]
-	path = plugins/lib/jansson
+[submodule "src/jansson"]
+	path = src/jansson
 	url = git@github.com:vedi/jansson.git
-[submodule "plugins/soomla/cocos2dx-store"]
-	path = plugins/soomla/cocos2dx-store
+[submodule "src/soomla/cocos2dx-store"]
+	path = src/soomla/cocos2dx-store
 	url = git@github.com:soomla/cocos2dx-store.git

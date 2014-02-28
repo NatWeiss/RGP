@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>BF7D19B5-8345-4E48-9D1A-5344B0C0AABB</string>
+	<key>IDESourceControlProjectName</key>
+	<string>cocos2dx-prebuilt</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D26C3F04-C2DD-49E4-82C8-FCB9F9DE161C</key>
+		<string>http://natweiss.com/git/rapidgame.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>cocos2dx-prebuilt.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D26C3F04-C2DD-49E4-82C8-FCB9F9DE161C</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://natweiss.com/git/rapidgame.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D26C3F04-C2DD-49E4-82C8-FCB9F9DE161C</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D26C3F04-C2DD-49E4-82C8-FCB9F9DE161C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RapidGame</string>
+		</dict>
+	</array>
+</dict>
+</plist>

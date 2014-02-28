@@ -1,0 +1,712 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		419E8E4A18A9845800232A34 /* iOS */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 419E8E4B18A9845800232A34 /* Build configuration list for PBXAggregateTarget "iOS" */;
+			buildPhases = (
+				419E8E4E18A9847700232A34 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = iOS;
+			productName = "cocos2d-x-static-ios";
+		};
+		419E8E9818A9BAEC00232A34 /* Mac-unused */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 419E8E9918A9BAEC00232A34 /* Build configuration list for PBXAggregateTarget "Mac-unused" */;
+			buildPhases = (
+				419E8E9E18A9BB3400232A34 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "Mac-unused";
+			productName = "cocos2d-x-static-mac";
+		};
+		419E8EA518A9CC3B00232A34 /* All */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 419E8EA618A9CC3B00232A34 /* Build configuration list for PBXAggregateTarget "All" */;
+			buildPhases = (
+			);
+			dependencies = (
+				419E8EAA18A9CC5C00232A34 /* PBXTargetDependency */,
+			);
+			name = All;
+			productName = "cocos2d-x-static";
+		};
+		419E91E718AB0AD800232A34 /* build-all-libs iOS */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 419E91E818AB0AD800232A34 /* Build configuration list for PBXAggregateTarget "build-all-libs iOS" */;
+			buildPhases = (
+			);
+			dependencies = (
+				41C58FED18C13480007B2614 /* PBXTargetDependency */,
+				41C58FEF18C13480007B2614 /* PBXTargetDependency */,
+				41C58FF118C13480007B2614 /* PBXTargetDependency */,
+				41C58FF318C13480007B2614 /* PBXTargetDependency */,
+				41C58FF518C13480007B2614 /* PBXTargetDependency */,
+				41C58FF718C13480007B2614 /* PBXTargetDependency */,
+				41C58FF918C13480007B2614 /* PBXTargetDependency */,
+				41C58FFB18C13480007B2614 /* PBXTargetDependency */,
+				41C58FFD18C13480007B2614 /* PBXTargetDependency */,
+			);
+			name = "build-all-libs iOS";
+			productName = "build-all-libs iOS";
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXContainerItemProxy section */
+		419E8EA918A9CC5C00232A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 419E8DAC18A9724F00232A34 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 419E8E4A18A9845800232A34;
+			remoteInfo = "cocos2d-x-static-ios";
+		};
+		41C58FB418C1336E007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FB018C1336E007B2614 /* PluginJSBindings.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA09A372168AFD41008C1C7B;
+			remoteInfo = PluginJSBindings;
+		};
+		41C58FC018C133AB007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FBC18C133AB007B2614 /* PluginProtocol.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA09A321168ADBC2008C1C7B;
+			remoteInfo = PluginProtocol;
+		};
+		41C58FC618C133CC007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FC218C133CC007B2614 /* PluginAdmob.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FADC44A7176EA82000B2D5ED;
+			remoteInfo = PluginAdmob;
+		};
+		41C58FCC18C133DF007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FC818C133DF007B2614 /* PluginFlurry.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA09A372168AFD41008C1C7B;
+			remoteInfo = PluginFlurry;
+		};
+		41C58FD218C133E9007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FCE18C133E9007B2614 /* PluginTwitter.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FACAD8881762C1B500D75ADE;
+			remoteInfo = PluginTwitter;
+		};
+		41C58FD818C133F8007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FD418C133F7007B2614 /* PluginUmeng.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA09A301168ADAEC008C1C7B;
+			remoteInfo = PluginUmeng;
+		};
+		41C58FDE18C1340B007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FDA18C1340B007B2614 /* PluginWeibo.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FAE27530175D9D2900F5DA8E;
+			remoteInfo = PluginWeibo;
+		};
+		41C58FE418C13425007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FE018C13425007B2614 /* PluginMobFox.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA09A372168AFD41008C1C7B;
+			remoteInfo = PluginMobFox;
+		};
+		41C58FEA18C1346B007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FE618C1346B007B2614 /* PluginSoomla.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA09A372168AFD41008C1C7B;
+			remoteInfo = PluginSoomla;
+		};
+		41C58FEC18C13480007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FB018C1336E007B2614 /* PluginJSBindings.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
+			remoteInfo = PluginJSBindings;
+		};
+		41C58FEE18C13480007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FBC18C133AB007B2614 /* PluginProtocol.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A320168ADBC2008C1C7B;
+			remoteInfo = PluginProtocol;
+		};
+		41C58FF018C13480007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FE018C13425007B2614 /* PluginMobFox.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
+			remoteInfo = PluginMobFox;
+		};
+		41C58FF218C13480007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FC218C133CC007B2614 /* PluginAdmob.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FADC44A6176EA82000B2D5ED;
+			remoteInfo = PluginAdmob;
+		};
+		41C58FF418C13480007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FC818C133DF007B2614 /* PluginFlurry.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
+			remoteInfo = PluginFlurry;
+		};
+		41C58FF618C13480007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FCE18C133E9007B2614 /* PluginTwitter.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FACAD8871762C1B500D75ADE;
+			remoteInfo = PluginTwitter;
+		};
+		41C58FF818C13480007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FD418C133F7007B2614 /* PluginUmeng.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A300168ADAEC008C1C7B;
+			remoteInfo = PluginUmeng;
+		};
+		41C58FFA18C13480007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FDA18C1340B007B2614 /* PluginWeibo.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FAE2752F175D9D2900F5DA8E;
+			remoteInfo = PluginWeibo;
+		};
+		41C58FFC18C13480007B2614 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FE618C1346B007B2614 /* PluginSoomla.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
+			remoteInfo = PluginSoomla;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		419E8DB718A9724F00232A34 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		419E8DC518A9724F00232A34 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		419E8DC818A9724F00232A34 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		41C58FB018C1336E007B2614 /* PluginJSBindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginJSBindings.xcodeproj; path = jsbindings/proj.ios/PluginJSBindings.xcodeproj; sourceTree = "<group>"; };
+		41C58FBC18C133AB007B2614 /* PluginProtocol.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginProtocol.xcodeproj; path = "cocos2d-x/plugin/protocols/proj.ios/PluginProtocol.xcodeproj"; sourceTree = "<group>"; };
+		41C58FC218C133CC007B2614 /* PluginAdmob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginAdmob.xcodeproj; path = "cocos2d-x/plugin/plugins/admob/proj.ios/PluginAdmob.xcodeproj"; sourceTree = "<group>"; };
+		41C58FC818C133DF007B2614 /* PluginFlurry.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginFlurry.xcodeproj; path = "cocos2d-x/plugin/plugins/flurry/proj.ios/PluginFlurry.xcodeproj"; sourceTree = "<group>"; };
+		41C58FCE18C133E9007B2614 /* PluginTwitter.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginTwitter.xcodeproj; path = "cocos2d-x/plugin/plugins/twitter/proj.ios/PluginTwitter.xcodeproj"; sourceTree = "<group>"; };
+		41C58FD418C133F7007B2614 /* PluginUmeng.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginUmeng.xcodeproj; path = "cocos2d-x/plugin/plugins/umeng/proj.ios/PluginUmeng.xcodeproj"; sourceTree = "<group>"; };
+		41C58FDA18C1340B007B2614 /* PluginWeibo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginWeibo.xcodeproj; path = "cocos2d-x/plugin/plugins/weibo/proj.ios/PluginWeibo.xcodeproj"; sourceTree = "<group>"; };
+		41C58FE018C13425007B2614 /* PluginMobFox.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginMobFox.xcodeproj; path = mobfox/proj.ios/PluginMobFox.xcodeproj; sourceTree = "<group>"; };
+		41C58FE618C1346B007B2614 /* PluginSoomla.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginSoomla.xcodeproj; path = soomla/proj.ios/PluginSoomla.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		419E8DAB18A9724F00232A34 = {
+			isa = PBXGroup;
+			children = (
+				41C58FB018C1336E007B2614 /* PluginJSBindings.xcodeproj */,
+				41C58FBC18C133AB007B2614 /* PluginProtocol.xcodeproj */,
+				41C58FE018C13425007B2614 /* PluginMobFox.xcodeproj */,
+				41C58FE618C1346B007B2614 /* PluginSoomla.xcodeproj */,
+				41C58FC218C133CC007B2614 /* PluginAdmob.xcodeproj */,
+				41C58FC818C133DF007B2614 /* PluginFlurry.xcodeproj */,
+				41C58FCE18C133E9007B2614 /* PluginTwitter.xcodeproj */,
+				41C58FD418C133F7007B2614 /* PluginUmeng.xcodeproj */,
+				41C58FDA18C1340B007B2614 /* PluginWeibo.xcodeproj */,
+				419E8DB618A9724F00232A34 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		419E8DB618A9724F00232A34 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				419E8DB718A9724F00232A34 /* Foundation.framework */,
+				419E8DC518A9724F00232A34 /* XCTest.framework */,
+				419E8DC818A9724F00232A34 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		41C58FB118C1336E007B2614 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41C58FB518C1336E007B2614 /* libPluginJSBindings.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		41C58FBD18C133AB007B2614 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41C58FC118C133AB007B2614 /* libPluginProtocol.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		41C58FC318C133CC007B2614 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41C58FC718C133CC007B2614 /* libPluginAdmob.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		41C58FC918C133DF007B2614 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41C58FCD18C133DF007B2614 /* libPluginFlurry.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		41C58FCF18C133E9007B2614 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41C58FD318C133E9007B2614 /* libPluginTwitter.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		41C58FD518C133F7007B2614 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41C58FD918C133F8007B2614 /* libPluginUmeng.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		41C58FDB18C1340B007B2614 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41C58FDF18C1340B007B2614 /* libPluginWeibo.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		41C58FE118C13425007B2614 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41C58FE518C13425007B2614 /* libPluginMobFox.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		41C58FE718C1346B007B2614 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41C58FEB18C1346B007B2614 /* libPluginSoomla.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		419E8DAC18A9724F00232A34 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+			};
+			buildConfigurationList = 419E8DAF18A9724F00232A34 /* Build configuration list for PBXProject "cocos2dx-plugins" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 419E8DAB18A9724F00232A34;
+			productRefGroup = 419E8DAB18A9724F00232A34;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 41C58FC318C133CC007B2614 /* Products */;
+					ProjectRef = 41C58FC218C133CC007B2614 /* PluginAdmob.xcodeproj */;
+				},
+				{
+					ProductGroup = 41C58FC918C133DF007B2614 /* Products */;
+					ProjectRef = 41C58FC818C133DF007B2614 /* PluginFlurry.xcodeproj */;
+				},
+				{
+					ProductGroup = 41C58FB118C1336E007B2614 /* Products */;
+					ProjectRef = 41C58FB018C1336E007B2614 /* PluginJSBindings.xcodeproj */;
+				},
+				{
+					ProductGroup = 41C58FE118C13425007B2614 /* Products */;
+					ProjectRef = 41C58FE018C13425007B2614 /* PluginMobFox.xcodeproj */;
+				},
+				{
+					ProductGroup = 41C58FBD18C133AB007B2614 /* Products */;
+					ProjectRef = 41C58FBC18C133AB007B2614 /* PluginProtocol.xcodeproj */;
+				},
+				{
+					ProductGroup = 41C58FE718C1346B007B2614 /* Products */;
+					ProjectRef = 41C58FE618C1346B007B2614 /* PluginSoomla.xcodeproj */;
+				},
+				{
+					ProductGroup = 41C58FCF18C133E9007B2614 /* Products */;
+					ProjectRef = 41C58FCE18C133E9007B2614 /* PluginTwitter.xcodeproj */;
+				},
+				{
+					ProductGroup = 41C58FD518C133F7007B2614 /* Products */;
+					ProjectRef = 41C58FD418C133F7007B2614 /* PluginUmeng.xcodeproj */;
+				},
+				{
+					ProductGroup = 41C58FDB18C1340B007B2614 /* Products */;
+					ProjectRef = 41C58FDA18C1340B007B2614 /* PluginWeibo.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				419E91E718AB0AD800232A34 /* build-all-libs iOS */,
+				419E8E4A18A9845800232A34 /* iOS */,
+				419E8E9818A9BAEC00232A34 /* Mac-unused */,
+				419E8EA518A9CC3B00232A34 /* All */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		41C58FB518C1336E007B2614 /* libPluginJSBindings.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginJSBindings.a;
+			remoteRef = 41C58FB418C1336E007B2614 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		41C58FC118C133AB007B2614 /* libPluginProtocol.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginProtocol.a;
+			remoteRef = 41C58FC018C133AB007B2614 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		41C58FC718C133CC007B2614 /* libPluginAdmob.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginAdmob.a;
+			remoteRef = 41C58FC618C133CC007B2614 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		41C58FCD18C133DF007B2614 /* libPluginFlurry.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginFlurry.a;
+			remoteRef = 41C58FCC18C133DF007B2614 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		41C58FD318C133E9007B2614 /* libPluginTwitter.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginTwitter.a;
+			remoteRef = 41C58FD218C133E9007B2614 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		41C58FD918C133F8007B2614 /* libPluginUmeng.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginUmeng.a;
+			remoteRef = 41C58FD818C133F8007B2614 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		41C58FDF18C1340B007B2614 /* libPluginWeibo.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginWeibo.a;
+			remoteRef = 41C58FDE18C1340B007B2614 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		41C58FE518C13425007B2614 /* libPluginMobFox.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginMobFox.a;
+			remoteRef = 41C58FE418C13425007B2614 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		41C58FEB18C1346B007B2614 /* libPluginSoomla.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginSoomla.a;
+			remoteRef = 41C58FEA18C1346B007B2614 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		419E8E4E18A9847700232A34 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "libName=\"libcocos2dx-plugins\"\nlibDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\nplatform=\"iOS\"\nscheme=\"build-all-libs $platform\"\n\n# copy headers\noutputDir=\"${SRCROOT}/../include\"\nmkdir -p ${outputDir}\n(cd ${SRCROOT}/soomla && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\nrm -r ${outputDir}/plugin/samples\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nmkdir -p \"${outputDir}\"\nfind ${SRCROOT}/soomla -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $outputDir \\;\n\n# build for all architectures\n#for config in ${CONFIGURATION}\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}-iphoneos/${libName}.a\n\toutputFileB=${BUILD_DIR}/${config}-iphonesimulator/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}-iphoneos/*.a\n\tlibtool -static -o $outputFileB ${BUILD_DIR}/${config}-iphonesimulator/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA $outputFileB\n\trm $outputFileA\n\trm $outputFileB\ndone\n";
+		};
+		419E8E9E18A9BB3400232A34 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"Mac\"\nscheme=\"build-all-libs $platform\"\n\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\t#if [ ! -f ${BUILD_DIR}/${config}/libcocos2dx\\ ${platform}.a ]; then\n\t\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" ONLY_ACTIVE_ARCH=NO -configuration ${config} BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\t#fi\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA\n\trm $outputFileA\ndone\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		419E8EAA18A9CC5C00232A34 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 419E8E4A18A9845800232A34 /* iOS */;
+			targetProxy = 419E8EA918A9CC5C00232A34 /* PBXContainerItemProxy */;
+		};
+		41C58FED18C13480007B2614 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginJSBindings;
+			targetProxy = 41C58FEC18C13480007B2614 /* PBXContainerItemProxy */;
+		};
+		41C58FEF18C13480007B2614 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginProtocol;
+			targetProxy = 41C58FEE18C13480007B2614 /* PBXContainerItemProxy */;
+		};
+		41C58FF118C13480007B2614 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginMobFox;
+			targetProxy = 41C58FF018C13480007B2614 /* PBXContainerItemProxy */;
+		};
+		41C58FF318C13480007B2614 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginAdmob;
+			targetProxy = 41C58FF218C13480007B2614 /* PBXContainerItemProxy */;
+		};
+		41C58FF518C13480007B2614 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginFlurry;
+			targetProxy = 41C58FF418C13480007B2614 /* PBXContainerItemProxy */;
+		};
+		41C58FF718C13480007B2614 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginTwitter;
+			targetProxy = 41C58FF618C13480007B2614 /* PBXContainerItemProxy */;
+		};
+		41C58FF918C13480007B2614 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginUmeng;
+			targetProxy = 41C58FF818C13480007B2614 /* PBXContainerItemProxy */;
+		};
+		41C58FFB18C13480007B2614 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginWeibo;
+			targetProxy = 41C58FFA18C13480007B2614 /* PBXContainerItemProxy */;
+		};
+		41C58FFD18C13480007B2614 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginSoomla;
+			targetProxy = 41C58FFC18C13480007B2614 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		419E8DD518A9724F00232A34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		419E8DD618A9724F00232A34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		419E8E4C18A9845800232A34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		419E8E4D18A9845800232A34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		419E8E9A18A9BAEC00232A34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		419E8E9B18A9BAEC00232A34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		419E8EA718A9CC3B00232A34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		419E8EA818A9CC3B00232A34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		419E91E918AB0AD800232A34 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		419E91EA18AB0AD800232A34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		419E8DAF18A9724F00232A34 /* Build configuration list for PBXProject "cocos2dx-plugins" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				419E8DD518A9724F00232A34 /* Debug */,
+				419E8DD618A9724F00232A34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		419E8E4B18A9845800232A34 /* Build configuration list for PBXAggregateTarget "iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				419E8E4C18A9845800232A34 /* Debug */,
+				419E8E4D18A9845800232A34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		419E8E9918A9BAEC00232A34 /* Build configuration list for PBXAggregateTarget "Mac-unused" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				419E8E9A18A9BAEC00232A34 /* Debug */,
+				419E8E9B18A9BAEC00232A34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		419E8EA618A9CC3B00232A34 /* Build configuration list for PBXAggregateTarget "All" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				419E8EA718A9CC3B00232A34 /* Debug */,
+				419E8EA818A9CC3B00232A34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		419E91E818AB0AD800232A34 /* Build configuration list for PBXAggregateTarget "build-all-libs iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				419E91E918AB0AD800232A34 /* Debug */,
+				419E91EA18AB0AD800232A34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 419E8DAC18A9724F00232A34 /* Project object */;
+}
