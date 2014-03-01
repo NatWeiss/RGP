@@ -1,0 +1,9 @@
+#!/bin/bash
+
+dest="natweiss.com:le"
+options="--stats -azPe ssh --exclude=.DS_Store"
+
+rsync proj.html5/* "${dest}/" $options
+rsync js "${dest}/" $options
+rsync res "${dest}/" $options
+rsync server "${dest}/" $options

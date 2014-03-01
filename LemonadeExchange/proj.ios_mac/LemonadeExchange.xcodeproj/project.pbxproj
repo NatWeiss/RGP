@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1A82F5FB169AC92500C4B13A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */; };
-		4152B77A189477A700BEF730 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 41E17C281888C1A500F6AD3C /* main.js */; };
 		4152B77E1894795000BEF730 /* js in Resources */ = {isa = PBXBuildFile; fileRef = 4152B77D1894795000BEF730 /* js */; };
 		4152B89018949C3F00BEF730 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4152B88318949C3F00BEF730 /* AppController.mm */; };
 		4152B89118949C3F00BEF730 /* Icon-114.png in Resources */ = {isa = PBXBuildFile; fileRef = 4152B88418949C3F00BEF730 /* Icon-114.png */; };
@@ -52,7 +51,6 @@
 		41F1A4B51894BB33006E818E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A922754F1517C094001B78AA /* CoreGraphics.framework */; };
 		41F1A4BC1894BB33006E818E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41F1A3E01894BA38006E818E /* Default-568h@2x.png */; };
 		41F1A4C81894BB33006E818E /* Icon-57.png in Resources */ = {isa = PBXBuildFile; fileRef = 4152B88818949C3F00BEF730 /* Icon-57.png */; };
-		41F1A4C91894BB33006E818E /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 41E17C281888C1A500F6AD3C /* main.js */; };
 		41F1A4CB1894BB33006E818E /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 4152B88918949C3F00BEF730 /* Icon-72.png */; };
 		41F1A4CC1894BB33006E818E /* js in Resources */ = {isa = PBXBuildFile; fileRef = 4152B77D1894795000BEF730 /* js */; };
 		41F1A4CD1894BB33006E818E /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = 4152B88718949C3F00BEF730 /* Icon-152.png */; };
@@ -86,6 +84,8 @@
 
 /* Begin PBXFileReference section */
 		1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		4142034218C15A490075A075 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = ../proj.html5/index.html; sourceTree = "<group>"; };
+		4142034318C15A520075A075 /* main.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = main.js; path = ../proj.html5/main.js; sourceTree = "<group>"; };
 		4152B77D1894795000BEF730 /* js */ = {isa = PBXFileReference; lastKnownFileType = folder; name = js; path = ../js; sourceTree = "<group>"; };
 		4152B88218949C3F00BEF730 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		4152B88318949C3F00BEF730 /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = "<group>"; };
@@ -123,8 +123,6 @@
 		41E177A8188794A700F6AD3C /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; name = res; path = ../res; sourceTree = "<group>"; };
 		41E17C151888B23F00F6AD3C /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = ../src/AppDelegate.mm; sourceTree = "<group>"; };
 		41E17C161888B24000F6AD3C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../src/AppDelegate.h; sourceTree = "<group>"; };
-		41E17C281888C1A500F6AD3C /* main.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = main.js; path = ../main.js; sourceTree = "<group>"; };
-		41E17C291888C2AD00F6AD3C /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = ../index.html; sourceTree = "<group>"; };
 		41F1A3E01894BA38006E818E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		41F1A4D61894BB33006E818E /* LemonadeExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LemonadeExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41F1A4D91894BBE3006E818E /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppController.h; path = mac/AppController.h; sourceTree = "<group>"; };
@@ -303,8 +301,8 @@
 				41E17C151888B23F00F6AD3C /* AppDelegate.mm */,
 				419E8EAD18A9D5CF00232A34 /* Extras.h */,
 				419E8EAE18A9D5CF00232A34 /* Extras.mm */,
-				41E17C291888C2AD00F6AD3C /* index.html */,
-				41E17C281888C1A500F6AD3C /* main.js */,
+				4142034218C15A490075A075 /* index.html */,
+				4142034318C15A520075A075 /* main.js */,
 				419E924E18AC3BDC00232A34 /* server.js */,
 				4152B77D1894795000BEF730 /* js */,
 				419E8EA218A9CA7600232A34 /* jsb */,
@@ -411,7 +409,6 @@
 				41F1A4E71894BBE3006E818E /* MainMenu.xib in Resources */,
 				41F1A4E61894BBE3006E818E /* InfoPlist.strings in Resources */,
 				41F1A4C81894BB33006E818E /* Icon-57.png in Resources */,
-				41F1A4C91894BB33006E818E /* main.js in Resources */,
 				41F1A4CB1894BB33006E818E /* Icon-72.png in Resources */,
 				41F1A4CC1894BB33006E818E /* js in Resources */,
 				41F1A4CD1894BB33006E818E /* Icon-152.png in Resources */,
@@ -428,7 +425,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				41F1A3E11894BA38006E818E /* Default-568h@2x.png in Resources */,
-				4152B77A189477A700BEF730 /* main.js in Resources */,
 				4152B89518949C3F00BEF730 /* Icon-57.png in Resources */,
 				4152B89618949C3F00BEF730 /* Icon-72.png in Resources */,
 				4152B77E1894795000BEF730 /* js in Resources */,

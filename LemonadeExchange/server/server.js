@@ -60,7 +60,9 @@ var i,
 	};
 
 // serve static files
-server.use('/', express.static(__dirname + '/../'));
+server.use('/', express.static(__dirname + '/../proj.html5/'));
+server.use('/res/', express.static(__dirname + '/../res/'));
+server.use('/js/', express.static(__dirname + '/../js/'));
 server.get('/', function(req,res){
 	res.sendfile('index.html');
 });

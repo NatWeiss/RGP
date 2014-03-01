@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		412DCAC818C16DE80044835D /* Headers */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 412DCAC918C16DE80044835D /* Build configuration list for PBXAggregateTarget "Headers" */;
+			buildPhases = (
+				412DCACC18C16DFF0044835D /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Headers;
+			productName = Headers;
+		};
 		419E8E4A18A9845800232A34 /* iOS */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 419E8E4B18A9845800232A34 /* Build configuration list for PBXAggregateTarget "iOS" */;
@@ -35,6 +46,7 @@
 			buildPhases = (
 			);
 			dependencies = (
+				412DCACE18C16E4D0044835D /* PBXTargetDependency */,
 				419E8EAA18A9CC5C00232A34 /* PBXTargetDependency */,
 				419E8EAC18A9CC5C00232A34 /* PBXTargetDependency */,
 			);
@@ -44,6 +56,13 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXContainerItemProxy section */
+		412DCACD18C16E4D0044835D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 419E8DAC18A9724F00232A34 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 412DCAC818C16DE80044835D;
+			remoteInfo = Headers;
+		};
 		419E8E2418A9837100232A34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 419E8E1118A9837100232A34 /* cocos2d_libs.xcodeproj */;
@@ -231,6 +250,7 @@
 			);
 			projectRoot = "";
 			targets = (
+				412DCAC818C16DE80044835D /* Headers */,
 				419E8E4A18A9845800232A34 /* iOS */,
 				419E8E9818A9BAEC00232A34 /* Mac */,
 				419E8EA518A9CC3B00232A34 /* All */,
@@ -340,6 +360,19 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		412DCACC18C16DFF0044835D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "libDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\n\n# copy headers\n# http://stackoverflow.com/questions/10176849/how-can-i-copy-only-header-files-in-an-entire-nested-directory-to-another-direct\noutputDir=\"${SRCROOT}/../include\"\nif [ -d $outputDir ]; then\n\trm -r ${outputDir}\nfi\nmkdir -p ${outputDir}\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\nrm -r ${outputDir}/docs\nif [ -d ${outputDir}/samples ]; then\n    rm -r ${outputDir}/samples\nfi\nif [ -d ${outputDir}/template ]; then\n    rm -r ${outputDir}/template\nfi\nif [ -d ${outputDir}/tools ]; then\n    rm -r ${outputDir}/tools\nfi\nfind ${outputDir} | xargs xattr -c\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nif [ -d $outputDir ]; then\n\trm -r ${outputDir}\nfi\nmkdir -p \"${outputDir}\"\nfind ${SRCROOT}/cocos2d-x/plugin/jsbindings -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/cocos2d-x/cocos/scripting/auto-generated -name *.js -exec cp {} $outputDir \\;\ncp ${SRCROOT}/cocos2d-x/cocos/scripting/javascript/script/*.js $outputDir\ncp -r ${SRCROOT}/cocos2d-x/cocos/scripting/javascript/script/debugger $outputDir\nfind ${outputDir} | xargs xattr -c\n\n# create absolute symlinks\nif [ ! -L ${libDir}/lib ]; then\n\tmkdir -p ${libDir}\n\tcd ${libDir} && ln -s ${SRCROOT}/../lib .\nfi\nif [ ! -L ${libDir}/include ]; then\n\tmkdir -p ${libDir}\n\tcd ${libDir} && ln -s ${SRCROOT}/../include .\nfi\n";
+		};
 		419E8E4E18A9847700232A34 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -351,7 +384,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "libName=\"libcocos2dx-prebuilt\"\nlibDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\nplatform=\"iOS\"\nscheme=\"build-all-libs $platform\"\n\n# copy headers\n# http://stackoverflow.com/questions/10176849/how-can-i-copy-only-header-files-in-an-entire-nested-directory-to-another-direct\noutputDir=\"${SRCROOT}/../include\"\nif [ -d $outputDir ]; then\n\trm -r ${outputDir}\nfi\nmkdir -p ${outputDir}\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\nrm -r ${outputDir}/docs\nrm -r ${outputDir}/samples\nrm -r ${outputDir}/template\nrm -r ${outputDir}/tools\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nif [ -d $outputDir ]; then\n\trm -r ${outputDir}\nfi\nmkdir -p \"${outputDir}\"\nfind ${SRCROOT}/cocos2d-x/plugin/jsbindings -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/cocos2d-x/cocos/scripting/auto-generated -name *.js -exec cp {} $outputDir \\;\ncp ${SRCROOT}/cocos2d-x/cocos/scripting/javascript/script/*.js $outputDir\ncp -r ${SRCROOT}/cocos2d-x/cocos/scripting/javascript/script/debugger $outputDir\n\n# create absolute symlinks\nif [ ! -L ${libDir}/lib ]; then\n\tmkdir -p ${libDir}\n\tcd ${libDir} && ln -s ${SRCROOT}/../lib .\nfi\nif [ ! -L ${libDir}/include ]; then\n\tmkdir -p ${libDir}\n\tcd ${libDir} && ln -s ${SRCROOT}/../include .\nfi\n\n# build for device and simulator\n#for config in ${CONFIGURATION}\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}-iphoneos/${libName}.a\n\toutputFileB=${BUILD_DIR}/${config}-iphonesimulator/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\t\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}-iphoneos/*.a\n\tlibtool -static -o $outputFileB ${BUILD_DIR}/${config}-iphonesimulator/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA $outputFileB\n\trm $outputFileA\n\trm $outputFileB\ndone\n";
+			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"iOS\"\nscheme=\"build-all-libs $platform\"\n\n# build for device and simulator\n#for config in ${CONFIGURATION}\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}-iphoneos/${libName}.a\n\toutputFileB=${BUILD_DIR}/${config}-iphonesimulator/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\t\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}-iphoneos/*.a\n\tlibtool -static -o $outputFileB ${BUILD_DIR}/${config}-iphonesimulator/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA $outputFileB\n\trm $outputFileA\n\trm $outputFileB\ndone\n";
 		};
 		419E8E9E18A9BB3400232A34 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -369,6 +402,11 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		412DCACE18C16E4D0044835D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 412DCAC818C16DE80044835D /* Headers */;
+			targetProxy = 412DCACD18C16E4D0044835D /* PBXContainerItemProxy */;
+		};
 		419E8EAA18A9CC5C00232A34 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 419E8E4A18A9845800232A34 /* iOS */;
@@ -382,6 +420,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		412DCACA18C16DE80044835D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		412DCACB18C16DE80044835D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		419E8DD518A9724F00232A34 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -503,6 +555,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		412DCAC918C16DE80044835D /* Build configuration list for PBXAggregateTarget "Headers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				412DCACA18C16DE80044835D /* Debug */,
+				412DCACB18C16DE80044835D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		419E8DAF18A9724F00232A34 /* Build configuration list for PBXProject "cocos2dx-prebuilt" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
