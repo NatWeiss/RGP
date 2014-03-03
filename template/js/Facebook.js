@@ -88,7 +88,7 @@ if (typeof window !== "undefined") {
 		};
 		
 		module.loadPlayerImage = function(id, callback) {
-			var dim = App.scale(App.getConfig("social-plugin-image-width") || 100);
+			var dim = App.scale(App.getConfig("social-plugin-profile-image-width") || 100);
 			FB.api("/" + id + "/picture?width=" + dim + "&height=" + dim, function(response) {
 				if (response.data.url) {
 					module.log("Got image url " + response.data.url + " for " + id);

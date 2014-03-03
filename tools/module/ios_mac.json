@@ -3,10 +3,11 @@
     "remove":               ["PROJECT_NAME.xcodeproj/project.xcworkspace",
                              "PROJECT_NAME.xcodeproj/xcuserdata"],
     "replace_package_name": ["ios/Info.plist",
-	                         "mac/Info.plist"],
+	                         "mac/Info.plist",
+							 "js/Config.js"],
     "replace_project_name": ["ios/Info.plist",
+							 "js/App.js",
+							 "mac/en.lproj/MainMenu.xib",
                              "mac/Info.plist",
-                             "ios/main.m",
-                             "ios/Prefix.pch",
                              "PROJECT_NAME.xcodeproj/project.pbxproj"]
 }

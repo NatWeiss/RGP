@@ -1,7 +1,7 @@
 
 var App = App || {};
 
-App.singleEngineFile = "LemonadeExchange-min.js";
+//App.singleEngineFile = "HelloJavascript-min.js";
 
 App.showFPS = false;
 
@@ -10,11 +10,7 @@ App.getFrameRate = function() {
 };
 
 App.getInitialScene = function() {
-	return SceneMain;
-};
-
-App.getInitialLayer = function() {
-	return (this.isHtml5() ? LayerMenu : LayerMenu);
+	return SceneHello;
 };
 
 App.getJSFiles = function() {
@@ -24,13 +20,11 @@ App.getJSFiles = function() {
 		"js/soomla.js",
 		"js/SoomlaNdk.js",
 		"js/Config.js",
+		"js/ConfigServer.js",
 		"js/Facebook.js",
-		"js/LemonadeExchange.js",
-		"js/ActionDrink.js",
+		"js/AppExtensions.js",
 		"js/AdsMobFox.js",
-		"js/SceneMain.js",
-		"js/LayerMenu.js",
-		"js/LayerGame.js",
+		"js/SceneHello.js",
 		"js/Loader.js"
 		];
 	return files;
@@ -127,19 +121,69 @@ App.scale = function(floatValue) {
 App.centralize = function(x, y) {
 	var winSize = this.getWinSize();
 	return cc.p(this.scale(x) + winSize.width * .5, this.scale(y) + winSize.height * .5);
-}
+};
 
 App.getConfig = function(key) {
 	return this.config[key];
-}
+};
 
 App.getString = function(key) {
 	return this.config[key];
-}
+};
+
+App.getLocalizedString = function(key) {
+	var strings,
+		language = cc.LANGUAGE_ENGLISH,
+		getLanguageCode;
+	
+	// get language code
+	if (typeof this._language === "undefined") {
+		getLanguageCode = function(l) {
+			var key,
+				languages = {
+					"en": cc.LANGUAGE_ENGLISH,
+					"zh": cc.LANGUAGE_CHINESE,
+					"fr": cc.LANGUAGE_FRENCH,
+					"it": cc.LANGUAGE_ITALIAN,
+					"de": cc.LANGUAGE_GERMAN,
+					"es": cc.LANGUAGE_SPANISH,
+					"ru": cc.LANGUAGE_RUSSIAN,
+					"ko": cc.LANGUAGE_KOREAN,
+					"ja": cc.LANGUAGE_JAPANESE,
+					"hu": cc.LANGUAGE_HUNGARIAN,
+					"pt": cc.LANGUAGE_PORTUGUESE,
+					"ar": cc.LANGUAGE_ARABIC
+				};
+			for (key in languages) {
+				if (languages.hasOwnProperty(key)) {
+					if (l === languages[key]) {
+						return key;
+					}
+				}
+			}
+			return "en";
+		};
+		
+		// store the language code
+		this._language = getLanguageCode(cc.Application.getInstance().getCurrentLanguage());
+		cc.log("Got language code: " + this._language);
+		if (typeof this.getConfig("strings")[this._language] === "undefined") {
+			cc.log("Don't have strings for language: " + this._language);
+			this._language = "en";
+		}
+	}
+
+	strings = this.getConfig("strings")[this._language];
+	if (typeof strings[key] !== "undefined") {
+		return strings[key];
+	}
+	cc.log("Couldn't find string[" + this._language + "][" + key + "]");
+	return "";
+};
 
 App.getInt = function(key) {
 	return parseInt(this.config[key]);
-}
+};
 
 App.rand = function(mod) {
 	var r = Math.random();
@@ -149,7 +193,7 @@ App.rand = function(mod) {
 		r %= mod;
 	}
 	return r;
-}
+};
 
 App.getWinSize = function() {
 	var size = cc.Director.getInstance().getWinSizeInPixels();
@@ -279,10 +323,6 @@ App.getHttpQueryParams = function() {
 	}
 	
 	return this._GET;
-};
-
-window.flurryAsyncInit = function() {
-	App.loadAnalyticsPlugin();
 };
 
 App.loadAnalyticsPlugin = function() {
@@ -584,12 +624,13 @@ App.bootX = function(global) {
 	
 	// after everything is done loading, create the main window variable
 	global.window = {
-		location: "http://localhost:8000/"
+		location: "http://localhost:" + App.serverPort + "/"
 	};
 	global.navigator = {
 		// http://stackoverflow.com/questions/8579019/how-to-get-the-user-agent-on-ios
 		userAgent: "Apple-iPhone5C1/1001.525" // how to apply this from C++??
 	};
+	cc.log("Got location: " + window.location);
 	
 	// add some functionality to cc
 	if (typeof cc.DEGREES_TO_RADIANS === 'undefined') {
@@ -676,6 +717,11 @@ App.main = function() {
 		this.mainX();
 	
 	cc.log("Resource directory: " + App.getResourceDir());
+	
+	// load flurry asynchronouslu
+	window.flurryAsyncInit = function() {
+		App.loadAnalyticsPlugin();
+	};
 	
 	if (this.isHtml5()) {
 		this._fullscreenEnabled = (this.runPrefixMethod(document, "FullScreen")

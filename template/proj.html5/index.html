@@ -57,6 +57,8 @@
 		js.addEventListener("load", function () {
 			if (typeof window.flurryAsyncInit !== "undefined") {
 				window.flurryAsyncInit();
+			} else {
+				throw "Couldn't find window.flurryAsyncInit()";
 			}
 			this.removeEventListener("load", arguments.callee, false);
 		}, false);

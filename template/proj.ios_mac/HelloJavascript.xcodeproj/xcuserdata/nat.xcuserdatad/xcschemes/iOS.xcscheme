@@ -7,20 +7,6 @@
       buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
-            buildForTesting = "NO"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A922753C1517C094001B78AA"
-               BuildableName = "LemonadeX.app"
-               BlueprintName = "LemonadeExchange-ios"
-               ReferencedContainer = "container:LemonadeExchange.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
             buildForProfiling = "YES"
@@ -47,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A922753C1517C094001B78AA"
-            BuildableName = "LemonadeX.app"
-            BlueprintName = "LemonadeExchange-ios"
-            ReferencedContainer = "container:LemonadeExchange.xcodeproj">
+            BuildableName = "HelloJavascript.app"
+            BlueprintName = "iOS"
+            ReferencedContainer = "container:HelloJavascript.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -66,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A922753C1517C094001B78AA"
-            BuildableName = "LemonadeX.app"
-            BlueprintName = "LemonadeExchange-ios"
-            ReferencedContainer = "container:LemonadeExchange.xcodeproj">
+            BuildableName = "HelloJavascript.app"
+            BlueprintName = "iOS"
+            ReferencedContainer = "container:HelloJavascript.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -84,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A922753C1517C094001B78AA"
-            BuildableName = "LemonadeX.app"
-            BlueprintName = "LemonadeExchange-ios"
-            ReferencedContainer = "container:LemonadeExchange.xcodeproj">
+            BuildableName = "HelloJavascript.app"
+            BlueprintName = "iOS"
+            ReferencedContainer = "container:HelloJavascript.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

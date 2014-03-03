@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1A82F5FB169AC92500C4B13A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */; };
+		412DCAD818C28E980044835D /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 4142034318C15A520075A075 /* main.js */; };
 		4152B77E1894795000BEF730 /* js in Resources */ = {isa = PBXBuildFile; fileRef = 4152B77D1894795000BEF730 /* js */; };
 		4152B89018949C3F00BEF730 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4152B88318949C3F00BEF730 /* AppController.mm */; };
 		4152B89118949C3F00BEF730 /* Icon-114.png in Resources */ = {isa = PBXBuildFile; fileRef = 4152B88418949C3F00BEF730 /* Icon-114.png */; };
@@ -424,6 +425,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				412DCAD818C28E980044835D /* main.js in Resources */,
 				41F1A3E11894BA38006E818E /* Default-568h@2x.png in Resources */,
 				4152B89518949C3F00BEF730 /* Icon-57.png in Resources */,
 				4152B89618949C3F00BEF730 /* Icon-72.png in Resources */,
