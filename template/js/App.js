@@ -15,15 +15,15 @@ App.getInitialScene = function() {
 
 App.getJSFiles = function() {
 	var files = [
-		"js/aes.js",
-		"js/underscore.js",
-		"js/soomla.js",
-		"js/SoomlaNdk.js",
+		"js/lib/aes.js",
+		"js/lib/underscore.js",
+		"lib/cocos2dx-prebuilt/jsb/soomla.js",
+		"js/lib/SoomlaNdk.js",
+		"js/lib/Facebook.js",
+		"js/lib/AdsMobFox.js",
 		"js/Config.js",
 		"js/ConfigServer.js",
-		"js/Facebook.js",
-		"js/AppExtensions.js",
-		"js/AdsMobFox.js",
+		"js/HelloJavascript.js",
 		"js/SceneHello.js",
 		"js/Loader.js"
 		];
@@ -32,10 +32,17 @@ App.getJSFiles = function() {
 
 App.getResourcesToPreload = function() {
 	var dir = this.getResourceDir(),
-		files = [
-			{src:dir + "/spritesheet.plist"},
-			{src:dir + "/spritesheet.png"}
-		];
+		files = this.getConfig("preload"),
+		i;
+	
+	if (files) {
+		for (i = 0; i < files.length; i += 1) {
+			if (files[i].src) {
+				files[i].src = dir + "/" + files[i].src;
+			}
+		}
+	}
+	
 	return files;
 };
 
@@ -44,11 +51,11 @@ App.getResourceDir = function() {
 		maxDimension,
 		minDimension;
 
-	if (typeof this._resourceDir === 'undefined') {
+	if (typeof this._resourceDir === "undefined") {
 		winSize = this.getWinSize();
 		maxDimension = Math.max(winSize.width, winSize.height);
 		minDimension = Math.min(winSize.width, winSize.height);
-		cc.log(maxDimension + " x " + minDimension);
+		//cc.log(maxDimension + " x " + minDimension);
 		
 		// set resource directories
 		if (this.isHtml5()) {
@@ -131,12 +138,12 @@ App.getString = function(key) {
 	return this.config[key];
 };
 
-App.getLocalizedString = function(key) {
-	var strings,
-		language = cc.LANGUAGE_ENGLISH,
-		getLanguageCode;
-	
-	// get language code
+App.localizeCurrency = function(amount) {
+	return "$" + parseFloat(amount).toFixed(2);
+};
+
+App.getLanguageCode = function() {
+	var getLanguageCode;
 	if (typeof this._language === "undefined") {
 		getLanguageCode = function(l) {
 			var key,
@@ -166,18 +173,25 @@ App.getLocalizedString = function(key) {
 		
 		// store the language code
 		this._language = getLanguageCode(cc.Application.getInstance().getCurrentLanguage());
-		cc.log("Got language code: " + this._language);
 		if (typeof this.getConfig("strings")[this._language] === "undefined") {
 			cc.log("Don't have strings for language: " + this._language);
 			this._language = "en";
 		}
 	}
+	return this._language;
+};
 
-	strings = this.getConfig("strings")[this._language];
+App.getLocalizedString = function(key) {
+	var strings,
+		code = this.getLanguageCode();
+	
+	strings = this.getConfig("strings")[code];
 	if (typeof strings[key] !== "undefined") {
 		return strings[key];
 	}
-	cc.log("Couldn't find string[" + this._language + "][" + key + "]");
+	if (key && key.length) {
+		cc.log("Couldn't find string[" + code + "][" + key + "]");
+	}
 	return "";
 };
 
@@ -201,6 +215,16 @@ App.getWinSize = function() {
 		this._winSize = size;
 	}
 	return this._winSize;
+};
+
+App.getRunningLayer = function() {
+	var node = cc.Director.getInstance().getRunningScene();
+	if (node) {
+		if (node.layer) {
+			node = node.layer;
+		}
+	}
+	return node;
 };
 
 App.isFullscreenAvailable = function() {
@@ -326,35 +350,34 @@ App.getHttpQueryParams = function() {
 };
 
 App.loadAnalyticsPlugin = function() {
-	var flurryApiKey,
+	var self = this,
+		flurryApiKey,
 		flurry;
+
+	this._loadAnalyticsTries = (this._loadAnalyticsTries || 0);
 	
 	if (typeof FlurryAgent !== "undefined" && typeof App.config !== "undefined" && !this._initializedFlurry) {
 		this._initializedFlurry = true;
+		//cc.log("Loaded flurry after " + this._loadAnalyticsTries + " tries");
 		flurryApiKey = App.getString("flurry-api-key");
-		cc.log("Loading Flurry");
 		if (flurryApiKey) {
 			flurry = plugin.PluginManager.getInstance().loadPlugin("AnalyticsFlurry");
 			if (flurry) {
 				flurry.startSession(flurryApiKey);
 			}
+		} else {
+			cc.log("Flurry: API key has not been set");
+		}
+	} else {
+		if (this._loadAnalyticsTries < 10) {
+			setTimeout(function(){
+				self.loadAnalyticsPlugin();
+			}, 250);
 		}
 	}
 
-
-//        var flurry = plugin.PluginManager.getInstance().loadPlugin("AnalyticsFlurry");
-		//flurry.setDebugMode(true);
-		//cc.log("Flurry SDK version: " + flurry.getSDKVersion());
-		//flurry.setSessionContinueMillis(5 * 60 * 1000);
-//		flurry.startSession("PBSGR7SV59JZN2RQQW96");
-		//flurry.logError("someErrorId", "Error in js: foo foo!");
-		//flurry.setCaptureUncaughtException(false);
-		//flurry.logEvent("myevent1");
-		//flurry.logEvent("myevent2", {"some-parameter": true});
-		//flurry.logTimedEventBegin("mytimedevent");
-		//flurry.logTimedEventEnd("mytimedevent");
-
-}
+	this._loadAnalyticsTries = this._loadAnalyticsTries + 1;
+};
 
 App.getAdsPlugin = function() {
 	var name;
@@ -374,7 +397,7 @@ App.getAdsPlugin = function() {
 	}
 
 	return this._adsPlugin;
-}
+};
 
 App.loadAdsPlugin = function() {
 	var plugin = this.getAdsPlugin(),
@@ -391,7 +414,7 @@ App.loadAdsPlugin = function() {
 			mode: this.getString("ads-plugin-mode")
 		});
 	}
-}
+};
 
 App.getSocialPlugin = function() {
 	var name = this.getString("social-plugin-name");
@@ -415,7 +438,7 @@ App.getSocialPlugin = function() {
 	}
 
 	return this._socialPlugin;
-}
+};
 
 App.loadSocialPlugin = function() {
 	var plugin = this.getSocialPlugin(),
@@ -424,18 +447,51 @@ App.loadSocialPlugin = function() {
 	if (typeof plugin !== "undefined") {
 		if (debug) {
 			plugin.setDebugMode(debug);
-			cc.log("Social plugin: " + plugin);
 		}
 
 		plugin.configDeveloperInfo(App.getConfig("social-plugin-init"));
 	}
-}
+};
 
 App.loadEconomyPlugin = function() {
+	var config = App.getConfig("economy-plugin-init");
+	
 	if (Soomla.CCSoomlaNdkBridge.setDebug) {
 		Soomla.CCSoomlaNdkBridge.setDebug(App.getConfig("economy-plugin-debug"));
 	}
-	Soomla.StoreController.createShared(App.getStoreAssets(), App.getConfig("economy-plugin-init"));
+
+	if (config && config.soomSec && config.customSec) {
+		Soomla.StoreController.createShared(App.getStoreAssets(), config);
+
+		Soomla.CCSoomlaNdkBridge.buy = function(productId, successCallback, failureCallback) {
+			var social = App.getSocialPlugin();
+			if (social && social.isCanvasMode()) {
+				social.buy(productId, successCallback, failureCallback);
+			}
+			else {
+				alert("Please play within Facebook to enable purchasing.");
+				Soomla.CCSoomlaNdkBridge.onPaymentComplete();
+			}
+		};
+
+		Soomla.CCSoomlaNdkBridge.onCurrencyUpdate = function() {
+			App.getRunningLayer().onCurrencyUpdate();
+		};
+
+		Soomla.CCSoomlaNdkBridge.onPaymentComplete = function() {
+			App.getRunningLayer().onPaymentComplete();
+		};
+	} else {
+		cc.log("Soomla: Secret keys have not been set");
+	}
+};
+
+App.giveItem = function(itemId, amount) {
+	if (amount < 0) {
+		Soomla.storeInventory.takeItem(itemId, Math.abs(amount));
+	} else {
+		Soomla.storeInventory.giveItem(itemId, amount);
+	}
 };
 
 App.onInitialLaunch = function() {
@@ -640,7 +696,7 @@ App.bootX = function(global) {
 		cc.DEGREES_TO_RADIANS = function(angle) {return angle * cc.RAD;};
 		cc.RADIANS_TO_DEGREES = function(angle) {return angle * cc.DEG;};
 	}
-}
+};
 
 App.mainHtml5 = function() {
 	var Application = cc.Application.extend({
@@ -674,7 +730,7 @@ App.mainHtml5 = function() {
 				scene = new Scene();
 				scene.init();
 				director.replaceScene(scene);
-			}, this );
+			}, this);
 
 			return true;
 		},
@@ -688,7 +744,7 @@ App.mainHtml5 = function() {
 	
 	App.addImageRaw = function() {
 	};
-}
+};
 
 App.mainX = function() {
 	var director = cc.Director.getInstance(),
@@ -699,7 +755,7 @@ App.mainX = function() {
 	scene = new Scene;
 	scene.init();
 	director.runWithScene(scene);
-}
+};
 
 App.main = function() {
 	var i,
@@ -707,6 +763,7 @@ App.main = function() {
 		sheets,
 		cacher,
 		dirs = [],
+		winSize,
 		initialLaunch = this.isInitialLaunch();
 
 	this.loadSoundEnabled();
@@ -716,12 +773,8 @@ App.main = function() {
 	else
 		this.mainX();
 	
-	cc.log("Resource directory: " + App.getResourceDir());
-	
-	// load flurry asynchronouslu
-	window.flurryAsyncInit = function() {
-		App.loadAnalyticsPlugin();
-	};
+	winSize = this.getWinSize();
+	cc.log(winSize.width + " x " + winSize.height + ", resource dir: " + App.getResourceDir() + ", language: " + App.getLanguageCode());
 	
 	if (this.isHtml5()) {
 		this._fullscreenEnabled = (this.runPrefixMethod(document, "FullScreen")
@@ -746,13 +799,18 @@ App.main = function() {
 	if (initialLaunch) {
 		this.onInitialLaunch();
 	}
-}
+};
 
 App.boot = function(global) {
 	if (this.isHtml5())
 		this.bootHtml5(global);
 	else
 		this.bootX(global);
-}
+
+	// window is not guaranteed until now
+	window.flurryAsyncInit = function() {
+		App.loadAnalyticsPlugin();
+	};
+};
 
 App.boot(this);

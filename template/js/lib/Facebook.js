@@ -134,22 +134,26 @@ if (typeof window !== "undefined") {
 			if (typeof FB !== "undefined" && !module.initialized) {
 				module.initialized = true;
 
-				// init
-				FB.init(module.devInfo);
-				module.log("Initialized app ID: " + module.devInfo.appId);
+				if (module.devInfo.appId && module.devInfo.appId.length) {
+					// init
+					FB.init(module.devInfo);
+					module.log("Initialized app ID: " + module.devInfo.appId);
 
-				// subscribe to authorization changes
-				FB.Event.subscribe("auth.authResponseChange", module.onCheckLoginStatus);
-				
-				// detect if running as a facebook canvas
-				if (window.name && window.name.length > 0) {
-					FB.Canvas.getPageInfo(function(info){
-						if (info && info.clientWidth) {
-							module.isCanvas = true;
-							module.canvasInfo = info;
-							module.log("Canvas mode");
-						}
-					});
+					// subscribe to authorization changes
+					FB.Event.subscribe("auth.authResponseChange", module.onCheckLoginStatus);
+					
+					// detect if running as a facebook canvas
+					if (window.name && window.name.length > 0) {
+						FB.Canvas.getPageInfo(function(info){
+							if (info && info.clientWidth) {
+								module.isCanvas = true;
+								module.canvasInfo = info;
+								module.log("Canvas mode");
+							}
+						});
+					}
+				} else {
+					module.log("App ID has not been set");
 				}
 			}
 		};
@@ -180,7 +184,7 @@ if (typeof window !== "undefined") {
 		};
 		
 		window.fbAsyncInit = function() {
-			module.log("fbAsyncInit");
+			//module.log("fbAsyncInit");
 			module.init();
 		};
 		

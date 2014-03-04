@@ -1,43 +1,6 @@
 
 var App = App || {};
 
-App.localizeCurrency = function(amount) {
-	return "$" + parseFloat(amount).toFixed(2);
-};
-
-App.giveItem = function(itemId, amount) {
-	if (amount < 0) {
-		Soomla.storeInventory.takeItem(itemId, Math.abs(amount));
-	} else {
-		Soomla.storeInventory.giveItem(itemId, amount);
-	}
-};
-
-Soomla.CCSoomlaNdkBridge.buy = function(productId, successCallback, failureCallback) {
-	var social = App.getSocialPlugin();
-	if (social.isCanvasMode()) {
-		social.buy(productId, successCallback, failureCallback);
-	}
-	else {
-		alert("Please play within Facebook to enable purchasing.");
-		Soomla.CCSoomlaNdkBridge.onPaymentComplete();
-	}
-};
-
-Soomla.CCSoomlaNdkBridge.onCurrencyUpdate = function() {
-	scene = cc.Director.getInstance().getRunningScene();
-	if (scene && scene.layer && scene.layer.onCurrencyUpdate()) {
-		scene.layer.onCurrencyUpdate();
-	}
-};
-
-Soomla.CCSoomlaNdkBridge.onPaymentComplete = function() {
-	scene = cc.Director.getInstance().getRunningScene();
-	if (scene && scene.layer && scene.layer.onPaymentComplete()) {
-		scene.layer.onPaymentComplete();
-	}
-};
-
 App.playClickSound = function() {
 	var sounds = App.getConfig("click-sounds");
 	this.clickSound = this.clickSound || 0;

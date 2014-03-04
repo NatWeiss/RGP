@@ -40,6 +40,10 @@ App.config = {
 	"spritesheets": [
 		"spritesheet.plist"
 	],
+	"preload": [
+		{src:"spritesheet.plist"},
+		{src:"spritesheet.png"}
+	],
 	
 	"font": "Arial",
 	

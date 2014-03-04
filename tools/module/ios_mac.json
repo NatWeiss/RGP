@@ -1,12 +1,14 @@
 {
-    "rename":               ["PROJECT_NAME.xcodeproj"],
+    "rename":               ["PROJECT_NAME.xcodeproj",
+	                         "../js/PROJECT_NAME.js"],
     "remove":               ["PROJECT_NAME.xcodeproj/project.xcworkspace",
                              "PROJECT_NAME.xcodeproj/xcuserdata"],
     "replace_package_name": ["ios/Info.plist",
 	                         "mac/Info.plist",
-							 "js/Config.js"],
+							 "../js/Config.js"],
     "replace_project_name": ["ios/Info.plist",
-							 "js/App.js",
+							 "../js/App.js",
+							 "../proj.html5/build.xml",
 							 "mac/en.lproj/MainMenu.xib",
                              "mac/Info.plist",
                              "PROJECT_NAME.xcodeproj/project.pbxproj"]

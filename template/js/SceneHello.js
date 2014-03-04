@@ -60,12 +60,17 @@ var LayerHello = (function(){
 				cc.EaseOut.create(cc.ScaleBy.create(0.1, 1.1), 2.0),
 				cc.EaseOut.create(cc.ScaleBy.create(0.2, 1 / 1.1), 1.5)
 			));
-			this.setCounterLabel("1");
-			App.requestUrl("api/counter", this.onGetCounter);
 
 			this.setTouchEnabled(true);
 
 			return true;
+		},
+		
+		onEnter: function() {
+			this._super();
+
+			this.setCounterLabel("1");
+			App.requestUrl("api/counter", this.onGetCounter);
 		},
 		
 		setCounterLabel: function(number) {

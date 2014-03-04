@@ -48,12 +48,11 @@ else:
 class ThreadedTask(threading.Thread):
     """Create cocos project thread.
     """
-    def __init__(self, queue, projectName, packageName, language, projectPath):
+    def __init__(self, queue, projectName, packageName, projectPath):
         threading.Thread.__init__(self)
         self.queue = queue
         self.projectName = projectName
         self.packageName = packageName
-        self.language = language
         self.projectPath = projectPath
 
     def run(self):
@@ -81,7 +80,6 @@ class ThreadedTask(threading.Thread):
         breturn = project.createPlatformProjects(
             self.projectName,
             self.packageName,
-            self.language,
             self.projectPath,
             self.newProjectCallBack
         )
@@ -113,7 +111,6 @@ class TkCocosDialog(Frame):
 
         self.projectName = ""
         self.packageName = ""
-        self.language = ""
 
         self.parent = parent
         self.columnconfigure(3, weight=1)
@@ -142,18 +139,6 @@ class TkCocosDialog(Frame):
         self.labPath.grid(row=2, column=0,sticky=W, pady=4, padx=5)
         self.editPath.grid(row=2, column=1, columnspan=3,padx=5, pady=2, sticky=E+W)
         self.btnPath.grid(row=2, column=4,)
-
-        # language frame
-        self.labLanguage = Label(self, text="Language:")
-        self.var=IntVar()
-        self.var.set(1)
-        self.checkcpp = Radiobutton(self, text="C++", variable=self.var, value=1)
-        self.checklua = Radiobutton(self, text="Lua", variable=self.var, value=2)
-        self.checkjs = Radiobutton(self, text="JavaScript", variable=self.var, value=3)
-        self.labLanguage.grid(row=3, column=0,sticky=W, padx=5)
-        self.checkcpp.grid(row=3, column=1,sticky=N+W)
-        self.checklua.grid(row=3, column=2,padx=5,sticky=N+W)
-        self.checkjs.grid(row=3, column=3,padx=5,sticky=N+W)
 
         # show progress
         self.progress = Scale(self, state= DISABLED, from_=0, to=100, orient=HORIZONTAL)
@@ -238,15 +223,6 @@ class TkCocosDialog(Frame):
                 showwarning("warning", "packageName format  error!")
                 return
 
-        # get select language type
-        language = "cpp"
-        if self.var.get() == 1:
-            language = "cpp"
-        elif self.var.get() == 2:
-            language = "lua"
-        elif self.var.get() == 3:
-            language = "javascript"
-
         projectPath = self.editPath.get()
         if projectPath == "":
             showwarning("warning", "projectPath is empty")
@@ -260,7 +236,7 @@ class TkCocosDialog(Frame):
         #create a new thread to deal with create new project.
         self.btnCreate['state'] = DISABLED
         self.queue = Queue()
-        ThreadedTask(self.queue, projectName, packageName, language, projectPath).start()
+        ThreadedTask(self.queue, projectName, packageName, projectPath).start()
         self.parent.after(100, self.process_queue)
 
     def pathCallback(self):

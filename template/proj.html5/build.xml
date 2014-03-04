@@ -6,7 +6,7 @@
 		classpath="${basedir}/../lib/cocos2d-html5/tools/compiler/compiler.jar"/>
 
 	<target name="compile_Canvas">
-		<jscomp compilationLevel="simple" warning="quiet" debug="false" output="${basedir}/LemonadeExchange-min.js"><!--sourceMapOutputFile="sourcemap" sourceMapFormat="V3">-->
+		<jscomp compilationLevel="simple" warning="quiet" debug="false" output="${basedir}/HelloJavascript-min.js"><!--sourceMapOutputFile="sourcemap" sourceMapFormat="V3">-->
 			<externs dir="${basedir}/../lib/cocos2d-html5/cocos2d">
 				<file name="core/cocos2d_externs.js"/>
 			</externs>
@@ -234,21 +234,17 @@
 				<file name="PluginX/plugins/AnalyticsFlurry.js"/>
 			</sources>
 			<sources dir="${basedir}/../js">
-				<file name="aes.js"/>
-				<file name="timers.js"/>
-				<file name="underscore.js"/>
-				<file name="soomla.js"/>
-				<file name="SoomlaNdk.js"/>
+				<file name="lib/aes.js"/>
+				<file name="lib/timers.js"/>
+				<file name="lib/underscore.js"/>
+				<file name="../lib/cocos2dx-prebuilt/jsb/soomla.js"/>
+				<file name="lib/SoomlaNdk.js"/>
+				<file name="lib/AdsMobFox.js"/>
+				<file name="lib/Facebook.js"/>
 				<file name="Config.js"/>
-				<!-- <file name="App.js"/> -->
-				<file name="LemonadeExchange.js"/>
+				<file name="HelloJavascript.js"/>
 				<file name="Loader.js"/>
-				<file name="AdsMobFox.js"/>
-				<file name="Facebook.js"/>
-				<file name="ActionDrink.js"/>
-				<file name="SceneMain.js"/>
-				<file name="LayerGame.js"/>
-				<file name="LayerMenu.js"/>
+				<file name="SceneHello.js"/>
 			</sources>
 		</jscomp>
 	</target>
