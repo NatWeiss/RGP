@@ -15,7 +15,7 @@ App.config = {
 	"social-plugin-image-width": 100,
 	
 	"economy-plugin-name": "Soomla",
-	"economy-plugin-debug": false,
+	"economy-plugin-debug": true,
 	"economy-plugin-init": {
 		// only use soomla highway and your don't need these...
 		soomSec: "77yMfv8l1yyYq4WoKJ0cVTEa3FU2zuSp",
@@ -38,6 +38,10 @@ App.config = {
 	
 	"spritesheets": [
 		"spritesheet.plist"
+	],
+	"preload": [
+		{src:"spritesheet.plist"},
+		{src:"spritesheet.png"}
 	],
 	
 	"font": "Arial",

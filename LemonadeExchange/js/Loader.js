@@ -1,27 +1,34 @@
 
+//
+// override cc.LoaderScene's init method to customize the scene
+//
 cc.LoaderScene.prototype.init = function(){
 	var self = this;
+	
+	// call super's init
 	cc.Scene.prototype.init.call(this);
 
+	// setup a few privates
 	this._currentColor = 0;
 	this._colors = App.getConfig("loading-image-colors") || [];
 
-	//
-	// convert your image to base64:
-	// http://webcodertools.com/imagetobase64converter
-	//
+	// start loading the logo texture
 	this._logoTexture = new Image();
 	this._logoTexture.addEventListener("load", function () {
 		var sizePercent = App.getConfig("loading-image-win-size-percent");
+		
+		// initialize the stage
 		self._initStage(cc.p(self._winSize.width * .5, self._winSize.height * .6));
 		
-		// adjust size of image
+		// adjust size of logo image
 		if (sizePercent) {
 			self._logo.setScale((self._winSize.height * sizePercent) / self._logo.getContentSize().height);
 		}
 		
 		this.removeEventListener("load", arguments.callee, false);
 	}, false);
+	
+	// properties of the logo texture
 	this._logoTexture.src = App.getConfig("loading-image");
 	if (App.getConfig("loading-image-width")) {
 		this._logoTexture.width = App.getConfig("loading-image-width");
@@ -57,9 +64,12 @@ cc.LoaderScene.prototype.init = function(){
 	this.addChild(this._loadingBar, 10);
 };
 
+//
+// override cc.LoaderScene's updatePercent method to customize the animation
+//
 cc.LoaderScene.prototype._updatePercent = function (){
 	var width,
-		percent = cc.Loader.getInstance().getPercentage(),
+		percent = Math.min(100, cc.Loader.getInstance().getPercentage()),
 		xSpacing;
 
 	if (percent >= 100) {

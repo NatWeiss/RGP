@@ -41,6 +41,8 @@ App.getResourcesToPreload = function() {
 				files[i].src = dir + "/" + files[i].src;
 			}
 		}
+	} else {
+		cc.log("Missing App.config.preload array");
 	}
 	
 	return files;
@@ -143,7 +145,9 @@ App.localizeCurrency = function(amount) {
 };
 
 App.getLanguageCode = function() {
-	var getLanguageCode;
+	var getLanguageCode,
+		strings;
+	
 	if (typeof this._language === "undefined") {
 		getLanguageCode = function(l) {
 			var key,
@@ -173,11 +177,13 @@ App.getLanguageCode = function() {
 		
 		// store the language code
 		this._language = getLanguageCode(cc.Application.getInstance().getCurrentLanguage());
-		if (typeof this.getConfig("strings")[this._language] === "undefined") {
+		strings = this.getConfig("strings");
+		if (strings && typeof strings[this._language] === "undefined") {
 			cc.log("Don't have strings for language: " + this._language);
 			this._language = "en";
 		}
 	}
+	
 	return this._language;
 };
 
@@ -432,7 +438,10 @@ App.getSocialPlugin = function() {
 				configDeveloperInfo: function() {},
 				buy: function() {},
 				login: function() {},
-				logout: function() {}
+				logout: function() {},
+				getPlayerImageUrl: function() {},
+				getPlayerFirstName: function() {},
+				getRandomFriendId: function() {}
 			};
 		}
 	}
@@ -460,7 +469,7 @@ App.loadEconomyPlugin = function() {
 		Soomla.CCSoomlaNdkBridge.setDebug(App.getConfig("economy-plugin-debug"));
 	}
 
-	if (config && config.soomSec && config.customSec) {
+	if (config && config.soomSec && config.customSecret) {
 		Soomla.StoreController.createShared(App.getStoreAssets(), config);
 
 		Soomla.CCSoomlaNdkBridge.buy = function(productId, successCallback, failureCallback) {

@@ -22,7 +22,7 @@ App.config = {
 	"social-plugin-profile-image-width": 100,
 	
 	"economy-plugin-name": "Soomla",
-	"economy-plugin-debug": false,
+	"economy-plugin-debug": true,
 	"economy-plugin-init": {
 		soomSec: "", // generate a random 32 character string for this
 		customSecret: "", // generate a random 32 character string for this too

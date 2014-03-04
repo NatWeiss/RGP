@@ -80,8 +80,7 @@ class CocosProject:
         # set the parser to parse input params
         # the correspond variable name of "-x, --xxx" is parser.xxx
         parser = OptionParser(
-            usage="Usage: %prog -n <PROJECT_NAME> -k <PACKAGE_NAME> -p <PROJECT_PATH>\n\
-            Sample: %prog -n MyGame -k com.MyCompany.AwesomeGame -p ~/code"
+            usage="Usage: %prog -n <PROJECT_NAME> -k <PACKAGE_NAME> -p <PROJECT_PATH>\nSample: %prog -n MyGame -k com.MyCompany.AwesomeGame -p ~/code"
         )
         parser.add_option("-n", "--name", metavar="PROJECT_NAME",help="Set a project name")
         parser.add_option("-k", "--package", metavar="PACKAGE_NAME",help="Set a package name for project")

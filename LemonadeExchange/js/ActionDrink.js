@@ -8,9 +8,9 @@
 //if (typeof cc.ActionInterval === 'undefined') {
 //	cc.ActionInterval = {};
 //}
-//if (typeof cc.ActionInterval.extend === 'undefined') {
-//	cc.ActionInterval.extend = cc.Class.extend;
-//}
+if (typeof cc.ActionInterval.extend === 'undefined') {
+	cc.ActionInterval.extend = cc.Class.extend;
+}
 cc.ActionDrink = cc.ActionInterval.extend(/** @lends cc.ActionDrink# */{
 //cc.ActionDrink = cc.Class.extend(/** @lends cc.ActionDrink# */{
     _originalRect:null,
