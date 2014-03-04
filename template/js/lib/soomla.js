@@ -532,7 +532,6 @@ Soomla = new function () {
         return false;
       }
 
-      // TODO: Check for Android only
       if (storeParams.androidPublicKey.length == 0) {
         logError("SOOMLA/COCOS2DX MISSING publickKey !!! Stopping here !!");
         return false;

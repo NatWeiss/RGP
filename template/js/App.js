@@ -17,7 +17,7 @@ App.getJSFiles = function() {
 	var files = [
 		"js/lib/aes.js",
 		"js/lib/underscore.js",
-		"lib/cocos2dx-prebuilt/jsb/soomla.js",
+		"js/lib/soomla.js",
 		"js/lib/SoomlaNdk.js",
 		"js/lib/Facebook.js",
 		"js/lib/AdsMobFox.js",
@@ -663,7 +663,7 @@ App.bootX = function(global) {
 	require("jsb_cocos2dx_auto_api.js");
 
 	// implement timers
-	require("js/timers.js");
+	require("js/lib/timers.js");
 	this.timerLoop = makeWindowTimer(global, function(ms){});
 	cc.Director.getInstance().getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
 	//setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);
