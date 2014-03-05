@@ -61,9 +61,9 @@ void QuadCommand::generateMaterialID()
 {
     //Generate Material ID
     //TODO fix shader ID generation
-    CCASSERT(_shader->getProgram() < pow(2,10), "ShaderID is greater than 2^10");
+    //CCASSERT(_shader->getProgram() < pow(2,10), "ShaderID is greater than 2^10");
     //TODO fix texture ID generation
-    CCASSERT(_textureID < pow(2,18), "TextureID is greater than 2^18");
+    //CCASSERT(_textureID < pow(2,18), "TextureID is greater than 2^18");
 
     //TODO fix blend id generation
     int blendID = 0;

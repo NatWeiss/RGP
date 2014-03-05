@@ -112,22 +112,31 @@ def copy_files(src, dst):
             os.mkdir(new_dst)
             copy_files(path, new_dst)
 
+def copy_asset_dir(root, src, dst):
+    src_dir = os.path.join(root, src)
+    dest_dir = os.path.join(root, "assets")
+    dest_dir = os.path.join(dest_dir, dst)
+    os.mkdir(dest_dir)
+    if os.path.isdir(src_dir):
+        copy_files(src_dir, dest_dir)
+
 def copy_resources(app_android_root):
 
     # remove app_android_root/assets if it exists
     assets_dir = os.path.join(app_android_root, "assets")
     if os.path.isdir(assets_dir):
         shutil.rmtree(assets_dir)
-
-    # copy resources
     os.mkdir(assets_dir)
-    resources_dir = os.path.join(app_android_root, "../res")
-    if os.path.isdir(resources_dir):
-        copy_files(resources_dir, assets_dir)
 
-    # jsb project should copy javascript files and resources(shared with cocos2d-html5)
-    resources_dir = os.path.join(app_android_root, "../lib/cocos2dx-prebuilt/jsb")
-    copy_files(resources_dir, assets_dir)
+    # copy asset directories
+    copy_asset_dir(app_android_root, "../res", "res")
+    copy_asset_dir(app_android_root, "../js", "js")
+    copy_asset_dir(app_android_root, "../lib/cocos2dx-prebuilt/jsb", "jsb")
+
+    # copy main
+    main_file = os.path.join(app_android_root, "../proj.html5/main.js")
+    dest_dir = os.path.join(app_android_root, "assets")
+    shutil.copy(main_file, dest_dir)
 
 def build(ndk_build_param,android_platform,build_mode):
 

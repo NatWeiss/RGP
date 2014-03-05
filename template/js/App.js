@@ -509,9 +509,14 @@ App.onInitialLaunch = function() {
 		itemId,
 		balance,
 		initialBalances = App.getConfig("economy-plugin-initial-balances"),
-		currencies = Soomla.storeInfo.getVirtualCurrencies(),
-		len = currencies.length || 0,
+		currencies,
+		len = 0,
 		allZero = true;
+	
+	if (Soomla && Soomla.storeInfo) {
+		currencies = Soomla.storeInfo.getVirtualCurrencies();
+		len = currencies.length || 0;
+	}
 
 	// determine if inventory is all at zero
 	for (i = 0; i < len; i += 1) {
@@ -680,7 +685,7 @@ App.bootX = function(global) {
 	// load js files
 	var files = this.getJSFiles();
 	for (var i = 0; i < files.length; i += 1) {
-		cc.log("Including: " + files[i]);
+		//cc.log("Including: " + files[i]);
 		require(files[i]);
 	}
 
@@ -689,7 +694,7 @@ App.bootX = function(global) {
 	
 	// after everything is done loading, create the main window variable
 	global.window = {
-		location: "http://localhost:" + App.serverPort + "/"
+		location: "http://" + App.serverAddress + (App.serverPort ? ":" + App.serverPort + "/" : "")
 	};
 	global.navigator = {
 		// http://stackoverflow.com/questions/8579019/how-to-get-the-user-agent-on-ios
