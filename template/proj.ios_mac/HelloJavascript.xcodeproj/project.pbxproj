@@ -35,15 +35,15 @@
 		419E8EA118A9C68100232A34 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 419E8EA018A9C68100232A34 /* libcurl.dylib */; };
 		419E8EA318A9CA7600232A34 /* jsb in Resources */ = {isa = PBXBuildFile; fileRef = 419E8EA218A9CA7600232A34 /* jsb */; };
 		419E8EA418A9CA7600232A34 /* jsb in Resources */ = {isa = PBXBuildFile; fileRef = 419E8EA218A9CA7600232A34 /* jsb */; };
-		419E8EAF18A9D5D000232A34 /* Extras.mm in Sources */ = {isa = PBXBuildFile; fileRef = 419E8EAE18A9D5CF00232A34 /* Extras.mm */; };
-		419E8EB018A9D5D000232A34 /* Extras.mm in Sources */ = {isa = PBXBuildFile; fileRef = 419E8EAE18A9D5CF00232A34 /* Extras.mm */; };
+		419E8EAF18A9D5D000232A34 /* Extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 419E8EAE18A9D5CF00232A34 /* Extras.cpp */; };
+		419E8EB018A9D5D000232A34 /* Extras.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 419E8EAE18A9D5CF00232A34 /* Extras.cpp */; };
 		419E8EBA18A9F60900232A34 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A92275471517C094001B78AA /* AudioToolbox.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		419E8EBB18A9F67C00232A34 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A92275451517C094001B78AA /* OpenAL.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		419E8ECB18A9F75900232A34 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A92275491517C094001B78AA /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		41E177A9188794A700F6AD3C /* res in Resources */ = {isa = PBXBuildFile; fileRef = 41E177A8188794A700F6AD3C /* res */; };
-		41E17C171888B24000F6AD3C /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41E17C151888B23F00F6AD3C /* AppDelegate.mm */; };
+		41E17C171888B24000F6AD3C /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41E17C151888B23F00F6AD3C /* AppDelegate.cpp */; };
 		41F1A3E11894BA38006E818E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41F1A3E01894BA38006E818E /* Default-568h@2x.png */; };
-		41F1A41D1894BB33006E818E /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41E17C151888B23F00F6AD3C /* AppDelegate.mm */; };
+		41F1A41D1894BB33006E818E /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41E17C151888B23F00F6AD3C /* AppDelegate.cpp */; };
 		41F1A4AA1894BB33006E818E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */; };
 		41F1A4AB1894BB33006E818E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D454520B156E22BD00887EB5 /* libz.dylib */; };
 		41F1A4AC1894BB33006E818E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D4545209156E22B400887EB5 /* libxml2.dylib */; };
@@ -117,12 +117,12 @@
 		419E8EA018A9C68100232A34 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
 		419E8EA218A9CA7600232A34 /* jsb */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jsb; path = "../lib/cocos2dx-prebuilt/jsb"; sourceTree = "<group>"; };
 		419E8EAD18A9D5CF00232A34 /* Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Extras.h; path = ../src/Extras.h; sourceTree = "<group>"; };
-		419E8EAE18A9D5CF00232A34 /* Extras.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Extras.mm; path = ../src/Extras.mm; sourceTree = "<group>"; };
+		419E8EAE18A9D5CF00232A34 /* Extras.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = Extras.cpp; path = ../src/Extras.cpp; sourceTree = "<group>"; };
 		419E8EB818A9F3C100232A34 /* cocos2d */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cocos2d; path = "../lib/cocos2d-html5/cocos2d"; sourceTree = "<group>"; };
 		419E8EB918A9F3D200232A34 /* extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = extensions; path = "../lib/cocos2d-html5/extensions"; sourceTree = "<group>"; };
 		419E924E18AC3BDC00232A34 /* server.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = server.js; path = ../server/server.js; sourceTree = "<group>"; };
 		41E177A8188794A700F6AD3C /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; name = res; path = ../res; sourceTree = "<group>"; };
-		41E17C151888B23F00F6AD3C /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = ../src/AppDelegate.mm; sourceTree = "<group>"; };
+		41E17C151888B23F00F6AD3C /* AppDelegate.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = AppDelegate.cpp; path = ../src/AppDelegate.cpp; sourceTree = "<group>"; };
 		41E17C161888B24000F6AD3C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../src/AppDelegate.h; sourceTree = "<group>"; };
 		41F1A3E01894BA38006E818E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		41F1A4D61894BB33006E818E /* HelloJavascript.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloJavascript.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -299,9 +299,9 @@
 			children = (
 				41F1A63D18972040006E818E /* README.md */,
 				41E17C161888B24000F6AD3C /* AppDelegate.h */,
-				41E17C151888B23F00F6AD3C /* AppDelegate.mm */,
+				41E17C151888B23F00F6AD3C /* AppDelegate.cpp */,
 				419E8EAD18A9D5CF00232A34 /* Extras.h */,
-				419E8EAE18A9D5CF00232A34 /* Extras.mm */,
+				419E8EAE18A9D5CF00232A34 /* Extras.cpp */,
 				4142034218C15A490075A075 /* index.html */,
 				4142034318C15A520075A075 /* main.js */,
 				419E924E18AC3BDC00232A34 /* server.js */,
@@ -476,9 +476,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				419E8EB018A9D5D000232A34 /* Extras.mm in Sources */,
+				419E8EB018A9D5D000232A34 /* Extras.cpp in Sources */,
 				41F1A4EA1894BBE3006E818E /* main.mm in Sources */,
-				41F1A41D1894BB33006E818E /* AppDelegate.mm in Sources */,
+				41F1A41D1894BB33006E818E /* AppDelegate.cpp in Sources */,
 				41F1A4E51894BBE3006E818E /* AppController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -487,9 +487,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				41E17C171888B24000F6AD3C /* AppDelegate.mm in Sources */,
+				41E17C171888B24000F6AD3C /* AppDelegate.cpp in Sources */,
 				4152B89018949C3F00BEF730 /* AppController.mm in Sources */,
-				419E8EAF18A9D5D000232A34 /* Extras.mm in Sources */,
+				419E8EAF18A9D5D000232A34 /* Extras.cpp in Sources */,
 				4152B89A18949C3F00BEF730 /* RootViewController.mm in Sources */,
 				4152B89918949C3F00BEF730 /* main.m in Sources */,
 			);

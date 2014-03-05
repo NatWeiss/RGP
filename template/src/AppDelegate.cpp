@@ -86,7 +86,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 	#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS )
 		sc->addRegisterCallback(register_all_pluginx_protocols);
 		sc->addRegisterCallback(register_jsb_soomla);
-	#else
+	#elif( CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID )
+		sc->addRegisterCallback(register_all_pluginx_protocols);
+		sc->addRegisterCallback(register_jsb_soomla);
 	#endif
 
 
@@ -99,10 +101,12 @@ bool AppDelegate::applicationDidFinishLaunching()
 	ScriptEngineManager::getInstance()->setScriptEngine(sc);
 	sc->runScript("js/App.js");
 
-	if( NSClassFromString(@"AdsMobFox") == nil )
-	{
-		sc->runScript("AdsMobFox.js");
-	}
+	#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS )
+		if( NSClassFromString(@"AdsMobFox") == nil )
+		{
+			sc->runScript("AdsMobFox.js");
+		}
+	#endif
 
 	return true;
 }
