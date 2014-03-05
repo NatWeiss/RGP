@@ -1,3 +1,10 @@
+.PHONY: docs
+
+docs:
+	rm -r docs
+	cp README.md index.litcoffee
+	docco -l linear index.litcoffee LemonadeExchange/js/*.js
+	rm index.litcoffee
 
 lemonadex: dest=~/Desktop
 lemonadex: name=LemonadeExchange
