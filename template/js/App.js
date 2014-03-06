@@ -700,7 +700,7 @@ App.bootX = function(global) {
 		// http://stackoverflow.com/questions/8579019/how-to-get-the-user-agent-on-ios
 		userAgent: "Apple-iPhone5C1/1001.525" // how to apply this from C++??
 	};
-	cc.log("Got location: " + window.location);
+	//cc.log("Got location: " + window.location);
 	
 	// add some functionality to cc
 	if (typeof cc.DEGREES_TO_RADIANS === 'undefined') {
