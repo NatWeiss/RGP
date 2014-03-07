@@ -28,7 +28,10 @@ var LayerMenu = (function(){
 				sprite,
 				label,
 				button,
-				loggedIn;
+				loggedIn,
+				pos = cc.p(0,0),
+				xSpacing = App.scale(300),
+				numButtons = 2;
 			this._super();
 
 			this.playMusic();
@@ -68,7 +71,9 @@ var LayerMenu = (function(){
 			layer.runAction(cc.EaseOut.create(cc.MoveBy.create(0.5, cc.p(0, winSize.height)), 1.5));
 			
 			// buttons
-			button = App.createButton(this, "ButtonPlay.png", TAG_PLAY_RESUME, App.centralize(-300, -183),
+			pos = App.centralize(0,-183);
+			pos.x -= ((numButtons - 1) * .5) * xSpacing;
+			button = App.createButton(this, "ButtonPlay.png", TAG_PLAY_RESUME, pos,
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 1.0, 1.5);
 			button.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.DelayTime.create(1.5),
@@ -76,16 +81,18 @@ var LayerMenu = (function(){
 				cc.ScaleBy.create(0.1, 1 / 1.02)
 			)));
 
-			this.buttonLogin = App.createButton(this, "ButtonLogin.png", TAG_LOGIN_LOGOUT, App.centralize(0, -183),
+			pos.x += xSpacing;
+			this.buttonLogin = App.createButton(this, "ButtonLogin.png", TAG_LOGIN_LOGOUT, pos,
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.7, 1.5);
-			this.buttonLogout = App.createButton(this, "ButtonLogout.png", TAG_LOGIN_LOGOUT, App.centralize(0, -183),
+			this.buttonLogout = App.createButton(this, "ButtonLogout.png", TAG_LOGIN_LOGOUT, pos,
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.7, 1.5);
 			loggedIn = App.getSocialPlugin().isLoggedIn();
 			this.buttonLogin.setVisible(!loggedIn);
 			this.buttonLogout.setVisible(loggedIn);
 
-			button = App.createButton(this, "ButtonAbout.png", TAG_INFO, App.centralize(300, -183),
-				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.4, 1.5);
+			//pos.x += xSpacing;
+			//button = App.createButton(this, "ButtonAbout.png", TAG_INFO, pos,
+			//	cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.4, 1.5);
 
 			this.buttonSound = App.createButton(this, "ButtonSound.png", TAG_TOGGLE_SOUND,
 				App.centralize(-420, 260),

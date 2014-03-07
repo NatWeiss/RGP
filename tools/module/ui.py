@@ -161,7 +161,10 @@ class TkCocosDialog(Frame):
         scnHeight = self.parent.winfo_screenheight()
         tmpcnf = '%dx%d+%d+%d'%(curWidth, curHeight, int((scnWidth-curWidth)/2), int((scnHeight-curHeight)/2))
         self.parent.geometry(tmpcnf)
-        self.parent.title("Cocos Project Creator")
+        self.parent.title("Project Creator")
+        self.parent.lift()
+        self.parent.call('wm', 'attributes', '.', '-topmost', True)
+        self.parent.after_idle(self.parent.call, 'wm', 'attributes', '.', '-topmost', False)
 
         #fix size
         #self.parent.maxsize(curWidth, curHeight)

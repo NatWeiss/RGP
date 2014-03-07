@@ -1,5 +1,33 @@
 .PHONY: docs
 
+release: dest=../releases/RapidGamePro/
+release:
+	find . -name .DS_Store -delete
+	mkdir ${dest}
+	cp -a docs ${dest}
+	cp docs.html ${dest}
+	cp -a include ${dest}
+	cp -a LemonadeExchange ${dest}
+	cp -a README.md ${dest}
+	cp -a src ${dest}
+	cp -a template ${dest}
+	cp -a tools ${dest}
+	#rm -r ${dest}.git
+	rm -rf ${dest}src/soomla/cocos2dx-store/.git
+	rm -rf ${dest}template/proj.android/assets
+	rm -rf ${dest}template/proj.android/bin
+	rm -rf ${dest}template/proj.android/gen
+	rm -rf ${dest}template/proj.android/libs
+	rm -rf ${dest}template/proj.android/obj
+	rm -rf ${dest}template/proj.android/*.a
+	rm -rf ${dest}LemonadeExchange/proj.android/assets
+	rm -rf ${dest}LemonadeExchange/proj.android/bin
+	rm -rf ${dest}LemonadeExchange/proj.android/gen
+	rm -rf ${dest}LemonadeExchange/proj.android/libs
+	rm -rf ${dest}LemonadeExchange/proj.android/obj
+	open ../releases
+	open -a /Applications/YemuZip.app/
+
 docs:
 	rm -r docs
 	cp README.md index.litcoffee
