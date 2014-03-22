@@ -165,7 +165,7 @@ cc.BLEND_DST = 0x0303;
 cc.NODE_DRAW_SETUP = function (node) {
     //cc.glEnable(node._glServerState);
     if (node._shaderProgram) {
-        //cc.renderContext.useProgram(node._shaderProgram._programObj);
+        //cc._renderContext.useProgram(node._shaderProgram._programObj);
         node._shaderProgram.use();
         node._shaderProgram.setUniformForModelViewAndProjectionMatrixWithMat4();
     }
@@ -235,7 +235,7 @@ cc.FLT_EPSILON = 0.0000001192092896;
  * @function
  */
 cc.CONTENT_SCALE_FACTOR = cc.IS_RETINA_DISPLAY_SUPPORTED ? function () {
-    return cc.Director.getInstance().getContentScaleFactor();
+    return cc.director.getContentScaleFactor();
 } : function () {
     return 1;
 };
@@ -249,12 +249,6 @@ cc.CONTENT_SCALE_FACTOR = cc.IS_RETINA_DISPLAY_SUPPORTED ? function () {
 cc.POINT_POINTS_TO_PIXELS = function (points) {
     var scale = cc.CONTENT_SCALE_FACTOR();
     return cc.p(points.x * scale, points.y * scale);
-};
-
-cc._POINT_POINTS_TO_PIXELS_OUT = function (points, outPixels) {
-    var scale = cc.CONTENT_SCALE_FACTOR();
-    outPixels._x = points.x * scale;
-    outPixels._y = points.y * scale;
 };
 
 /**
@@ -281,8 +275,8 @@ cc.SIZE_PIXELS_TO_POINTS = function (sizeInPixels) {
 
 cc._SIZE_PIXELS_TO_POINTS_OUT = function (sizeInPixels, outSize) {
     var scale = cc.CONTENT_SCALE_FACTOR();
-    outSize._width = sizeInPixels.width / scale;
-    outSize._height = sizeInPixels.height / scale;
+    outSize.width = sizeInPixels.width / scale;
+    outSize.height = sizeInPixels.height / scale;
 };
 
 /**
@@ -297,8 +291,8 @@ cc.POINT_PIXELS_TO_POINTS = function (pixels) {
 
 cc._POINT_PIXELS_TO_POINTS_OUT = function(pixels, outPoint){
     var scale = cc.CONTENT_SCALE_FACTOR();
-    outPoint._x = pixels.x / scale;
-    outPoint._y = pixels.y / scale;
+    outPoint.x = pixels.x / scale;
+    outPoint.y = pixels.y / scale;
 };
 
 /**
@@ -327,47 +321,40 @@ cc.RECT_POINTS_TO_PIXELS = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (point) {
     return p;
 };
 
-if (!cc.Browser.supportWebGL) {
-    /**
-     * WebGL constants
-     * @type {object}
-     */
-    var gl = gl || {};
+/**
+ * @constant
+ * @type Number
+ */
+cc.ONE = 1;
 
-    /**
-     * @constant
-     * @type Number
-     */
-    gl.ONE = 1;
+/**
+ * @constant
+ * @type Number
+ */
+cc.ZERO = 0;
 
-    /**
-     * @constant
-     * @type Number
-     */
-    gl.ZERO = 0;
+/**
+ * @constant
+ * @type Number
+ */
+cc.SRC_ALPHA = 0x0302;
 
-    /**
-     * @constant
-     * @type Number
-     */
-    gl.SRC_ALPHA = 0x0302;
+/**
+ * @constant
+ * @type Number
+ */
+cc.ONE_MINUS_SRC_ALPHA = 0x0303;
 
-    /**
-     * @constant
-     * @type Number
-     */
-    gl.ONE_MINUS_SRC_ALPHA = 0x0303;
+/**
+ * @constant
+ * @type Number
+ */
+cc.ONE_MINUS_DST_COLOR = 0x0307;
 
-    /**
-     * @constant
-     * @type Number
-     */
-    gl.ONE_MINUS_DST_COLOR = 0x0307;
-}
 
 cc.CHECK_GL_ERROR_DEBUG = function () {
-    if (cc.renderMode == cc.WEBGL) {
-        var _error = cc.renderContext.getError();
+    if (cc.renderMode == cc._RENDER_TYPE_WEBGL) {
+        var _error = cc._renderContext.getError();
         if (_error) {
             cc.log("WebGL error " + _error);
         }

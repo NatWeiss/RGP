@@ -24,9 +24,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-cc.RAND_MAX = 0xffffff;
+/**
+ * get a random number from 0 to 0xffffff
+ * @function
+ * @returns {number}
+ */
 cc.rand = function () {
-    return Math.random() * cc.RAND_MAX;
+    return Math.random() * 0xffffff;
 };
 /**
  * cc.Waves3D action
@@ -132,7 +136,7 @@ cc.Waves3D.create = function (duration, gridSize, waves, amplitude) {
  * @class
  * @extends cc.Grid3DAction
  */
-cc.FlipX3D = cc.Grid3DAction.extend(/** @lends cc.Waves3D# */{
+cc.FlipX3D = cc.Grid3DAction.extend(/** @lends cc.FlipX3D# */{
     /**
      * initializes the action with duration
      * @param {Number} duration
@@ -330,7 +334,7 @@ cc.Lens3D = cc.Grid3DAction.extend(/** @lends cc.Lens3D# */{
     ctor:function () {
         cc.GridAction.prototype.ctor.call(this);
 
-        this._position = cc._pConst(0, 0);
+        this._position = cc.p(0, 0);
         this._radius = 0;
         this._lensEffect = 0;
         this._concave = false;
@@ -375,8 +379,8 @@ cc.Lens3D = cc.Grid3DAction.extend(/** @lends cc.Lens3D# */{
      */
     setPosition:function (position) {
         if (!cc.pointEqualToPoint(position, this._position)) {
-            this._position._x = position.x;
-            this._position._y = position.y;
+            this._position.x = position.x;
+            this._position.y = position.y;
             this._dirty = true;
         }
     },
@@ -473,7 +477,7 @@ cc.Ripple3D = cc.Grid3DAction.extend(/** @lends cc.Ripple3D# */{
     ctor:function () {
         cc.GridAction.prototype.ctor.call(this);
 
-        this._position = cc._pConst(0, 0);
+        this._position = cc.p(0, 0);
         this._radius = 0;
         this._waves = 0;
         this._amplitude = 0;
@@ -493,8 +497,8 @@ cc.Ripple3D = cc.Grid3DAction.extend(/** @lends cc.Ripple3D# */{
      * @param {cc.Point} position
      */
     setPosition:function (position) {
-        this._position._x = position.x;
-        this._position._y = position.y;
+        this._position.x = position.x;
+        this._position.y = position.y;
     },
 
     /**
@@ -876,7 +880,7 @@ cc.Waves.create = function (duration, gridSize, waves, amplitude, horizontal, ve
  * @class
  * @extends cc.Grid3DAction
  */
-cc.Twirl = cc.Grid3DAction.extend({
+cc.Twirl = cc.Grid3DAction.extend(/** @lends cc.Twirl# */{
     /* twirl center */
     _position:null,
     _twirls:null,
@@ -886,7 +890,7 @@ cc.Twirl = cc.Grid3DAction.extend({
     ctor:function () {
         cc.GridAction.prototype.ctor.call(this);
 
-        this._position = cc._pConst(0, 0);
+        this._position = cc.p(0, 0);
         this._twirls = 0;
         this._amplitude = 0;
         this._amplitudeRate = 0;
@@ -905,8 +909,8 @@ cc.Twirl = cc.Grid3DAction.extend({
      * @param {cc.Point} position
      */
     setPosition:function (position) {
-        this._position._x = position.x;
-        this._position._y = position.y;
+        this._position.x = position.x;
+        this._position.y = position.y;
     },
 
     /**

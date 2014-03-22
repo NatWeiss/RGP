@@ -33,13 +33,13 @@
  * @constant
  * @type String
  */
-cc.ENGINE_VERSION = "Cocos2d-html5-v2.2.2";
+cc.ENGINE_VERSION = "Cocos2d-html5-v3.0 alpha";
 
 /**
  * <p>
  *   If enabled, the texture coordinates will be calculated by using this formula: <br/>
- *      - texCoord.left = (rect.origin.x*2+1) / (texture.wide*2);                  <br/>
- *      - texCoord.right = texCoord.left + (rect.size.width*2-2)/(texture.wide*2); <br/>
+ *      - texCoord.left = (rect.x*2+1) / (texture.wide*2);                  <br/>
+ *      - texCoord.right = texCoord.left + (rect.width*2-2)/(texture.wide*2); <br/>
  *                                                                                 <br/>
  *  The same for bottom and top.                                                   <br/>
  *                                                                                 <br/>
@@ -265,22 +265,6 @@ cc.IS_RETINA_DISPLAY_SUPPORTED = 1;
  * @type String
  */
 cc.DEFAULT_ENGINE = cc.ENGINE_VERSION + "-canvas";
-
-/**
- *  Runtime information
- *  @deprecated Use "sys" instead.
- */
-cc.config = {
-    'platform' : sys.platform
-};
-
-/**
- * dump config info, but only in debug mode
- */
-cc.dumpConfig = function() {
-    for(var i in sys )
-        cc.log( i + " = " + sys[i] );
-};
 
 /**
  * <p>

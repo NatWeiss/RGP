@@ -11,10 +11,6 @@
 //#import "Window.h"
 
 @interface AppController : NSObject //<NSApplicationDelegate>
-//	{
-//		Window *window;
-//		EAGLView *glView;
-//	}
 
 //	@property (nonatomic, assign) IBOutlet Window* window;
 //	@property (nonatomic, assign) IBOutlet EAGLView* glView;

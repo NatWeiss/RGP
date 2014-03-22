@@ -29,51 +29,62 @@
  * @constant
  * @type {number}
  */
-CC_ANIMATION_TYPE_SINGLE_FRAME = -4;
+ccs.ANIMATION_TYPE_SINGLE_FRAME = -4;
 /**
  * the animation isn't loop
  * @constant
  * @type {number}
  */
-CC_ANIMATION_TYPE_NO_LOOP = -3;
+ccs.ANIMATION_TYPE_NO_LOOP = -3;
 /**
  * the animation to loop from front
  * @constant
  * @type {number}
  */
-CC_ANIMATION_TYPE_TO_LOOP_FRONT = -2;
+ccs.ANIMATION_TYPE_TO_LOOP_FRONT = -2;
 /**
  * the animation to loop from back
  * @constant
  * @type {number}
  */
-CC_ANIMATION_TYPE_TO_LOOP_BACK = -1;
+ccs.ANIMATION_TYPE_TO_LOOP_BACK = -1;
 /**
  * the animation loop from front
  * @constant
  * @type {number}
  */
-CC_ANIMATION_TYPE_LOOP_FRONT = 0;
+ccs.ANIMATION_TYPE_LOOP_FRONT = 0;
 /**
  * the animation loop from back
  * @constant
  * @type {number}
  */
-CC_ANIMATION_TYPE_LOOP_BACK = 1;
+ccs.ANIMATION_TYPE_LOOP_BACK = 1;
 /**
  * the animation max
  * @constant
  * @type {number}
  */
-CC_ANIMATION_TYPE_MAX = 2;
+ccs.ANIMATION_TYPE_MAX = 2;
 
 /**
  * Base class for ccs.ProcessBase objects.
  * @class
  * @extends ccs.Class
+ *
+ * @property {Number}   currentFrameIndex   - <@readonly> The current frame's index
+ * @property {Boolean}  paused              - <@readonly> Indicate whether the process is paused
+ * @property {Boolean}  completed           - <@readonly> Indicate whether the process is done
+ * @property {Number}   currentPercent      - <@readonly> The current percentage of the process
+ * @property {Number}   rawDuration         - <@readonly> The duration
+ * @property {Number}   loop                - <@readonly> The number of loop
+ * @property {Number}   tweenEasing         - <@readonly> The tween easing
+ * @property {Number}   animationInterval   - The animation internal
+ * @property {Number}   processScale        - The process scale
+ * @property {Boolean}  playing             - <@readonly> Indicate whether the process is playing
  */
 ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
-    _processScale:1,
+    processScale:1,
     _isComplete:true,
     _isPause:true,
     _isPlaying:false,
@@ -81,14 +92,14 @@ ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
     _rawDuration:0,
     _loopType:0,
     _tweenEasing:0,
-    _animationInternal:null,
+    animationInternal:null,
     _currentFrame:0,
     _durationTween:0,
     _nextFrameIndex:0,
     _curFrameIndex:null,
     _isLoopBack:false,
     ctor:function () {
-        this._processScale = 1;
+        this.processScale = 1;
         this._isComplete = true;
         this._isPause = true;
         this._isPlaying = false;
@@ -96,9 +107,9 @@ ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
         this._currentPercent = 0.0;
         this._durationTween = 0;
         this._rawDuration = 0;
-        this._loopType = CC_ANIMATION_TYPE_LOOP_BACK;
+        this._loopType = ccs.ANIMATION_TYPE_LOOP_BACK;
         this._tweenEasing = ccs.TweenType.linear;
-        this._animationInternal = 1/60;
+        this.animationInternal = 1/60;
         this._curFrameIndex = 0;
         this._durationTween = 0;
         this._isLoopBack = false;
@@ -157,10 +168,10 @@ ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
         }else{
             /*
              *  update currentFrame, every update add the frame passed.
-             *  dt/this._animationInternal determine it is not a frame animation. If frame speed changed, it will not make our
+             *  dt/this.animationInternal determine it is not a frame animation. If frame speed changed, it will not make our
              *  animation speed slower or quicker.
              */
-            locCurrentFrame += this._processScale * (dt / this._animationInternal);
+            locCurrentFrame += this.processScale * (dt / this.animationInternal);
 
             this._currentPercent = locCurrentFrame / locNextFrameIndex;
 
@@ -188,11 +199,11 @@ ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
      */
     gotoFrame:function (frameIndex) {
         var locLoopType = this._loopType;
-        if (locLoopType == CC_ANIMATION_TYPE_NO_LOOP) {
-            locLoopType = CC_ANIMATION_TYPE_MAX;
+        if (locLoopType == ccs.ANIMATION_TYPE_NO_LOOP) {
+            locLoopType = ccs.ANIMATION_TYPE_MAX;
         }
-        else if (locLoopType == CC_ANIMATION_TYPE_TO_LOOP_FRONT) {
-            locLoopType = CC_ANIMATION_TYPE_LOOP_FRONT;
+        else if (locLoopType == ccs.ANIMATION_TYPE_TO_LOOP_FRONT) {
+            locLoopType = ccs.ANIMATION_TYPE_LOOP_FRONT;
         }
         this._loopType = locLoopType;
         this._curFrameIndex = frameIndex;
@@ -261,7 +272,7 @@ ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
      * @returns {number}
      */
     getAnimationInternal:function () {
-        return this._animationInternal;
+        return this.animationInternal;
     },
 
     /**
@@ -269,7 +280,7 @@ ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
      * @param animationInternal
      */
     setAnimationInternal:function(animationInternal){
-        this._animationInternal = animationInternal;
+        this.animationInternal = animationInternal;
     },
 
     /**
@@ -277,7 +288,7 @@ ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
      * @returns {number}
      */
     getProcessScale:function () {
-        return this._processScale;
+        return this.processScale;
     },
 
     /**
@@ -285,7 +296,7 @@ ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
      * @param processScale
      */
     setProcessScale:function (processScale) {
-        this._processScale = processScale;
+        this.processScale = processScale;
     },
 
     /**
@@ -296,3 +307,33 @@ ccs.ProcessBase = ccs.Class.extend(/** @lends ccs.ProcessBase# */{
         return this._isPlaying;
     }
 });
+
+window._p = ccs.ProcessBase.prototype;
+
+// Extended properties
+/** @expose */
+_p.currentFrameIndex;
+cc.defineGetterSetter(_p, "currentFrameIndex", _p.getCurrentFrameIndex);
+/** @expose */
+_p.paused;
+cc.defineGetterSetter(_p, "paused", _p.isPause);
+/** @expose */
+_p.completed;
+cc.defineGetterSetter(_p, "completed", _p.isComplete);
+/** @expose */
+_p.currentPercent;
+cc.defineGetterSetter(_p, "currentPercent", _p.getCurrentPercent);
+/** @expose */
+_p.rawDuration;
+cc.defineGetterSetter(_p, "rawDuration", _p.getRawDuration);
+/** @expose */
+_p.loop;
+cc.defineGetterSetter(_p, "loop", _p.getLoop);
+/** @expose */
+_p.tweenEasing;
+cc.defineGetterSetter(_p, "tweenEasing", _p.getTweenEasing);
+/** @expose */
+_p.playing;
+cc.defineGetterSetter(_p, "playing", _p.isPlaying);
+
+delete window._p;

@@ -24,7 +24,11 @@ App.showTouchCircle = function(self, pos, item) {
 		}
 	}
 	
-	circle = cc.Sprite.createWithSpriteFrameName("TouchCircle.png");
+//	var frame = cc.spriteFrameCache.getSpriteFrame("TouchCircle.png");
+//	cc.log("TouchCircle.png spriteframe: " + frame);
+	
+	
+	circle = cc.Sprite.create("#TouchCircle.png");
 	if (circle === null) {
 		return;
 	}
@@ -37,7 +41,7 @@ App.showTouchCircle = function(self, pos, item) {
 	));
 	self.addChild(circle, 10);
 
-	circle = cc.Sprite.createWithSpriteFrameName("TouchCircle.png");
+	circle = cc.Sprite.create("#TouchCircle.png");
 	circle.setPosition(pos);
 	circle.setScale(0.5);
 	circle.runAction(cc.Spawn.create(

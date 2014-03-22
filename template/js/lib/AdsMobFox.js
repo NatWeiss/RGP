@@ -204,7 +204,7 @@ plugin.AdsMobFox = cc.Class.extend({
     },
 
 	getWinSize: function() {
-		var size = cc.Director.getInstance().getWinSize();
+		var size = cc.director.getWinSize();
 		if (size.width && size.height) {
 			this.winSize = size;
 		}
@@ -287,7 +287,7 @@ plugin.AdsMobFox = cc.Class.extend({
 		
 		// create layer + sprite
 		this.layer = cc.Layer.create();
-		sprite = cc.MenuItemImage.create(imageUrl, imageUrl, this.clickAdCallback, this);
+		sprite = cc.MenuItemImage.create(imageUrl, imageUrl, null, this.clickAdCallback, this);
 		
 		// set sprite position
 		switch (posEnum) {
@@ -322,11 +322,11 @@ plugin.AdsMobFox = cc.Class.extend({
 		
 		// close button for fullscreen ad
 		if (typeEnum == plugin.AdsType.FullScreenAd) {
-			normalSprite = cc.Sprite.createWithSpriteFrameName("close-button.png");
-			selectedSprite = cc.Sprite.createWithSpriteFrameName("close-button.png");
+			normalSprite = cc.Sprite.create("#close-button.png");
+			selectedSprite = cc.Sprite.create("#close-button.png");
 			if (normalSprite && selectedSprite) {
-				selectedSprite.setColor(cc.c3b(128,128,128));
-				closeButton = cc.MenuItemSprite.create(normalSprite, selectedSprite, this.closeAdCallback, this);
+				selectedSprite.setColor(cc.color(128,128,128));
+				closeButton = cc.MenuItemSprite.create(normalSprite, selectedSprite, null, this.closeAdCallback, this);
 				closeButton.setAnchorPoint(cc.p(1,1));
 				closeButton.setPosition(sprite.getPositionX() + sprite.getContentSize().width * .5,
 					sprite.getPositionY() + sprite.getContentSize().height * .5);
@@ -355,11 +355,11 @@ plugin.AdsMobFox = cc.Class.extend({
 		if (closeButton) {
 			menu.addChild(closeButton, 1);
 		}
-		menu.setPosition(cc.PointZero());
+		menu.setPosition(cc.p());
 
 		// add children
 		this.layer.addChild(menu);
-		scene = cc.Director.getInstance().getRunningScene()
+		scene = cc.director.getRunningScene()
 		if (scene) {
 			scene.addChild(this.layer, 1000);
 		}
@@ -372,7 +372,7 @@ plugin.AdsMobFox = cc.Class.extend({
 	clickAdCallback: function(menuItem) {
 		this.debugLog("MobFox: clicked ad, visiting: " + this.adUrl);
 		if (this.adUrl.length) {
-			cc.Browser.openURL(this.adUrl);
+			cc.openURL(this.adUrl);
 		}
 	},
 	
@@ -385,13 +385,13 @@ plugin.AdsMobFox = cc.Class.extend({
 	},
 	
 	getUUID: function(length) {
-		var ret = sys.localStorage.getItem("uuid") || "";
+		var ret = cc.sys.localStorage.getItem("uuid") || "";
 		if (ret.length === 0) {
 			length = length || 32;
 			for (var i = 0; i < length; i+= 1) {
 				ret += Math.floor(Math.random() * 16).toString(16);
 			}
-			sys.localStorage.setItem("uuid", ret);
+			cc.sys.localStorage.setItem("uuid", ret);
 			this.debugLog("MobFox generated UUID for the first time: " + ret);
 		} else {
 			this.debugLog("MobFox already had UUID: " + ret);

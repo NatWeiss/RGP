@@ -71,13 +71,7 @@ var MySocialManager = cc.Class.extend({
 
         this._qzone = plugin.PluginManager.getInstance().loadPlugin("SocialQzone");
         this._twitter = plugin.PluginManager.getInstance().loadPlugin("SocialTwitter");
-		if (this._twitter) {
-			this._twitter.setResultListener(this._listener);
-		}
         this._facebook = plugin.PluginManager.getInstance().loadPlugin("SocialFacebook");
-		if (this._facebook) {
-			this._facebook.setResultListener(this._listener);
-		}
 
         window.test = this;
 
@@ -104,7 +98,7 @@ var MySocialManager = cc.Class.extend({
                 break;
         }
 
-		cc.log("Share: " + share);
+
         if (share) {
             share.share(info);
         }

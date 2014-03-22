@@ -1,73 +1,66 @@
 
 #import "RootViewController.h"
+#import "cocos2d.h"
+#import "CCEAGLView.h"
 
+using namespace cocos2d;
 
 @implementation RootViewController
 
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
+	// iOS 5 and older uses this method
+	-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+	{
+		return UIInterfaceOrientationIsLandscape(interfaceOrientation);
+	}
 
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
+	// iOS 6 and newer uses supportedInterfaceOrientations & shouldAutorotate
+	-(NSUInteger) supportedInterfaceOrientations
+	{
+		#ifdef __IPHONE_6_0
+			return UIInterfaceOrientationMaskLandscape;
+		#endif
+	}
 
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
- 
-*/
-// Override to allow orientations other than the default portrait orientation.
-// This method is deprecated on ios6
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return UIInterfaceOrientationIsLandscape( interfaceOrientation );
-}
+	-(BOOL) shouldAutorotate
+	{
+		return YES;
+	}
 
-// For ios6, use supportedInterfaceOrientations & shouldAutorotate instead
-- (NSUInteger) supportedInterfaceOrientations{
-#ifdef __IPHONE_6_0
-	return UIInterfaceOrientationMaskLandscape;
-    //return UIInterfaceOrientationMaskAllButUpsideDown;
-#endif
-}
+	-(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+	{
+		[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-- (BOOL) shouldAutorotate {
-    return YES;
-}
+// does this actually get a width / height?
+		CGSize s = CGSizeMake([[CCEAGLView sharedEGLView] getWidth], [[CCEAGLView sharedEGLView] getHeight]);
+NSLog(@"new window dimensions %.0f x %.0f", s.width, s.height);
 
-//fix not hide status on ios7
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
+		Application::getInstance()->applicationScreenSizeChanged((int)s.width, (int)s.height);
+	}
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
+	-(BOOL) prefersStatusBarHidden
+	{
+		return YES;
+	}
 
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
+	-(void) didReceiveMemoryWarning
+	{
+		// releases the view if it doesn't have a superview
+		[super didReceiveMemoryWarning];
+		
+		// release any cached data, images, etc that aren't in use
+	}
 
+	- (void)viewDidUnload
+	{
+		[super viewDidUnload];
+		
+		// release any retained subviews of the main view
+		// e.g. self.myOutlet = nil;
+	}
 
-- (void)dealloc {
-    [super dealloc];
-}
-
+	-(void) dealloc
+	{
+		[super dealloc];
+	}
 
 @end

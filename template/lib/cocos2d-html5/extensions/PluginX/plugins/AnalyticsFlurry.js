@@ -38,7 +38,7 @@ plugin.AnalyticsFlurry = cc.Class.extend({
     },
 
 	startSession: function(appKey){
-		this.debugLog("Starting Flurry session, SDK version " + this.getSDKVersion());
+		this.debugLog("Starting Flurry session");
 		FlurryAgent.startSession(appKey);
 	},
 
@@ -84,7 +84,7 @@ plugin.AnalyticsFlurry = cc.Class.extend({
 	
 	debugLog: function() {
 		if (this.debug) {
-			cc.log.apply(this, arguments);
+			cc.log(arguments);
 		}
 	},
 

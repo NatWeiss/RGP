@@ -1,4 +1,4 @@
-
+/*
 #include "AppDelegate.h"
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
@@ -141,21 +141,6 @@ static JSBool empty_constructor(JSContext *cx, uint32_t argc, jsval *vp) {
 }
 
 void js_register_cocos2dx_CCExtras(JSContext *cx, JSObject *global) {
-/*
-	// first, try to get the ns
-	JS::RootedValue nsval(cx);
-	JSObject *ns;
-	JS_GetProperty(cx, global, "cc", &nsval);
-	if (nsval == JSVAL_VOID) {
-		ns = JS_NewObject(cx, NULL, NULL, NULL);
-		nsval = OBJECT_TO_JSVAL(ns);
-		JS_SetProperty(cx, global, "cc", nsval);
-	} else {
-		JS_ValueToObject(cx, nsval, &ns);
-	}
-	global = ns;
-*/
-
 	jsb_cocos2d_CCExtras_class = (JSClass *)calloc(1, sizeof(JSClass));
 	jsb_cocos2d_CCExtras_class->name = kJSNamespace;
 	jsb_cocos2d_CCExtras_class->addProperty = JS_PropertyStub;
@@ -208,73 +193,4 @@ void js_register_cocos2dx_CCExtras(JSContext *cx, JSObject *global) {
 		_js_global_type_map.insert(std::make_pair(typeName, p));
 	}
 }
-
-
-
-
-
-
-
-/*	jsval nsval;
-	JSObject *ns;
-	JS_GetProperty(cx, global, "cc", &nsval);
-	if (nsval == JSVAL_VOID) {
-		ns = JS_NewObject(cx, NULL, NULL, NULL);
-		nsval = OBJECT_TO_JSVAL(ns);
-		JS_SetProperty(cx, global, "cc", &nsval);
-	} else {
-		JS_ValueToObject(cx, nsval, &ns);
-	}
-	global = ns;
-
-	jsb_cocos2d_CCExtras_class = (JSClass *)calloc(1, sizeof(JSClass));
-	jsb_cocos2d_CCExtras_class->name = "Extensions";
-	jsb_cocos2d_CCExtras_class->addProperty = JS_PropertyStub;
-	jsb_cocos2d_CCExtras_class->delProperty = JS_PropertyStub;
-	jsb_cocos2d_CCExtras_class->getProperty = JS_PropertyStub;
-	jsb_cocos2d_CCExtras_class->setProperty = JS_StrictPropertyStub;
-	jsb_cocos2d_CCExtras_class->enumerate = JS_EnumerateStub;
-	jsb_cocos2d_CCExtras_class->resolve = JS_ResolveStub;
-	jsb_cocos2d_CCExtras_class->convert = JS_ConvertStub;
-	jsb_cocos2d_CCExtras_class->finalize = js_cocos2d_CCExtras_finalize;
-	jsb_cocos2d_CCExtras_class->flags = JSCLASS_HAS_RESERVED_SLOTS(2);
-
-	static JSPropertySpec properties[] = {
-		{0, 0, 0, JSOP_NULLWRAPPER, JSOP_NULLWRAPPER}
-	};
-
-	JSFunctionSpec *funcs = NULL;
-
-	static JSFunctionSpec st_funcs[] = {
-		JS_FN("addImageRaw", js_cocos2dx_CCExtras_addImageRaw, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-		JS_FS_END
-	};
-
-	jsb_cocos2d_CCExtras_prototype = JS_InitClass(
-		cx, global,
-		NULL, // no prototype
-		jsb_cocos2d_CCExtras_class,
-		//dummy_constructor<cocos2d::CCExtras>, 0, // no constructor
-		empty_constructor, 0, // no constructor
-		properties,
-		funcs,
-		NULL, // no static properties
-		st_funcs);
-	// make the class enumerable in the registered namespace
-	JSBool found;
-	JS_SetPropertyAttributes(cx, global, "Extensions", JSPROP_ENUMERATE | JSPROP_READONLY, &found);
-
-	// add the proto and JSClass to the type->js info hash table
-	TypeTest<cocos2d::CCExtras> t;
-	js_type_class_t *p;
-	uint32_t typeId = t.s_id();
-	HASH_FIND_INT(_js_global_type_ht, &typeId, p);
-	if (!p) {
-		p = (js_type_class_t *)malloc(sizeof(js_type_class_t));
-		p->type = typeId;
-		p->jsclass = jsb_cocos2d_CCExtras_class;
-		p->proto = jsb_cocos2d_CCExtras_prototype;
-		p->parentProto = NULL;
-		HASH_ADD_INT(_js_global_type_ht, type, p);
-	}
 */

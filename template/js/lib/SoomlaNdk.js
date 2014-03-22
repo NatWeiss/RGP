@@ -70,10 +70,10 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 				return;
 			}
 			if (ALWAYS_RESET_INVENTORY) {
-				sys.localStorage.removeItem(INVENTORY_ID);
+				cc.sys.localStorage.removeItem(INVENTORY_ID);
 			}
 			
-			inventory = sys.localStorage.getItem(INVENTORY_ID);
+			inventory = cc.sys.localStorage.getItem(INVENTORY_ID);
 			if (inventory) {
 				try {
 					inventory = JSON.parse(module.decrypt(inventory));
@@ -92,7 +92,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 		// save inventory
 		module.saveInventory = function() {
 			var inventory = module.encrypt(JSON.stringify(module.storeInventory));
-			sys.localStorage.setItem(INVENTORY_ID, inventory);
+			cc.sys.localStorage.setItem(INVENTORY_ID, inventory);
 			module.log("Saved Soomla store inventory: " + JSON.stringify(module.storeInventory));
 		};
 		

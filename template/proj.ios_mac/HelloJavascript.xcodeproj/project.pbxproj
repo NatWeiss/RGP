@@ -22,7 +22,6 @@
 		4110F72618C7ED7F004E9231 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4110F71818C7ED7F004E9231 /* Icon-72@2x.png */; };
 		4110F72718C7ED7F004E9231 /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 4110F71918C7ED7F004E9231 /* Icon-76.png */; };
 		4110F72818C7ED7F004E9231 /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4110F71A18C7ED7F004E9231 /* Icon-76@2x.png */; };
-		412DCAD818C28E980044835D /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 4142034318C15A520075A075 /* main.js */; };
 		4152B77E1894795000BEF730 /* js in Resources */ = {isa = PBXBuildFile; fileRef = 4152B77D1894795000BEF730 /* js */; };
 		4152B89018949C3F00BEF730 /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4152B88318949C3F00BEF730 /* AppController.mm */; };
 		4152B89918949C3F00BEF730 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4152B88C18949C3F00BEF730 /* main.m */; };
@@ -49,6 +48,8 @@
 		419E8ECB18A9F75900232A34 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A92275491517C094001B78AA /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		41E177A9188794A700F6AD3C /* res in Resources */ = {isa = PBXBuildFile; fileRef = 41E177A8188794A700F6AD3C /* res */; };
 		41E17C171888B24000F6AD3C /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41E17C151888B23F00F6AD3C /* AppDelegate.cpp */; };
+		41F0F5B118DABA6600F5FC64 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 41F0F5B018DABA5800F5FC64 /* project.json */; };
+		41F0F5B218DABA6B00F5FC64 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 41F0F5B018DABA5800F5FC64 /* project.json */; };
 		41F1A3E11894BA38006E818E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41F1A3E01894BA38006E818E /* Default-568h@2x.png */; };
 		41F1A41D1894BB33006E818E /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41E17C151888B23F00F6AD3C /* AppDelegate.cpp */; };
 		41F1A4AA1894BB33006E818E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */; };
@@ -100,7 +101,6 @@
 		4110F71918C7ED7F004E9231 /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
 		4110F71A18C7ED7F004E9231 /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76@2x.png"; sourceTree = "<group>"; };
 		4142034218C15A490075A075 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = ../proj.html5/index.html; sourceTree = "<group>"; };
-		4142034318C15A520075A075 /* main.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = main.js; path = ../proj.html5/main.js; sourceTree = "<group>"; };
 		4152B77D1894795000BEF730 /* js */ = {isa = PBXFileReference; lastKnownFileType = folder; name = js; path = ../js; sourceTree = "<group>"; };
 		4152B88218949C3F00BEF730 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		4152B88318949C3F00BEF730 /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = "<group>"; };
@@ -131,6 +131,8 @@
 		41E177A8188794A700F6AD3C /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; name = res; path = ../res; sourceTree = "<group>"; };
 		41E17C151888B23F00F6AD3C /* AppDelegate.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = AppDelegate.cpp; path = ../src/AppDelegate.cpp; sourceTree = "<group>"; };
 		41E17C161888B24000F6AD3C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../src/AppDelegate.h; sourceTree = "<group>"; };
+		41F0F5B018DABA5800F5FC64 /* project.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = project.json; path = ../proj.html5/project.json; sourceTree = "<group>"; };
+		41F0F5B618DBA5D600F5FC64 /* CCBoot.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = CCBoot.js; path = "../lib/cocos2d-html5/CCBoot.js"; sourceTree = "<group>"; };
 		41F1A3E01894BA38006E818E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		41F1A4D61894BB33006E818E /* HelloJavascript.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloJavascript.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41F1A4D91894BBE3006E818E /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppController.h; path = mac/AppController.h; sourceTree = "<group>"; };
@@ -317,7 +319,8 @@
 				419E8EAD18A9D5CF00232A34 /* Extras.h */,
 				419E8EAE18A9D5CF00232A34 /* Extras.cpp */,
 				4142034218C15A490075A075 /* index.html */,
-				4142034318C15A520075A075 /* main.js */,
+				41F0F5B618DBA5D600F5FC64 /* CCBoot.js */,
+				41F0F5B018DABA5800F5FC64 /* project.json */,
 				419E924E18AC3BDC00232A34 /* server.js */,
 				4152B77D1894795000BEF730 /* js */,
 				419E8EA218A9CA7600232A34 /* jsb */,
@@ -385,7 +388,7 @@
 		A92275341517C094001B78AA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = A92275371517C094001B78AA /* Build configuration list for PBXProject "HelloJavascript" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -410,6 +413,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				41F0F5B218DABA6B00F5FC64 /* project.json in Resources */,
 				41F1A4E81894BBE3006E818E /* Icon.icns in Resources */,
 				419E8EA418A9CA7600232A34 /* jsb in Resources */,
 				41F1A4BC1894BB33006E818E /* Default-568h@2x.png in Resources */,
@@ -424,7 +428,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				412DCAD818C28E980044835D /* main.js in Resources */,
+				41F0F5B118DABA6600F5FC64 /* project.json in Resources */,
 				4110F71F18C7ED7F004E9231 /* Icon-50.png in Resources */,
 				4110F72618C7ED7F004E9231 /* Icon-72@2x.png in Resources */,
 				41F1A3E11894BA38006E818E /* Default-568h@2x.png in Resources */,
@@ -590,7 +594,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = CashCow;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/base $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/physics $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/math/kazmath/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/gui $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/network $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/audio/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/editor-support $(SRCROOT)/../lib/cocos2dx-prebuilt/include/extensions $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/chipmunk/include/chipmunk";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/base $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/physics $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/math/kazmath $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/gui $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/network $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/audio/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/editor-support $(SRCROOT)/../lib/cocos2dx-prebuilt/include/extensions $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/chipmunk/include/chipmunk $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/auto $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/manual $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/manual/cocosbuilder";
 				WARNING_CFLAGS = (
 					"-Wno-invalid-offsetof",
 					"-Wno-tautological-constant-out-of-range-compare",
@@ -628,7 +632,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = CashCow;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/base $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/physics $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/math/kazmath/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/gui $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/network $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/audio/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/editor-support $(SRCROOT)/../lib/cocos2dx-prebuilt/include/extensions $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/chipmunk/include/chipmunk";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/base $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/physics $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/math/kazmath $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/gui $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/network $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/audio/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/editor-support $(SRCROOT)/../lib/cocos2dx-prebuilt/include/extensions $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/chipmunk/include/chipmunk $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/auto $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/manual $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/manual/cocosbuilder";
 				VALIDATE_PRODUCT = YES;
 				WARNING_CFLAGS = (
 					"-Wno-invalid-offsetof",

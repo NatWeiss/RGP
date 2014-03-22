@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+	<meta charset="utf-8">
+	<title>HelloJavascript</title>
+	<!--<link rel="icon" type="image/GIF" href="favicon.ico"/>-->
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="full-screen" content="yes"/>
+	<meta name="screen-orientation" content="landscape"/>
+	<meta name="x5-fullscreen" content="true"/>
+	<meta name="360-fullscreen" content="true"/>
 
-    <title>HelloJavascript</title>
-
-	<script src="js/App.js"></script>
-	<!--<script src="HelloJavascript-min.js"></script>-->
 	<script>
+		// set html5 flag
+		var App = App || {};
+		App._isHtml5 = true;
+		
+		// ensure that we have JSON parsing
 		window.JSON || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/json3/3.2.4/json3.min.js"><\/script>');
 	</script>
 
@@ -28,42 +36,47 @@
 		<div id="ads"></div>
 		<!-- we want to use a custom loading scene, so use a dummy cocos2d_loadJsImg to inhibit jsloader.js -->
 		<img id="cocos2d_loadJsImg" />
-		<script type="text/javascript">
-			var canvas = document.getElementById('gameCanvas'),
-				pixelRatio = 1;//window.devicePixelRatio || 1;
-			canvas.width = window.innerWidth * pixelRatio;
-			canvas.height = window.innerHeight * pixelRatio;
-			canvas.style.width = window.innerWidth + "px";
-			canvas.style.height = window.innerHeight + "px";
-		</script>
 	</div>
 
 	<script type="text/javascript">
-	// load facebook asynchronously
-	(function(d){
-		var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-		if (d.getElementById(id)) {return;}
-		js = d.createElement('script'); js.id = id; js.async = true;
-		js.src = "https://connect.facebook.net/en_US/all.js";
-		ref.parentNode.insertBefore(js, ref);
-	}(document));
+		var canvas = document.getElementById('gameCanvas'),
+			pixelRatio = 1;//window.devicePixelRatio || 1;
+		canvas.width = window.innerWidth * pixelRatio;
+		canvas.height = window.innerHeight * pixelRatio;
+		canvas.style.width = window.innerWidth + "px";
+		canvas.style.height = window.innerHeight + "px";
+	</script>
 
-	// load flurry asynchronously
-	(function(d){
-		var js, id = 'flurry-jssdk', ref = d.getElementsByTagName('script')[0];
-		if (d.getElementById(id)) {return;}
-		js = d.createElement('script'); js.id = id; js.async = true;
-		js.src = "https://cdn.flurry.com/js/flurry.js";
-		js.addEventListener("load", function () {
-			if (typeof window.flurryAsyncInit !== "undefined") {
-				window.flurryAsyncInit();
-			} else {
-				throw "Couldn't find window.flurryAsyncInit()";
-			}
-			this.removeEventListener("load", arguments.callee, false);
-		}, false);
-		ref.parentNode.insertBefore(js, ref);
-	}(document));
+	<script src="lib/cocos2d-html5/CCBoot.js"></script>
+	<script src="js/App.js"></script>
+	<!--<script src="HelloJavascript-min.js"></script>-->
+
+	<script type="text/javascript">
+		// load facebook asynchronously
+		(function(d){
+			var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement('script'); js.id = id; js.async = true;
+			js.src = "https://connect.facebook.net/en_US/all.js";
+			ref.parentNode.insertBefore(js, ref);
+		}(document));
+
+		// load flurry asynchronously
+		(function(d){
+			var js, id = 'flurry-jssdk', ref = d.getElementsByTagName('script')[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement('script'); js.id = id; js.async = true;
+			js.src = "https://cdn.flurry.com/js/flurry.js";
+			js.addEventListener("load", function () {
+				if (typeof window.flurryAsyncInit !== "undefined") {
+					window.flurryAsyncInit();
+				} else {
+					throw "Couldn't find window.flurryAsyncInit()";
+				}
+				this.removeEventListener("load", arguments.callee, false);
+			}, false);
+			ref.parentNode.insertBefore(js, ref);
+		}(document));
 	</script>
 
 </body>

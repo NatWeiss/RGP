@@ -37,7 +37,7 @@ if (typeof window !== "undefined") {
 		};
 		
 		module.callRunningLayer = function(method, param1, param2, param3) {
-			scene = cc.Director.getInstance().getRunningScene();
+			scene = cc.director.getRunningScene();
 			if (scene && scene.layer && scene.layer[method]) {
 				scene.layer[method](param1, param2, param3);
 			}

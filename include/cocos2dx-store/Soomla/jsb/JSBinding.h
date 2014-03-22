@@ -9,7 +9,7 @@
 #ifdef COCOS2D_JAVASCRIPT
 
 #include "cocos2d.h"
-#include "ScriptingCore.h"
+//#include "ScriptingCore.h"
 
 // Define a namespace to manage your code and make your code clearly
 namespace Soomla {

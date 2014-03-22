@@ -2,7 +2,7 @@ App.config = {
 	"strings": {
 		"en": {
 			"hello-world": "Hello World!",
-			"you-are-player-number": "You're magic number is %d."
+			"you-are-player-number": "Your magic number is %d."
 		}
 	},
 	
@@ -41,8 +41,8 @@ App.config = {
 		"spritesheet.plist"
 	],
 	"preload": [
-		{src:"spritesheet.plist"},
-		{src:"spritesheet.png"}
+		"spritesheet.plist",
+		"spritesheet.png"
 	],
 	
 	"font": "Arial",
@@ -53,20 +53,20 @@ App.config = {
 		"res/Drop3.wav"
 	],
 
-	"loader-bg-color": cc.c4b(253, 252, 255, 255),
+	"loader-bg-color": cc.color(253, 252, 255, 255),
 	"loader-text": "L o a d i n g . . .",
 	"loader-text-font": "Arial",
 	"loading-image-win-size-percent": 0.5, // make the loading image a percentage of the win size
-	//"loader-text-color": cc.c3b(255,180,180),
+	//"loader-text-color": cc.color(255,180,180),
 	//"loader-text-size": 20,
-	//"loader-bar-color": cc.c4b(9,9,10,255),
+	//"loader-bar-color": cc.color(9,9,10,255),
 	//"loading-image-width": 213, // can manually set the width / height
 	//"loading-image-height": 174,
 	//"loading-image-colors": [ // specify an array of colors to run a simple color animation on this sprite
-	//	cc.c3b(255, 72,  0),
-	//	cc.c3b(255, 105, 3),
-	//	cc.c3b(255, 156, 26),
-	//	cc.c3b(36,  255, 249)
+	//	cc.color(255, 72,  0),
+	//	cc.color(255, 105, 3),
+	//	cc.color(255, 156, 26),
+	//	cc.color(36,  255, 249)
 	//]
 	//
 	// convert your image to base64:

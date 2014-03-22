@@ -25,12 +25,13 @@ var LayerHello = (function(){
 		labelCounter: null,
 
 		init: function() {
-			var winSize = App.getWinSize(),
+			var self = this,
+				winSize = App.getWinSize(),
 				font = App.getConfig("font");
 			this._super();
 
 			// background
-			this.bg = cc.LayerGradient.create(cc.c4(127,190,255,255), cc.c4(102,153,204,255), cc.p(0.25,-1));
+			this.bg = cc.LayerGradient.create(cc.color(127,190,255,255), cc.color(102,153,204,255), cc.p(0.25,-1));
 			this.bg.setAnchorPoint(0, 0);
 			this.addChild(this.bg, 0);
 
@@ -61,7 +62,16 @@ var LayerHello = (function(){
 				cc.EaseOut.create(cc.ScaleBy.create(0.2, 1 / 1.1), 1.5)
 			));
 
-			this.setTouchEnabled(true);
+			// handle touch events
+			cc.eventManager.addListener({
+				event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+				onTouchesBegan: function(touches, event) {
+					if (touches) {
+						App.showTouchCircle(self, touches[0].getLocation());
+						App.playClickSound();
+					}
+				}
+			}, this);
 
 			return true;
 		},
@@ -83,16 +93,9 @@ var LayerHello = (function(){
 		// onGetCounter is a callback method without "this" context, like a static method
 		//
 		onGetCounter: function(response) {
-			var scene = cc.Director.getInstance().getRunningScene();
+			var scene = cc.director.getRunningScene();
 			if (scene && scene.layer) {
 				scene.layer.setCounterLabel(parseInt(response));
-			}
-		},
-		
-		onTouchesBegan: function(touches, event) {
-			if (touches) {
-				App.showTouchCircle(this, touches[0].getLocation());
-				App.playClickSound();
 			}
 		}
 	}); // end of layer extend

@@ -23,7 +23,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#pragma once
+
+#include "CCPlatformConfig.h"
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+
 #import <TargetConditionals.h>
 
 // when compiling to ARM (iPhone device), hide everything and use system defaults
@@ -74,4 +77,6 @@ THE SOFTWARE.
 
 @end
 
-#endif
+#endif // !TARGET_CPU_ARM
+
+#endif // CC_PLATFORM_IOS

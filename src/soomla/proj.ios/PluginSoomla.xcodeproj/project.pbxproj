@@ -864,7 +864,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include $(SRCROOT)/../../../include/cocos $(SRCROOT)/../../../include/cocos/base $(SRCROOT)/../../../include/cocos/physics $(SRCROOT)/../../../include/cocos/math/kazmath/include $(SRCROOT)/../../../include/cocos/2d $(SRCROOT)/../../../include/cocos/gui $(SRCROOT)/../../../include/cocos/network $(SRCROOT)/../../../include/cocos/audio/include $(SRCROOT)/../../../include/cocos/editor-support $(SRCROOT)/../../../include/extensions $(SRCROOT)/../../../include/external $(SRCROOT)/../../../include/external/chipmunk/include/chipmunk";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include $(SRCROOT)/../../../include/cocos $(SRCROOT)/../../../include/cocos/base $(SRCROOT)/../../../include/cocos/physics $(SRCROOT)/../../../include/cocos/math/kazmath $(SRCROOT)/../../../include/cocos/2d $(SRCROOT)/../../../include/cocos/gui $(SRCROOT)/../../../include/cocos/network $(SRCROOT)/../../../include/cocos/audio/include $(SRCROOT)/../../../include/cocos/editor-support $(SRCROOT)/../../../include/extensions $(SRCROOT)/../../../include/external $(SRCROOT)/../../../include/external/chipmunk/include/chipmunk";
 			};
 			name = Debug;
 		};
@@ -901,7 +901,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include $(SRCROOT)/../../../include/cocos $(SRCROOT)/../../../include/cocos/base $(SRCROOT)/../../../include/cocos/physics $(SRCROOT)/../../../include/cocos/math/kazmath/include $(SRCROOT)/../../../include/cocos/2d $(SRCROOT)/../../../include/cocos/gui $(SRCROOT)/../../../include/cocos/network $(SRCROOT)/../../../include/cocos/audio/include $(SRCROOT)/../../../include/cocos/editor-support $(SRCROOT)/../../../include/extensions $(SRCROOT)/../../../include/external $(SRCROOT)/../../../include/external/chipmunk/include/chipmunk";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include $(SRCROOT)/../../../include/cocos $(SRCROOT)/../../../include/cocos/base $(SRCROOT)/../../../include/cocos/physics $(SRCROOT)/../../../include/cocos/math/kazmath $(SRCROOT)/../../../include/cocos/2d $(SRCROOT)/../../../include/cocos/gui $(SRCROOT)/../../../include/cocos/network $(SRCROOT)/../../../include/cocos/audio/include $(SRCROOT)/../../../include/cocos/editor-support $(SRCROOT)/../../../include/extensions $(SRCROOT)/../../../include/external $(SRCROOT)/../../../include/external/chipmunk/include/chipmunk";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -909,7 +909,6 @@
 		FA09A381168AFD41008C1C7B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = armv7;
 				DSTROOT = /tmp/libPluginFlurry.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginSoomla-Prefix.pch";

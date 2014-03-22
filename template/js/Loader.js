@@ -5,6 +5,8 @@
 cc.LoaderScene.prototype.init = function(){
 	var self = this;
 	
+	this._winSize = cc.director.getWinSize();
+	
 	// call super's init
 	cc.Scene.prototype.init.call(this);
 
@@ -13,12 +15,25 @@ cc.LoaderScene.prototype.init = function(){
 	this._colors = App.getConfig("loading-image-colors") || [];
 
 	// start loading the logo texture
-	this._logoTexture = new Image();
+	cc.loader.loadImg(App.getConfig("loading-image"), {isCrossOrigin : false}, function(err, img){
+		var sizePercent = App.getConfig("loading-image-win-size-percent");
+
+		//logoWidth = img.width;
+		//logoHeight = img.height;
+		self._initStage(img, cc.p(self._winSize.width * .5, self._winSize.height * .6));
+
+		// adjust size of logo image
+		if (sizePercent) {
+			self._logo.setScale((self._winSize.height * sizePercent) / self._logo.getContentSize().height);
+		}
+	});
+
+/*	this._logoTexture = new Image();
 	this._logoTexture.addEventListener("load", function () {
 		var sizePercent = App.getConfig("loading-image-win-size-percent");
 		
 		// initialize the stage
-		self._initStage(cc.p(self._winSize.width * .5, self._winSize.height * .6));
+		self._initStage(this._logoTexture, cc.p(self._winSize.width * .5, self._winSize.height * .6));
 		
 		// adjust size of logo image
 		if (sizePercent) {
@@ -36,9 +51,9 @@ cc.LoaderScene.prototype.init = function(){
 	if (App.getConfig("loading-image-height")) {
 		this._logoTexture.height = App.getConfig("loading-image-height");
 	}
-
+*/
 	// background
-	this._bgLayer = cc.LayerColor.create(App.getConfig("loader-bg-color") || cc.c4b(0,0,0,0));
+	this._bgLayer = cc.LayerColor.create(App.getConfig("loader-bg-color") || cc.color(0,0,0,0));
 	this._bgLayer.setPosition(0, 0);
 	this.addChild(this._bgLayer, 0);
 
@@ -48,14 +63,14 @@ cc.LoaderScene.prototype.init = function(){
 		App.getConfig("loader-text-font") || "Arial",
 		App.getConfig("loader-text-size") || 20
 	);
-	this._label.setColor(App.getConfig("loader-text-color") || cc.c3(180, 180, 180));
+	this._label.setColor(App.getConfig("loader-text-color") || cc.color(180, 180, 180, 255));
 	this._label.setPosition(this._winSize.width * .5, this._winSize.height * .265);
 	this._bgLayer.addChild(this._label, 10);
 
 	// loading bar
 	this._loadingBarSize = cc.size(this._winSize.width * .2, this._winSize.height * .025);
 	this._loadingBar = cc.LayerColor.create(
-		App.getConfig("loader-bar-color") || cc.c4b(9,9,10,255),
+		App.getConfig("loader-bar-color") || cc.color(9,9,10,255),
 		this._loadingBarSize.width,
 		this._loadingBarSize.height
 	);
@@ -69,7 +84,7 @@ cc.LoaderScene.prototype.init = function(){
 //
 cc.LoaderScene.prototype._updatePercent = function (){
 	var width,
-		percent = Math.min(100, cc.Loader.getInstance().getPercentage()),
+		percent = Math.min(100, Math.max(0, (this._count / this._length) * 100)),
 		xSpacing;
 
 	if (percent >= 100) {

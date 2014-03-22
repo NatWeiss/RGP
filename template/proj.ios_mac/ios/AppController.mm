@@ -1,11 +1,10 @@
 
 #import <UIKit/UIKit.h>
-#import "AppController.h"
 #import "cocos2d.h"
-#import "EAGLView.h"
+#import "AppController.h"
 #import "AppDelegate.h"
-
 #import "RootViewController.h"
+#import "CCEAGLView.h"
 
 using namespace cocos2d;
 
@@ -26,20 +25,20 @@ void __openURL(const char* urlCstr)
 	{
 		// create window
 		window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-		CCEAGLView* glView = [CCEAGLView viewWithFrame: [window bounds]
+		CCEAGLView* eaglView = [CCEAGLView viewWithFrame: [window bounds]
 			pixelFormat: kEAGLColorFormatRGBA8
-			depthFormat: GL_DEPTH_COMPONENT16
+			depthFormat: GL_DEPTH24_STENCIL8_OES // was GL_DEPTH_COMPONENT16
 			preserveBackbuffer: NO
 			sharegroup: nil
 			multiSampling: NO
 			numberOfSamples: 0];
 
-		[glView setMultipleTouchEnabled:YES];
+		[eaglView setMultipleTouchEnabled:YES];
 
 		// use root view controller manage gl view
 		viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
 		viewController.wantsFullScreenLayout = YES;
-		viewController.view = glView;
+		viewController.view = eaglView;
 
 		// add root view controller to window
 		if( [[UIDevice currentDevice].systemVersion floatValue] < 6.0 )
@@ -50,29 +49,32 @@ void __openURL(const char* urlCstr)
 
 		[[UIApplication sharedApplication] setStatusBarHidden:YES];
 
+		// setting the GLView should be done after creating the RootViewController
+		GLView *glview = GLView::createWithEAGLView(eaglView);
+		Director::getInstance()->setOpenGLView(glview);
+
 		Application::getInstance()->run();
 		return YES;
 	}
 
-
 	-(void) applicationWillResignActive:(UIApplication*)application
 	{
-		CCDirector::getInstance()->pause();
+		Director::getInstance()->pause();
 	}
 
 	-(void) applicationDidBecomeActive:(UIApplication*)application
 	{
-		CCDirector::getInstance()->resume();
+		Director::getInstance()->resume();
 	}
 
 	-(void) applicationDidEnterBackground:(UIApplication*)application
 	{
-		CCApplication::getInstance()->applicationDidEnterBackground();
+		Application::getInstance()->applicationDidEnterBackground();
 	}
 
 	-(void) applicationWillEnterForeground:(UIApplication*)application
 	{
-		CCApplication::getInstance()->applicationWillEnterForeground();
+		Application::getInstance()->applicationWillEnterForeground();
 	}
 
 	-(void) applicationWillTerminate:(UIApplication*)application
@@ -81,7 +83,7 @@ void __openURL(const char* urlCstr)
 
 	-(void) applicationDidReceiveMemoryWarning:(UIApplication*)application
 	{
-		CCDirector::getInstance()->purgeCachedData();
+		Director::getInstance()->purgeCachedData();
 	}
 
 @end

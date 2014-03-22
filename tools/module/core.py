@@ -56,7 +56,7 @@ class CocosProject:
         """
         """
         self.platforms= {
-            "javascript" : ["ios_mac", "android", "win32", "linux"]
+            "javascript" : ["ios_mac", "android", "win32", "linux", "html5"]
         }
         self.context = {
             "src_project_name": None,
@@ -152,7 +152,7 @@ class CocosProject:
     def __processPlatformProjects(self, platform):
         """ Process each platform project.
         Arg:
-            platform: "ios_mac", "android", "win32", "linux"
+            platform: "ios_mac", "android", "win32", "linux", "html5"
         """
 
         # determine proj_path

@@ -8,6 +8,7 @@
 							 "../js/Config.js"],
     "replace_project_name": ["ios/Info.plist",
                              "../proj.html5/index.html",
+                             "../proj.html5/project.json",
 							 "../js/App.js",
 							 "../proj.html5/build.xml",
 							 "mac/en.lproj/MainMenu.xib",

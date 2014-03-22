@@ -35,7 +35,7 @@
         loadPluginx:true,
         frameRate:60,
         tag:'gameCanvas', //the dom element to run cocos2d on
-        engineDir:'cocos2d/',
+        engineDir:'../../../../cocos2d/',
         //SingleEngineFile:'',
         appFiles:[
             'src/resource.js',
@@ -58,9 +58,9 @@
         return;
     }
 
-
-    window.addEventListener('DOMContentLoaded', function () {
-        this.removeEventListener('DOMContentLoaded', arguments.callee, false);
+    var fn;
+    window.addEventListener('DOMContentLoaded', fn = function() {
+        this.removeEventListener('DOMContentLoaded', fn, false);
         //first load engine file if specified
         var s = d.createElement('script');
         /*********Delete this section if you have packed all files into one*******/

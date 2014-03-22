@@ -24,12 +24,13 @@
 
 cc.BatchNode = cc.Node.extend({
     _atlas:null,
+    _className:"BatchNode",
     ctor:function () {
         this._atlas = null;
     },
     init:function () {
         var ret = cc.Node.prototype.init.call(this);
-        this.setShaderProgram(cc.ShaderCache.getInstance().programForKey(cc.SHADER_POSITION_TEXTURE_UCOLOR));
+        this.setShaderProgram(cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURE_UCOLOR));
         return ret;
     },
 
@@ -46,16 +47,16 @@ cc.BatchNode = cc.Node.extend({
             return;
         }
         this.kmGLPushMatrix();
-        if (this._grid && this._grid.isActive()) {
-            this._grid.beforeDraw();
+        if (this.grid && this.grid.isActive()) {
+            this.grid.beforeDraw();
         }
         this.transform();
         this.sortAllChildren();
         this.draw();
         // reset for next frame
-        this._orderOfArrival = 0;
-        if (this._grid && this._grid.isActive()) {
-            this._grid.afterDraw(this);
+        this.arrivalOrder = 0;
+        if (this.grid && this.grid.isActive()) {
+            this.grid.afterDraw(this);
         }
         this.kmGLPopMatrix();
     },

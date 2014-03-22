@@ -98,20 +98,6 @@
 			remoteGlobalIDString = A03F2ED617814268006731B9;
 			remoteInfo = "CocosDenshion Mac";
 		};
-		419E8E2E18A9837100232A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 419E8E1118A9837100232A34 /* cocos2d_libs.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A03F31FD1781479B006731B9;
-			remoteInfo = "jsbindings Mac";
-		};
-		419E8E3018A9837100232A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 419E8E1118A9837100232A34 /* cocos2d_libs.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1A6FB53017854BC300CDF010;
-			remoteInfo = "luabindings Mac";
-		};
 		419E8E3218A9837100232A34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 419E8E1118A9837100232A34 /* cocos2d_libs.xcodeproj */;
@@ -146,20 +132,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = A07A4FB4178387730073F6A7;
 			remoteInfo = "CocosDenshion iOS";
-		};
-		419E8E3C18A9837100232A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 419E8E1118A9837100232A34 /* cocos2d_libs.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A07A5030178387750073F6A7;
-			remoteInfo = "jsbindings iOS";
-		};
-		419E8E3E18A9837100232A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 419E8E1118A9837100232A34 /* cocos2d_libs.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1A119791178526AA00D62A44;
-			remoteInfo = "luabindings iOS";
 		};
 		419E8EA918A9CC5C00232A34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -211,15 +183,11 @@
 				419E8E2918A9837100232A34 /* libchipmunk Mac.a */,
 				419E8E2B18A9837100232A34 /* libbox2d Mac.a */,
 				419E8E2D18A9837100232A34 /* libCocosDenshion Mac.a */,
-				419E8E2F18A9837100232A34 /* libjsbindings Mac.a */,
-				419E8E3118A9837100232A34 /* libluabindings Mac.a */,
 				419E8E3318A9837100232A34 /* libcocos2dx iOS.a */,
 				419E8E3518A9837100232A34 /* libcocos2dx-extensions iOS.a */,
 				419E8E3718A9837100232A34 /* libchipmunk iOS.a */,
 				419E8E3918A9837100232A34 /* libbox2d iOS.a */,
 				419E8E3B18A9837100232A34 /* libCocosDenshion iOS.a */,
-				419E8E3D18A9837100232A34 /* libjsbindings iOS.a */,
-				419E8E3F18A9837100232A34 /* libluabindings iOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -294,20 +262,6 @@
 			remoteRef = 419E8E2C18A9837100232A34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		419E8E2F18A9837100232A34 /* libjsbindings Mac.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libjsbindings Mac.a";
-			remoteRef = 419E8E2E18A9837100232A34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		419E8E3118A9837100232A34 /* libluabindings Mac.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libluabindings Mac.a";
-			remoteRef = 419E8E3018A9837100232A34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		419E8E3318A9837100232A34 /* libcocos2dx iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -343,20 +297,6 @@
 			remoteRef = 419E8E3A18A9837100232A34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		419E8E3D18A9837100232A34 /* libjsbindings iOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libjsbindings iOS.a";
-			remoteRef = 419E8E3C18A9837100232A34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		419E8E3F18A9837100232A34 /* libluabindings iOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libluabindings iOS.a";
-			remoteRef = 419E8E3E18A9837100232A34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -371,7 +311,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "libDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\n\n# copy headers\n# http://stackoverflow.com/questions/10176849/how-can-i-copy-only-header-files-in-an-entire-nested-directory-to-another-direct\noutputDir=\"${SRCROOT}/../include\"\nif [ -d $outputDir ]; then\n\trm -r ${outputDir}\nfi\nmkdir -p ${outputDir}\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\nrm -r ${outputDir}/docs\nif [ -d ${outputDir}/samples ]; then\n    rm -r ${outputDir}/samples\nfi\nif [ -d ${outputDir}/template ]; then\n    rm -r ${outputDir}/template\nfi\nif [ -d ${outputDir}/tools ]; then\n    rm -r ${outputDir}/tools\nfi\nfind ${outputDir} | xargs xattr -c\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nif [ -d $outputDir ]; then\n\trm -r ${outputDir}\nfi\nmkdir -p \"${outputDir}\"\nfind ${SRCROOT}/cocos2d-x/plugin/jsbindings -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/cocos2d-x/cocos/scripting/auto-generated -name *.js -exec cp {} $outputDir \\;\ncp ${SRCROOT}/cocos2d-x/cocos/scripting/javascript/script/*.js $outputDir\ncp -r ${SRCROOT}/cocos2d-x/cocos/scripting/javascript/script/debugger $outputDir\nfind ${outputDir} | xargs xattr -c\n\n# create absolute symlinks\nif [ ! -L ${libDir}/lib ]; then\n\tmkdir -p ${libDir}\n\tcd ${libDir} && ln -s ${SRCROOT}/../lib .\nfi\nif [ ! -L ${libDir}/include ]; then\n\tmkdir -p ${libDir}\n\tcd ${libDir} && ln -s ${SRCROOT}/../include .\nfi\n";
+			shellScript = "libDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\n\n# copy headers\n# http://stackoverflow.com/questions/10176849/how-can-i-copy-only-header-files-in-an-entire-nested-directory-to-another-direct\noutputDir=\"${SRCROOT}/../include\"\nif [ -d $outputDir ]; then\n\trm -r ${outputDir}\nfi\nmkdir -p ${outputDir}\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/cocos2d-x && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\nif [ -d ${outputDir}/docs ]; then\n    rm -r ${outputDir}/docs\nfi\nif [ -d ${outputDir}/samples ]; then\n    rm -r ${outputDir}/samples\nfi\nif [ -d ${outputDir}/templates ]; then\n    rm -r ${outputDir}/templates\nfi\nif [ -d ${outputDir}/tools ]; then\n    rm -r ${outputDir}/tools\nfi\nif [ -d ${outputDir}/plugin/samples ]; then\n    rm -r ${outputDir}/plugin/samples\nfi\nif [ -d ${outputDir}/plugin/plugins ]; then\n    rm -r ${outputDir}/plugin/plugins\nfi\nfind ${outputDir} | xargs xattr -c\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nif [ -d $outputDir ]; then\n\trm -r ${outputDir}\nfi\nmkdir -p \"${outputDir}\"\nfind ${outputDir} | xargs xattr -c\n\n# create absolute symlinks\nif [ ! -L ${libDir}/lib ]; then\n\tmkdir -p ${libDir}\n\tcd ${libDir} && ln -s ${SRCROOT}/../lib .\nfi\nif [ ! -L ${libDir}/include ]; then\n\tmkdir -p ${libDir}\n\tcd ${libDir} && ln -s ${SRCROOT}/../include .\nfi\n";
 		};
 		419E8E4E18A9847700232A34 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -384,7 +324,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"iOS\"\nscheme=\"build-all-libs $platform\"\n\n# build for device and simulator\n#for config in ${CONFIGURATION}\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}-iphoneos/${libName}.a\n\toutputFileB=${BUILD_DIR}/${config}-iphonesimulator/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\t\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}-iphoneos/*.a\n\tlibtool -static -o $outputFileB ${BUILD_DIR}/${config}-iphonesimulator/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA $outputFileB\n\trm $outputFileA\n\trm $outputFileB\ndone\n";
+			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"iOS\"\nscheme=\"build all libs $platform\"\n\n# build for device and simulator\n#for config in ${CONFIGURATION}\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}-iphoneos/${libName}.a\n\toutputFileB=${BUILD_DIR}/${config}-iphonesimulator/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\t\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}-iphoneos/*.a\n\tlibtool -static -o $outputFileB ${BUILD_DIR}/${config}-iphonesimulator/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA $outputFileB\n\trm $outputFileA\n\trm $outputFileB\ndone\n";
 		};
 		419E8E9E18A9BB3400232A34 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -397,7 +337,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"Mac\"\nscheme=\"build-all-libs $platform\"\n\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" ONLY_ACTIVE_ARCH=NO -configuration ${config} BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA\n\trm $outputFileA\ndone\n";
+			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"Mac\"\nscheme=\"build all libs $platform\"\n\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" ONLY_ACTIVE_ARCH=NO -configuration ${config} BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA\n\trm $outputFileA\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -562,6 +502,7 @@
 				412DCACB18C16DE80044835D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		419E8DAF18A9724F00232A34 /* Build configuration list for PBXProject "cocos2dx-prebuilt" */ = {
 			isa = XCConfigurationList;

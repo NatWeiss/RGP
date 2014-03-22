@@ -13,14 +13,14 @@ App.getInitialScene = function() {
 	return SceneHello;
 };
 
-App.getJSFiles = function() {
+/*App.getJSFiles = function() {
 	var files = [
 		"js/lib/aes.js",
 		"js/lib/underscore.js",
 		"js/lib/soomla.js",
 		"js/lib/SoomlaNdk.js",
-		"js/lib/Facebook.js",
-		"js/lib/AdsMobFox.js",
+//		"js/lib/Facebook.js",
+//		"js/lib/AdsMobFox.js",
 		"js/Config.js",
 		"js/ConfigServer.js",
 		"js/HelloJavascript.js",
@@ -28,24 +28,25 @@ App.getJSFiles = function() {
 		"js/Loader.js"
 		];
 	return files;
-};
+};*/
 
 App.getResourcesToPreload = function() {
 	var dir = this.getResourceDir(),
+		ret = [],
 		files = this.getConfig("preload"),
 		i;
-	
+
 	if (files) {
 		for (i = 0; i < files.length; i += 1) {
-			if (files[i].src) {
-				files[i].src = dir + "/" + files[i].src;
+			if (files[i] && files[i].length) {
+				ret[i] = dir + "/" + files[i];
 			}
 		}
 	} else {
 		cc.log("Missing App.config.preload array");
 	}
 	
-	return files;
+	return ret;
 };
 
 App.getResourceDir = function() {
@@ -91,32 +92,28 @@ App.getResourceDir = function() {
 };
 
 App.setupResources = function() {
-	var cacher,
+	var sheet,
 		sheets,
-		i,
-		dirs = [];
+		i;
 
-	dirs.push(this.getResourceDir());
-	cc.Director.getInstance().setContentScaleFactor(this._contentScaleFactor);
-
-	// set resource directories
-	dirs.push("jsb");
-	//cc.log("Setting resource directories: " + JSON.stringify(dirs));
-	cc.FileUtils.getInstance().setSearchPaths(dirs);
+	// set resource directory
+	cc.loader.resPath = this.getResourceDir();
+	
+	// scale factor
+	cc.director.setContentScaleFactor(this._contentScaleFactor);
 
 	// load spritesheets
-	cacher = cc.SpriteFrameCache.getInstance();
 	sheets = App.getConfig("spritesheets");
 	for (i = 0; i < sheets.length; i += 1) {
-		cc.log("Loading spritesheet: " + sheets[i]);
-		cacher.addSpriteFrames(sheets[i]);
+		sheet = cc.loader.getUrl(sheets[i]);
+		cc.log("Loading spritesheet: " + sheet);
+		cc.spriteFrameCache.addSpriteFrames(sheet);
 	}
-	
 };
 
 App.isHtml5 = function() {
-	if (typeof this._isHtml5 === 'undefined') {
-		this._isHtml5 = (typeof window !== 'undefined');
+	if (typeof this._isHtml5 === "undefined") {
+		this._isHtml5 = false;
 	}
 	return this._isHtml5;
 };
@@ -176,7 +173,8 @@ App.getLanguageCode = function() {
 		};
 		
 		// store the language code
-		this._language = getLanguageCode(cc.Application.getInstance().getCurrentLanguage());
+		//this._language = getLanguageCode(cc.Application.getInstance().getCurrentLanguage());
+		this._language = getLanguageCode(0);
 		strings = this.getConfig("strings");
 		if (strings && typeof strings[this._language] === "undefined") {
 			cc.log("Don't have strings for language: " + this._language);
@@ -216,7 +214,7 @@ App.rand = function(mod) {
 };
 
 App.getWinSize = function() {
-	var size = cc.Director.getInstance().getWinSizeInPixels();
+	var size = cc.director.getWinSizeInPixels();
 	if (typeof this._winSize === 'undefined' || (size.width && size.height)) {
 		this._winSize = size;
 	}
@@ -224,7 +222,7 @@ App.getWinSize = function() {
 };
 
 App.getRunningLayer = function() {
-	var node = cc.Director.getInstance().getRunningScene();
+	var node = cc.director.getRunningScene();
 	if (node) {
 		if (node.layer) {
 			node = node.layer;
@@ -282,12 +280,12 @@ App.runPrefixMethod = function(obj, method) {
 
 App.isInitialLaunch = function() {
 	// use soundEnabled as an indicator of if we have previously launched the app
-	var v = sys.localStorage.getItem("soundEnabled");
+	var v = cc.sys.localStorage.getItem("soundEnabled");
 	return (typeof v === "undefined" || v === null || v === "");
 };
 
 App.loadSoundEnabled = function() {
-	this._soundEnabled = sys.localStorage.getItem("soundEnabled");
+	this._soundEnabled = cc.sys.localStorage.getItem("soundEnabled");
 	//cc.log("Loaded sound enabled: " + this._soundEnabled);
 	if (this._soundEnabled === null || this._soundEnabled === "") {
 		this.enableSound(true);
@@ -297,12 +295,10 @@ App.loadSoundEnabled = function() {
 };
 
 App.enableSound = function(enabled) {
-	var audio;
 	this._soundEnabled = enabled ? true : false;
-	sys.localStorage.setItem("soundEnabled", this._soundEnabled);
+	cc.sys.localStorage.setItem("soundEnabled", this._soundEnabled);
 	if (!this.isSoundEnabled()) {
-		audio = cc.AudioEngine.getInstance();
-		audio.stopMusic();
+		cc.audioEngine.stopMusic();
 	}
 };
 
@@ -315,18 +311,14 @@ App.isSoundEnabled = function() {
 };
 
 App.playEffect = function(filename) {
-	var audio;
 	if (this.isSoundEnabled()) {
-		audio = cc.AudioEngine.getInstance();
-		audio.playEffect(filename);
+		cc.audioEngine.playEffect(filename);
 	}
 };
 
 App.playMusic = function(filename) {
-	var audio;
 	if (this.isSoundEnabled()) {
-		audio = cc.AudioEngine.getInstance();
-		audio.playMusic(filename);
+		cc.audioEngine.playMusic(filename);
 	}
 };
 
@@ -388,7 +380,7 @@ App.loadAnalyticsPlugin = function() {
 App.getAdsPlugin = function() {
 	var name;
 	
-	if (typeof this._adsPlugin === 'undefined' && typeof plugin !== 'undefined') {
+	if (typeof this._adsPlugin === "undefined" && typeof plugin !== "undefined") {
 		name = this.getString("ads-plugin-name");
 
 		// try to load plugin
@@ -599,7 +591,7 @@ App.loadImage = function(url, callback) {
 		image.src = url;
 		//cc.log("Loading image: " + url);
 		image.addEventListener("load", function(){
-			cc.TextureCache.getInstance().cacheImage(url, image);
+			cc.textureCache.cacheImage(url, image);
 			this.removeEventListener("load", arguments.callee, false);
 			callback();
 		}, false);
@@ -608,15 +600,18 @@ App.loadImage = function(url, callback) {
 		//cc.log("Loading image from raw data: " + url);
 		this.requestURL(url, function(response, status) {
 			var bytes = new Uint8Array(response);
-			cc.TextureCache.getInstance().addImage(url, bytes);
+			cc.textureCache.addImage(url, bytes);
 			callback();
 		}, true);
 	}
 };
 
 App.bootHtml5 = function() {
+
+// set fps to 30...
+
 	var d = document;
-	var c = {
+/*	var c = {
 		COCOS2D_DEBUG: 2, // 0 to turn debug off, 1 for basic debug, and 2 for full debug
 		box2d: false,
 		chipmunk: false,
@@ -654,43 +649,48 @@ App.bootHtml5 = function() {
 	window.addEventListener('DOMContentLoaded', function() {
 		this.removeEventListener('DOMContentLoaded', arguments.callee, false);
 		var s = d.createElement('script');
-		if (c.SingleEngineFile && !c.engineDir) {
-			s.src = c.SingleEngineFile;
-		}
-		else if (c.engineDir && !c.SingleEngineFile) {
-			s.src = c.engineDir + 'jsloader.js';
-		}
-		else {
-			alert('You must specify either the single engine file OR the engine directory in "cocos2d.js"');
-		}
+//		if (c.SingleEngineFile && !c.engineDir) {
+//			s.src = c.SingleEngineFile;
+//		}
+//		else if (c.engineDir && !c.SingleEngineFile) {
+//			//s.src = c.engineDir + 'jsloader.js';
+//			s.src = "lib/cocos2d-html5/CCBoot.js";
+//		}
+//		else {
+//			alert('You must specify either the single engine file OR the engine directory in "cocos2d.js"');
+//		}
+		s.src = "lib/cocos2d-html5/CCBoot.js";
 
-		document.ccConfig = c;
+//		document.ccConfig = c;
 		s.id = 'cocos2d-html5';
 		d.body.appendChild(s);
 	});
+*/
 };
 
 App.bootX = function(global) {
-	require("jsb.js");
+//cc.log("Requiring jsb.js");
+//	require("jsb.js");
+//cc.log("Done requiring jsb.js");
 	//require("jsb_pluginx.js");
 	//require("jsb_pluginx_protocols_auto_api.js");
-	require("jsb_cocos2dx_auto_api.js");
+	//require("jsb_cocos2dx_auto_api.js");
 
 	// implement timers
 	require("js/lib/timers.js");
 	this.timerLoop = makeWindowTimer(global, function(ms){});
-	cc.Director.getInstance().getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
+//	cc.director.getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
 	//setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);
 
 	// load js files
-	var files = this.getJSFiles();
-	for (var i = 0; i < files.length; i += 1) {
-		//cc.log("Including: " + files[i]);
-		require(files[i]);
-	}
+	//var files = this.getJSFiles();
+	//for (var i = 0; i < files.length; i += 1) {
+	//	//cc.log("Including: " + files[i]);
+	//	require(files[i]);
+	//}
 
 	// main
-	require("main.js");
+	//require("main.js");
 	
 	// after everything is done loading, create the main window variable
 	global.window = {
@@ -713,6 +713,23 @@ App.bootX = function(global) {
 };
 
 App.mainHtml5 = function() {
+	var winSize = this.getWinSize();
+	
+	cc.view.setDesignResolutionSize(winSize.width, winSize.height, cc.ResolutionPolicy.SHOW_ALL);
+	cc.view.resizeWithBrowserSize(true);
+
+	cc.LoaderScene.preload(App.getResourcesToPreload(), function() {
+		var scene,
+			Scene = App.getInitialScene();
+
+		App.setupResources();
+
+		scene = new Scene();
+		scene.init();
+		cc.director.runScene(scene);
+	}, this);
+
+/*
 	var Application = cc.Application.extend({
 		config: document['ccConfig'],
 
@@ -730,7 +747,7 @@ App.mainHtml5 = function() {
 				return false;
 			}
 
-			var director = cc.Director.getInstance(),
+			var director = cc.director,
 				screenSize = cc.EGLView.getInstance().getFrameSize(),
 				Scene = App.getInitialScene();
 
@@ -755,13 +772,13 @@ App.mainHtml5 = function() {
 		}
 	});
 	var myApp = new Application();
-	
+*/
 	App.addImageRaw = function() {
 	};
 };
 
 App.mainX = function() {
-	var director = cc.Director.getInstance(),
+	var director = cc.director,
 		Scene = this.getInitialScene(),
 		scene;
 	
@@ -772,6 +789,7 @@ App.mainX = function() {
 };
 
 App.main = function() {
+	cc.log("App.main()");
 	var i,
 		director,
 		sheets,
@@ -798,7 +816,7 @@ App.main = function() {
 		}
 	}
 
-	director = cc.Director.getInstance();
+	director = cc.director;
 	director.setDisplayStats(this.showFPS);
 	director.setAnimationInterval(1.0 / this.getFrameRate());
 
@@ -816,6 +834,7 @@ App.main = function() {
 };
 
 App.boot = function(global) {
+	cc.log("App.boot()");
 	if (this.isHtml5())
 		this.bootHtml5(global);
 	else
@@ -825,6 +844,19 @@ App.boot = function(global) {
 	window.flurryAsyncInit = function() {
 		App.loadAnalyticsPlugin();
 	};
+
+	// embed main.js
+	cc.log("main.js embedded");
+	cc.game.onStart = function(){
+		//
+		// cocos2d-html5 loads this from cocos2d's jsloader.js after everything else
+		// cocos2d-x uses App.bootX to load this file as well
+		//
+		App.main();
+	};
+	cc.log("Calling cc.game.run()");
+	cc.game.run();
+	cc.log("Done with App.boot()");
 };
 
 App.boot(this);
