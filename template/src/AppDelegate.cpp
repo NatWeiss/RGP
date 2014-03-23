@@ -37,6 +37,7 @@
 #include "chipmunk/js_bindings_chipmunk_registration.h"
 #include "jsb_opengl_registration.h"
 
+#include "bindings/manual/network/XMLHTTPRequest.h"
 //#include "plugin/jsbindings/auto/jsb_pluginx_protocols_auto.hpp"
 #include "cocos2dx-store/Soomla/jsb/jsb_soomla.h"
 #include "Extras.h"
@@ -96,7 +97,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	sc->addRegisterCallback(JSB_register_opengl);
 	sc->addRegisterCallback(jsb_register_chipmunk);
 
-//	sc->addRegisterCallback(MinXmlHttpRequest::_js_register);
+	sc->addRegisterCallback(MinXmlHttpRequest::_js_register);
 //	sc->addRegisterCallback(register_jsb_websocket);
 //	sc->addRegisterCallback(register_all_cocos2dx_spine);
 

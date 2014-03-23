@@ -21,10 +21,8 @@
 		"js/lib/underscore.js",
 		"js/lib/soomla.js",
 		"js/lib/SoomlaNdk.js",
-		"js/lib/Facebook.js",
 		"js/lib/AdsMobFox.js",
 		"js/Config.js",
-		"js/ConfigServer.js",
 		"js/HelloJavascript.js",
 		"js/SceneHello.js",
 		"js/Loader.js"

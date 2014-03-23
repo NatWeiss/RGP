@@ -13,23 +13,6 @@ App.getInitialScene = function() {
 	return SceneHello;
 };
 
-/*App.getJSFiles = function() {
-	var files = [
-		"js/lib/aes.js",
-		"js/lib/underscore.js",
-		"js/lib/soomla.js",
-		"js/lib/SoomlaNdk.js",
-//		"js/lib/Facebook.js",
-//		"js/lib/AdsMobFox.js",
-		"js/Config.js",
-		"js/ConfigServer.js",
-		"js/HelloJavascript.js",
-		"js/SceneHello.js",
-		"js/Loader.js"
-		];
-	return files;
-};*/
-
 App.getResourcesToPreload = function() {
 	var dir = this.getResourceDir(),
 		ret = [],
@@ -113,7 +96,8 @@ App.setupResources = function() {
 
 App.isHtml5 = function() {
 	if (typeof this._isHtml5 === "undefined") {
-		this._isHtml5 = false;
+		//cc.log("Is native? " + cc.sys.isNative);
+		this._isHtml5 = cc.sys.isNative ? false : true;
 	}
 	return this._isHtml5;
 };
@@ -142,39 +126,11 @@ App.localizeCurrency = function(amount) {
 };
 
 App.getLanguageCode = function() {
-	var getLanguageCode,
-		strings;
+	var strings;
 	
 	if (typeof this._language === "undefined") {
-		getLanguageCode = function(l) {
-			var key,
-				languages = {
-					"en": cc.LANGUAGE_ENGLISH,
-					"zh": cc.LANGUAGE_CHINESE,
-					"fr": cc.LANGUAGE_FRENCH,
-					"it": cc.LANGUAGE_ITALIAN,
-					"de": cc.LANGUAGE_GERMAN,
-					"es": cc.LANGUAGE_SPANISH,
-					"ru": cc.LANGUAGE_RUSSIAN,
-					"ko": cc.LANGUAGE_KOREAN,
-					"ja": cc.LANGUAGE_JAPANESE,
-					"hu": cc.LANGUAGE_HUNGARIAN,
-					"pt": cc.LANGUAGE_PORTUGUESE,
-					"ar": cc.LANGUAGE_ARABIC
-				};
-			for (key in languages) {
-				if (languages.hasOwnProperty(key)) {
-					if (l === languages[key]) {
-						return key;
-					}
-				}
-			}
-			return "en";
-		};
-		
 		// store the language code
-		//this._language = getLanguageCode(cc.Application.getInstance().getCurrentLanguage());
-		this._language = getLanguageCode(0);
+		this._language = cc.sys.language;
 		strings = this.getConfig("strings");
 		if (strings && typeof strings[this._language] === "undefined") {
 			cc.log("Don't have strings for language: " + this._language);
@@ -543,6 +499,7 @@ App.requestUrl = function(url, callback, binary) {
 	}
 	
 	if (url.indexOf("://") <= 0) {
+		cc.log("window.location = " + window.location);
 		loc = window.location.toString() || "";
 		pos = loc.indexOf("?");
 		if (pos > 0) {
@@ -649,19 +606,17 @@ App.bootHtml5 = function() {
 	window.addEventListener('DOMContentLoaded', function() {
 		this.removeEventListener('DOMContentLoaded', arguments.callee, false);
 		var s = d.createElement('script');
-//		if (c.SingleEngineFile && !c.engineDir) {
-//			s.src = c.SingleEngineFile;
-//		}
-//		else if (c.engineDir && !c.SingleEngineFile) {
-//			//s.src = c.engineDir + 'jsloader.js';
-//			s.src = "lib/cocos2d-html5/CCBoot.js";
-//		}
-//		else {
-//			alert('You must specify either the single engine file OR the engine directory in "cocos2d.js"');
-//		}
-		s.src = "lib/cocos2d-html5/CCBoot.js";
+		if (c.SingleEngineFile && !c.engineDir) {
+			s.src = c.SingleEngineFile;
+		}
+		else if (c.engineDir && !c.SingleEngineFile) {
+			s.src = c.engineDir + 'jsloader.js';
+		}
+		else {
+			alert('You must specify either the single engine file OR the engine directory in "cocos2d.js"');
+		}
 
-//		document.ccConfig = c;
+		document.ccConfig = c;
 		s.id = 'cocos2d-html5';
 		d.body.appendChild(s);
 	});
@@ -669,33 +624,25 @@ App.bootHtml5 = function() {
 };
 
 App.bootX = function(global) {
-//cc.log("Requiring jsb.js");
-//	require("jsb.js");
-//cc.log("Done requiring jsb.js");
+	//require("jsb.js");
 	//require("jsb_pluginx.js");
 	//require("jsb_pluginx_protocols_auto_api.js");
 	//require("jsb_cocos2dx_auto_api.js");
 
+	global.plugin = global.plugin || {};
+	if (!global.plugin.PluginManager) {
+		global.plugin.PluginManager = {getInstance:function(){return {loadPlugin:function(){}}}};
+	}
+
 	// implement timers
 	require("js/lib/timers.js");
 	this.timerLoop = makeWindowTimer(global, function(ms){});
-//	cc.director.getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
+	cc.director.getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
 	//setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);
 
-	// load js files
-	//var files = this.getJSFiles();
-	//for (var i = 0; i < files.length; i += 1) {
-	//	//cc.log("Including: " + files[i]);
-	//	require(files[i]);
-	//}
-
-	// main
-	//require("main.js");
-	
 	// after everything is done loading, create the main window variable
-	global.window = {
-		location: "http://" + App.serverAddress + (App.serverPort ? ":" + App.serverPort + "/" : "")
-	};
+	require("js/ConfigServer.js");
+	global.location = "http://" + App.serverAddress + (App.serverPort ? ":" + App.serverPort : "") + "/";
 	global.navigator = {
 		// http://stackoverflow.com/questions/8579019/how-to-get-the-user-agent-on-ios
 		userAgent: "Apple-iPhone5C1/1001.525" // how to apply this from C++??
@@ -718,78 +665,26 @@ App.mainHtml5 = function() {
 	cc.view.setDesignResolutionSize(winSize.width, winSize.height, cc.ResolutionPolicy.SHOW_ALL);
 	cc.view.resizeWithBrowserSize(true);
 
-	cc.LoaderScene.preload(App.getResourcesToPreload(), function() {
-		var scene,
-			Scene = App.getInitialScene();
+	cc.LoaderScene.preload(App.getResourcesToPreload(), App.mainCallback, this);
 
-		App.setupResources();
-
-		scene = new Scene();
-		scene.init();
-		cc.director.runScene(scene);
-	}, this);
-
-/*
-	var Application = cc.Application.extend({
-		config: document['ccConfig'],
-
-		ctor: function() {
-			this._super();
-			cc.COCOS2D_DEBUG = this.config['COCOS2D_DEBUG'];
-			cc.initDebugSetting();
-			cc.setup(this.config['tag']);
-			cc.AppController.shareAppController().didFinishLaunchingWithOptions();
-		},
-
-		applicationDidFinishLaunching: function() {
-			if (cc.RenderDoesnotSupport()) {
-				alert("Browser doesn't support WebGL");
-				return false;
-			}
-
-			var director = cc.director,
-				screenSize = cc.EGLView.getInstance().getFrameSize(),
-				Scene = App.getInitialScene();
-
-			cc.EGLView.getInstance().resizeWithBrowserSize( true );
-			//cc.EGLView.getInstance().setDesignResolutionSize(screenSize.width, screenSize.height, cc.RESOLUTION_POLICY.SHOW_ALL);
-			cc.EGLView.getInstance().setResolutionPolicy(cc.RESOLUTION_POLICY.SHOW_ALL);
-
-			cc.LoaderScene.preload(App.getResourcesToPreload(), function() {
-				var scene;
-				App.setupResources();
-				scene = new Scene();
-				scene.init();
-				director.replaceScene(scene);
-			}, this);
-
-			return true;
-		},
-		
-		getCurrentLanguage: function() {
-			// navigator.systemLanguage... / navigator.language... / navigator.platform...
-			return cc.LANGUAGE_ENGLISH;
-		}
-	});
-	var myApp = new Application();
-*/
-	App.addImageRaw = function() {
-	};
+	App.addImageRaw = function() {};
 };
 
 App.mainX = function() {
-	var director = cc.director,
-		Scene = this.getInitialScene(),
+	App.mainCallback();
+};
+
+App.mainCallback = function() {
+	var Scene = App.getInitialScene(),
 		scene;
 	
-	this.setupResources();
+	App.setupResources();
 	scene = new Scene;
 	scene.init();
-	director.runWithScene(scene);
+	cc.director.runScene(scene);
 };
 
 App.main = function() {
-	cc.log("App.main()");
 	var i,
 		director,
 		sheets,
@@ -806,7 +701,9 @@ App.main = function() {
 		this.mainX();
 	
 	winSize = this.getWinSize();
-	cc.log(winSize.width + " x " + winSize.height + ", resource dir: " + App.getResourceDir() + ", language: " + App.getLanguageCode());
+	cc.log(winSize.width + " x " + winSize.height
+		+ ", resource dir: " + App.getResourceDir()
+		+ ", language: " + App.getLanguageCode());
 	
 	if (this.isHtml5()) {
 		this._fullscreenEnabled = (this.runPrefixMethod(document, "FullScreen")
@@ -834,7 +731,6 @@ App.main = function() {
 };
 
 App.boot = function(global) {
-	cc.log("App.boot()");
 	if (this.isHtml5())
 		this.bootHtml5(global);
 	else
@@ -846,17 +742,10 @@ App.boot = function(global) {
 	};
 
 	// embed main.js
-	cc.log("main.js embedded");
 	cc.game.onStart = function(){
-		//
-		// cocos2d-html5 loads this from cocos2d's jsloader.js after everything else
-		// cocos2d-x uses App.bootX to load this file as well
-		//
 		App.main();
 	};
-	cc.log("Calling cc.game.run()");
 	cc.game.run();
-	cc.log("Done with App.boot()");
 };
 
 App.boot(this);

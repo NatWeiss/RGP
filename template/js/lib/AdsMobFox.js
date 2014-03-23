@@ -1,3 +1,7 @@
+
+
+var plugin = plugin || {};
+
 plugin.AdsType = {
 	BannerAd: 0,
 	FullScreenAd: 1

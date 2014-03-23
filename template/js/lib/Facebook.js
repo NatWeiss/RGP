@@ -11,6 +11,8 @@
 // begin module
 //
 if (typeof window !== "undefined") {
+	var plugin = plugin || {};
+
 	plugin.Facebook = (function(){
 		var TAG = "Facebook:",
 			module = {
