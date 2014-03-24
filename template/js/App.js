@@ -564,9 +564,6 @@ App.loadImage = function(url, callback) {
 };
 
 App.bootHtml5 = function() {
-
-// set fps to 30...
-
 	var d = document;
 /*	var c = {
 		COCOS2D_DEBUG: 2, // 0 to turn debug off, 1 for basic debug, and 2 for full debug
@@ -650,7 +647,7 @@ App.bootX = function(global) {
 	//cc.log("Got location: " + window.location);
 	
 	// add some functionality to cc
-	if (typeof cc.DEGREES_TO_RADIANS === 'undefined') {
+	if (typeof cc.DEGREES_TO_RADIANS === "undefined") {
 		cc.PI = Math.PI;
 		cc.RAD = cc.PI / 180;
 		cc.DEG = 180 / cc.PI;
@@ -686,7 +683,6 @@ App.mainCallback = function() {
 
 App.main = function() {
 	var i,
-		director,
 		sheets,
 		cacher,
 		dirs = [],
@@ -701,9 +697,6 @@ App.main = function() {
 		this.mainX();
 	
 	winSize = this.getWinSize();
-	cc.log(winSize.width + " x " + winSize.height
-		+ ", resource dir: " + App.getResourceDir()
-		+ ", language: " + App.getLanguageCode());
 	
 	if (this.isHtml5()) {
 		this._fullscreenEnabled = (this.runPrefixMethod(document, "FullScreen")
@@ -713,9 +706,12 @@ App.main = function() {
 		}
 	}
 
-	director = cc.director;
-	director.setDisplayStats(this.showFPS);
-	director.setAnimationInterval(1.0 / this.getFrameRate());
+	cc.director.setDisplayStats(this.showFPS);
+	cc.director.setAnimationInterval(1.0 / this.getFrameRate());
+	cc.log(winSize.width + " x " + winSize.height
+		+ ", resource dir: " + App.getResourceDir()
+		+ ", language: " + App.getLanguageCode()
+		+ ", " + parseInt(1.0 / cc.director.getAnimationInterval()) + " fps");
 
 	// load
 	this.loadAnalyticsPlugin();
