@@ -48,13 +48,14 @@
 			);
 			dependencies = (
 				41F0F5AE18DA917900F5FC64 /* PBXTargetDependency */,
-				41F0F60B18E097A600F5FC64 /* PBXTargetDependency */,
 				41C58FEF18C13480007B2614 /* PBXTargetDependency */,
 				41C58FF318C13480007B2614 /* PBXTargetDependency */,
 				41C58FF518C13480007B2614 /* PBXTargetDependency */,
 				41C58FF718C13480007B2614 /* PBXTargetDependency */,
 				41C58FF918C13480007B2614 /* PBXTargetDependency */,
 				41C58FFB18C13480007B2614 /* PBXTargetDependency */,
+				41F0F61A18E1241D00F5FC64 /* PBXTargetDependency */,
+				41F0F61C18E1242500F5FC64 /* PBXTargetDependency */,
 			);
 			name = "build-all-libs iOS";
 			productName = "build-all-libs iOS";
@@ -213,12 +214,19 @@
 			remoteGlobalIDString = FA09A372168AFD41008C1C7B;
 			remoteInfo = PluginJSBindings;
 		};
-		41F0F60A18E097A600F5FC64 /* PBXContainerItemProxy */ = {
+		41F0F61918E1241D00F5FC64 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 41F0F60118DFE9E100F5FC64 /* PluginJSBindings.xcodeproj */;
+			containerPortal = 41C58FE618C1346B007B2614 /* PluginSoomla.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
-			remoteInfo = PluginJSBindings;
+			remoteInfo = PluginSoomla;
+		};
+		41F0F61B18E1242500F5FC64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41C58FE018C13425007B2614 /* PluginMobFox.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
+			remoteInfo = PluginMobFox;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -536,7 +544,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "libDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\n\n# copy headers\noutputDir=\"${SRCROOT}/../include\"\nmkdir -p ${outputDir}\nmkdir -p ${outputDir}/bindings\nmkdir -p ${outputDir}/external\n(cd ${SRCROOT}/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/soomla && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n\nif [ -d ${outputDir}/plugin/samples ]; then\n    rm -r ${outputDir}/plugin/samples\nfi\nfind ${outputDir} | xargs xattr -c\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nmkdir -p \"${outputDir}\"\ncp ${SRCROOT}/bindings/script/*.js $outputDir\ncp -r ${SRCROOT}/bindings/script/debugger $outputDir\ncp ${SRCROOT}/bindings/auto/api/*.js $outputDir\nfind ${SRCROOT}/soomla -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/bindings-pluginx -name *.js -exec cp {} $outputDir \\;\nfind ${outputDir} | xargs xattr -c\n";
+			shellScript = "libDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\n\n# copy headers\noutputDir=\"${SRCROOT}/../include\"\nmkdir -p ${outputDir}\nmkdir -p ${outputDir}/bindings\nmkdir -p ${outputDir}/external\n(cd ${SRCROOT}/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/soomla && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n#(cd ${SRCROOT}/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n#(cd ${SRCROOT}/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n\nif [ -d ${outputDir}/plugin/samples ]; then\n    rm -r ${outputDir}/plugin/samples\nfi\nfind ${outputDir} | xargs xattr -c\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nmkdir -p \"${outputDir}\"\ncp ${SRCROOT}/bindings/script/*.js $outputDir\ncp -r ${SRCROOT}/bindings/script/debugger $outputDir\ncp ${SRCROOT}/bindings/auto/api/*.js $outputDir\nfind ${SRCROOT}/soomla -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $outputDir \\;\n#find ${SRCROOT}/bindings-pluginx -name *.js -exec cp {} $outputDir \\;\nfind ${outputDir} | xargs xattr -c\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -586,10 +594,15 @@
 			target = 41F0F57D18DA17F700F5FC64 /* Headers */;
 			targetProxy = 41F0F5D818DD1CBF00F5FC64 /* PBXContainerItemProxy */;
 		};
-		41F0F60B18E097A600F5FC64 /* PBXTargetDependency */ = {
+		41F0F61A18E1241D00F5FC64 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = PluginJSBindings;
-			targetProxy = 41F0F60A18E097A600F5FC64 /* PBXContainerItemProxy */;
+			name = PluginSoomla;
+			targetProxy = 41F0F61918E1241D00F5FC64 /* PBXContainerItemProxy */;
+		};
+		41F0F61C18E1242500F5FC64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginMobFox;
+			targetProxy = 41F0F61B18E1242500F5FC64 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

@@ -24,12 +24,12 @@ App.config = {
 	"economy-plugin-name": "Soomla",
 	"economy-plugin-debug": true,
 	"economy-plugin-init": {
-		soomSec: "", // generate a random 32 character string for this
-		customSecret: "", // generate a random 32 character string for this too
-		androidPublicKey: ""
+		soomSec: "01234567890123456789012345678901", // replace with your own random 32 character string
+		customSecret: "01234567890123456789012345678901", // replace with your own random 32 character string
+		androidPublicKey: "01234567890123456789012345678901" // replace with your Android public key
 	},
 	"economy-plugin-initial-balances": {
-		//"currency_name": 10,
+		"currency_example": 10,
 	},
 
 	"ads-plugin-name": "AdsMobFox",
@@ -79,7 +79,7 @@ App.config = {
 };
 
 App.getStoreAssets = function() {
-	var CURRENCY_ITEM_ID_1 = "currency_name";
+	var CURRENCY_ITEM_ID_1 = "currency_example";
 
 	// currencies
 	var currency1 = Soomla.Models.VirtualCurrency.create({

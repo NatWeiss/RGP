@@ -105,10 +105,10 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 	#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS )
 //		sc->addRegisterCallback(register_all_pluginx_protocols);
-//		sc->addRegisterCallback(register_jsb_soomla);
+		sc->addRegisterCallback(register_jsb_soomla);
 	#elif( CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID )
 //		sc->addRegisterCallback(register_all_pluginx_protocols);
-//		sc->addRegisterCallback(register_jsb_soomla);
+		sc->addRegisterCallback(register_jsb_soomla);
 	#endif
 
 	sc->start();

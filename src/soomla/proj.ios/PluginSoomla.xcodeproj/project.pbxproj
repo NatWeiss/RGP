@@ -843,7 +843,6 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					DEBUG,
 					"COCOS2D_DEBUG=1",
 					USE_FILE32API,
 					COCOS2D_JAVASCRIPT,
@@ -920,7 +919,7 @@
 				PRODUCT_NAME = PluginSoomla;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/cocos/2d/platform/ios $(SRCROOT)/../../../include/cocos/scripting/javascript/bindings $(SRCROOT)/../../../include/cocos/scripting/auto-generated/js-bindings $(SRCROOT)/../../../include/external/spidermonkey/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/cocos/2d/platform/ios $(SRCROOT)/../../../include/cocos/scripting/javascript/bindings $(SRCROOT)/../../../include/cocos/scripting/auto-generated/js-bindings $(SRCROOT)/../../../include/external/spidermonkey/include/ios $(SRCROOT)/../../../include/bindings/manual";
 			};
 			name = Debug;
 		};
@@ -938,7 +937,7 @@
 				PRODUCT_NAME = PluginSoomla;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/cocos/2d/platform/ios $(SRCROOT)/../../../include/cocos/scripting/javascript/bindings $(SRCROOT)/../../../include/cocos/scripting/auto-generated/js-bindings $(SRCROOT)/../../../include/external/spidermonkey/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/cocos/2d/platform/ios $(SRCROOT)/../../../include/cocos/scripting/javascript/bindings $(SRCROOT)/../../../include/cocos/scripting/auto-generated/js-bindings $(SRCROOT)/../../../include/external/spidermonkey/include/ios $(SRCROOT)/../../../include/bindings/manual";
 			};
 			name = Release;
 		};
