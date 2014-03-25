@@ -198,7 +198,7 @@
 		419E8DAC18A9724F00232A34 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = 419E8DAF18A9724F00232A34 /* Build configuration list for PBXProject "cocos2dx-prebuilt" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -337,7 +337,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"Mac\"\nscheme=\"build all libs $platform\"\n\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" ONLY_ACTIVE_ARCH=NO -configuration ${config} BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA\n\trm $outputFileA\ndone\n";
+			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"Mac\"\nscheme=\"build all libs $platform\"\n\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA\n\trm $outputFileA\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

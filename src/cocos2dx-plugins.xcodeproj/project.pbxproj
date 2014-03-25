@@ -18,15 +18,15 @@
 			name = iOS;
 			productName = "cocos2d-x-static-ios";
 		};
-		419E8E9818A9BAEC00232A34 /* Mac-unused */ = {
+		419E8E9818A9BAEC00232A34 /* Mac */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 419E8E9918A9BAEC00232A34 /* Build configuration list for PBXAggregateTarget "Mac-unused" */;
+			buildConfigurationList = 419E8E9918A9BAEC00232A34 /* Build configuration list for PBXAggregateTarget "Mac" */;
 			buildPhases = (
 				419E8E9E18A9BB3400232A34 /* ShellScript */,
 			);
 			dependencies = (
 			);
-			name = "Mac-unused";
+			name = Mac;
 			productName = "cocos2d-x-static-mac";
 		};
 		419E8EA518A9CC3B00232A34 /* All */ = {
@@ -37,6 +37,7 @@
 			dependencies = (
 				41F0F5D918DD1CBF00F5FC64 /* PBXTargetDependency */,
 				419E8EAA18A9CC5C00232A34 /* PBXTargetDependency */,
+				41F0F63D18E1550A00F5FC64 /* PBXTargetDependency */,
 			);
 			name = All;
 			productName = "cocos2d-x-static";
@@ -71,6 +72,17 @@
 			);
 			name = Headers;
 			productName = "Just Headers";
+		};
+		41F0F62918E1503100F5FC64 /* build-all-libs Mac */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 41F0F62A18E1503100F5FC64 /* Build configuration list for PBXAggregateTarget "build-all-libs Mac" */;
+			buildPhases = (
+			);
+			dependencies = (
+				41F0F62E18E1504300F5FC64 /* PBXTargetDependency */,
+			);
+			name = "build-all-libs Mac";
+			productName = "build-all-libs Mac";
 		};
 /* End PBXAggregateTarget section */
 
@@ -236,6 +248,27 @@
 			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
 			remoteInfo = PluginJSBindings;
 		};
+		41F0F62718E14CE300F5FC64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41F0F62318E14CE300F5FC64 /* PluginFacebook.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA09A372168AFD41008C1C7B;
+			remoteInfo = PluginFacebook;
+		};
+		41F0F62D18E1504300F5FC64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41F0F5A418DA916B00F5FC64 /* cocos2d_js_bindings.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A03F31E81781479B006731B9;
+			remoteInfo = "jsbindings Mac";
+		};
+		41F0F63C18E1550A00F5FC64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 419E8DAC18A9724F00232A34 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 419E8E9818A9BAEC00232A34;
+			remoteInfo = Mac;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -252,6 +285,7 @@
 		41C58FE618C1346B007B2614 /* PluginSoomla.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginSoomla.xcodeproj; path = soomla/proj.ios/PluginSoomla.xcodeproj; sourceTree = "<group>"; };
 		41F0F5A418DA916B00F5FC64 /* cocos2d_js_bindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_js_bindings.xcodeproj; path = bindings/proj.ios_mac/cocos2d_js_bindings.xcodeproj; sourceTree = "<group>"; };
 		41F0F60118DFE9E100F5FC64 /* PluginJSBindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginJSBindings.xcodeproj; path = "bindings-pluginx/proj.ios/PluginJSBindings.xcodeproj"; sourceTree = "<group>"; };
+		41F0F62318E14CE300F5FC64 /* PluginFacebook.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginFacebook.xcodeproj; path = facebook/proj.ios/PluginFacebook.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -263,6 +297,7 @@
 				41C58FBC18C133AB007B2614 /* PluginProtocol.xcodeproj */,
 				41C58FE018C13425007B2614 /* PluginMobFox.xcodeproj */,
 				41C58FE618C1346B007B2614 /* PluginSoomla.xcodeproj */,
+				41F0F62318E14CE300F5FC64 /* PluginFacebook.xcodeproj */,
 				41C58FC218C133CC007B2614 /* PluginAdmob.xcodeproj */,
 				41C58FC818C133DF007B2614 /* PluginFlurry.xcodeproj */,
 				41C58FCE18C133E9007B2614 /* PluginTwitter.xcodeproj */,
@@ -363,6 +398,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		41F0F62418E14CE300F5FC64 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41F0F62818E14CE300F5FC64 /* libPluginFacebook.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXProject section */
@@ -389,6 +432,10 @@
 				{
 					ProductGroup = 41C58FC318C133CC007B2614 /* Products */;
 					ProjectRef = 41C58FC218C133CC007B2614 /* PluginAdmob.xcodeproj */;
+				},
+				{
+					ProductGroup = 41F0F62418E14CE300F5FC64 /* Products */;
+					ProjectRef = 41F0F62318E14CE300F5FC64 /* PluginFacebook.xcodeproj */;
 				},
 				{
 					ProductGroup = 41C58FC918C133DF007B2614 /* Products */;
@@ -428,7 +475,8 @@
 				41F0F57D18DA17F700F5FC64 /* Headers */,
 				419E91E718AB0AD800232A34 /* build-all-libs iOS */,
 				419E8E4A18A9845800232A34 /* iOS */,
-				419E8E9818A9BAEC00232A34 /* Mac-unused */,
+				41F0F62918E1503100F5FC64 /* build-all-libs Mac */,
+				419E8E9818A9BAEC00232A34 /* Mac */,
 				419E8EA518A9CC3B00232A34 /* All */,
 			);
 		};
@@ -512,6 +560,13 @@
 			remoteRef = 41F0F60618DFE9E100F5FC64 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		41F0F62818E14CE300F5FC64 /* libPluginFacebook.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginFacebook.a;
+			remoteRef = 41F0F62718E14CE300F5FC64 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -539,7 +594,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"Mac\"\nscheme=\"build-all-libs $platform\"\n\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\t#if [ ! -f ${BUILD_DIR}/${config}/libcocos2dx\\ ${platform}.a ]; then\n\t\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" ONLY_ACTIVE_ARCH=NO -configuration ${config} BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\t#fi\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA\n\trm $outputFileA\ndone\n";
+			shellScript = "libName=\"lib${PROJECT_NAME}\"\nplatform=\"Mac\"\nscheme=\"build-all-libs $platform\"\n\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" ONLY_ACTIVE_ARCH=NO -configuration ${config} BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA\n\trm $outputFileA\ndone\n";
 		};
 		41F0F58118DA180B00F5FC64 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -552,7 +607,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "libDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\n\n# copy headers\noutputDir=\"${SRCROOT}/../include\"\nmkdir -p ${outputDir}\nmkdir -p ${outputDir}/bindings\nmkdir -p ${outputDir}/external\n(cd ${SRCROOT}/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/soomla && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n#(cd ${SRCROOT}/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n#(cd ${SRCROOT}/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n\nif [ -d ${outputDir}/plugin/samples ]; then\n    rm -r ${outputDir}/plugin/samples\nfi\nfind ${outputDir} | xargs xattr -c\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nmkdir -p \"${outputDir}\"\ncp ${SRCROOT}/bindings/script/*.js $outputDir\ncp -r ${SRCROOT}/bindings/script/debugger $outputDir\ncp ${SRCROOT}/bindings/auto/api/*.js $outputDir\nfind ${SRCROOT}/soomla -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $outputDir \\;\n#find ${SRCROOT}/bindings-pluginx -name *.js -exec cp {} $outputDir \\;\nfind ${outputDir} | xargs xattr -c\n";
+			shellScript = "libDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\n\n# copy headers\noutputDir=\"${SRCROOT}/../include\"\nmkdir -p ${outputDir}\nmkdir -p ${outputDir}/bindings\nmkdir -p ${outputDir}/external\n(cd ${SRCROOT}/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/soomla && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n\nif [ -d ${outputDir}/plugin/samples ]; then\n    rm -r ${outputDir}/plugin/samples\nfi\nfind ${outputDir} | xargs xattr -c\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nmkdir -p \"${outputDir}\"\ncp ${SRCROOT}/bindings/script/*.js $outputDir\ncp -r ${SRCROOT}/bindings/script/debugger $outputDir\ncp ${SRCROOT}/bindings/auto/api/*.js $outputDir\nfind ${SRCROOT}/soomla -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/bindings-pluginx -name *.js -exec cp {} $outputDir \\;\nfind ${outputDir} | xargs xattr -c\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -616,6 +671,16 @@
 			isa = PBXTargetDependency;
 			name = PluginJSBindings;
 			targetProxy = 41F0F61D18E1424100F5FC64 /* PBXContainerItemProxy */;
+		};
+		41F0F62E18E1504300F5FC64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "jsbindings Mac";
+			targetProxy = 41F0F62D18E1504300F5FC64 /* PBXContainerItemProxy */;
+		};
+		41F0F63D18E1550A00F5FC64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 419E8E9818A9BAEC00232A34 /* Mac */;
+			targetProxy = 41F0F63C18E1550A00F5FC64 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -766,6 +831,22 @@
 			};
 			name = Release;
 		};
+		41F0F62B18E1503100F5FC64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		41F0F62C18E1503100F5FC64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -787,7 +868,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		419E8E9918A9BAEC00232A34 /* Build configuration list for PBXAggregateTarget "Mac-unused" */ = {
+		419E8E9918A9BAEC00232A34 /* Build configuration list for PBXAggregateTarget "Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				419E8E9A18A9BAEC00232A34 /* Debug */,
@@ -822,6 +903,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		41F0F62A18E1503100F5FC64 /* Build configuration list for PBXAggregateTarget "build-all-libs Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				41F0F62B18E1503100F5FC64 /* Debug */,
+				41F0F62C18E1503100F5FC64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

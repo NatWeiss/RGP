@@ -592,6 +592,7 @@
 					"-lz",
 					"-lxml2",
 					"-ObjC",
+					"-lcocos2dx-plugins",
 				);
 				PRODUCT_NAME = CashCow;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/base $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/physics $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/math/kazmath $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/gui $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/network $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/audio/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/editor-support $(SRCROOT)/../lib/cocos2dx-prebuilt/include/extensions $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/chipmunk/include/chipmunk $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/auto $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/manual $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/manual/cocosbuilder";
@@ -630,6 +631,7 @@
 					"-lz",
 					"-lxml2",
 					"-ObjC",
+					"-lcocos2dx-plugins",
 				);
 				PRODUCT_NAME = CashCow;
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/base $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/physics $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/math/kazmath $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/gui $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/network $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/audio/include $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/editor-support $(SRCROOT)/../lib/cocos2dx-prebuilt/include/extensions $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/chipmunk/include/chipmunk $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/auto $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/manual $(SRCROOT)/../lib/cocos2dx-prebuilt/include/bindings/manual/cocosbuilder";
@@ -645,6 +647,7 @@
 		A92277011517C097001B78AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -657,10 +660,6 @@
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-lcocos2dx-plugins",
-				);
 				PRODUCT_NAME = HelloJavascript;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -671,6 +670,7 @@
 		A92277021517C097001B78AA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -683,10 +683,6 @@
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-lcocos2dx-plugins",
-				);
 				PRODUCT_NAME = HelloJavascript;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

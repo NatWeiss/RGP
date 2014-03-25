@@ -17,7 +17,7 @@
                BlueprintIdentifier = "419E8E9818A9BAEC00232A34"
                BuildableName = "Mac"
                BlueprintName = "Mac"
-               ReferencedContainer = "container:cocos2dx-prebuilt.xcodeproj">
+               ReferencedContainer = "container:cocos2dx-plugins.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
