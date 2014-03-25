@@ -20,7 +20,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			DEFAULT_SOOM_SEC = "DEFAULT",
 			DEFAULT_CUSTOM_SEC = "DEFAULT",
 			INVENTORY_ID = "soomla.inventory",
-			TAG = "SoomlaNDK:";
+			TAG = "SoomlaNDK: ";
 
 		var self = {},
 			module = {
@@ -33,10 +33,9 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			hasBase64 = (typeof btoa !== "undefined");
 		
 		// log
-		module.log = function() {
+		module.log = function(msg) {
 			if (DEBUG) {
-				[].unshift.call(arguments, TAG);
-				cc.log.apply(self, arguments);
+				cc.log(TAG + msg);
 			}
 		};
 		

@@ -287,7 +287,8 @@ plugin.AdsMobFox = cc.Class.extend({
 			menu,
 			closeButton = null,
 			normalSprite,
-			selectedSprite;
+			selectedSprite,
+			disabledSprite;
 		
 		// create layer + sprite
 		this.layer = cc.Layer.create();
@@ -328,9 +329,10 @@ plugin.AdsMobFox = cc.Class.extend({
 		if (typeEnum == plugin.AdsType.FullScreenAd) {
 			normalSprite = cc.Sprite.create("#close-button.png");
 			selectedSprite = cc.Sprite.create("#close-button.png");
+			disabledSprite = cc.Sprite.create("#close-button.png");
 			if (normalSprite && selectedSprite) {
 				selectedSprite.setColor(cc.color(128,128,128));
-				closeButton = cc.MenuItemSprite.create(normalSprite, selectedSprite, null, this.closeAdCallback, this);
+				closeButton = cc.MenuItemSprite.create(normalSprite, selectedSprite, disabledSprite, this.closeAdCallback, this);
 				closeButton.setAnchorPoint(cc.p(1,1));
 				closeButton.setPosition(sprite.getPositionX() + sprite.getContentSize().width * .5,
 					sprite.getPositionY() + sprite.getContentSize().height * .5);

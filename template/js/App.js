@@ -303,6 +303,14 @@ App.getHttpQueryParams = function() {
 	return this._GET;
 };
 
+App.alert = function(msg) {
+	if(typeof alert === "function") {
+		alert(msg);
+	} else {
+		cc.log(msg);
+	}
+};
+
 App.loadAnalyticsPlugin = function() {
 	var self = this,
 		flurryApiKey,
@@ -426,7 +434,7 @@ App.loadEconomyPlugin = function() {
 				social.buy(productId, successCallback, failureCallback);
 			}
 			else {
-				alert("Please play within Facebook to enable purchasing.");
+				App.alert("Please play within Facebook to enable purchasing.");
 				Soomla.CCSoomlaNdkBridge.onPaymentComplete();
 			}
 		};
@@ -654,6 +662,10 @@ App.bootX = function(global) {
 		cc.DEGREES_TO_RADIANS = function(angle) {return angle * cc.RAD;};
 		cc.RADIANS_TO_DEGREES = function(angle) {return angle * cc.DEG;};
 	}
+	
+	// test addImageRaw
+	//var array = new Uint8Array;
+	//App.addImageRaw("http://somewhere.com/something.png", array);
 };
 
 App.mainHtml5 = function() {
