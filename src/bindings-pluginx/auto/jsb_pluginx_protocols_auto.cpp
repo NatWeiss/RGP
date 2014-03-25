@@ -1452,20 +1452,6 @@ void register_all_pluginx_protocols(JSContext* cx, JSObject* obj) {
 	}
 	obj = ns;
 
-	// first, try to get the ns
-/*	JS::RootedValue nsval(cx);
-	JSObject *ns;
-	JS_GetProperty(cx, obj, "plugin", &nsval);
-	if (nsval == JSVAL_VOID) {
-		ns = JS_NewObject(cx, NULL, NULL, NULL);
-		nsval = OBJECT_TO_JSVAL(ns);
-		JS_SetProperty(cx, obj, "plugin", nsval);
-	} else {
-		JS_ValueToObject(cx, nsval, &ns);
-	}
-	obj = ns;
-*/
-
 	js_register_pluginx_protocols_PluginProtocol(cx, obj);
 	js_register_pluginx_protocols_ProtocolUser(cx, obj);
 	js_register_pluginx_protocols_ProtocolShare(cx, obj);

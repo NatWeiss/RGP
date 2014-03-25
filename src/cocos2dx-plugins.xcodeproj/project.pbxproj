@@ -48,6 +48,7 @@
 			);
 			dependencies = (
 				41F0F5AE18DA917900F5FC64 /* PBXTargetDependency */,
+				41F0F61E18E1424100F5FC64 /* PBXTargetDependency */,
 				41C58FEF18C13480007B2614 /* PBXTargetDependency */,
 				41C58FF318C13480007B2614 /* PBXTargetDependency */,
 				41C58FF518C13480007B2614 /* PBXTargetDependency */,
@@ -227,6 +228,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
 			remoteInfo = PluginMobFox;
+		};
+		41F0F61D18E1424100F5FC64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41F0F60118DFE9E100F5FC64 /* PluginJSBindings.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
+			remoteInfo = PluginJSBindings;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -603,6 +611,11 @@
 			isa = PBXTargetDependency;
 			name = PluginMobFox;
 			targetProxy = 41F0F61B18E1242500F5FC64 /* PBXContainerItemProxy */;
+		};
+		41F0F61E18E1424100F5FC64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginJSBindings;
+			targetProxy = 41F0F61D18E1424100F5FC64 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
