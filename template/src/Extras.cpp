@@ -1,5 +1,25 @@
-/*
+
 #include "AppDelegate.h"
+
+#include "cocosbuilder/js_bindings_ccbreader.h"
+#include "SimpleAudioEngine.h"
+#include "jsb_cocos2dx_auto.hpp"
+#include "jsb_cocos2dx_ui_auto.hpp"
+#include "jsb_cocos2dx_studio_auto.hpp"
+#include "jsb_cocos2dx_extension_auto.hpp"
+#include "jsb_cocos2dx_builder_auto.hpp"
+#include "ui/jsb_cocos2dx_ui_manual.h"
+#include "extension/jsb_cocos2dx_extension_manual.h"
+#include "cocostudio/jsb_cocos2dx_studio_manual.h"
+#include "localstorage/js_bindings_system_registration.h"
+#include "chipmunk/js_bindings_chipmunk_registration.h"
+#include "jsb_opengl_registration.h"
+
+#include "bindings/manual/network/XMLHTTPRequest.h"
+#include "bindings/auto/jsb_pluginx_protocols_auto.hpp"
+#include "cocos2dx-store/Soomla/jsb/jsb_soomla.h"
+
+/*
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
 #include "ScriptingCore.h"
@@ -26,6 +46,13 @@
 //#import <UIKit/UIKit.h>
 //#import <Foundation/Foundation.h>
 //#import <NSWorkspace.h>
+*/
+
+#ifndef JSBool
+#define JSBool bool
+#define JS_TRUE (bool)1
+#define JS_FALSE (bool)0
+#endif
 
 const char* const kJSNamespace = "App";
 
@@ -51,9 +78,10 @@ using namespace CocosDenshion;
 #endif
 
 JSBool jsval_to_binary_data(JSContext *cx, jsval v, void** ret, uint32_t *byteLength) {
-	JSObject *tmp_arg;
-	JSBool ok = JS_ValueToObject( cx, v, &tmp_arg );
-	JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
+	JSObject *tmp_arg = JSVAL_TO_OBJECT(v);
+
+	//JSBool ok = JS_ValueToObject( cx, v, tmp_arg );
+	//JSB_PRECONDITION3( ok, cx, JS_FALSE, "Error converting value to object");
 	JSB_PRECONDITION3( tmp_arg && JS_IsTypedArrayObject( tmp_arg ), cx, JS_FALSE, "Not a TypedArray object");
 	
 	*ret = JS_GetArrayBufferViewData( tmp_arg );
@@ -177,8 +205,8 @@ void js_register_cocos2dx_CCExtras(JSContext *cx, JSObject *global) {
 		NULL, // no static properties
 		st_funcs);
 	// make the class enumerable in the registered namespace
-	JSBool found;
-	JS_SetPropertyAttributes(cx, global, kJSNamespace, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
+//	JSBool found;
+//	JS_SetPropertyAttributes(cx, global, kJSNamespace, JSPROP_ENUMERATE | JSPROP_READONLY, &found);
 
 	// add the proto and JSClass to the type->js info hash table
 	TypeTest<cocos2d::Extras> t;
@@ -192,5 +220,31 @@ void js_register_cocos2dx_CCExtras(JSContext *cx, JSObject *global) {
 		p->parentProto = NULL;
 		_js_global_type_map.insert(std::make_pair(typeName, p));
 	}
-}
+
+/*	JS::RootedValue nsval(cx);
+	JS::RootedObject ns(cx);
+	JS_GetProperty(cx, global, "plugin", &nsval);
+	if (nsval == JSVAL_VOID) {
+		ns = JS_NewObject(cx, NULL, NULL, NULL);
+		nsval = OBJECT_TO_JSVAL(ns);
+		JS_SetProperty(cx, global, "plugin", nsval);
+	} else {
+		JS_ValueToObject(cx, nsval, &ns);
+	}
 */
+//	global = ns;
+
+/*	auto obj = global;
+	JS::RootedValue nsval(cx);
+	JS::RootedObject ns(cx);
+	JS_GetProperty(cx, obj, "cc", &nsval);
+	if (nsval == JSVAL_VOID) {
+		ns = JS_NewObject(cx, NULL, NULL, NULL);
+		nsval = OBJECT_TO_JSVAL(ns);
+		JS_SetProperty(cx, obj, "cc", nsval);
+	} else {
+		JS_ValueToObject(cx, nsval, &ns);
+	}
+	obj = ns;
+*/
+}

@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "41F0F57D18DA17F700F5FC64"
-               BuildableName = "Headers"
-               BlueprintName = "Headers"
-               ReferencedContainer = "container:cocos2dx-plugins.xcodeproj">
+               BlueprintIdentifier = "FA09A371168AFD41008C1C7B"
+               BuildableName = "libPluginJSBindings.a"
+               BlueprintName = "PluginJSBindings"
+               ReferencedContainer = "container:PluginJSBindings.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
