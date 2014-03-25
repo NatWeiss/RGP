@@ -13,11 +13,11 @@
 
 // Define a namespace to manage your code and make your code clearly
 namespace Soomla {
-    class JSBinding: public cocos2d::CCObject
+    class JSBinding: public cocos2d::Ref
     {
     public:
         static void callNative(const char *params, std::string &result);
-        static void callCallback(cocos2d::CCDictionary *params);
+        static void callCallback(cocos2d::Dictionary *params);
     };
 }
 

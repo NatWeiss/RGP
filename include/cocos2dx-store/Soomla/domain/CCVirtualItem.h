@@ -19,7 +19,7 @@ namespace soomla {
 
 		A virtual item, the base class for all virtual items.
 	*/    
-    class CCVirtualItem : public cocos2d::CCObject {
+    class CCVirtualItem : public cocos2d::Ref {
         SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString*, mName, Name, JSON_ITEM_NAME);
         SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString*, mDescription, Description, JSON_ITEM_DESCRIPTION);
         SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString*, mItemId, ItemId, JSON_ITEM_ITEMID);

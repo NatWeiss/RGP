@@ -20,7 +20,7 @@ namespace soomla {
 		it to your event handler call addEventHandler(). You also set parameters
 		for StoreController through this class.
 	 */
-    class CCSoomla: public cocos2d::CCObject {
+    class CCSoomla: public cocos2d::Ref {
 	private:
         cocos2d::CCSet mEventHandlers;
 

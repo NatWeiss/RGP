@@ -20,7 +20,7 @@ namespace soomla {
 		Pass this as a pointer to this class to functions requiring it and
 		examine the result. If its value is not null then something went wrong.
 	 */
-    class CCSoomlaError: public cocos2d::CCObject {
+    class CCSoomlaError: public cocos2d::Ref {
 		/**
 		   The error code.
 		   Can be one of SOOMLA_EXCEPTION_ITEM_NOT_FOUND, 
@@ -29,7 +29,7 @@ namespace soomla {
 		 */
         CC_SYNTHESIZE_READONLY(int, mCode, Code);
     public:
-        static CCSoomlaError *createWithObject(cocos2d::CCObject *obj);
+        static CCSoomlaError *createWithObject(cocos2d::Ref *obj);
 
         static CCSoomlaError *createVirtualItemNotFoundException();
         static CCSoomlaError *createInsufficientFundsException();

@@ -20,7 +20,7 @@ namespace soomla {
 		An interface to the native StoreInfo class, use this class to
 		access the native StoreInfo functionality.
 	*/
-	class CCStoreInfo: cocos2d::CCObject {
+	class CCStoreInfo: cocos2d::Ref {
     public:
 		/**
 		   This class is singleton, use this function to access it.
@@ -104,7 +104,7 @@ namespace soomla {
 		*/
 		cocos2d::CCArray *getVirtualCategories();
     private:
-        cocos2d::CCObject *createWithRetParams(cocos2d::CCDictionary *retParams);
+        cocos2d::Ref *createWithRetParams(cocos2d::CCDictionary *retParams);
     };
 };
 

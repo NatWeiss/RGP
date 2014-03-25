@@ -15,7 +15,7 @@
 CC_SYNTHESIZE_RETAIN(varType, varName, funName); \
 protected: inline void fill##funName##FromDict(cocos2d::CCDictionary* dict) \
 { \
-    cocos2d::CCObject* obj = dict->objectForKey(jsonKey); \
+    cocos2d::Ref* obj = dict->objectForKey(jsonKey); \
     CCAssert(obj == NULL || dynamic_cast<varType>(obj), "invalid object type in dictionary"); \
     if (varName != obj) \
     { \

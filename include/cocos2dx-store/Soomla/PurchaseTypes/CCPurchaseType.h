@@ -18,7 +18,7 @@ namespace soomla {
 		A PurchaseType is a way to purchase a PurchasableVirtualItem. This abstract class describes basic features
 		of the actual implementations of PurchaseType.
 	 */
-    class CCPurchaseType : public cocos2d::CCObject {
+    class CCPurchaseType : public cocos2d::Ref {
     public:
         CCPurchaseType() {}
         

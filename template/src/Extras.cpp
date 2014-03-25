@@ -93,7 +93,7 @@ JSBool jsval_to_binary_data(JSContext *cx, jsval v, void** ret, uint32_t *byteLe
 
 namespace cocos2d
 {
-	class Extras : public Object
+	class Extras : public Ref
 	{
 		public:
 			static Texture2D* addImageRaw(const char* name, void* data, int dataLength)

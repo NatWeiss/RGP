@@ -16,7 +16,7 @@ namespace soomla {
 		An interface to the native StoreController class, use this class to
 		access the native StoreController functionality.
 	 */
-    class CCStoreController: public cocos2d::CCObject {
+    class CCStoreController: public cocos2d::Ref {
     public:
 		/**
 		   This class is singleton, use this function to access it.

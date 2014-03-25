@@ -17,7 +17,7 @@ namespace soomla {
 
 		A category for virtual items.
 	 */
-    class CCVirtualCategory : public cocos2d::CCObject {
+    class CCVirtualCategory : public cocos2d::Ref {
         SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString*, mName, Name, JSON_CATEGORY_NAME);
         SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCArray*, mGoodItemIds, GoodItemIds, JSON_CATEGORY_GOODSITEMIDS);
     public:

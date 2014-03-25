@@ -16,7 +16,7 @@ namespace soomla {
 		Implement this class to define your store's assets. See the wiki for
 		information about the various VirtualGoods and how to define them.
 	 */
-    class CCIStoreAssets: public cocos2d::CCObject {
+    class CCIStoreAssets: public cocos2d::Ref {
     public:
         virtual int getVersion() = 0;
 

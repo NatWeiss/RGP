@@ -17,7 +17,7 @@ namespace soomla {
 
 		An item you can purchase in the App Store or in Google Play.
 	 */
-    class CCMarketItem : public cocos2d::CCObject {
+    class CCMarketItem : public cocos2d::Ref {
         SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString *, mProductId, ProductId, JSON_MARKETITEM_PRODUCT_ID);
         SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCInteger *, mConsumable, Consumable, JSON_MARKETITEM_CONSUMABLE);
         SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCDouble *, mPrice, Price, JSON_MARKETITEM_PRICE);
