@@ -8,6 +8,5 @@
 
 #include "jsapi.h"
 #include "jsfriendapi.h"
-#include "ScriptingCore.h"
 
-void register_jsb_facebook(JSContext* cx, JSObject* global);
+void register_jsb_app_bindings(JSContext *cx, JSObject *global);

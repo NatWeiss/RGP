@@ -49,6 +49,7 @@
 			);
 			dependencies = (
 				41F0F5AE18DA917900F5FC64 /* PBXTargetDependency */,
+				41F0F65C18E3467900F5FC64 /* PBXTargetDependency */,
 				41F0F61E18E1424100F5FC64 /* PBXTargetDependency */,
 				41C58FEF18C13480007B2614 /* PBXTargetDependency */,
 				41C58FF318C13480007B2614 /* PBXTargetDependency */,
@@ -277,6 +278,20 @@
 			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
 			remoteInfo = PluginFacebook;
 		};
+		41F0F65618E3460000F5FC64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41F0F65218E3460000F5FC64 /* AppBindings.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA09A372168AFD41008C1C7B;
+			remoteInfo = AppBindings;
+		};
+		41F0F65B18E3467900F5FC64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41F0F65218E3460000F5FC64 /* AppBindings.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
+			remoteInfo = "AppBindings iOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -294,6 +309,7 @@
 		41F0F5A418DA916B00F5FC64 /* cocos2d_js_bindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_js_bindings.xcodeproj; path = bindings/proj.ios_mac/cocos2d_js_bindings.xcodeproj; sourceTree = "<group>"; };
 		41F0F60118DFE9E100F5FC64 /* PluginJSBindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginJSBindings.xcodeproj; path = "bindings-pluginx/proj.ios/PluginJSBindings.xcodeproj"; sourceTree = "<group>"; };
 		41F0F62318E14CE300F5FC64 /* PluginFacebook.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginFacebook.xcodeproj; path = facebook/proj.ios/PluginFacebook.xcodeproj; sourceTree = "<group>"; };
+		41F0F65218E3460000F5FC64 /* AppBindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppBindings.xcodeproj; path = app/proj.ios/AppBindings.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -301,6 +317,7 @@
 			isa = PBXGroup;
 			children = (
 				41F0F5A418DA916B00F5FC64 /* cocos2d_js_bindings.xcodeproj */,
+				41F0F65218E3460000F5FC64 /* AppBindings.xcodeproj */,
 				41F0F60118DFE9E100F5FC64 /* PluginJSBindings.xcodeproj */,
 				41C58FBC18C133AB007B2614 /* PluginProtocol.xcodeproj */,
 				41C58FE018C13425007B2614 /* PluginMobFox.xcodeproj */,
@@ -414,6 +431,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		41F0F65318E3460000F5FC64 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41F0F65718E3460000F5FC64 /* libAppBindings.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXProject section */
@@ -433,6 +458,10 @@
 			productRefGroup = 419E8DAB18A9724F00232A34;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 41F0F65318E3460000F5FC64 /* Products */;
+					ProjectRef = 41F0F65218E3460000F5FC64 /* AppBindings.xcodeproj */;
+				},
 				{
 					ProductGroup = 41F0F5A518DA916B00F5FC64 /* Products */;
 					ProjectRef = 41F0F5A418DA916B00F5FC64 /* cocos2d_js_bindings.xcodeproj */;
@@ -575,6 +604,13 @@
 			remoteRef = 41F0F62718E14CE300F5FC64 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		41F0F65718E3460000F5FC64 /* libAppBindings.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libAppBindings.a;
+			remoteRef = 41F0F65618E3460000F5FC64 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -615,7 +651,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "libDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\n\n# copy headers\noutputDir=\"${SRCROOT}/../include\"\nmkdir -p ${outputDir}\nmkdir -p ${outputDir}/bindings\nmkdir -p ${outputDir}/external\nmkdir -p ${outputDir}/facebook\n(cd ${SRCROOT}/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/soomla && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\ncp ${SRCROOT}/facebook/jsb*.h $outputDir/facebook\n\nif [ -d ${outputDir}/plugin/samples ]; then\n    rm -r ${outputDir}/plugin/samples\nfi\nfind ${outputDir} | xargs xattr -c\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nmkdir -p \"${outputDir}\"\ncp ${SRCROOT}/bindings/script/*.js $outputDir\ncp -r ${SRCROOT}/bindings/script/debugger $outputDir\ncp ${SRCROOT}/bindings/auto/api/*.js $outputDir\nfind ${SRCROOT}/soomla -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/bindings-pluginx -name *.js -exec cp {} $outputDir \\;\nfind ${outputDir} | xargs xattr -c\n";
+			shellScript = "libDir=\"${SRCROOT}/../template/lib/cocos2dx-prebuilt\"\n\n# copy headers\noutputDir=\"${SRCROOT}/../include\"\nmkdir -p ${outputDir}\nmkdir -p ${outputDir}/bindings\nmkdir -p ${outputDir}/external\nmkdir -p ${outputDir}/facebook\nmkdir -p ${outputDir}/app\n(cd ${SRCROOT}/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/soomla && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir && tar xvfp -)\n(cd ${SRCROOT}/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $outputDir/external && tar xvfp -)\n(cd ${SRCROOT}/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\n(cd ${SRCROOT}/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $outputDir/bindings && tar xvfp -)\ncp ${SRCROOT}/facebook/jsb*.h $outputDir/facebook\ncp ${SRCROOT}/app/jsb*.h $outputDir/app\n\nif [ -d ${outputDir}/plugin/samples ]; then\n    rm -r ${outputDir}/plugin/samples\nfi\nfind ${outputDir} | xargs xattr -c\n\n# copy javascript bindings\noutputDir=\"${libDir}/jsb\"\nmkdir -p \"${outputDir}\"\ncp ${SRCROOT}/bindings/script/*.js $outputDir\ncp -r ${SRCROOT}/bindings/script/debugger $outputDir\ncp ${SRCROOT}/bindings/auto/api/*.js $outputDir\nfind ${SRCROOT}/soomla -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $outputDir \\;\nfind ${SRCROOT}/bindings-pluginx -name *.js -exec cp {} $outputDir \\;\nfind ${outputDir} | xargs xattr -c\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -694,6 +730,11 @@
 			isa = PBXTargetDependency;
 			name = PluginFacebook;
 			targetProxy = 41F0F64818E20A9000F5FC64 /* PBXContainerItemProxy */;
+		};
+		41F0F65C18E3467900F5FC64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "AppBindings iOS";
+			targetProxy = 41F0F65B18E3467900F5FC64 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

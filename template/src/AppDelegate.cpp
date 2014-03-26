@@ -1,3 +1,8 @@
+//
+//  See the file 'LICENSE_RapidGame.txt' for the license governing this code.
+//      The license can also be obtained online at:
+//          http://WizardFu.com/licenses
+//
 
 #include "AppDelegate.h"
 
@@ -41,7 +46,7 @@
 #include "bindings/auto/jsb_pluginx_protocols_auto.hpp"
 #include "cocos2dx-store/Soomla/jsb/jsb_soomla.h"
 #include "facebook/jsb_facebook.h"
-#include "Extras.h"
+#include "app/jsb_app_bindings.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -102,16 +107,16 @@ bool AppDelegate::applicationDidFinishLaunching()
 //	sc->addRegisterCallback(register_jsb_websocket);
 //	sc->addRegisterCallback(register_all_cocos2dx_spine);
 
-	sc->addRegisterCallback(js_register_cocos2dx_CCExtras);
-
 	#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS )
 		sc->addRegisterCallback(register_all_pluginx_protocols);
 		sc->addRegisterCallback(register_jsb_soomla);
 		sc->addRegisterCallback(register_jsb_facebook);
+		sc->addRegisterCallback(register_jsb_app_bindings);
 	#elif( CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID )
 		sc->addRegisterCallback(register_all_pluginx_protocols);
 		sc->addRegisterCallback(register_jsb_soomla);
 		sc->addRegisterCallback(register_jsb_facebook);
+		sc->addRegisterCallback(register_jsb_app_bindings);
 	#endif
 
 	sc->start();

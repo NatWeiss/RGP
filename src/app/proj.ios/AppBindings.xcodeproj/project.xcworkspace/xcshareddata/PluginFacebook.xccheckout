@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>462C39CE-3726-4862-8EC7-D957653F4665</string>
+	<key>IDESourceControlProjectName</key>
+	<string>PluginFacebook</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>
+		<string>http://natweiss.com/git/rapidgamepro.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>src/app/proj.ios/PluginFacebook.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://natweiss.com/git/rapidgamepro.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RapidGamePro</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,7 +1,7 @@
 //
-//  See the file 'LICENSE_iPhoneGameKit.txt' for the license governing this code.
+//  See the file 'LICENSE_RapidGame.txt' for the license governing this code.
 //      The license can also be obtained online at:
-//          http://iPhoneGameKit.com/license
+//          http://WizardFu.com/licenses
 //
 
 #pragma once

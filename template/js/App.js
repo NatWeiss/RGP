@@ -562,15 +562,19 @@ App.loadImage = function(url, callback) {
 		image.addEventListener("load", function(){
 			cc.textureCache.cacheImage(url, image);
 			this.removeEventListener("load", arguments.callee, false);
-			callback();
+			if (typeof callback === "function") {
+				callback();
+			}
 		}, false);
 	// load image from raw file data the cocos2d-x way
 	} else {
 		//cc.log("Loading image from raw data: " + url);
-		this.requestURL(url, function(response, status) {
+		this.requestUrl(url, function(response, status) {
 			var bytes = new Uint8Array(response);
-			cc.textureCache.addImage(url, bytes);
-			callback();
+			App.addImageData(url, bytes);
+			if (typeof callback === "function") {
+				callback();
+			}
 		}, true);
 	}
 };
@@ -667,9 +671,9 @@ App.bootX = function(global) {
 		cc.RADIANS_TO_DEGREES = function(angle) {return angle * cc.DEG;};
 	}
 	
-	// test addImageRaw
+	// test addImageData
 	//var array = new Uint8Array;
-	//App.addImageRaw("http://somewhere.com/something.png", array);
+	//App.addImageData("http://somewhere.com/something.png", array);
 };
 
 App.mainHtml5 = function() {
@@ -680,7 +684,7 @@ App.mainHtml5 = function() {
 
 	cc.LoaderScene.preload(App.getResourcesToPreload(), App.mainCallback, this);
 
-	App.addImageRaw = function() {};
+	App.addImageData = function() {};
 };
 
 App.mainX = function() {

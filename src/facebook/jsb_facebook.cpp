@@ -1,3 +1,8 @@
+//
+//  See the file 'LICENSE_RapidGame.txt' for the license governing this code.
+//      The license can also be obtained online at:
+//          http://WizardFu.com/licenses
+//
 
 #include "jsb_facebook.h"
 #include "Facebook.h"

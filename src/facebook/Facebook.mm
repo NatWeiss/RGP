@@ -1,3 +1,8 @@
+//
+//  See the file 'LICENSE_RapidGame.txt' for the license governing this code.
+//      The license can also be obtained online at:
+//          http://WizardFu.com/licenses
+//
 
 #include "Facebook.h"
 #import <FacebookSDK/FacebookSDK.h>
@@ -15,6 +20,7 @@ static map<string, string> playerNames;
 static map<string, string> playerFirstNames;
 static map<string, string> playerImageUrls;
 static vector<string> friendIds;
+static string userIdForImage;
 
 static string blankString;
 static string anonymousString("Anonymous");
@@ -39,6 +45,42 @@ void callRunningLayer(const string& method, const string& param1)
 	ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
 }
 
+void loadPlayerImageUrl(const string& playerId, int callback = 0)
+{
+	int dim = 100;
+	//var dim = App.scale(App.getConfig("social-plugin-profile-image-width") || 100);
+	NSString* idStr = [[NSString alloc] initWithUTF8String:playerId.c_str()];
+	NSString* uriStr = [[NSString alloc] initWithFormat:@"/%@/picture?redirect=0&width=%d&height=%d", idStr, dim, dim];
+	userIdForImage = playerId;
+	//NSLog(@"Loading player[%@] image path: %@", idStr, uriStr);
+
+	[FBRequestConnection startWithGraphPath:uriStr
+		parameters:nil
+		HTTPMethod:@"GET"
+		completionHandler:^(FBRequestConnection *connection, id result, NSError *error)
+		{
+			if (!error)
+			{
+				string url = strVal([[result objectForKey:@"data"] objectForKey:@"url"]);
+				playerImageUrls[userIdForImage] = url;
+				debugLog("Got image url %s for %s", url.c_str(), userIdForImage.c_str());
+
+				// load image
+				jsval ret;
+				stringstream ss;
+				ss << "App.loadImage(\"" << url << "\");";
+				debugLog("Executing script: %s", ss.str().c_str());
+				ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
+				
+				//if (callback)...
+			}
+		}
+	];
+	
+	[idStr release];
+	[uriStr release];
+}
+
 void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 ^(FBSession* session, FBSessionState state, NSError* error)
 {
@@ -46,7 +88,7 @@ void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 	{
 		loggedIn = true;
 
-		// get user's details
+		// get player's details
 		[FBRequestConnection startWithGraphPath:@"me"
 			completionHandler:^(FBRequestConnection *connection, id result, NSError *error)
 			{
@@ -64,6 +106,9 @@ void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 				}
 			}
 		];
+		
+		// load player's image
+		loadPlayerImageUrl("me");
 
 		// get friends list
 		[FBRequestConnection startWithGraphPath:@"/me/friends?fields=id,name,first_name"
