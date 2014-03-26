@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		41F0F62018E14BCD00F5FC64 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41F0F61F18E14BCD00F5FC64 /* FacebookSDK.framework */; };
 		41F0F64618E209C900F5FC64 /* Facebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F64318E209C900F5FC64 /* Facebook.mm */; };
 		41F0F64718E209C900F5FC64 /* jsb_facebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F64418E209C900F5FC64 /* jsb_facebook.cpp */; };
+		41F0F65118E2534100F5FC64 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41F0F65018E2534100F5FC64 /* FacebookSDK.framework */; };
 		FA09A376168AFD41008C1C7B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA09A375168AFD41008C1C7B /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,11 +27,11 @@
 
 /* Begin PBXFileReference section */
 		419E922C18AB25D400232A34 /* PluginFacebook-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PluginFacebook-Prefix.pch"; sourceTree = "<group>"; };
-		41F0F61F18E14BCD00F5FC64 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		41F0F64218E209C900F5FC64 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Facebook.h; path = ../Facebook.h; sourceTree = "<group>"; };
 		41F0F64318E209C900F5FC64 /* Facebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Facebook.mm; path = ../Facebook.mm; sourceTree = "<group>"; };
 		41F0F64418E209C900F5FC64 /* jsb_facebook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsb_facebook.cpp; path = ../jsb_facebook.cpp; sourceTree = "<group>"; };
 		41F0F64518E209C900F5FC64 /* jsb_facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsb_facebook.h; path = ../jsb_facebook.h; sourceTree = "<group>"; };
+		41F0F65018E2534100F5FC64 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../template/proj.ios_mac/ios/FacebookSDK.framework; sourceTree = "<group>"; };
 		FA09A372168AFD41008C1C7B /* libPluginFacebook.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginFacebook.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA09A375168AFD41008C1C7B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FA86650E168BE22D0073E055 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -43,7 +43,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA09A376168AFD41008C1C7B /* Foundation.framework in Frameworks */,
-				41F0F62018E14BCD00F5FC64 /* FacebookSDK.framework in Frameworks */,
+				41F0F65118E2534100F5FC64 /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,7 +74,7 @@
 		FA09A374168AFD41008C1C7B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				41F0F61F18E14BCD00F5FC64 /* FacebookSDK.framework */,
+				41F0F65018E2534100F5FC64 /* FacebookSDK.framework */,
 				FA86650E168BE22D0073E055 /* SystemConfiguration.framework */,
 				FA09A375168AFD41008C1C7B /* Foundation.framework */,
 			);
@@ -219,6 +219,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)",
+					"$(SRCROOT)/../../../template/proj.ios_mac/ios",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginFacebook-Prefix.pch";
@@ -243,6 +244,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 					"$(PROJECT_DIR)",
+					"$(SRCROOT)/../../../template/proj.ios_mac/ios",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginFacebook-Prefix.pch";

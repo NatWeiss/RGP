@@ -50,6 +50,7 @@
 		41E17C171888B24000F6AD3C /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41E17C151888B23F00F6AD3C /* AppDelegate.cpp */; };
 		41F0F5B118DABA6600F5FC64 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 41F0F5B018DABA5800F5FC64 /* project.json */; };
 		41F0F5B218DABA6B00F5FC64 /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 41F0F5B018DABA5800F5FC64 /* project.json */; };
+		41F0F64F18E2531E00F5FC64 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41F0F64E18E2531E00F5FC64 /* FacebookSDK.framework */; };
 		41F1A3E11894BA38006E818E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41F1A3E01894BA38006E818E /* Default-568h@2x.png */; };
 		41F1A41D1894BB33006E818E /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41E17C151888B23F00F6AD3C /* AppDelegate.cpp */; };
 		41F1A4AA1894BB33006E818E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A82F5FA169AC92500C4B13A /* libsqlite3.dylib */; };
@@ -133,6 +134,7 @@
 		41E17C161888B24000F6AD3C /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../src/AppDelegate.h; sourceTree = "<group>"; };
 		41F0F5B018DABA5800F5FC64 /* project.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = project.json; path = ../proj.html5/project.json; sourceTree = "<group>"; };
 		41F0F5B618DBA5D600F5FC64 /* CCBoot.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = CCBoot.js; path = "../lib/cocos2d-html5/CCBoot.js"; sourceTree = "<group>"; };
+		41F0F64E18E2531E00F5FC64 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ios/FacebookSDK.framework; sourceTree = "<group>"; };
 		41F1A3E01894BA38006E818E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		41F1A4D61894BB33006E818E /* HelloJavascript.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloJavascript.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41F1A4D91894BBE3006E818E /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppController.h; path = mac/AppController.h; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				A922754A1517C094001B78AA /* AVFoundation.framework in Frameworks */,
 				A922754E1517C094001B78AA /* Foundation.framework in Frameworks */,
 				A92275501517C094001B78AA /* CoreGraphics.framework in Frameworks */,
+				41F0F64F18E2531E00F5FC64 /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,6 +226,7 @@
 		4152B64E1894756E00BEF730 /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				41F0F64E18E2531E00F5FC64 /* FacebookSDK.framework */,
 				419E8EA018A9C68100232A34 /* libcurl.dylib */,
 				419E8E6018A9922800232A34 /* UIKit.framework */,
 				419E8E5E18A9921800232A34 /* OpenGLES.framework */,
@@ -651,6 +655,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(PROJECT_DIR)/ios",
 				);
 				GCC_PREFIX_HEADER = ios/Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -674,6 +679,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(PROJECT_DIR)/ios",
 				);
 				GCC_PREFIX_HEADER = ios/Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (

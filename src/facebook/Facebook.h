@@ -26,14 +26,5 @@ class Facebook
 		int getSDKVersion() const;
 	
 	private:
-		bool debug;
-		bool loggedIn;
-		bool canvasMode;
-		map<string, string> devInfo;
-		map<string, string> playerNames;
-		map<string, string> playerFirstNames;
-		map<string, string> playerImageUrls;
-		vector<string> friendIds;
-
 		void clear();
 };

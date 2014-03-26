@@ -36,13 +36,6 @@ if (typeof plugin.Facebook === "undefined") {
 				cc.log(TAG + msg);
 			}
 		};
-		
-		module.callRunningLayer = function(method, param1, param2, param3) {
-			scene = cc.director.getRunningScene();
-			if (scene && scene.layer && scene.layer[method]) {
-				scene.layer[method](param1, param2, param3);
-			}
-		};
 
 		module.onCheckLoginStatus = function(response) {
 			if (!response) {
@@ -59,7 +52,7 @@ if (typeof plugin.Facebook === "undefined") {
 					module.playerFirstNames["me"] = response.first_name;
 					module.userId = response.id;
 					module.deleteRequests();
-					module.callRunningLayer("onGetPlayerName", module.playerNames["me"]);
+					App.callRunningLayer("onGetPlayerName", module.playerNames["me"]);
 				});
 				
 				// get my profile image
@@ -85,7 +78,7 @@ if (typeof plugin.Facebook === "undefined") {
 			}
 			module.log("Logged in? " + module.loggedIn);
 			
-			module.callRunningLayer("onGetLoginStatus", module.loggedIn);
+			App.callRunningLayer("onGetLoginStatus", module.loggedIn);
 		};
 		
 		module.loadPlayerImage = function(id, callback) {

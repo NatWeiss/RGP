@@ -311,6 +311,13 @@ App.alert = function(msg) {
 	}
 };
 
+App.callRunningLayer = function(method, param1, param2, param3) {
+	scene = cc.director.getRunningScene();
+	if (scene && scene.layer && scene.layer[method]) {
+		scene.layer[method](param1, param2, param3);
+	}
+};
+
 App.loadAnalyticsPlugin = function() {
 	var self = this,
 		flurryApiKey,

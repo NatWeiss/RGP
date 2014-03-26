@@ -19,6 +19,9 @@ template<class T> T* getNativeObj(JSContext* cx, jsval* vp)
 
 void dictionaryToMap(__Dictionary* dict, map<string,string>& ret)
 {
+	if (dict == nullptr)
+		return;
+	
 	DictElement* el = nullptr;
 	CCDICT_FOREACH(dict, el)
 	{
@@ -143,7 +146,7 @@ bool js_facebook_login(JSContext* cx, uint32_t argc, jsval* vp)
 		bool ok = true;
 		__Dictionary* dict = nullptr;
 		ok &= jsval_to_ccdictionary(cx, JS_ARGV(cx, vp)[0], &dict);
-		JSB_PRECONDITION2(ok && dict, cx, false, "Error processing arguments");
+		JSB_PRECONDITION2(ok, cx, false, "Error processing arguments");
 		
 		map<string,string> m;
 		dictionaryToMap(dict, m);
