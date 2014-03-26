@@ -6,15 +6,15 @@
 // scores:
 // https://developers.facebook.com/docs/games/scores/
 
+var plugin = plugin || {};
 
 //
 // begin module
 //
-if (typeof window !== "undefined") {
-	var plugin = plugin || {};
+if (typeof plugin.Facebook === "undefined") {
 
 	plugin.Facebook = (function(){
-		var TAG = "Facebook:",
+		var TAG = "Facebook: ",
 			module = {
 				devInfo: {},
 				debug: false,
@@ -31,10 +31,9 @@ if (typeof window !== "undefined") {
 		
 		module.reset();
 		
-		module.log = function() {
+		module.log = function(msg) {
 			if (module.debug) {
-				[].unshift.call(arguments, TAG);
-				cc.log.apply(self, arguments);
+				cc.log(TAG + msg);
 			}
 		};
 		
@@ -91,17 +90,19 @@ if (typeof window !== "undefined") {
 		
 		module.loadPlayerImage = function(id, callback) {
 			var dim = App.scale(App.getConfig("social-plugin-profile-image-width") || 100);
-			FB.api("/" + id + "/picture?width=" + dim + "&height=" + dim, function(response) {
-				if (response.data.url) {
-					module.log("Got image url " + response.data.url + " for " + id);
-					App.loadImage(response.data.url, function(){
-						module.playerImageUrls[id] = response.data.url;
-						if (typeof callback === "function"){
-							callback(response.data.url);
-						}
-					});
-				}
-			});
+			if (this.checkForFB()) {
+				FB.api("/" + id + "/picture?width=" + dim + "&height=" + dim, function(response) {
+					if (response.data.url) {
+						module.log("Got image url " + response.data.url + " for " + id);
+						App.loadImage(response.data.url, function(){
+							module.playerImageUrls[id] = response.data.url;
+							if (typeof callback === "function"){
+								callback(response.data.url);
+							}
+						});
+					}
+				});
+			}
 		};
 		
 		module.onGetFriends = function(friends) {

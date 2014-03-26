@@ -22,6 +22,7 @@
 		"js/lib/soomla.js",
 		"js/lib/SoomlaNdk.js",
 		"js/lib/AdsMobFox.js",
+		"js/lib/Facebook.js",
 		"js/Config.js",
 		"js/HelloJavascript.js",
 		"js/SceneHello.js",

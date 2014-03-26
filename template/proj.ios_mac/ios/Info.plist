@@ -52,6 +52,19 @@
 	</dict>
 	<key>UIStatusBarHidden</key>
 	<true/>
+	<key>FacebookAppID</key>
+	<string>MyFacebookAppID</string>
+	<key>FacebookDisplayName</key>
+	<string>HelloJavascript</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fbMyFacebookAppID</string>
+			</array>
+		</dict>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeRight</string>

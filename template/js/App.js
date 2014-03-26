@@ -379,13 +379,15 @@ App.loadAdsPlugin = function() {
 };
 
 App.getSocialPlugin = function() {
-	var name = this.getString("social-plugin-name");
+	var name;
 	
 	if (typeof this._socialPlugin === "undefined") {
+		name = this.getString("social-plugin-name");
 		if (plugin[name]) {
 			this._socialPlugin = new plugin[name]();
+			this._socialPlugin.setDebugMode(this.getConfig("social-plugin-debug"));
 			this._socialPlugin.init();
-		} else {
+		} /*else {
 			this._socialPlugin = {
 				isLoggedIn: function() {return true;},
 				isCanvasMode: function() {return false;},
@@ -399,21 +401,16 @@ App.getSocialPlugin = function() {
 				getPlayerFirstName: function() {},
 				getRandomFriendId: function() {}
 			};
-		}
+		}*/
 	}
 
 	return this._socialPlugin;
 };
 
 App.loadSocialPlugin = function() {
-	var plugin = this.getSocialPlugin(),
-		debug = this.getConfig("social-plugin-debug");
+	var plugin = this.getSocialPlugin();
 
 	if (typeof plugin !== "undefined") {
-		if (debug) {
-			plugin.setDebugMode(debug);
-		}
-
 		plugin.configDeveloperInfo(App.getConfig("social-plugin-init"));
 	}
 };

@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		41F0F62018E14BCD00F5FC64 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41F0F61F18E14BCD00F5FC64 /* FacebookSDK.framework */; };
-		41F0F62218E14C3C00F5FC64 /* Facebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F62118E14C3C00F5FC64 /* Facebook.mm */; };
+		41F0F64618E209C900F5FC64 /* Facebook.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F64318E209C900F5FC64 /* Facebook.mm */; };
+		41F0F64718E209C900F5FC64 /* jsb_facebook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F64418E209C900F5FC64 /* jsb_facebook.cpp */; };
 		FA09A376168AFD41008C1C7B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA09A375168AFD41008C1C7B /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,7 +28,10 @@
 /* Begin PBXFileReference section */
 		419E922C18AB25D400232A34 /* PluginFacebook-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PluginFacebook-Prefix.pch"; sourceTree = "<group>"; };
 		41F0F61F18E14BCD00F5FC64 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
-		41F0F62118E14C3C00F5FC64 /* Facebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Facebook.mm; sourceTree = "<group>"; };
+		41F0F64218E209C900F5FC64 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Facebook.h; path = ../Facebook.h; sourceTree = "<group>"; };
+		41F0F64318E209C900F5FC64 /* Facebook.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Facebook.mm; path = ../Facebook.mm; sourceTree = "<group>"; };
+		41F0F64418E209C900F5FC64 /* jsb_facebook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsb_facebook.cpp; path = ../jsb_facebook.cpp; sourceTree = "<group>"; };
+		41F0F64518E209C900F5FC64 /* jsb_facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsb_facebook.h; path = ../jsb_facebook.h; sourceTree = "<group>"; };
 		FA09A372168AFD41008C1C7B /* libPluginFacebook.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPluginFacebook.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA09A375168AFD41008C1C7B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FA86650E168BE22D0073E055 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -49,7 +53,10 @@
 		FA09A367168AFD41008C1C7B = {
 			isa = PBXGroup;
 			children = (
-				41F0F62118E14C3C00F5FC64 /* Facebook.mm */,
+				41F0F64218E209C900F5FC64 /* Facebook.h */,
+				41F0F64318E209C900F5FC64 /* Facebook.mm */,
+				41F0F64518E209C900F5FC64 /* jsb_facebook.h */,
+				41F0F64418E209C900F5FC64 /* jsb_facebook.cpp */,
 				419E922C18AB25D400232A34 /* PluginFacebook-Prefix.pch */,
 				FA09A374168AFD41008C1C7B /* Frameworks */,
 				FA09A373168AFD41008C1C7B /* Products */,
@@ -125,7 +132,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				41F0F62218E14C3C00F5FC64 /* Facebook.mm in Sources */,
+				41F0F64618E209C900F5FC64 /* Facebook.mm in Sources */,
+				41F0F64718E209C900F5FC64 /* jsb_facebook.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,6 +156,11 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"COCOS2D_DEBUG=1",
+					USE_FILE32API,
+					"CC_ENABLE_CHIPMUNK_INTEGRATION=1",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -160,7 +173,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include/plugin/protocols/include/ $(SRCROOT)/../../../include/plugin/protocols/platform/ios $(SRCROOT)/../../../include/external/spidermonkey/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../cocos2d-x $(SRCROOT)/../../cocos2d-x/cocos $(SRCROOT)/../../cocos2d-x/cocos/base $(SRCROOT)/../../cocos2d-x/cocos/2d $(SRCROOT)/../../cocos2d-x/cocos/physics $(SRCROOT)/../../cocos2d-x/cocos/math/kazmath $(SRCROOT)/../../cocos2d-x/cocos/2d/platform $(SRCROOT)/../../cocos2d-x/cocos/audio/include $(SRCROOT)/../../cocos2d-x/cocos/editor-support $(SRCROOT)/../../cocos2d-x/cocos/editor-support/cocosbuilder $(SRCROOT)/../../cocos2d-x/cocos/editor-support/cocostudio $(SRCROOT)/../../cocos2d-x/cocos/editor-support/spine $(SRCROOT)/../../cocos2d-x/cocos/ui $(SRCROOT)/../../cocos2d-x/cocos/storage $(SRCROOT)/../../cocos2d-x/extensions $(SRCROOT)/../../cocos2d-x/external/chipmunk/include/chipmunk $(SRCROOT)/../../cocos2d-x/external $(SRCROOT)/../../bindings/auto $(SRCROOT)/../../bindings/manual $(SRCROOT)/../../external/spidermonkey/include/ios";
 			};
 			name = Debug;
 		};
@@ -178,6 +191,11 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"CC_ENABLE_CHIPMUNK_INTEGRATION=1",
+					NDEBUG,
+					USE_FILE32API,
+				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -188,7 +206,7 @@
 				HEADER_SEARCH_PATHS = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include/plugin/protocols/include/ $(SRCROOT)/../../../include/plugin/protocols/platform/ios $(SRCROOT)/../../../include/external/spidermonkey/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../cocos2d-x $(SRCROOT)/../../cocos2d-x/cocos $(SRCROOT)/../../cocos2d-x/cocos/base $(SRCROOT)/../../cocos2d-x/cocos/2d $(SRCROOT)/../../cocos2d-x/cocos/physics $(SRCROOT)/../../cocos2d-x/cocos/math/kazmath $(SRCROOT)/../../cocos2d-x/cocos/2d/platform $(SRCROOT)/../../cocos2d-x/cocos/audio/include $(SRCROOT)/../../cocos2d-x/cocos/editor-support $(SRCROOT)/../../cocos2d-x/cocos/editor-support/cocosbuilder $(SRCROOT)/../../cocos2d-x/cocos/editor-support/cocostudio $(SRCROOT)/../../cocos2d-x/cocos/editor-support/spine $(SRCROOT)/../../cocos2d-x/cocos/ui $(SRCROOT)/../../cocos2d-x/cocos/storage $(SRCROOT)/../../cocos2d-x/extensions $(SRCROOT)/../../cocos2d-x/external/chipmunk/include/chipmunk $(SRCROOT)/../../cocos2d-x/external $(SRCROOT)/../../bindings/auto $(SRCROOT)/../../bindings/manual $(SRCROOT)/../../external/spidermonkey/include/ios";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -204,11 +222,16 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginFacebook-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					COCOS2D_JAVASCRIPT,
+					CC_TARGET_OS_IPHONE,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = PluginFacebook;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited)";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../external/spidermonkey/include/ios $(SRCROOT)/../../cocos2d-x/cocos/2d/platform/ios";
 			};
 			name = Debug;
 		};
@@ -223,11 +246,16 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PluginFacebook-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					COCOS2D_JAVASCRIPT,
+					CC_TARGET_OS_IPHONE,
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = PluginFacebook;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited)";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../external/spidermonkey/include/ios $(SRCROOT)/../../cocos2d-x/cocos/2d/platform/ios";
 			};
 			name = Release;
 		};

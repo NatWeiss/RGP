@@ -40,6 +40,7 @@
 #include "bindings/manual/network/XMLHTTPRequest.h"
 #include "bindings/auto/jsb_pluginx_protocols_auto.hpp"
 #include "cocos2dx-store/Soomla/jsb/jsb_soomla.h"
+#include "facebook/jsb_facebook.h"
 #include "Extras.h"
 
 using namespace cocos2d;
@@ -106,9 +107,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 	#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS )
 		sc->addRegisterCallback(register_all_pluginx_protocols);
 		sc->addRegisterCallback(register_jsb_soomla);
+		sc->addRegisterCallback(register_jsb_facebook);
 	#elif( CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID )
 		sc->addRegisterCallback(register_all_pluginx_protocols);
 		sc->addRegisterCallback(register_jsb_soomla);
+		sc->addRegisterCallback(register_jsb_facebook);
 	#endif
 
 	sc->start();
