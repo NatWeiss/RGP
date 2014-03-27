@@ -21,16 +21,41 @@ static map<string, string> playerFirstNames;
 static map<string, string> playerImageUrls;
 static vector<string> friendIds;
 static string userIdForImage;
+static const string blankString;
+static NSMutableArray* publishPermissions = nil;
 
-static string blankString;
-static string anonymousString("Anonymous");
+const char* const kTag = "Facebook:";
 
 #define debugLog(...) {if(debug) cocos2d::log(__VA_ARGS__);}
+
+void clear_module()
+{
+	//debug = false;
+	loggedIn = false;
+	canvasMode = false;
+	devInfo.clear();
+	playerNames.clear();
+	playerNames["me"] = "Me";
+	playerFirstNames.clear();
+	playerFirstNames["me"] = "Me";
+	playerImageUrls.clear();
+	playerImageUrls["me"] = "";
+	friendIds.clear();
+}
 
 const char* strVal(id obj)
 {
 	auto ret = [obj UTF8String];
 	return ret ? ret : "";
+}
+
+// Split a string into an array by a delimiter
+inline void split(const string& s, char delim, vector<string>& elems)
+{
+	stringstream ss(s);
+	string item;
+	while(std::getline(ss, item, delim))
+		elems.push_back(item);
 }
 
 void callRunningLayer(const string& method, const string& param1)
@@ -41,14 +66,18 @@ void callRunningLayer(const string& method, const string& param1)
 	ss << "App.callRunningLayer(\"" << method
 		<< "\", " << (addParam1Quotes ? "\"" : "") << param1 << (addParam1Quotes ? "\"" : "") << ");";
 
-	debugLog("Executing script: %s", ss.str().c_str());
+	//debugLog("%s Executing script: %s", kTag, ss.str().c_str());
 	ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
 }
 
 void loadPlayerImageUrl(const string& playerId, int callback = 0)
 {
-	int dim = 100;
-	//var dim = App.scale(App.getConfig("social-plugin-profile-image-width") || 100);
+	jsval ret;
+	ScriptingCore::getInstance()->evalString("App.scale(App.getConfig(\"social-plugin-profile-image-width\"));", &ret);
+	int dim = JSVAL_TO_INT(ret);
+	if (dim < 10)
+		dim = 120;
+
 	NSString* idStr = [[NSString alloc] initWithUTF8String:playerId.c_str()];
 	NSString* uriStr = [[NSString alloc] initWithFormat:@"/%@/picture?redirect=0&width=%d&height=%d", idStr, dim, dim];
 	userIdForImage = playerId;
@@ -63,13 +92,13 @@ void loadPlayerImageUrl(const string& playerId, int callback = 0)
 			{
 				string url = strVal([[result objectForKey:@"data"] objectForKey:@"url"]);
 				playerImageUrls[userIdForImage] = url;
-				debugLog("Got image url %s for %s", url.c_str(), userIdForImage.c_str());
+				debugLog("%s Got image url %s for %s", kTag, url.c_str(), userIdForImage.c_str());
 
 				// load image
 				jsval ret;
 				stringstream ss;
 				ss << "App.loadImage(\"" << url << "\");";
-				debugLog("Executing script: %s", ss.str().c_str());
+				//debugLog("%s Executing script: %s", kTag, ss.str().c_str());
 				ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
 				
 				//if (callback)...
@@ -84,13 +113,16 @@ void loadPlayerImageUrl(const string& playerId, int callback = 0)
 void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 ^(FBSession* session, FBSessionState state, NSError* error)
 {
-	if (!error && state == FBSessionStateOpen)
+	bool isOpenState = (state == FBSessionStateOpen || state == FBSessionStateOpenTokenExtended);
+	if (!error && isOpenState)
 	{
 		loggedIn = true;
+		string token = strVal([[session accessTokenData] accessToken]);
+		debugLog("%s User is authorized, token: %s...", kTag, token.substr(0,4).c_str());
 
 		// get player's details
 		[FBRequestConnection startWithGraphPath:@"me"
-			completionHandler:^(FBRequestConnection *connection, id result, NSError *error)
+			completionHandler:^(FBRequestConnection* connection, id result, NSError* error)
 			{
 				if (!error)
 				{
@@ -100,9 +132,9 @@ void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 					playerFirstNames["me"] = strVal([result objectForKey:@"first_name"]);
 					userId = strVal([result objectForKey:@"id"]);
 					//deleteRequests();
-					callRunningLayer("onGetPlayerName", playerNames["me"].c_str());
+					callRunningLayer("onGetPlayerName", playerFirstNames["me"].c_str());
 					
-					debugLog("Name: %s, First name: %s, User id: %s", playerNames["me"].c_str(), playerFirstNames["me"].c_str(), userId.c_str());
+					//debugLog("%s Name: %s, First name: %s, User id: %s", kTag, playerNames["me"].c_str(), playerFirstNames["me"].c_str(), userId.c_str());
 				}
 			}
 		];
@@ -112,12 +144,13 @@ void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 
 		// get friends list
 		[FBRequestConnection startWithGraphPath:@"/me/friends?fields=id,name,first_name"
-			completionHandler:^(FBRequestConnection *connection, id result, NSError *error)
+			completionHandler:^(FBRequestConnection* connection, id result, NSError* error)
 			{
 				if (!error)
 				{
 					id friends = [result objectForKey:@"data"];
-					long count = [friends count];
+					long count = [friends count],
+						actualCount = 0;
 					if (count < 0)
 						count = 0;
 					//NSLog(@"Friends (%ld): %@", count, friends);
@@ -128,6 +161,7 @@ void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 						string id = strVal([f objectForKey:@"id"]);
 						if (id.size())
 						{
+							actualCount++;
 							friendIds.push_back(id);
 
 							string name = strVal([f objectForKey:@"name"]);
@@ -139,6 +173,8 @@ void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 								playerFirstNames[id] = firstName;
 						}
 					}
+					
+					debugLog("%s Parsed %ld friends", kTag, actualCount);
 				}
 			}
 		];
@@ -146,42 +182,46 @@ void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 	else
 	{
 		loggedIn = false;
+		clear_module();
+		debugLog("%s Player is not logged in, state %d: '%s'", kTag, (int)state, [[error localizedDescription] UTF8String]);
 	}
 	callRunningLayer("onGetLoginStatus", loggedIn ? "true" : "false");
-	debugLog("State is now %d, logged in %d", (int)state, (int)loggedIn);
 };
+
+void permissionsStringToArray(const string& str, NSMutableArray* array)
+{
+	if (!str.size())
+		return;
+
+	vector<string> permissions;
+	split(str, ',', permissions);
+	for (auto& permission : permissions)
+	{
+		if (permission.size() <= 0 || permission == "undefined")
+			continue;
+		
+		NSString* s = [[NSString alloc] initWithUTF8String:permission.c_str()];
+		[array addObject:s];
+		[s release];
+	}
+}
 
 Facebook::Facebook()
 {
-	clear();
+	clear_module();
 }
 
 Facebook::~Facebook()
 {
 }
 
-void Facebook::clear()
-{
-	debug = false;
-	loggedIn = false;
-	canvasMode = false;
-	devInfo.clear();
-	playerNames.clear();
-	playerNames["me"] = "Me";
-	playerFirstNames.clear();
-	playerFirstNames["me"] = "Me";
-	playerImageUrls.clear();
-	playerImageUrls["me"] = "";
-	friendIds.clear();
-}
-
 void Facebook::init()
 {
-	debugLog("Facebook init");
+	debugLog("%s Init SDK v%s, App ID %s", kTag, this->getSDKVersion().c_str(), [FBSession.activeSession.appID UTF8String]);
 
+	// If there's one, just open the session silently, without showing the user the login UI
 	if (FBSession.activeSession.state == FBSessionStateCreatedTokenLoaded)
 	{
-		// If there's one, just open the session silently, without showing the user the login UI
 		[FBSession openActiveSessionWithReadPermissions:@[@"basic_info"]
 			allowLoginUI:NO
 			completionHandler:sessionStateHandler];
@@ -203,24 +243,23 @@ void Facebook::setDebugMode(bool b)
 	debug = b;
 }
 
+// Developer info not used because the Info.plist contains appId, etc.
 void Facebook::configDeveloperInfo(const map<string,string>& info)
 {
-	for (auto& pair : info)
-	{
-		debugLog("Developer info[%s] = %s", pair.first.c_str(), pair.second.c_str());
-	}
 }
 
-void Facebook::login(const map<string,string>& info)
+void Facebook::login(const string& permissions)
 {
-	for (auto& pair : info)
-	{
-		debugLog("Login info[%s] = %s", pair.first.c_str(), pair.second.c_str());
-	}
+	NSMutableArray* perms = [[NSMutableArray alloc] init];
+	[perms addObject:@"basic_info"];
+	permissionsStringToArray(permissions, perms);
+	debugLog("%s Logging in with permissions: %s", kTag, [[perms description] UTF8String]);
 
-	[FBSession openActiveSessionWithReadPermissions:@[@"basic_info"]
+	[FBSession openActiveSessionWithReadPermissions:perms
 		allowLoginUI:YES
-		completionHandler: sessionStateHandler ];
+		completionHandler:sessionStateHandler];
+	
+	[perms release];
 }
 
 void Facebook::logout()
@@ -228,6 +267,63 @@ void Facebook::logout()
 	// Close the session and remove the access token from the cache
 	// The session state handler (in the app delegate) will be called automatically
 	[FBSession.activeSession closeAndClearTokenInformation];
+}
+
+void requestPublishPermissions()
+{
+	debugLog("%s Requesting additional permissions: %s", kTag, [[publishPermissions description] UTF8String]);
+
+	[[FBSession activeSession] requestNewPublishPermissions:publishPermissions
+		defaultAudience:FBSessionDefaultAudienceFriends
+		completionHandler:^(FBSession* session, NSError* error)
+		{
+			if (error)
+			{
+				debugLog("%s Error granting publish permissions: %s", kTag, [[error localizedDescription] UTF8String]);
+			}
+		}
+	 ];
+}
+
+void Facebook::requestPublishPermissions(const string& permissions)
+{
+	[publishPermissions release];
+	publishPermissions = [[NSMutableArray alloc] init];
+	permissionsStringToArray(permissions, publishPermissions);
+
+	// Check for publish permissions
+	[FBRequestConnection startWithGraphPath:@"/me/permissions"
+		completionHandler:^(FBRequestConnection* connection, id result, NSError* error)
+		{
+			if (!error)
+			{
+				NSDictionary* perms = [(NSArray*)[result data] objectAtIndex:0];
+				//debugLog("%s Current permissions: %s", kTag, [[perms description] UTF8String]);
+
+				bool hasAllPermissions = true;
+				for (NSString* perm in publishPermissions)
+				{
+					if ([perms objectForKey:perm] == nil)
+					{
+						hasAllPermissions = false;
+					}
+				}
+				
+				if (!hasAllPermissions)
+				{
+					::requestPublishPermissions();
+				}
+				else
+				{
+					debugLog("%s Already has permissions: %s", kTag, [[publishPermissions description] UTF8String]);
+				}
+			}
+			else
+			{
+				debugLog("%s Error getting permissions: %s", kTag, [[error localizedDescription] UTF8String]);
+			}
+		}
+	];
 }
 
 const string& Facebook::getPlayerName(const string& id) const
@@ -247,11 +343,14 @@ const string& Facebook::getPlayerImageUrl(const string& id, int callback) const
 
 const string& Facebook::getRandomFriendId() const
 {
-	int index = (rand() % friendIds.size());
-	return friendIds[index];
+	auto size = friendIds.size();
+	if (size)
+		return friendIds[rand() % size];
+	return blankString;
 }
 
-int Facebook::getSDKVersion() const
+string Facebook::getSDKVersion() const
 {
-	return 0;
+	auto cstr = [[FBSettings sdkVersion] UTF8String];
+	return cstr ? cstr : "";
 }

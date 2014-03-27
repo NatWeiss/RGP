@@ -16,9 +16,9 @@ App.config = {
 		status: true,
 		cookie: true
 	},
-	"social-plugin-login": {
-		//scope:'email'
-	},
+	// Add permissions here as needed. Leave empty to use only "basic_info".
+	// Reference: https://developers.facebook.com/docs/facebook-login/permissions
+	"social-plugin-login-permissions": "",
 	"social-plugin-profile-image-width": 100,
 	
 	"economy-plugin-name": "Soomla",

@@ -22,12 +22,12 @@ Texture2D* AppBindings::addImageData(const char* name, void* data, int dataLengt
 			if( image )
 			{
 				texture = cacher->addImage(image, name);
-				log("Added texture %x, image %x", (uint32_t)(uint64_t)texture, (uint32_t)(uint64_t)image);
+				//log("Added texture %x, image %x", (uint32_t)(uint64_t)texture, (uint32_t)(uint64_t)image);
 			}
 		}
 		catch (exception& e)
 		{
-			log("Exception adding image: %s", e.what());
+			log("%s: Exception adding image: %s", __func__, e.what());
 		}
 	}
 	return texture;

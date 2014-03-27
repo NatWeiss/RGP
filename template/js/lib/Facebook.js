@@ -19,7 +19,8 @@ if (typeof plugin.Facebook === "undefined") {
 				devInfo: {},
 				debug: false,
 				loggedIn: false,
-				isCanvas: false
+				isCanvas: false,
+				userId: ""
 			};
 
 		module.reset = function() {
@@ -27,6 +28,7 @@ if (typeof plugin.Facebook === "undefined") {
 			module.playerFirstNames = {"me": "Me"};
 			module.playerImageUrls = {"me": ""};
 			module.friendIds = [];
+			module.permissions = null;
 		};
 		
 		module.reset();
@@ -38,45 +40,53 @@ if (typeof plugin.Facebook === "undefined") {
 		};
 
 		module.onCheckLoginStatus = function(response) {
-			if (!response) {
-				return;
-			}
-			
-			if (response.status === "connected") {
+			if (response && response.status === "connected") {
 				module.log("User is authorized, token: " + response.authResponse.accessToken.substring(0,4) + "...");
 
 				// get my info
-				FB.api("/me", function(response) {
-					//module.log("Got /me response: " + JSON.stringify(response));
-					module.playerNames["me"] = response.name;
-					module.playerFirstNames["me"] = response.first_name;
-					module.userId = response.id;
-					module.deleteRequests();
-					App.callRunningLayer("onGetPlayerName", module.playerNames["me"]);
-				});
+				if (!module.userId) {
+					FB.api("/me", function(response) {
+						//module.log("Got /me response: " + JSON.stringify(response));
+						module.playerNames["me"] = response.name;
+						module.playerFirstNames["me"] = response.first_name;
+						module.userId = response.id;
+						module.deleteRequests();
+						App.callRunningLayer("onGetPlayerName", module.playerFirstNames["me"]);
+					});
+				}
 				
 				// get my profile image
-				module.loadPlayerImage("me");
+				if (!module.playerImageUrls["me"]) {
+					module.loadPlayerImage("me");
+				}
 				
 				// get my friends
-				FB.api("/me/friends?fields=id,name,first_name", function(response) {
-					if (response.data && response.data.length) {
-						module.onGetFriends(response.data);
-					}
-				});
+				if (module.playerNames.length <= 1) {
+					FB.api("/me/friends?fields=id,name,first_name", function(response) {
+						if (response.data && response.data.length) {
+							module.onGetFriends(response.data);
+						}
+					});
+				}
+				
+				// get current permissions
+				if (!module.permissions) {
+					module.getCurrentPermissions();
+				}
+									
 				module.loggedIn = true;
 			}
-			else if (response.status === "not_authorized") {
-				cc.log("FB user is not authorized yet");
+			else if (response && response.status === "not_authorized") {
+				module.log("User is not authorized yet");
 				module.loggedIn = false;
 				module.reset();
 			}
 			else {
-				cc.log("FB user is not logged in to Facebook");
+				module.log("User is not logged in");
 				module.loggedIn = false;
 				module.reset();
 			}
-			module.log("Logged in? " + module.loggedIn);
+			//module.log("Logged in? " + module.loggedIn);
 			
 			App.callRunningLayer("onGetLoginStatus", module.loggedIn);
 		};
@@ -84,8 +94,8 @@ if (typeof plugin.Facebook === "undefined") {
 		module.loadPlayerImage = function(id, callback) {
 			var dim = App.scale(App.getConfig("social-plugin-profile-image-width") || 100);
 			if (this.checkForFB()) {
-				FB.api("/" + id + "/picture?width=" + dim + "&height=" + dim, function(response) {
-					if (response.data.url) {
+				FB.api("/" + id + "/picture?redirect=0&width=" + dim + "&height=" + dim, function(response) {
+					if (response && response.data && response.data.url) {
 						module.log("Got image url " + response.data.url + " for " + id);
 						App.loadImage(response.data.url, function(){
 							module.playerImageUrls[id] = response.data.url;
@@ -165,7 +175,7 @@ if (typeof plugin.Facebook === "undefined") {
 			// https://apps.facebook.com/lemonadex/?fb_source=notification&request_ids=221921991333209%2C1426088330967926&ref=notif&app_request_type=user_to_user&notif_t=app_invite
 			gets = App.getHttpQueryParams();
 			if (gets.request_ids) {
-				cc.log("GET: " + JSON.stringify(gets));
+				//module.log("GET: " + JSON.stringify(gets));
 				requestIds = gets.request_ids.split(",");
 				if (requestIds) {
 					len = requestIds.length;
@@ -176,6 +186,17 @@ if (typeof plugin.Facebook === "undefined") {
 						});
 					}
 				}
+			}
+		};
+		
+		module.getCurrentPermissions = function() {
+			if (module.checkForFB()) {
+				FB.api("/me/permissions", function(response) {
+					if (response.data && response.data.length) {
+						module.permissions = JSON.parse(JSON.stringify(response.data[0]));
+						module.log("Current permissions: " + JSON.stringify(module.permissions));
+					}
+				});
 			}
 		};
 		
@@ -193,9 +214,43 @@ if (typeof plugin.Facebook === "undefined") {
 				module.init();
 			},
 			
-			login: function(loginInfo) {
+			login: function(permissions) {
 				if (module.checkForFB()) {
-					FB.login(null, loginInfo);
+					module.log("Logging in with permissions: " + permissions);
+					FB.login(function(response){
+						if (response && !response.authResponse) {
+							module.onCheckLoginStatus();
+						}
+					}, permissions ? {scope: permissions} : null);
+				}
+			},
+			
+			requestPublishPermissions: function(permissions) {
+				var i,
+					requestingPerms,
+					hasAllPermissions = true;
+
+				if (module.checkForFB()) {
+					if (!module.permissions) {
+						hasAllPermissions = false;
+					} else {
+						requestingPerms = permissions.split(',');
+						for (i = 0; i < requestingPerms.length; i += 1) {
+							if (typeof module.permissions[requestingPerms[i]] === "undefined") {
+								hasAllPermissions = false;
+								break;
+							}
+						}
+					}
+					
+					if (!hasAllPermissions) {
+						module.log("Requesting additional permissions: " + permissions);
+						FB.login(function(response){
+							module.getCurrentPermissions();
+						}, {scope: permissions});
+					} else {
+						module.log("Already have permissions: " + permissions);
+					}
 				}
 			},
 			

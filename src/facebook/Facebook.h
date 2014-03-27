@@ -22,14 +22,12 @@ class Facebook
 		bool isCanvasMode() const;
 		void setDebugMode(bool enabled);
 		void configDeveloperInfo(const map<string,string>& info);
-		void login(const map<string,string>& info);
+		void login(const string& permissions);
 		void logout();
+		void requestPublishPermissions(const string& permissions);
 		const string& getPlayerName(const string& id) const;
 		const string& getPlayerFirstName(const string& id) const;
 		const string& getPlayerImageUrl(const string& id, int callback) const;
 		const string& getRandomFriendId() const;
-		int getSDKVersion() const;
-	
-	private:
-		void clear();
+		string getSDKVersion() const;
 };

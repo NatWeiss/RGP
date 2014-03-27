@@ -146,16 +146,13 @@ bool js_facebook_configDeveloperInfo(JSContext* cx, uint32_t argc, jsval* vp)
 bool js_facebook_login(JSContext* cx, uint32_t argc, jsval* vp)
 {
 	const int numArgs = 1;
-	if (argc == numArgs)
+	if (argc <= numArgs)
 	{
-		bool ok = true;
-		__Dictionary* dict = nullptr;
-		ok &= jsval_to_ccdictionary(cx, JS_ARGV(cx, vp)[0], &dict);
-		JSB_PRECONDITION2(ok, cx, false, "Error processing arguments");
+		string str;
+		if (argc > 0)
+			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
 		
-		map<string,string> m;
-		dictionaryToMap(dict, m);
-		getNativeObj<Facebook>(cx, vp)->login(m);
+		getNativeObj<Facebook>(cx, vp)->login(str);
 		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
@@ -169,6 +166,23 @@ bool js_facebook_logout(JSContext* cx, uint32_t argc, jsval* vp)
 	if (argc == numArgs)
 	{
 		getNativeObj<Facebook>(cx, vp)->logout();
+		JS_SET_RVAL(cx, vp, JSVAL_VOID);
+		return true;
+	}
+	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
+	return false;
+}
+
+bool js_facebook_requestPublishPermissions(JSContext* cx, uint32_t argc, jsval* vp)
+{
+	const int numArgs = 1;
+	if (argc <= numArgs)
+	{
+		string str;
+		if (argc > 0)
+			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
+		
+		getNativeObj<Facebook>(cx, vp)->requestPublishPermissions(str);
 		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
@@ -243,8 +257,8 @@ bool js_facebook_getSDKVersion(JSContext* cx, uint32_t argc, jsval* vp)
 	const int numArgs = 0;
 	if (argc == numArgs)
 	{
-		int ret = getNativeObj<Facebook>(cx, vp)->getSDKVersion();
-		JS_SET_RVAL(cx, vp, INT_TO_JSVAL(ret));
+		string ret = getNativeObj<Facebook>(cx, vp)->getSDKVersion();
+		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -285,6 +299,7 @@ void js_facebook_register(JSContext* cx, JSObject* global)
 		JS_FN("configDeveloperInfo", js_facebook_configDeveloperInfo, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("login", js_facebook_login, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("logout", js_facebook_logout, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("requestPublishPermissions", js_facebook_requestPublishPermissions, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getPlayerName", js_facebook_getPlayerName, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getPlayerFirstName", js_facebook_getPlayerFirstName, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getPlayerImageUrl", js_facebook_getPlayerImageUrl, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
