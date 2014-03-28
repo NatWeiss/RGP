@@ -14,14 +14,14 @@ namespace soomla {
 		A pack of single use virtual goods.
 	*/
     class CCSingleUsePackVG : public CCVirtualGood {
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString *, mGoodItemId, GoodItemId, JSON_VGP_GOOD_ITEMID);
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCInteger *, mGoodAmount, GoodAmount, JSON_VGP_GOOD_AMOUNT);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String *, mGoodItemId, GoodItemId, JSON_VGP_GOOD_ITEMID);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__Integer *, mGoodAmount, GoodAmount, JSON_VGP_GOOD_AMOUNT);
     public:
         CCSingleUsePackVG(): CCVirtualGood(), mGoodItemId(NULL), mGoodAmount(NULL) {};
-        static CCSingleUsePackVG *create(cocos2d::CCString* goodItemId, cocos2d::CCInteger* goodAmount,
-                cocos2d::CCString* name, cocos2d::CCString* description,
-                cocos2d::CCString* itemId, CCPurchaseType * purchaseType);
-        static CCSingleUsePackVG *createWithDictionary(cocos2d::CCDictionary *dict);
+        static CCSingleUsePackVG *create(cocos2d::__String* goodItemId, cocos2d::__Integer* goodAmount,
+                cocos2d::__String* name, cocos2d::__String* description,
+                cocos2d::__String* itemId, CCPurchaseType * purchaseType);
+        static CCSingleUsePackVG *createWithDictionary(cocos2d::__Dictionary *dict);
 
 		/**
 		   Create a CCSingleUsePackVG.
@@ -33,18 +33,18 @@ namespace soomla {
 		   \param purchaseType The purchase type for this pack.
 		   \return The pack.
 		*/
-        bool init(cocos2d::CCString* goodItemId, cocos2d::CCInteger* goodAmount,
-				  cocos2d::CCString* name, cocos2d::CCString* description,
-				  cocos2d::CCString* itemId, CCPurchaseType * purchaseType);
+        bool init(cocos2d::__String* goodItemId, cocos2d::__Integer* goodAmount,
+				  cocos2d::__String* name, cocos2d::__String* description,
+				  cocos2d::__String* itemId, CCPurchaseType * purchaseType);
 
 		/**
 		   Create a CCSingleUsePackVG.
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The pack.
 		*/
-        bool initWithDictionary(cocos2d::CCDictionary *dict);
+        bool initWithDictionary(cocos2d::__Dictionary *dict);
 
-        cocos2d::CCDictionary *toDictionary();
+        cocos2d::__Dictionary *toDictionary();
 
         virtual ~CCSingleUsePackVG();
     };

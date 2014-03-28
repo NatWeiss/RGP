@@ -13,7 +13,7 @@
 
 #define SL_SYNTHESIZE_RETAIN_WITH_DICT(varType, varName, funName, jsonKey)    \
 CC_SYNTHESIZE_RETAIN(varType, varName, funName); \
-protected: inline void fill##funName##FromDict(cocos2d::CCDictionary* dict) \
+protected: inline void fill##funName##FromDict(cocos2d::__Dictionary* dict) \
 { \
     cocos2d::Ref* obj = dict->objectForKey(jsonKey); \
     CCAssert(obj == NULL || dynamic_cast<varType>(obj), "invalid object type in dictionary"); \
@@ -22,13 +22,13 @@ protected: inline void fill##funName##FromDict(cocos2d::CCDictionary* dict) \
         set##funName((varType)obj); \
     } \
 } \
-protected: inline void put##funName##ToDict(cocos2d::CCDictionary* dict) { \
+protected: inline void put##funName##ToDict(cocos2d::__Dictionary* dict) { \
     dict->setObject(varName, jsonKey); \
 }
 
 #define SL_SYNTHESIZE_RETAIN_WITH_DICT_DCL(varType, varName, funName)    \
 CC_SYNTHESIZE_RETAIN(varType, varName, funName); \
-protected: inline void fill##funName##FromDict(cocos2d::CCDictionary* dict); \
-protected: inline void put##funName##ToDict(cocos2d::CCDictionary* dict); \
+protected: inline void fill##funName##FromDict(cocos2d::__Dictionary* dict); \
+protected: inline void put##funName##ToDict(cocos2d::__Dictionary* dict); \
 
 #endif

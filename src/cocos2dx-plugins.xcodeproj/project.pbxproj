@@ -965,6 +965,7 @@
 				41F0F62C18E1503100F5FC64 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

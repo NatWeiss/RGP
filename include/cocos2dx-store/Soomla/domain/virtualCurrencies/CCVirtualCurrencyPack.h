@@ -18,8 +18,8 @@ namespace soomla {
 		real money.
 	 */
     class CCVirtualCurrencyPack : public CCPurchasableVirtualItem {
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCInteger *, mCurrencyAmount, CurrencyAmount, JSON_CURRENCYPACK_CURRENCYAMOUNT);
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString *, mCurrencyItemId, CurrencyItemId, JSON_CURRENCYPACK_CURRENCYITEMID);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__Integer *, mCurrencyAmount, CurrencyAmount, JSON_CURRENCYPACK_CURRENCYAMOUNT);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String *, mCurrencyItemId, CurrencyItemId, JSON_CURRENCYPACK_CURRENCYITEMID);
     public:
 	CCVirtualCurrencyPack(): CCPurchasableVirtualItem(), mCurrencyAmount(NULL), mCurrencyItemId(NULL) {};
 
@@ -33,8 +33,8 @@ namespace soomla {
 		   \param purchaseType The purchase type for this item.
 		   \return The pack.
 		*/
-        static CCVirtualCurrencyPack *create(cocos2d::CCString* name, cocos2d::CCString* description,
-											 cocos2d::CCString* itemId, cocos2d::CCInteger* currencyAmount, cocos2d::CCString* currencyItemId,
+        static CCVirtualCurrencyPack *create(cocos2d::__String* name, cocos2d::__String* description,
+											 cocos2d::__String* itemId, cocos2d::__Integer* currencyAmount, cocos2d::__String* currencyItemId,
 											 CCPurchaseType * purchaseType);
 
 		/**
@@ -42,14 +42,14 @@ namespace soomla {
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The pack.
 		*/
-        static CCVirtualCurrencyPack *createWithDictionary(cocos2d::CCDictionary *dict);
+        static CCVirtualCurrencyPack *createWithDictionary(cocos2d::__Dictionary *dict);
 
-        bool init(cocos2d::CCString* name, cocos2d::CCString* description,
-                cocos2d::CCString* itemId, cocos2d::CCInteger* currencyAmount, cocos2d::CCString* currencyItemId,
+        bool init(cocos2d::__String* name, cocos2d::__String* description,
+                cocos2d::__String* itemId, cocos2d::__Integer* currencyAmount, cocos2d::__String* currencyItemId,
                 CCPurchaseType * purchaseType);
-        bool initWithDictionary(cocos2d::CCDictionary *dict);
+        bool initWithDictionary(cocos2d::__Dictionary *dict);
 
-        cocos2d::CCDictionary *toDictionary();
+        cocos2d::__Dictionary *toDictionary();
 
         virtual ~CCVirtualCurrencyPack();
     };

@@ -22,7 +22,7 @@ namespace soomla {
 	 */
     class CCSoomla: public cocos2d::Ref {
 	private:
-        cocos2d::CCSet mEventHandlers;
+        cocos2d::__Set mEventHandlers;
 
     public:
 		/**
@@ -37,7 +37,7 @@ namespace soomla {
 		   Call an NDK function by name and parameters.
 		   \param parameters A dictionary containing the function to call and parameters to pass to it.
 		 */
-        void easyNDKCallBack(cocos2d::CCDictionary *parameters);
+        void easyNDKCallBack(cocos2d::__Dictionary *parameters);
 
 		/**
 		   Add an event handler. This retains the event handler.
@@ -54,7 +54,7 @@ namespace soomla {
         /**
            CCSoomla attributes have been removed. Attributes were accessed by 
            CCStoreController on initialization, and are now passed to it through
-           a CCDictionary. See CCStoreController::createShared() for more information.
+           a __Dictionary. See CCStoreController::createShared() for more information.
          */
         CC_SYNTH_DEPRECATED(std::string, mCustomSecret, CustomSecret);
         CC_SYNTH_DEPRECATED(std::string, mAndroidPublicKey, AndroidPublicKey);

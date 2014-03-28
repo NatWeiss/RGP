@@ -19,11 +19,11 @@ namespace soomla {
     public:
 		/**
 		   Call a native application function.
-		   \param params A CCDictionary containing the name of the function to call and parameters to pass to it.
+		   \param params A __Dictionary containing the name of the function to call and parameters to pass to it.
 		   \param pError A CCSoomlaError that can be used to tell if there was an error.
 		   \return The return value of the called function as a cocos2d::Ref.
 		 */
-        static cocos2d::Ref *callNative(cocos2d::CCDictionary *params, CCSoomlaError **pError);
+        static cocos2d::Ref *callNative(cocos2d::__Dictionary *params, CCSoomlaError **pError);
     };
 };
 

@@ -28,9 +28,9 @@ namespace soomla {
 		(which actually means we upgrading the associated VirtualGood).
 	 */
     class CCUpgradeVG : public CCVirtualGood {
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString *, mGoodItemId, GoodItemId, JSON_VGU_GOOD_ITEMID);
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString *, mPrevItemId, PrevItemId, JSON_VGU_PREV_ITEMID);
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString *, mNextItemId, NextItemId, JSON_VGU_NEXT_ITEMID);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String *, mGoodItemId, GoodItemId, JSON_VGU_GOOD_ITEMID);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String *, mPrevItemId, PrevItemId, JSON_VGU_PREV_ITEMID);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String *, mNextItemId, NextItemId, JSON_VGU_NEXT_ITEMID);
     public:
 	CCUpgradeVG(): CCVirtualGood(), mGoodItemId(NULL), mPrevItemId(NULL), mNextItemId(NULL) {};
 
@@ -45,23 +45,23 @@ namespace soomla {
 			\purchaseType The good's purchaseType.
 			\return The virtual good.
 		 */
-		static CCUpgradeVG *create(cocos2d::CCString* goodItemId, cocos2d::CCString* prevItemId, cocos2d::CCString* nextItemId,
-								   cocos2d::CCString* name, cocos2d::CCString* description,
-								   cocos2d::CCString* itemId, CCPurchaseType * purchaseType);
+		static CCUpgradeVG *create(cocos2d::__String* goodItemId, cocos2d::__String* prevItemId, cocos2d::__String* nextItemId,
+								   cocos2d::__String* name, cocos2d::__String* description,
+								   cocos2d::__String* itemId, CCPurchaseType * purchaseType);
 
 		/**
 		   Create a CCUpgradeVG.
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The virtual good.
 		*/
-		static CCUpgradeVG *createWithDictionary(cocos2d::CCDictionary *dict);
+		static CCUpgradeVG *createWithDictionary(cocos2d::__Dictionary *dict);
 
-        bool init(cocos2d::CCString* goodItemId, cocos2d::CCString* prevItemId, cocos2d::CCString* nextItemId,
-                cocos2d::CCString* name, cocos2d::CCString* description,
-                cocos2d::CCString* itemId, CCPurchaseType * purchaseType);
-        bool initWithDictionary(cocos2d::CCDictionary *dict);
+        bool init(cocos2d::__String* goodItemId, cocos2d::__String* prevItemId, cocos2d::__String* nextItemId,
+                cocos2d::__String* name, cocos2d::__String* description,
+                cocos2d::__String* itemId, CCPurchaseType * purchaseType);
+        bool initWithDictionary(cocos2d::__Dictionary *dict);
 
-        cocos2d::CCDictionary *toDictionary();
+        cocos2d::__Dictionary *toDictionary();
 
         virtual ~CCUpgradeVG();
     };

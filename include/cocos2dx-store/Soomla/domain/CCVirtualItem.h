@@ -20,9 +20,9 @@ namespace soomla {
 		A virtual item, the base class for all virtual items.
 	*/    
     class CCVirtualItem : public cocos2d::Ref {
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString*, mName, Name, JSON_ITEM_NAME);
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString*, mDescription, Description, JSON_ITEM_DESCRIPTION);
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString*, mItemId, ItemId, JSON_ITEM_ITEMID);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String*, mName, Name, JSON_ITEM_NAME);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String*, mDescription, Description, JSON_ITEM_DESCRIPTION);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String*, mItemId, ItemId, JSON_ITEM_ITEMID);
         
     public:
         CCVirtualItem(): mName(NULL), mDescription(NULL), mItemId(NULL) {}
@@ -34,21 +34,21 @@ namespace soomla {
 		   \param itemId The item's itemId
 		   \return The item.
 		*/
-        static CCVirtualItem * create(cocos2d::CCString* name, cocos2d::CCString* description, cocos2d::CCString* itemId);
+        static CCVirtualItem * create(cocos2d::__String* name, cocos2d::__String* description, cocos2d::__String* itemId);
 
 		/**
 		   Create a  CCVirtualItem.
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The item.
 		*/
-		static CCVirtualItem * createWithDictionary(cocos2d::CCDictionary* dict);
+		static CCVirtualItem * createWithDictionary(cocos2d::__Dictionary* dict);
 
-        virtual bool init(cocos2d::CCString* name, cocos2d::CCString* description, cocos2d::CCString* itemId);
-        virtual bool initWithDictionary(cocos2d::CCDictionary* dict);
+        virtual bool init(cocos2d::__String* name, cocos2d::__String* description, cocos2d::__String* itemId);
+        virtual bool initWithDictionary(cocos2d::__Dictionary* dict);
         
         virtual ~CCVirtualItem();
         
-        virtual cocos2d::CCDictionary* toDictionary();
+        virtual cocos2d::__Dictionary* toDictionary();
     };
     
 }

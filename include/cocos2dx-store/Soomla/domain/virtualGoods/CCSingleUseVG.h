@@ -28,15 +28,15 @@ namespace soomla {
 		   \param purchaseType The purchase type for this virtual good.
 		   \return The virtual good.
 		*/
-        static CCSingleUseVG *create(cocos2d::CCString* name, cocos2d::CCString* description,
-                cocos2d::CCString* itemId, CCPurchaseType * purchaseType);
+        static CCSingleUseVG *create(cocos2d::__String* name, cocos2d::__String* description,
+                cocos2d::__String* itemId, CCPurchaseType * purchaseType);
 
 		/**
 		   Create a CCSingleUseVG.
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The virtual good.
 		*/
-		static CCSingleUseVG *createWithDictionary(cocos2d::CCDictionary *dict);
+		static CCSingleUseVG *createWithDictionary(cocos2d::__Dictionary *dict);
     };
 };
 

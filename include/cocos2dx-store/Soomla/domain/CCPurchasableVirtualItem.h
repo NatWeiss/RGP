@@ -31,21 +31,21 @@ namespace soomla {
 		   \param purchaseType Either purchase with market or purchase with virtual good.
 		   \return The item.
 		*/
-        static CCPurchasableVirtualItem * create(cocos2d::CCString* name, cocos2d::CCString* description, cocos2d::CCString* itemId, CCPurchaseType * purchaseType);
+        static CCPurchasableVirtualItem * create(cocos2d::__String* name, cocos2d::__String* description, cocos2d::__String* itemId, CCPurchaseType * purchaseType);
 
 		/**
 		   Create a CCPurchasableVirtualItem.
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The item.
 		*/
-        static CCPurchasableVirtualItem * createWithDictionary(cocos2d::CCDictionary* dict);
+        static CCPurchasableVirtualItem * createWithDictionary(cocos2d::__Dictionary* dict);
 
-        virtual bool init(cocos2d::CCString* name, cocos2d::CCString* description, cocos2d::CCString* itemId, CCPurchaseType * purchaseType);
-        virtual bool initWithDictionary(cocos2d::CCDictionary* dict);
+        virtual bool init(cocos2d::__String* name, cocos2d::__String* description, cocos2d::__String* itemId, CCPurchaseType * purchaseType);
+        virtual bool initWithDictionary(cocos2d::__Dictionary* dict);
         
         virtual ~CCPurchasableVirtualItem();
         
-        virtual cocos2d::CCDictionary* toDictionary();
+        virtual cocos2d::__Dictionary* toDictionary();
     };
 }
 
