@@ -31,7 +31,8 @@ release:
 docs:
 	rm -r docs
 	cp README.md index.litcoffee
-	docco -l linear index.litcoffee LemonadeExchange/js/*.js
+	#docco -l linear LemonadeExchange/server/server.js index.litcoffee LemonadeExchange/js/*.js
+	docco -l linear template/server/server.js index.litcoffee template/js/*.js template/js/lib/*.js
 	rm index.litcoffee
 
 icons:
