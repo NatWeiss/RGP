@@ -1,22 +1,143 @@
 
+//
+// The main App object is a singleton providing boot code, main functions, and other commonly-used, globally-accessible functionality.
+
+// 1. All code in this file is applicable to any game project in general.
+// 2. If you need to extend the App object with project-specific code, use [HelloJavascript.js](HelloJavascript.html).
+//
+
+//
+// ###  App
+//
+// Get or create the App object.
+//
+
 var App = App || {};
 
-//App.singleEngineFile = "HelloJavascript-min.js";
-
-App.showFPS = false;
-
-App.getFrameRate = function() {
-	return (this.isHtml5() ? 30 : 60);
-};
-
+//
+// ###  App.getInitialScene
+//
+// Return the initial Scene class.
+//
 App.getInitialScene = function() {
 	return SceneHello;
 };
 
+//
+// ###  App.isHtml5
+//
+// Return true if the app is running in HTML5 mode.
+//
+App.isHtml5 = function() {
+	if (typeof this._isHtml5 === "undefined") {
+		this._isHtml5 = cc.sys.isNative ? false : true;
+	}
+	return this._isHtml5;
+};
+
+//
+// ###  App.getTargetFrameRate
+//
+// Return the target frame rate to use. Scale back in HTML5 mode to save a CPU fan somewhere.
+//
+App.getTargetFrameRate = function() {
+	return this.isHtml5() ? 30 : 60;
+};
+
+//
+// ###  App.rand
+//
+// Return a random integer between 0 and the given value.
+//
+App.rand = function(mod) {
+	var r = Math.random();
+	if (typeof mod !== 'undefined') {
+		r *= 0xffffff;
+		r = parseInt(r);
+		r %= mod;
+	}
+	return r;
+};
+
+//
+// ###  App.getWinSize
+//
+// Return the current size of the window or screen.
+//
+App.getWinSize = function() {
+	var size = cc.director.getWinSizeInPixels();
+	if (typeof this._winSize === 'undefined' || (size.width && size.height)) {
+		this._winSize = size;
+	}
+	return this._winSize;
+};
+
+//
+// ###  App.getResourceDir
+//
+// Return the resource directory (SD, HD or HDR) for this device's resolution.
+//
+App.getResourceDir = function() {
+	if (typeof this._resourceDir === "undefined") {
+		var self = this,
+			winSize = this.getWinSize(),
+			maxDimension = Math.max(winSize.width, winSize.height),
+			minDimension = Math.min(winSize.width, winSize.height),
+			setResourceDir = function(dir, contentScaleFactor, scaleFactor){
+				self._resourceDir = dir;
+				self._contentScaleFactor = contentScaleFactor;
+				self._scaleFactor = scaleFactor;
+			};
+		
+		if (this.isHtml5()) {
+			if (minDimension >= 600) {
+				setResourceDir("res/hd", 1, 1);
+			} else {
+				setResourceDir("res/sd", 1, .5);
+			}
+		} else {
+			if (maxDimension > 1600) {
+				setResourceDir("res/hdr", 1, 2);
+			} else if (maxDimension >= 960) {
+				setResourceDir("res/hd", 1, 1);
+			} else {
+				setResourceDir("res/sd", 1, .5);
+			}
+		}
+	}
+
+	return this._resourceDir;
+};
+
+//
+// ###  App.scale
+//
+// Scale a number by a factor based on the screen size.
+//
+App.scale = function(floatValue) {
+	return floatValue * this._scaleFactor;
+};
+
+//
+// ###  App.centralize
+//
+// Return a point relative to the center of the screen and scaled.
+//
+App.centralize = function(x, y) {
+	var winSize = this.getWinSize();
+	return cc.p(this.scale(x) + winSize.width * .5,
+		this.scale(y) + winSize.height * .5);
+};
+
+//
+// ###  App.getResourcesToPreload
+//
+// Return an array of files to preload.
+//
 App.getResourcesToPreload = function() {
 	var dir = this.getResourceDir(),
-		ret = [],
 		files = this.getConfig("preload"),
+		ret = [],
 		i;
 
 	if (files) {
@@ -32,61 +153,19 @@ App.getResourcesToPreload = function() {
 	return ret;
 };
 
-App.getResourceDir = function() {
-	var winSize,
-		maxDimension,
-		minDimension;
-
-	if (typeof this._resourceDir === "undefined") {
-		winSize = this.getWinSize();
-		maxDimension = Math.max(winSize.width, winSize.height);
-		minDimension = Math.min(winSize.width, winSize.height);
-		//cc.log(maxDimension + " x " + minDimension);
-		
-		// set resource directories
-		if (this.isHtml5()) {
-			if (minDimension >= 600) { // 640 would be more accurate, 600 is a litte more lenient
-				this._resourceDir = "res/hd";
-				this._contentScaleFactor = 1;
-				this._scaleFactor = 1;
-			} else {
-				this._resourceDir = "res/sd";
-				this._contentScaleFactor = 1;
-				this._scaleFactor = .5;
-			}
-		} else {
-			if (maxDimension > 1600) {
-				this._resourceDir = "res/hdr";
-				this._contentScaleFactor = 1;
-				this._scaleFactor = 2;
-			} else if (maxDimension >= 960) {
-				this._resourceDir = "res/hd";
-				this._contentScaleFactor = 1;
-				this._scaleFactor = 1;
-			} else {
-				this._resourceDir = "res/sd";
-				this._contentScaleFactor = 1;
-				this._scaleFactor = .5;
-			}
-		}
-	}
-
-	return this._resourceDir;
-};
-
-App.setupResources = function() {
-	var sheet,
-		sheets,
+//
+// ###  App.loadResources
+//
+// Setup and load resources.
+//
+App.loadResources = function() {
+	var sheets = App.getConfig("spritesheets"),
+		sheet,
 		i;
 
-	// set resource directory
 	cc.loader.resPath = this.getResourceDir();
-	
-	// scale factor
 	cc.director.setContentScaleFactor(this._contentScaleFactor);
 
-	// load spritesheets
-	sheets = App.getConfig("spritesheets");
 	for (i = 0; i < sheets.length; i += 1) {
 		sheet = cc.loader.getUrl(sheets[i]);
 		cc.log("Loading spritesheet: " + sheet);
@@ -94,30 +173,7 @@ App.setupResources = function() {
 	}
 };
 
-App.isHtml5 = function() {
-	if (typeof this._isHtml5 === "undefined") {
-		//cc.log("Is native? " + cc.sys.isNative);
-		this._isHtml5 = cc.sys.isNative ? false : true;
-	}
-	return this._isHtml5;
-};
-
-// scale a number by a factor based on the screen size
-App.scale = function(floatValue) {
-	return floatValue * this._scaleFactor;
-};
-
-// make a point relative to the center of the screen and scaled
-App.centralize = function(x, y) {
-	var winSize = this.getWinSize();
-	return cc.p(this.scale(x) + winSize.width * .5, this.scale(y) + winSize.height * .5);
-};
-
 App.getConfig = function(key) {
-	return this.config[key];
-};
-
-App.getString = function(key) {
 	return this.config[key];
 };
 
@@ -129,8 +185,8 @@ App.getLanguageCode = function() {
 	var strings;
 	
 	if (typeof this._language === "undefined") {
-		// store the language code
 		this._language = cc.sys.language;
+
 		strings = this.getConfig("strings");
 		if (strings && typeof strings[this._language] === "undefined") {
 			cc.log("Don't have strings for language: " + this._language);
@@ -153,28 +209,6 @@ App.getLocalizedString = function(key) {
 		cc.log("Couldn't find string[" + code + "][" + key + "]");
 	}
 	return "";
-};
-
-App.getInt = function(key) {
-	return parseInt(this.config[key]);
-};
-
-App.rand = function(mod) {
-	var r = Math.random();
-	if (typeof mod !== 'undefined') {
-		r *= 0xffffff;
-		r = parseInt(r);
-		r %= mod;
-	}
-	return r;
-};
-
-App.getWinSize = function() {
-	var size = cc.director.getWinSizeInPixels();
-	if (typeof this._winSize === 'undefined' || (size.width && size.height)) {
-		this._winSize = size;
-	}
-	return this._winSize;
 };
 
 App.getRunningLayer = function() {
@@ -328,7 +362,7 @@ App.loadAnalyticsPlugin = function() {
 	if (typeof FlurryAgent !== "undefined" && typeof App.config !== "undefined" && !this._initializedFlurry) {
 		this._initializedFlurry = true;
 		//cc.log("Loaded flurry after " + this._loadAnalyticsTries + " tries");
-		flurryApiKey = App.getString("flurry-api-key");
+		flurryApiKey = App.getConfig("flurry-api-key");
 		if (flurryApiKey) {
 			flurry = plugin.PluginManager.getInstance().loadPlugin("AnalyticsFlurry");
 			if (flurry) {
@@ -352,7 +386,7 @@ App.getAdsPlugin = function() {
 	var name;
 	
 	if (typeof this._adsPlugin === "undefined" && typeof plugin !== "undefined") {
-		name = this.getString("ads-plugin-name");
+		name = this.getConfig("ads-plugin-name");
 
 		// try to load plugin
 		this._adsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
@@ -379,8 +413,8 @@ App.loadAdsPlugin = function() {
 		}
 
 		plugin.configDeveloperInfo({
-			apiKey: this.getString("ads-plugin-api-key"),
-			mode: this.getString("ads-plugin-mode")
+			apiKey: this.getConfig("ads-plugin-api-key"),
+			mode: this.getConfig("ads-plugin-mode")
 		});
 	}
 };
@@ -389,7 +423,7 @@ App.getSocialPlugin = function() {
 	var name;
 	
 	if (typeof this._socialPlugin === "undefined") {
-		name = this.getString("social-plugin-name");
+		name = this.getConfig("social-plugin-name");
 		if (plugin[name]) {
 			this._socialPlugin = new plugin[name]();
 			this._socialPlugin.setDebugMode(this.getConfig("social-plugin-debug"));
@@ -586,7 +620,7 @@ App.bootHtml5 = function() {
 		box2d: false,
 		chipmunk: false,
 		showFPS: this.showFPS,
-		frameRate: this.getFrameRate(),
+		frameRate: this.getTargetFrameRate(),
 		loadExtension: true,
 		loadPluginx: true,
 		renderMode: 0, // 0 (default), 1 (Canvas only), 2 (WebGL only)
@@ -695,7 +729,7 @@ App.mainCallback = function() {
 	var Scene = App.getInitialScene(),
 		scene;
 	
-	App.setupResources();
+	App.loadResources();
 	scene = new Scene;
 	scene.init();
 	cc.director.runScene(scene);
@@ -726,8 +760,8 @@ App.main = function() {
 		}
 	}
 
-	cc.director.setDisplayStats(this.showFPS);
-	cc.director.setAnimationInterval(1.0 / this.getFrameRate());
+	//cc.director.setDisplayStats(this.showFPS);
+	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
 	cc.log(winSize.width + " x " + winSize.height
 		+ ", resource dir: " + App.getResourceDir()
 		+ ", language: " + App.getLanguageCode()

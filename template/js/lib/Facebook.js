@@ -61,7 +61,7 @@ if (typeof plugin.Facebook === "undefined") {
 				}
 				
 				// get my friends
-				if (module.playerNames.length <= 1) {
+				if (!module.friendIds.length) {
 					FB.api("/me/friends?fields=id,name,first_name", function(response) {
 						if (response.data && response.data.length) {
 							module.onGetFriends(response.data);
@@ -288,6 +288,7 @@ if (typeof plugin.Facebook === "undefined") {
 				}
 				if (!module.playerImageUrls[id]) {
 					module.loadPlayerImage(id, callback);
+					return "";
 				}
 				return module.playerImageUrls[id];
 			},

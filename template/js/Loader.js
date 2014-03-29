@@ -1,74 +1,60 @@
 
 //
-// override cc.LoaderScene's init method to customize the scene
+// Create a unique loading screen by customizing `cc.LoaderScene`.
+//
+// See `lib/cocos2d-html5/cocos2d/core/scenes/CCLoaderScene.js`.
+//
+
+//
+// ###  cc.LoaderScene.init
+//
+// Setup the loader scene.
 //
 cc.LoaderScene.prototype.init = function(){
 	var self = this;
-	
 	this._winSize = cc.director.getWinSize();
 	
-	// call super's init
+	/* Call super's init. */
 	cc.Scene.prototype.init.call(this);
 
-	// setup a few privates
-	this._currentColor = 0;
-	this._colors = App.getConfig("loading-image-colors") || [];
+	/* Start loading the logo texture. */
+	cc.loader.loadImg(App.getConfig("loading-image"),
+		{isCrossOrigin : false},
+		function(err, img){
+			var sizePercent = App.getConfig("loading-image-win-size-percent");
 
-	// start loading the logo texture
-	cc.loader.loadImg(App.getConfig("loading-image"), {isCrossOrigin : false}, function(err, img){
-		var sizePercent = App.getConfig("loading-image-win-size-percent");
+			self._initStage(img, cc.p(self._winSize.width * .5,
+				self._winSize.height * .6));
 
-		//logoWidth = img.width;
-		//logoHeight = img.height;
-		self._initStage(img, cc.p(self._winSize.width * .5, self._winSize.height * .6));
-
-		// adjust size of logo image
-		if (sizePercent) {
-			self._logo.setScale((self._winSize.height * sizePercent) / self._logo.getContentSize().height);
+			if (sizePercent) {
+				self._logo.setScale((self._winSize.height * sizePercent)
+					/ self._logo.getContentSize().height);
+			}
 		}
-	});
+	);
 
-/*	this._logoTexture = new Image();
-	this._logoTexture.addEventListener("load", function () {
-		var sizePercent = App.getConfig("loading-image-win-size-percent");
-		
-		// initialize the stage
-		self._initStage(this._logoTexture, cc.p(self._winSize.width * .5, self._winSize.height * .6));
-		
-		// adjust size of logo image
-		if (sizePercent) {
-			self._logo.setScale((self._winSize.height * sizePercent) / self._logo.getContentSize().height);
-		}
-		
-		this.removeEventListener("load", arguments.callee, false);
-	}, false);
-	
-	// properties of the logo texture
-	this._logoTexture.src = App.getConfig("loading-image");
-	if (App.getConfig("loading-image-width")) {
-		this._logoTexture.width = App.getConfig("loading-image-width");
-	}
-	if (App.getConfig("loading-image-height")) {
-		this._logoTexture.height = App.getConfig("loading-image-height");
-	}
-*/
-	// background
-	this._bgLayer = cc.LayerColor.create(App.getConfig("loader-bg-color") || cc.color(0,0,0,0));
+	/* Create background color. */
+	this._bgLayer = cc.LayerColor.create(App.getConfig("loader-bg-color"));
 	this._bgLayer.setPosition(0, 0);
 	this.addChild(this._bgLayer, 0);
 
-	// label
+	/* Create label. */
 	this._label = cc.LabelTTF.create(
 		App.getConfig("loader-text") || "Loading...",
 		App.getConfig("loader-text-font") || "Arial",
 		App.getConfig("loader-text-size") || 20
 	);
-	this._label.setColor(App.getConfig("loader-text-color") || cc.color(180, 180, 180, 255));
+	this._label.setColor(
+		App.getConfig("loader-text-color") || cc.color(180,180,180,255)
+	);
 	this._label.setPosition(this._winSize.width * .5, this._winSize.height * .265);
 	this._bgLayer.addChild(this._label, 10);
 
-	// loading bar
-	this._loadingBarSize = cc.size(this._winSize.width * .2, this._winSize.height * .025);
+	/* Create loading bar. */
+	this._loadingBarSize = cc.size(
+		this._winSize.width * .2,
+		this._winSize.height * .025
+	);
 	this._loadingBar = cc.LayerColor.create(
 		App.getConfig("loader-bar-color") || cc.color(9,9,10,255),
 		this._loadingBarSize.width,
@@ -80,30 +66,18 @@ cc.LoaderScene.prototype.init = function(){
 };
 
 //
-// override cc.LoaderScene's updatePercent method to customize the animation
+// ###  cc.LoaderScene._updatePercent
+//
+// Update the percent loaded animation.
 //
 cc.LoaderScene.prototype._updatePercent = function (){
-	var width,
-		percent = Math.min(100, Math.max(0, (this._count / this._length) * 100)),
-		xSpacing;
+	var percent = Math.min(100, Math.max(0, (this._count / this._length) * 100)),
+		width = Math.max(2, this._loadingBarSize.width * (percent / 100));
 
-	if (percent >= 100) {
-		this._currentColor = this._colors.length - 1;
-	}
-	
-	if (this._logo) {
-		if (this._colors.length) {
-			xSpacing = this._logo.getContentSize().width * .5;
-			this._logo.setColor(this._colors[this._currentColor]);
-			this._logo.setPositionX(this._winSize.width * .5 + ((this._currentColor - (this._colors.length * .5)) * xSpacing));
-		}
-	}
-
-	width = Math.max(2, this._loadingBarSize.width * (percent / 100));
+	/* Set width of loading bar. */
 	this._loadingBar.setContentSize(width, this._loadingBarSize.height);
 
-	this._currentColor = Math.min(this._currentColor + 1, this._colors.length - 1);
-
+	/* Unschedule update. */
 	if (percent >= 100) {
 		this.unschedule(this._updatePercent);
 	}

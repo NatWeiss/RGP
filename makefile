@@ -28,11 +28,20 @@ release:
 	open ../releases
 	open -a /Applications/YemuZip.app/
 
-docs:
-	rm -r docs
+docker:
+	if [ -d docs ]; then rm -r docs; fi
+	#cp README.md index.litcoffee
+	docker -o docs -i template -c manni -s yes -I --extras fileSearch -x lib/*
+	#rm index.litcoffee
+
+docco:
+	if [ -d docs ]; then rm -r docs; fi
 	cp README.md index.litcoffee
-	#docco -l linear LemonadeExchange/server/server.js index.litcoffee LemonadeExchange/js/*.js
-	docco -l linear template/server/server.js index.litcoffee template/js/*.js template/js/lib/*.js
+	#docco -l linear index.litcoffee
+	#docco -l linear template/server/server.js
+	#docco -l linear template/js/*.js
+	#docco -l linear template/js/lib/*.js
+	docco -l linear index.litcoffee template/server/server.js template/js/*.js template/js/lib/*.js
 	rm index.litcoffee
 
 icons:

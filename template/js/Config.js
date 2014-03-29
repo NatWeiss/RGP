@@ -57,17 +57,9 @@ App.config = {
 	"loader-text": "L o a d i n g . . .",
 	"loader-text-font": "Arial",
 	"loading-image-win-size-percent": 0.5, // make the loading image a percentage of the win size
-	//"loader-text-color": cc.color(255,180,180),
-	//"loader-text-size": 20,
-	//"loader-bar-color": cc.color(9,9,10,255),
-	//"loading-image-width": 213, // can manually set the width / height
-	//"loading-image-height": 174,
-	//"loading-image-colors": [ // specify an array of colors to run a simple color animation on this sprite
-	//	cc.color(255, 72,  0),
-	//	cc.color(255, 105, 3),
-	//	cc.color(255, 156, 26),
-	//	cc.color(36,  255, 249)
-	//]
+	"loader-text-color": cc.color(180, 180, 180, 255),
+	"loader-text-size": 20,
+	"loader-bar-color": cc.color(9, 9, 10, 255),
 	//
 	// convert your image to base64:
 	// http://webcodertools.com/imagetobase64converter
