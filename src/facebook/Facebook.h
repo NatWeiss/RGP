@@ -27,7 +27,7 @@ class Facebook
 		void requestPublishPermissions(const string& permissions);
 		const string& getPlayerName(const string& id) const;
 		const string& getPlayerFirstName(const string& id) const;
-		const string& getPlayerImageUrl(const string& id, int callback) const;
+		const string& getPlayerImageUrl(const string& id) const;
 		const string& getRandomFriendId() const;
 		string getSDKVersion() const;
 };

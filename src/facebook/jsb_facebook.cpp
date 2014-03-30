@@ -224,14 +224,13 @@ bool js_facebook_getPlayerFirstName(JSContext* cx, uint32_t argc, jsval* vp)
 
 bool js_facebook_getPlayerImageUrl(JSContext* cx, uint32_t argc, jsval* vp)
 {
-	const int numArgs = 2;
+	const int numArgs = 1;
 	if (argc <= numArgs)
 	{
 		string str;
-		int callback;
 		if (argc > 0)
 			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
-		auto& ret = getNativeObj<Facebook>(cx, vp)->getPlayerImageUrl(str, callback);
+		auto& ret = getNativeObj<Facebook>(cx, vp)->getPlayerImageUrl(str);
 		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
 		return true;
 	}
@@ -302,7 +301,7 @@ void js_facebook_register(JSContext* cx, JSObject* global)
 		JS_FN("requestPublishPermissions", js_facebook_requestPublishPermissions, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getPlayerName", js_facebook_getPlayerName, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getPlayerFirstName", js_facebook_getPlayerFirstName, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-		JS_FN("getPlayerImageUrl", js_facebook_getPlayerImageUrl, 2, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("getPlayerImageUrl", js_facebook_getPlayerImageUrl, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getRandomFriendId", js_facebook_getRandomFriendId, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getSDKVersion", js_facebook_getSDKVersion, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END

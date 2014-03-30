@@ -68,6 +68,8 @@ static bool empty_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 
 void register_jsb_app_bindings(JSContext *cx, JSObject *global)
 {
+	cocos2d::log("SpiderMonkey version %s %s", JS_GetImplementationVersion(), JS_VersionToString(JS_GetVersion(cx)));
+
 	jsb_app_bindings_class = (JSClass *)calloc(1, sizeof(JSClass));
 	jsb_app_bindings_class->name = kJSNamespace;
 	jsb_app_bindings_class->addProperty = JS_PropertyStub;

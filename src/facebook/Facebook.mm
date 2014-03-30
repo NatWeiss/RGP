@@ -41,6 +41,8 @@ void clear_module()
 	playerImageUrls.clear();
 	playerImageUrls["me"] = "";
 	friendIds.clear();
+	
+	srand((unsigned)time(nullptr));
 }
 
 const char* strVal(id obj)
@@ -70,7 +72,7 @@ void callRunningLayer(const string& method, const string& param1)
 	ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
 }
 
-void loadPlayerImageUrl(const string& playerId, int callback = 0)
+void loadPlayerImageUrl(const string& playerId)
 {
 	jsval ret;
 	ScriptingCore::getInstance()->evalString("App.scale(App.getConfig(\"social-plugin-profile-image-width\"));", &ret);
@@ -97,11 +99,11 @@ void loadPlayerImageUrl(const string& playerId, int callback = 0)
 				// load image
 				jsval ret;
 				stringstream ss;
-				ss << "App.loadImage(\"" << url << "\");";
+				ss << "App.loadImage(\"" << url << "\", function(){"
+					<< "App.callRunningLayer(\"onPlayerImageLoaded\", \"" << userIdForImage << "\", \"" << url << "\");"
+					<< "}); ";
 				//debugLog("%s Executing script: %s", kTag, ss.str().c_str());
 				ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
-				
-				//if (callback)...
 			}
 		}
 	];
@@ -336,9 +338,14 @@ const string& Facebook::getPlayerFirstName(const string& id) const
 	return playerFirstNames[id.size() ? id : "me"];
 }
 
-const string& Facebook::getPlayerImageUrl(const string& id, int callback) const
+const string& Facebook::getPlayerImageUrl(const string& id) const
 {
-	return playerImageUrls[id.size() ? id : "me"];
+	auto& ret = playerImageUrls[id.size() ? id : "me"];
+	if (ret.size())
+		return ret;
+
+	loadPlayerImageUrl(id);
+	return blankString;
 }
 
 const string& Facebook::getRandomFriendId() const

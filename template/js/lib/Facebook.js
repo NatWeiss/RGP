@@ -91,7 +91,7 @@ if (typeof plugin.Facebook === "undefined") {
 			App.callRunningLayer("onGetLoginStatus", module.loggedIn);
 		};
 		
-		module.loadPlayerImage = function(id, callback) {
+		module.loadPlayerImage = function(id) {
 			var dim = App.scale(App.getConfig("social-plugin-profile-image-width") || 100);
 			if (this.checkForFB()) {
 				FB.api("/" + id + "/picture?redirect=0&width=" + dim + "&height=" + dim, function(response) {
@@ -99,9 +99,7 @@ if (typeof plugin.Facebook === "undefined") {
 						module.log("Got image url " + response.data.url + " for " + id);
 						App.loadImage(response.data.url, function(){
 							module.playerImageUrls[id] = response.data.url;
-							if (typeof callback === "function"){
-								callback(response.data.url);
-							}
+							App.callRunningLayer("onPlayerImageLoaded", id, module.playerImageUrls[id]);
 						});
 					}
 				});
@@ -282,12 +280,12 @@ if (typeof plugin.Facebook === "undefined") {
 				return module.playerFirstNames[id];
 			},
 
-			getPlayerImageUrl: function(id, callback) {
+			getPlayerImageUrl: function(id) {
 				if (!id) {
 					id = "me";
 				}
 				if (!module.playerImageUrls[id]) {
-					module.loadPlayerImage(id, callback);
+					module.loadPlayerImage(id);
 					return "";
 				}
 				return module.playerImageUrls[id];
