@@ -824,13 +824,17 @@ App.boot = function(global) {
 
 		/* Location. */
 		require("js/ConfigServer.js");
-		global.location = "http://" + App.serverAddress +
-			(App.serverPort ? ":" + App.serverPort : "") + "/";
-		global.navigator = {
-			/* http://stackoverflow.com/questions/8579019/how-to-get-the-user-agent-on-ios */
-			userAgent: "Apple-iPhone5C1/1001.525"
-		};
-		/*cc.log("Got location: " + window.location);*/
+		if (!global.location) {
+			global.location = "http://" + App.serverAddress +
+				(App.serverPort ? ":" + App.serverPort : "") + "/";
+			/*cc.log("Got location: " + window.location);*/
+		}
+		if (!global.navigator) {
+			/*http://stackoverflow.com/questions/8579019/how-to-get-the-user-agent-on-ios */
+			global.navigator = {
+				userAgent: "Apple-iPhone5C1/1001.525"
+			};
+		}
 		
 		/* Add some functionality to cc. */
 		if (typeof cc.DEGREES_TO_RADIANS === "undefined") {

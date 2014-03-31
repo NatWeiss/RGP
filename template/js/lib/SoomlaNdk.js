@@ -361,7 +361,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			}
 
 			// assign return value
-			returnParams.result.return = ret;
+			returnParams.result["return"] = ret;
 			
 			// since we are using JSON stringify + parse theres no worries about object cloning! :)
 			return JSON.stringify(returnParams);

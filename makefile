@@ -65,9 +65,12 @@ lemonadex:
 	cp rez/${name}/js/*.js ${dest}/${name}/js/
 	cp rez/${name}/server/server.js ${dest}/${name}/server/
 	rm -rf ${dest}/${name}/art
+	rm -f ${dest}/${name}/proj.html5/*-min.js
 	rm ${dest}/${name}/js/SceneHello.js
 	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/js/App.js
 	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/project.json
+	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/build.xml
+	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/minified.js
 	sed -i "" 's/Loader\.js/Loader\.js", "js\/LayerGame\.js", "js\/LayerMenu\.js", "js\/ActionDrink\.js/g' ${dest}/${name}/proj.html5/project.json
 	sed -i "" 's/MyFacebookAppID/641151319281152/g' ${dest}/${name}/proj.ios_mac/ios/Info.plist
 

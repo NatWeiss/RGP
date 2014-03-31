@@ -1,3 +1,7 @@
+
+
+var App = App || {};
+
 App.config = {
 	"strings": {
 		"en": {
@@ -31,7 +35,7 @@ App.config = {
 		androidPublicKey: "01234567890123456789012345678901" // replace with your Android public key
 	},
 	"economy-plugin-initial-balances": {
-		"currency_example": 10,
+		"currency_example": 10
 	},
 
 	"ads-plugin-name": "AdsMobFox",
@@ -113,4 +117,4 @@ App.getStoreAssets = function() {
 	};
 	
 	return Soomla.IStoreAssets.create(assets);
-}
+};

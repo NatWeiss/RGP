@@ -2,3 +2,10 @@
 .idea/*
 node_modules/
 .DS_Store
+current/
+lib/
+*/proj.android/assets/
+*/proj.android/bin/
+*/proj.android/gen/
+*/proj.android/libs/
+*/proj.android/obj/

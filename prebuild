@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+cd src
+xcodebuild -project cocos2dx-prebuilt.xcodeproj -scheme "Just Headers"
+xcodebuild -project cocos2dx-plugins.xcodeproj -scheme "Just Headers"
+xcodebuild -project cocos2dx-plugins.xcodeproj -scheme "Just Mac"
+xcodebuild -project cocos2dx-plugins.xcodeproj -scheme "Just iOS"

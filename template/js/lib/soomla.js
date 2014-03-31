@@ -167,7 +167,7 @@ Soomla = new function () {
   }, PurchaseType);
 
   function extractModel(retParams) {
-    var retValue = retParams.return;
+    var retValue = retParams["return"];
     var className = retValue.className;
     var item = retValue.item;
     item.className = className;
@@ -175,12 +175,12 @@ Soomla = new function () {
   }
 
   function extractCollection(retParams) {
-    var retArray = retParams.return;
+    var retArray = retParams["return"];
 
     var result = [];
     for (var i = 0; i < retArray.length; i++) {
       result.push(extractModel({
-        return: retArray[i]
+        "return": retArray[i]
       }));
     }
     return result;
@@ -581,7 +581,7 @@ Soomla = new function () {
       var retParams = callNative({
         method: "CCStoreController::transactionsAlreadyRestored"
       });
-      return retParams.return;
+      return retParams["return"];
     },
     // TODO: For Android only
     startIabServiceInBg: function() {
@@ -618,7 +618,7 @@ Soomla = new function () {
         method: "CCStoreInventory::getItemBalance",
         itemId: itemId
       });
-      return retParams.return;
+      return retParams["return"];
     },
     giveItem: function(itemId, amount) {
       callNative({
@@ -651,21 +651,21 @@ Soomla = new function () {
         method: "CCStoreInventory::isVirtualGoodEquipped",
         itemId: itemId
       });
-      return retParams.return;
+      return retParams["return"];
     },
     getGoodUpgradeLevel: function(goodItemId) {
       var retParams = callNative({
         method: "CCStoreInventory::getGoodUpgradeLevel",
         goodItemId: goodItemId
       });
-      return retParams.return;
+      return retParams["return"];
     },
     getGoodCurrentUpgrade: function(goodItemId) {
       var retParams = callNative({
         method: "CCStoreInventory::getGoodCurrentUpgrade",
         goodItemId: goodItemId
       });
-      return retParams.return;
+      return retParams["return"];
     },
     upgradeGood: function(goodItemId) {
       callNative({
@@ -684,7 +684,7 @@ Soomla = new function () {
         method: "CCStoreInventory::nonConsumableItemExists",
         nonConsItemId: nonConsItemId
       });
-      return retParams.return;
+      return retParams["return"];
     },
     addNonConsumableItem: function(nonConsItemId) {
       callNative({

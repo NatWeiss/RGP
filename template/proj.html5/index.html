@@ -35,7 +35,7 @@ A: you could use passworded zip, obfuscate your code, or simply use the bytecode
 	<div class="center" id="gameDiv">
 		<canvas id="gameCanvas"></canvas>
 		<div id="ads"></div>
-		<!-- we want to use a custom loading scene, so use a dummy cocos2d_loadJsImg to inhibit jsloader.js -->
+		<!-- We want to create a custom loading scene, so use a dummy cocos2d_loadJsImg to inhibit jsloader.js. -->
 		<img id="cocos2d_loadJsImg" />
 	</div>
 
@@ -48,6 +48,7 @@ A: you could use passworded zip, obfuscate your code, or simply use the bytecode
 		canvas.style.height = window.innerHeight + "px";
 	</script>
 
+	<!-- Either use CCBoot.js + App.js or HelloJavascript-min.js -->
 	<script src="lib/cocos2d-html5/CCBoot.js"></script>
 	<script src="js/App.js"></script>
 	<!--<script src="HelloJavascript-min.js"></script>-->

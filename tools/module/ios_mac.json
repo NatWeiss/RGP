@@ -11,6 +11,7 @@
                              "../proj.html5/project.json",
 							 "../js/App.js",
 							 "../proj.html5/build.xml",
+							 "../proj.html5/minified.js",
 							 "mac/en.lproj/MainMenu.xib",
                              "mac/Info.plist",
                              "PROJECT_NAME.xcodeproj/project.pbxproj"]
