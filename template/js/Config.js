@@ -6,7 +6,9 @@ App.config = {
 		}
 	},
 	
-	"flurry-api-key": "", // enter your api key
+	"analytics-plugin-name": "Flurry",
+	"analytics-plugin-api-key": "",
+	"analytics-plugin-debug": true,
 	
 	"social-plugin-name": "Facebook",
 	"social-plugin-debug": true,

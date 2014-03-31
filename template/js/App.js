@@ -23,6 +23,15 @@ App.getInitialScene = function() {
 };
 
 //
+// ###  App.getTargetFrameRate
+//
+// Return the target frame rate to use. Scale back in HTML5 mode to save a CPU fan somewhere.
+//
+App.getTargetFrameRate = function() {
+	return this.isHtml5() ? 30 : 60;
+};
+
+//
 // ###  App.isHtml5
 //
 // Return true if the app is running in HTML5 mode.
@@ -51,15 +60,6 @@ App.isDesktop = function() {
 		}
 	}
 	return this._isDesktop;
-};
-
-//
-// ###  App.getTargetFrameRate
-//
-// Return the target frame rate to use. Scale back in HTML5 mode to save a CPU fan somewhere.
-//
-App.getTargetFrameRate = function() {
-	return this.isHtml5() ? 30 : 60;
 };
 
 //
@@ -148,6 +148,35 @@ App.centralize = function(x, y) {
 };
 
 //
+// ###  App.alert
+//
+// Safely call `alert`.
+//
+App.alert = function(msg) {
+	if(typeof alert === "function") {
+		alert(msg);
+	} else {
+		cc.log(msg);
+	}
+};
+
+//
+// ###  App.assert
+//
+// Throw an error if the given object is undefined or boolean is false.
+//
+App.assert = function(objOrBool, errMsg) {
+	if (typeof objOrBool === "undefined"
+	|| (typeof objOrBool === "boolean" && !objOrBool)
+	) {
+		errMsg = errMsg || "Couldn't load the game. Please try a newer browser.";
+		alert(errMsg);
+		debugger;
+		throw errMsg;
+	}
+};
+
+//
 // ###  App.localizeCurrency
 //
 // Return the currency amount localized. Currently the method only localizes to the United States currency format.
@@ -197,25 +226,11 @@ App.getLocalizedString = function(key) {
 };
 
 //
-// ###  App.assert
-//
-// Throw an error if the given object is undefined or boolean is false.
-//
-App.assert = function(objOrBool, errMsg) {
-	if (typeof objOrBool === "undefined"
-	|| (typeof objOrBool === "boolean" && !objOrBool)
-	) {
-		errMsg = errMsg || "Couldn't load the game. Please try a newer browser.";
-		alert(errMsg);
-		debugger;
-		throw errMsg;
-	}
-};
-
-//
 // ###  App.getRunningLayer
 //
-// Returns the running scene's child layer. A scene creates a member variable named `layer` to be used by this method.
+// Returns the running scene's child layer.
+//
+// Scenes can create a member variable named `layer` which will be used by this method.
 //
 App.getRunningLayer = function() {
 	var node = cc.director.getRunningScene();
@@ -225,6 +240,20 @@ App.getRunningLayer = function() {
 		}
 	}
 	return node;
+};
+
+//
+// ###  App.callRunningLayer
+//
+// Call the running scene's layer's method.
+//
+App.callRunningLayer = function(methodName, param1, param2, param3) {
+	var layer = this.getRunningLayer();
+	if (layer[methodName]) {
+		layer[methodName](param1, param2, param3);
+	} else {
+		cc.log("Couldn't find method '" + methodName + "' in running scene or layer.");
+	}
 };
 
 //
@@ -272,6 +301,21 @@ App.loadResources = function() {
 };
 
 //
+// ###  App.runInitialScene
+//
+// Loads resources and calls the initial scene. Called by `App.main`.
+//
+App.runInitialScene = function() {
+	var Scene = App.getInitialScene(),
+		scene;
+	
+	App.loadResources();
+	scene = new Scene;
+	scene.init();
+	cc.director.runScene(scene);
+};
+
+//
 // ###  App.isFullscreenAvailable
 //
 // Return true if fullscreen mode is available on this platform.
@@ -290,19 +334,27 @@ App.isFullscreenEnabled = function() {
 };
 
 //
-// ###
+// ###  App.enableFullscreen
 //
-// .
+// Enable or disable fullscreen mode.
 //
-App.setFullscreenEnabled = function(enabled) {
-	if (this.isHtml5()) {
-		if (this.isFullscreenEnabled()) {
-			this.runPrefixMethod(document, "CancelFullScreen");
-			/*cc.log("Cancelling fullscreen");*/
-		}
-		else {
-			this.runPrefixMethod(document.getElementById("gameBody"), "RequestFullScreen");
-			/*cc.log("Requesting fullscreen");*/
+App.enableFullscreen = function(enabled) {
+	if (this.isFullscreenAvailable()) {
+		if (this.isHtml5()) {
+			if (this.isFullscreenEnabled()) {
+				/*cc.log("Cancelling fullscreen");*/
+				this.runPrefixMethod(
+					document,
+					"CancelFullScreen"
+				);
+			}
+			else {
+				/*cc.log("Requesting fullscreen");*/
+				this.runPrefixMethod(
+					document.getElementById("gameBody"),
+					"RequestFullScreen"
+				);
+			}
 		}
 	}
 
@@ -311,21 +363,22 @@ App.setFullscreenEnabled = function(enabled) {
 };
 
 //
-// ###
+// ###  App.toggleFullscreenEnabled
 //
-// .
+// Toggle whether fullscreen is enabled.
 //
 App.toggleFullscreenEnabled = function() {
-	this.setFullscreenEnabled(!this.isFullscreenEnabled());
+	this.enableFullscreen(!this.isFullscreenEnabled());
 };
 
 //
-// ###
+// ###  App.runPrefixMethod
 //
-// .
+// Run a method name prefixed according to the browser. Example: `RequestFullScreen` becomes `webkitRequestFullScreen`.
+//
+// See http://www.sitepoint.com/html5-full-screen-api/.
 //
 App.runPrefixMethod = function(obj, method) {
-	// from: http://www.sitepoint.com/html5-full-screen-api/
 	var pfx = ["webkit", "moz", "ms", "o", ""];
 	var p = 0, m, t;
 	while (p < pfx.length && !obj[m]) {
@@ -344,35 +397,26 @@ App.runPrefixMethod = function(obj, method) {
 };
 
 //
-// ###
+// ###  App.loadSoundEnabled
 //
-// .
-//
-App.isInitialLaunch = function() {
-	// use soundEnabled as an indicator of if we have previously launched the app
-	var v = cc.sys.localStorage.getItem("soundEnabled");
-	return (typeof v === "undefined" || v === null || v === "");
-};
-
-//
-// ###
-//
-// .
+// Load the `soundEnabled` preference from local storage.
 //
 App.loadSoundEnabled = function() {
-	this._soundEnabled = cc.sys.localStorage.getItem("soundEnabled");
-	//cc.log("Loaded sound enabled: " + this._soundEnabled);
-	if (this._soundEnabled === null || this._soundEnabled === "") {
+	var enabled = cc.sys.localStorage.getItem("soundEnabled");
+	/*cc.log("Loaded sound enabled: " + enabled);*/
+	
+	if (enabled === null || enabled === "") {
 		this.enableSound(true);
+	} else {
+		this._soundEnabled = (enabled === "true" || enabled === true);
 	}
-	this._soundEnabled = (this._soundEnabled === "true" || this._soundEnabled === true) ? true : false;
-	//cc.log("Loaded sound enabled: " + this._soundEnabled);
+	/*cc.log("Sound enabled is now: " + this._soundEnabled);*/
 };
 
 //
-// ###
+// ###  App.enableSound
 //
-// .
+// Enable or disable sound.
 //
 App.enableSound = function(enabled) {
 	this._soundEnabled = enabled ? true : false;
@@ -383,27 +427,27 @@ App.enableSound = function(enabled) {
 };
 
 //
-// ###
+// ###  App.toggleSoundEnabled
 //
-// .
+// Toggle whether sound is enabled.
 //
 App.toggleSoundEnabled = function() {
 	this.enableSound(!this.isSoundEnabled());
 };
 
 //
-// ###
+// ###  App.isSoundEnabled
 //
-// .
+// Return true if sound is enabled.
 //
 App.isSoundEnabled = function() {
 	return this._soundEnabled ? true : false;
 };
 
 //
-// ###
+// ###  App.playEffect
 //
-// .
+// Plays the sound effect with the given filename if sound is enabled.
 //
 App.playEffect = function(filename) {
 	if (this.isSoundEnabled()) {
@@ -412,9 +456,9 @@ App.playEffect = function(filename) {
 };
 
 //
-// ###
+// ###  App.playMusic
 //
-// .
+// Plays the music file with the given filename if sound is enabled.
 //
 App.playMusic = function(filename) {
 	if (this.isSoundEnabled()) {
@@ -423,9 +467,219 @@ App.playMusic = function(filename) {
 };
 
 //
-// ###
+// ###  App.getAnalyticsPlugin
 //
-// .
+// Get the analytics plugin. The first time this is called, the plugin is loaded and configured.
+//
+App.getAnalyticsPlugin = function() {
+	var self = this,
+		name,
+		p;
+
+	if (typeof this._analyticsPlugin === "undefined") {
+		this._loadAnalyticsTries = (this._loadAnalyticsTries || 0);
+		
+		if (typeof FlurryAgent !== "undefined" &&
+			typeof App.config !== "undefined" &&
+			!this._initializedAnalytics
+		) {
+			this._initializedAnalytics = true;
+			/*cc.log("Loading analytics plugin after "
+				+ this._loadAnalyticsTries + " tries");*/
+
+			name = App.config["analytics-plugin-name"];
+			if (apiKey && manager && name) {
+				p = plugin.PluginManager.getInstance().loadPlugin(name);
+				if (p) {
+					p.setDebugMode(App.config["analytics-plugin-debug"]);
+					p.startSession(App.config["analytics-plugin-api-key"]);
+					this._analyticsPlugin = p;
+				}
+			} else {
+				cc.log("Analytics plugin: API key has not been set");
+			}
+		} else {
+			/* Try to load plugin up to 10 times with a 250ms delay between tries. */
+			if (this._loadAnalyticsTries < 10) {
+				setTimeout(function(){
+					self.getAnalyticsPlugin();
+				}, 250);
+			}
+		}
+
+		this._loadAnalyticsTries = this._loadAnalyticsTries + 1;
+	}
+	return this._analyticsPlugin;
+};
+
+//
+// ###  App.getAdsPlugin
+//
+// Get the advertisements plugin. The first time this is called, the plugin is loaded and configured.
+//
+App.getAdsPlugin = function() {
+	if (typeof this._adsPlugin === "undefined" && typeof plugin !== "undefined") {
+		var name = App.config["ads-plugin-name"];
+
+		this._adsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
+		
+		if (this._adsPlugin === null) {
+			this._adsPlugin = new plugin[name]();
+			this._adsPlugin.init();
+		}
+		
+		if (this._adsPlugin) {
+			this._adsPlugin.setDebugMode(App.config["ads-plugin-debug"]);
+			this._adsPlugin.configDeveloperInfo({
+				apiKey: App.config["ads-plugin-api-key"],
+				mode: App.config["ads-plugin-mode"]
+			});
+		}
+	}
+
+	return this._adsPlugin;
+};
+
+//
+// ###  App.getSocialPlugin
+//
+// Get the social networking plugin. The first time this is called, the plugin is loaded and configured.
+//
+App.getSocialPlugin = function() {
+	var name;
+	
+	if (typeof this._socialPlugin === "undefined") {
+		name = App.config["social-plugin-name"];
+		if (plugin[name]) {
+			this._socialPlugin = new plugin[name]();
+			this._socialPlugin.setDebugMode(App.config["social-plugin-debug"]);
+			this._socialPlugin.init();
+			this._socialPlugin.configDeveloperInfo(App.config["social-plugin-init"]);
+		}
+	}
+
+	return this._socialPlugin;
+};
+
+//
+// ###  App.getEconomyPlugin
+//
+// Get the virtual economy plugin. The first time this is called, the plugin is loaded and configured.
+//
+App.getEconomyPlugin = function() {
+	if (typeof this._economyPlugin === "undefined") {
+		var config = App.config["economy-plugin-init"];
+		
+		this._economyPlugin = Soomla;
+		
+		if (Soomla.CCSoomlaNdkBridge.setDebug) {
+			Soomla.CCSoomlaNdkBridge.setDebug(App.config["economy-plugin-debug"]);
+		}
+
+		if (config && config.soomSec && config.customSecret) {
+			Soomla.StoreController.createShared(App.getStoreAssets(), config);
+
+			Soomla.CCSoomlaNdkBridge.buy = function(
+				productId,
+				successCallback,
+				failureCallback
+			) {
+				var social = App.getSocialPlugin();
+				if (social && social.isCanvasMode()) {
+					social.buy(productId, successCallback, failureCallback);
+				}
+				else {
+					App.alert("Please play within Facebook to enable purchasing.");
+					Soomla.CCSoomlaNdkBridge.onPaymentComplete();
+				}
+			};
+
+			Soomla.CCSoomlaNdkBridge.onCurrencyUpdate = function() {
+				App.getRunningLayer().onCurrencyUpdate();
+			};
+
+			Soomla.CCSoomlaNdkBridge.onPaymentComplete = function() {
+				App.getRunningLayer().onPaymentComplete();
+			};
+		} else {
+			cc.log("Soomla: Secret keys have not been set");
+		}
+	}
+	
+	return this._economyPlugin;
+};
+
+//
+// ###  App.giveItem
+//
+// Give the player a certain amount of an item ID. Use a negative amount to take away.
+//
+App.giveItem = function(itemId, amount) {
+	if (amount < 0) {
+		Soomla.storeInventory.takeItem(itemId, Math.abs(amount));
+	} else {
+		Soomla.storeInventory.giveItem(itemId, amount);
+	}
+};
+
+//
+// ###   App.isInitialLaunch
+//
+// Returns true if this is the first time the app is being launched. It determines this based on whether the `soundEnabled` key exists within local storage. Deleting this key will essentially reset the app into thinking it's the first run.
+//
+// Must be called before `App.loadSoundEnabled`, which creates the `soundEnabled` key.
+//
+App.isInitialLaunch = function() {
+	var v = cc.sys.localStorage.getItem("soundEnabled");
+	return (typeof v === "undefined" || v === null || v === "");
+};
+
+//
+// ###  App.onInitialLaunch
+//
+// Called on the App's first launch. Used to set initial balances of virtual economy currencies.
+//
+App.onInitialLaunch = function() {
+	var i,
+		itemId,
+		balance,
+		initialBalances = App.config["economy-plugin-initial-balances"],
+		currencies,
+		len = 0,
+		allZero = true;
+	
+	/* Get the currencies. */
+	if (Soomla && Soomla.storeInfo) {
+		currencies = Soomla.storeInfo.getVirtualCurrencies();
+		len = currencies.length || 0;
+	}
+
+	/* Determine if inventory is all at zero. */
+	for (i = 0; i < len; i += 1) {
+		itemId = currencies[i].itemId;
+		balance = Soomla.storeInventory.getItemBalance(itemId);
+		if (balance > 0) {
+			cc.log("User has " + balance + " of " + itemId);
+			allZero = false;
+			break;
+		}
+	}
+	
+	/* Set initial balances. */
+	if (allZero) {
+		for (i = 0; i < len; i += 1) {
+			itemId = currencies[i].itemId;
+			balance = (initialBalances ? initialBalances[itemId] : 0);
+			cc.log("Setting initial balance " + balance + " for " + itemId);
+			Soomla.storeInventory.giveItem(itemId, balance);
+		}
+	}
+};
+
+//
+// ###  App.getHttpQueryParams
+//
+// Return the HTTP query's GET parameters.
 //
 App.getHttpQueryParams = function() {
 	var loc,
@@ -453,256 +707,11 @@ App.getHttpQueryParams = function() {
 };
 
 //
-// ###
+// ###  App.requestUrl
 //
-// .
+// Load the given URL and call the callback when finished. If the third parameter `binary` is truthy, then use binary transfer mode.
 //
-App.alert = function(msg) {
-	if(typeof alert === "function") {
-		alert(msg);
-	} else {
-		cc.log(msg);
-	}
-};
-
-//
-// ###
-//
-// .
-//
-App.callRunningLayer = function(method, param1, param2, param3) {
-	scene = cc.director.getRunningScene();
-	if (scene && scene.layer && scene.layer[method]) {
-		scene.layer[method](param1, param2, param3);
-	}
-};
-
-//
-// ###
-//
-// .
-//
-App.loadAnalyticsPlugin = function() {
-	var self = this,
-		flurryApiKey,
-		flurry;
-
-	this._loadAnalyticsTries = (this._loadAnalyticsTries || 0);
-	
-	if (typeof FlurryAgent !== "undefined" && typeof App.config !== "undefined" && !this._initializedFlurry) {
-		this._initializedFlurry = true;
-		//cc.log("Loaded flurry after " + this._loadAnalyticsTries + " tries");
-		flurryApiKey = App.config["flurry-api-key"];
-		if (flurryApiKey) {
-			flurry = plugin.PluginManager.getInstance().loadPlugin("AnalyticsFlurry");
-			if (flurry) {
-				flurry.startSession(flurryApiKey);
-			}
-		} else {
-			cc.log("Flurry: API key has not been set");
-		}
-	} else {
-		if (this._loadAnalyticsTries < 10) {
-			setTimeout(function(){
-				self.loadAnalyticsPlugin();
-			}, 250);
-		}
-	}
-
-	this._loadAnalyticsTries = this._loadAnalyticsTries + 1;
-};
-
-//
-// ###
-//
-// .
-//
-App.getAdsPlugin = function() {
-	var name;
-	
-	if (typeof this._adsPlugin === "undefined" && typeof plugin !== "undefined") {
-		name = App.config["ads-plugin-name"];
-
-		// try to load plugin
-		this._adsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
-		
-		// fallback trying for manual js load
-		// this happens for any platform that doesn't have a c++ plugin with js bindings
-		if (this._adsPlugin === null) {
-			this._adsPlugin = new plugin[name]();
-			this._adsPlugin.init();
-		}
-	}
-
-	return this._adsPlugin;
-};
-
-//
-// ###
-//
-// .
-//
-App.loadAdsPlugin = function() {
-	var plugin = this.getAdsPlugin(),
-		debug = App.config["ads-plugin-debug"];
-
-	if (typeof plugin !== 'undefined') {
-		if (debug) {
-			plugin.setDebugMode(debug);
-			cc.log("Ads plugin: " + plugin);
-		}
-
-		plugin.configDeveloperInfo({
-			apiKey: App.config["ads-plugin-api-key"],
-			mode: App.config["ads-plugin-mode"]
-		});
-	}
-};
-
-//
-// ###
-//
-// .
-//
-App.getSocialPlugin = function() {
-	var name;
-	
-	if (typeof this._socialPlugin === "undefined") {
-		name = App.config["social-plugin-name"];
-		if (plugin[name]) {
-			this._socialPlugin = new plugin[name]();
-			this._socialPlugin.setDebugMode(App.config["social-plugin-debug"]);
-			this._socialPlugin.init();
-		} /*else {
-			this._socialPlugin = {
-				isLoggedIn: function() {return true;},
-				isCanvasMode: function() {return false;},
-				getPlayerName: function() {return "Anonymous";},
-				setDebugMode: function() {},
-				configDeveloperInfo: function() {},
-				buy: function() {},
-				login: function() {},
-				logout: function() {},
-				getPlayerImageUrl: function() {},
-				getPlayerFirstName: function() {},
-				getRandomFriendId: function() {}
-			};
-		}*/
-	}
-
-	return this._socialPlugin;
-};
-
-//
-// ###
-//
-// .
-//
-App.loadSocialPlugin = function() {
-	var plugin = this.getSocialPlugin();
-
-	if (typeof plugin !== "undefined") {
-		plugin.configDeveloperInfo(App.config["social-plugin-init"]);
-	}
-};
-
-//
-// ###
-//
-// .
-//
-App.loadEconomyPlugin = function() {
-	var config = App.config["economy-plugin-init"];
-	
-	if (Soomla.CCSoomlaNdkBridge.setDebug) {
-		Soomla.CCSoomlaNdkBridge.setDebug(App.config["economy-plugin-debug"]);
-	}
-
-	if (config && config.soomSec && config.customSecret) {
-		Soomla.StoreController.createShared(App.getStoreAssets(), config);
-
-		Soomla.CCSoomlaNdkBridge.buy = function(productId, successCallback, failureCallback) {
-			var social = App.getSocialPlugin();
-			if (social && social.isCanvasMode()) {
-				social.buy(productId, successCallback, failureCallback);
-			}
-			else {
-				App.alert("Please play within Facebook to enable purchasing.");
-				Soomla.CCSoomlaNdkBridge.onPaymentComplete();
-			}
-		};
-
-		Soomla.CCSoomlaNdkBridge.onCurrencyUpdate = function() {
-			App.getRunningLayer().onCurrencyUpdate();
-		};
-
-		Soomla.CCSoomlaNdkBridge.onPaymentComplete = function() {
-			App.getRunningLayer().onPaymentComplete();
-		};
-	} else {
-		cc.log("Soomla: Secret keys have not been set");
-	}
-};
-
-//
-// ###
-//
-// .
-//
-App.giveItem = function(itemId, amount) {
-	if (amount < 0) {
-		Soomla.storeInventory.takeItem(itemId, Math.abs(amount));
-	} else {
-		Soomla.storeInventory.giveItem(itemId, amount);
-	}
-};
-
-//
-// ###
-//
-// .
-//
-App.onInitialLaunch = function() {
-	// set initial balances
-	var i,
-		itemId,
-		balance,
-		initialBalances = App.config["economy-plugin-initial-balances"],
-		currencies,
-		len = 0,
-		allZero = true;
-	
-	if (Soomla && Soomla.storeInfo) {
-		currencies = Soomla.storeInfo.getVirtualCurrencies();
-		len = currencies.length || 0;
-	}
-
-	// determine if inventory is all at zero
-	for (i = 0; i < len; i += 1) {
-		itemId = currencies[i].itemId;
-		balance = Soomla.storeInventory.getItemBalance(itemId);
-		if (balance > 0) {
-			cc.log("User has " + balance + " of " + itemId);
-			allZero = false;
-			break;
-		}
-	}
-	
-	// set initial balances
-	if (allZero) {
-		for (i = 0; i < len; i += 1) {
-			itemId = currencies[i].itemId;
-			balance = (initialBalances ? initialBalances[itemId] : 0);
-			cc.log("Setting initial balance " + balance + " for " + itemId);
-			Soomla.storeInventory.giveItem(itemId, balance);
-		}
-	}
-};
-
-//
-// ###
-//
-// .
+// Uses `XMLHttpRequest` (implemented natively on native platforms).
 //
 App.requestUrl = function(url, callback, binary) {
 	var x,
@@ -730,9 +739,9 @@ App.requestUrl = function(url, callback, binary) {
 			x.overrideMimeType("text/xml");
 		}
 
-		// callback
+		/* Call the callback when done. */
 		x.onreadystatechange = function () {
-			if (x.readyState == 4) { // 4 == done
+			if (x.readyState == 4) { /* 4 == done. */
 				var res = (binary ? x.response : x.responseText);
 				callback(res || "", x.statusText);
 				if (res) {
@@ -741,7 +750,7 @@ App.requestUrl = function(url, callback, binary) {
 			}
 		};
 
-		// request
+		/* Make the request. */
 		x.open("GET", url, true);
 		if (binary) {
 			x.responseType = "arraybuffer";
@@ -753,21 +762,23 @@ App.requestUrl = function(url, callback, binary) {
 };
 
 //
-// ###
+// ###  App.loadImage
 //
-// .
+// Loads an image asynchronously from the given URL, calling the callback when finished. Different for HTML5 versus native.
 //
 App.loadImage = function(url, callback) {
 	if (url.indexOf("://") == 0) {
+		cc.log("Not a URL: " + url);
 		return;
 	}
 	
-	// load image the cocos2d-html5 way
+	/* Load image HTML5. */
 	if (typeof Image !== "undefined") {
 		var image = new Image();
-		//image.crossOrigin = "Anonymous";
+		/*image.crossOrigin = "Anonymous";*/
 		image.src = url;
-		//cc.log("Loading image: " + url);
+
+		/*cc.log("Loading image: " + url);*/
 		image.addEventListener("load", function(){
 			cc.textureCache.cacheImage(url, image);
 			this.removeEventListener("load", arguments.callee, false);
@@ -775,9 +786,10 @@ App.loadImage = function(url, callback) {
 				callback();
 			}
 		}, false);
-	// load image from raw file data the cocos2d-x way
+
+	/* Load image native. */
 	} else {
-		//cc.log("Loading image from raw data: " + url);
+		/*cc.log("Loading image from raw data: " + url);*/
 		this.requestUrl(url, function(response, status) {
 			var bytes = new Uint8Array(response);
 			App.addImageData(url, bytes);
@@ -789,175 +801,85 @@ App.loadImage = function(url, callback) {
 };
 
 //
-// ###
+// ###  App.boot
 //
-// .
+// Boot method. Different for HTML5 versus native. Called at the end of this file.
 //
-App.bootHtml5 = function() {
-	var d = document;
-/*	var c = {
-		COCOS2D_DEBUG: 2, // 0 to turn debug off, 1 for basic debug, and 2 for full debug
-		box2d: false,
-		chipmunk: false,
-		showFPS: this.showFPS,
-		frameRate: this.getTargetFrameRate(),
-		loadExtension: true,
-		loadPluginx: true,
-		renderMode: 0, // 0 (default), 1 (Canvas only), 2 (WebGL only)
-		tag: "gameCanvas" // the dom element to run cocos2d on
-	};
-	
-	if (typeof this.singleEngineFile !== "undefined" && this.singleEngineFile.length) {
-		c.SingleEngineFile = this.singleEngineFile;
-		c.appFiles = [];
+App.boot = function(global) {
+	if (this.isHtml5()) {
 	} else {
-		c.engineDir = "lib/cocos2d-html5/cocos2d/";
-		c.appFiles = this.getJSFiles();
-	}
-
-	// require canvas element
-	if (!d.createElement('canvas').getContext) {
-		var s = d.createElement('div');
-		s.innerHTML = '<h2>Your browser does not support HTML5 canvas!</h2>' +
-			'<p>Google Chrome is a browser that combines a minimal design with sophisticated technology to make the web faster, safer, and easier.Click the logo to download.</p>' +
-			'<a href="http://www.google.com/chrome" target="_blank"><img src="http://www.google.com/intl/zh-CN/chrome/assets/common/images/chrome_logo_2x.png" border="0"/></a>';
-		var p = d.getElementById(c.tag).parentNode;
-		p.style.background = 'none';
-		p.style.border = 'none';
-		p.insertBefore(s, d.getElementById(c.tag));
-		d.body.style.background = '#ffffff';
-		return;
-	}
-
-	// load cocos2d
-	window.addEventListener('DOMContentLoaded', function() {
-		this.removeEventListener('DOMContentLoaded', arguments.callee, false);
-		var s = d.createElement('script');
-		if (c.SingleEngineFile && !c.engineDir) {
-			s.src = c.SingleEngineFile;
-		}
-		else if (c.engineDir && !c.SingleEngineFile) {
-			s.src = c.engineDir + 'jsloader.js';
-		}
-		else {
-			alert('You must specify either the single engine file OR the engine directory in "cocos2d.js"');
+		/* Ensure plugin is defined. */
+		global.plugin = global.plugin || {};
+		if (!global.plugin.PluginManager) {
+			global.plugin.PluginManager = {
+				getInstance:function(){return {loadPlugin:function(){}}}
+			};
 		}
 
-		document.ccConfig = c;
-		s.id = 'cocos2d-html5';
-		d.body.appendChild(s);
-	});
-*/
-};
+		/* Implement timers. */
+		require("js/lib/timers.js");
+		this.timerLoop = makeWindowTimer(global, function(ms){});
+		cc.director.getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
+		/*setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);*/
 
-//
-// ###
-//
-// .
-//
-App.bootX = function(global) {
-	//require("jsb.js");
-	//require("jsb_pluginx.js");
-	//require("jsb_pluginx_protocols_auto_api.js");
-	//require("jsb_cocos2dx_auto_api.js");
-
-	global.plugin = global.plugin || {};
-	if (!global.plugin.PluginManager) {
-		global.plugin.PluginManager = {getInstance:function(){return {loadPlugin:function(){}}}};
+		/* Location. */
+		require("js/ConfigServer.js");
+		global.location = "http://" + App.serverAddress +
+			(App.serverPort ? ":" + App.serverPort : "") + "/";
+		global.navigator = {
+			/* http://stackoverflow.com/questions/8579019/how-to-get-the-user-agent-on-ios */
+			userAgent: "Apple-iPhone5C1/1001.525"
+		};
+		/*cc.log("Got location: " + window.location);*/
+		
+		/* Add some functionality to cc. */
+		if (typeof cc.DEGREES_TO_RADIANS === "undefined") {
+			cc.PI = Math.PI;
+			cc.RAD = cc.PI / 180;
+			cc.DEG = 180 / cc.PI;
+			cc.DEGREES_TO_RADIANS = function(angle) {return angle * cc.RAD;};
+			cc.RADIANS_TO_DEGREES = function(angle) {return angle * cc.DEG;};
+		}
 	}
 
-	// implement timers
-	require("js/lib/timers.js");
-	this.timerLoop = makeWindowTimer(global, function(ms){});
-	cc.director.getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
-	//setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);
-
-	// after everything is done loading, create the main window variable
-	require("js/ConfigServer.js");
-	global.location = "http://" + App.serverAddress + (App.serverPort ? ":" + App.serverPort : "") + "/";
-	global.navigator = {
-		// http://stackoverflow.com/questions/8579019/how-to-get-the-user-agent-on-ios
-		userAgent: "Apple-iPhone5C1/1001.525" // how to apply this from C++??
+	/* Embed main.js. */
+	cc.game.onStart = function(){
+		App.main();
 	};
-	//cc.log("Got location: " + window.location);
-	
-	// add some functionality to cc
-	if (typeof cc.DEGREES_TO_RADIANS === "undefined") {
-		cc.PI = Math.PI;
-		cc.RAD = cc.PI / 180;
-		cc.DEG = 180 / cc.PI;
-		cc.DEGREES_TO_RADIANS = function(angle) {return angle * cc.RAD;};
-		cc.RADIANS_TO_DEGREES = function(angle) {return angle * cc.DEG;};
-	}
-	
-	// test addImageData
-	//var array = new Uint8Array;
-	//App.addImageData("http://somewhere.com/something.png", array);
+	cc.game.run();
 };
 
 //
-// ###
+// ###  App.main
 //
-// .
-//
-App.mainHtml5 = function() {
-	var winSize = this.getWinSize();
-	
-	cc.view.setDesignResolutionSize(winSize.width, winSize.height, cc.ResolutionPolicy.SHOW_ALL);
-	cc.view.resizeWithBrowserSize(true);
-
-	cc.LoaderScene.preload(App.getResourcesToPreload(), App.mainCallback, this);
-
-	App.addImageData = function() {};
-};
-
-//
-// ###
-//
-// .
-//
-App.mainX = function() {
-	App.mainCallback();
-};
-
-//
-// ###
-//
-// .
-//
-App.mainCallback = function() {
-	var Scene = App.getInitialScene(),
-		scene;
-	
-	App.loadResources();
-	scene = new Scene;
-	scene.init();
-	cc.director.runScene(scene);
-};
-
-//
-// ###
-//
-// .
+// The main method. Called by `cc.game.onStart`.
 //
 App.main = function() {
 	var i,
 		sheets,
 		cacher,
 		dirs = [],
-		winSize,
 		initialLaunch = this.isInitialLaunch();
 
 	this.loadSoundEnabled();
 
 	cc.defineGetterSetter(App, "winSize", App.getWinSize);
 
-	if (this.isHtml5())
-		this.mainHtml5();
-	else
-		this.mainX();
-	
-	winSize = this.getWinSize();
+	if (this.isHtml5()) {
+		cc.view.setDesignResolutionSize(
+			App.winSize.width,
+			App.winSize.height,
+			cc.ResolutionPolicy.SHOW_ALL
+		);
+		cc.view.resizeWithBrowserSize(true);
+
+		cc.LoaderScene.preload(App.getResourcesToPreload(), App.runInitialScene, this);
+
+		App.addImageData = function() {};
+	}
+	else {
+		App.runInitialScene();
+	}
 	
 	if (this.isHtml5()) {
 		this._fullscreenEnabled = (this.runPrefixMethod(document, "FullScreen")
@@ -967,47 +889,29 @@ App.main = function() {
 		}
 	}
 
-	//cc.director.setDisplayStats(this.showFPS);
 	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
-	cc.log(winSize.width + " x " + winSize.height
+	cc.log(App.winSize.width + " x " + App.winSize.height
 		+ ", resource dir: " + App.getResourceDir()
 		+ ", language: " + App.getLanguageCode()
 		+ ", " + parseInt(1.0 / cc.director.getAnimationInterval()) + " fps");
 
-	// load
-	this.loadAnalyticsPlugin();
-	this.loadAdsPlugin();
-	this.loadSocialPlugin();
-	this.loadEconomyPlugin();
+	/* Load plugins. */
+	this.getAnalyticsPlugin();
+	this.getAdsPlugin();
+	this.getSocialPlugin();
+	this.getEconomyPlugin();
 	
-	// handle initial launch
-	//cc.log("Initial launch: " + initialLaunch);
+	/* Handle initial launch. */
+	/* Call after loading plugins so initial currency balances can be set. */
+	/*cc.log("Initial launch: " + initialLaunch);*/
 	if (initialLaunch) {
 		this.onInitialLaunch();
 	}
 };
 
 //
-// ###
+// ###  Boot
 //
-// .
-//
-App.boot = function(global) {
-	if (this.isHtml5())
-		this.bootHtml5(global);
-	else
-		this.bootX(global);
-
-	// embed main.js
-	cc.game.onStart = function(){
-		App.main();
-	};
-	cc.game.run();
-};
-
-//
-// ###
-//
-// .
+// Call `App.boot` passing in the global variable.
 //
 App.boot(this);

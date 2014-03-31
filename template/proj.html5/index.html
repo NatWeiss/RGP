@@ -69,10 +69,10 @@ A: you could use passworded zip, obfuscate your code, or simply use the bytecode
 			js = d.createElement('script'); js.id = id; js.async = true;
 			js.src = "https://cdn.flurry.com/js/flurry.js";
 			js.addEventListener("load", function () {
-				if (typeof App !== "undefined" && typeof App.loadAnalyticsPlugin !== "undefined") {
-					App.loadAnalyticsPlugin();
+				if (typeof App !== "undefined" && typeof App.getAnalyticsPlugin !== "undefined") {
+					App.getAnalyticsPlugin();
 				} else {
-					throw "Couldn't find App.loadAnalyticsPlugin()";
+					throw "Couldn't find App.getAnalyticsPlugin()";
 				}
 				this.removeEventListener("load", arguments.callee, false);
 			}, false);
