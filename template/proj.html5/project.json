@@ -12,7 +12,6 @@
 		"cocos2d",
 		"extensions",
 		"pluginx",
-		"box2d",
 		"chipmunk"
 		],
 

@@ -44,14 +44,12 @@ plugin.AdsMobFox = cc.Class.extend({
 	adUrl: "",
 	geoData: null,
 	doShowAds: null,
-	winSize: {width: 480, height: 320},
 
     /**
      methods of InterfaceAds protocol
 	 */
     init: function() {
 		var self = this;
-		this.getWinSize();
 		
 		// get client's IP address & geo data
 		this.requestURL("http://api.hostip.info/get_json.php?position=true", function(response, status){
@@ -121,13 +119,13 @@ plugin.AdsMobFox = cc.Class.extend({
 				latitude: self.geoData.lat
 			};
 		if (isFullscreen){
-			params["adspace.width"] = parseInt(this.winSize.width);
-			params["adspace.height"] = parseInt(this.winSize.height);
+			params["adspace.width"] = parseInt(App.winSize.width);
+			params["adspace.height"] = parseInt(App.winSize.height);
 			posEnum = plugin.AdsPos.Center;
 		} else if (typeEnum === plugin.AdsType.BannerAd) {
 			if (sizeEnum > 0) {
-				params["adspace.width"] = parseInt(this.winSize.width);
-				params["adspace.height"] = (this.winSize.width >= 1024 ? 90 : 50);
+				params["adspace.width"] = parseInt(App.winSize.width);
+				params["adspace.height"] = (App.winSize.width >= 1024 ? 90 : 50);
 			}
 		}
 
@@ -170,7 +168,7 @@ plugin.AdsMobFox = cc.Class.extend({
 			
 			this.layer.stopAllActions();
 			this.layer.runAction(cc.Sequence.create(
-				cc.EaseIn.create(cc.MoveBy.create(0.5, cc.p(0, -this.winSize.height)), 3.0),
+				cc.EaseIn.create(cc.MoveBy.create(0.5, cc.p(0, -App.winSize.height)), 3.0),
 				cc.RemoveSelf(true)
 			));
 			this.layer = null;
@@ -207,14 +205,6 @@ plugin.AdsMobFox = cc.Class.extend({
         return plugin.Version;
     },
 
-	getWinSize: function() {
-		var size = cc.director.getWinSize();
-		if (size.width && size.height) {
-			this.winSize = size;
-		}
-		return this.winSize;
-	},
-	
 	between: function(string, prefix, suffix) {
 		var startPos = string.indexOf(prefix),
 			endPos = string.indexOf(suffix, startPos + prefix.length);
@@ -297,23 +287,23 @@ plugin.AdsMobFox = cc.Class.extend({
 		// set sprite position
 		switch (posEnum) {
 			case plugin.AdsPos.Center:
-				sprite.setPosition(this.winSize.width * .5, this.winSize.height * .5);
+				sprite.setPosition(App.winSize.width * .5, App.winSize.height * .5);
 				break;
 			case plugin.AdsPos.Top:
 				sprite.setAnchorPoint(cc.p(.5, 1));
-				sprite.setPosition(this.winSize.width * .5, this.winSize.height);
+				sprite.setPosition(App.winSize.width * .5, App.winSize.height);
 				break;
 			case plugin.AdsPos.TopLeft:
 				sprite.setAnchorPoint(cc.p(0, 1));
-				sprite.setPosition(0, this.winSize.height);
+				sprite.setPosition(0, App.winSize.height);
 				break;
 			case plugin.AdsPos.TopRight:
 				sprite.setAnchorPoint(cc.p(1, 1));
-				sprite.setPosition(this.winSize.width, this.winSize.height);
+				sprite.setPosition(App.winSize.width, App.winSize.height);
 				break;
 			case plugin.AdsPos.Bottom:
 				sprite.setAnchorPoint(cc.p(.5, 0));
-				sprite.setPosition(this.winSize.width * .5, 0);
+				sprite.setPosition(App.winSize.width * .5, 0);
 				break;
 			case plugin.AdsPos.BottomLeft:
 				sprite.setAnchorPoint(cc.p(0, 0));
@@ -321,7 +311,7 @@ plugin.AdsMobFox = cc.Class.extend({
 				break;
 			case plugin.AdsPos.BottomRight:
 				sprite.setAnchorPoint(cc.p(1, 0));
-				sprite.setPosition(this.winSize.width, 0);
+				sprite.setPosition(App.winSize.width, 0);
 				break;
 		}
 		
@@ -336,9 +326,9 @@ plugin.AdsMobFox = cc.Class.extend({
 				closeButton.setAnchorPoint(cc.p(1,1));
 				closeButton.setPosition(sprite.getPositionX() + sprite.getContentSize().width * .5,
 					sprite.getPositionY() + sprite.getContentSize().height * .5);
-				closeButton.setPositionY(closeButton.getPositionY() - this.winSize.height);
-				closeButton.runAction(cc.EaseOut.create(cc.MoveBy.create(0.5, cc.p(0, this.winSize.height)), 3.0));
-				if (this.winSize.width < 1024) {
+				closeButton.setPositionY(closeButton.getPositionY() - App.winSize.height);
+				closeButton.runAction(cc.EaseOut.create(cc.MoveBy.create(0.5, cc.p(0, App.winSize.height)), 3.0));
+				if (App.winSize.width < 1024) {
 					closeButton.setScale(.5);
 				}
 
@@ -352,8 +342,8 @@ plugin.AdsMobFox = cc.Class.extend({
 		}
 
 		// action
-		sprite.setPositionY(sprite.getPositionY() - this.winSize.height);
-		sprite.runAction(cc.EaseOut.create(cc.MoveBy.create(0.5, cc.p(0, this.winSize.height)), 3.0));
+		sprite.setPositionY(sprite.getPositionY() - App.winSize.height);
+		sprite.runAction(cc.EaseOut.create(cc.MoveBy.create(0.5, cc.p(0, App.winSize.height)), 3.0));
 
 		// create menu
 		menu = cc.Menu.create();

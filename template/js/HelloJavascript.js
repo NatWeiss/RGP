@@ -16,7 +16,7 @@ var App = App || {};
 // Play one of the click sounds in sequential order.
 //
 App.playClickSound = function() {
-	var sounds = App.getConfig("click-sounds");
+	var sounds = App.config["click-sounds"];
 	this.clickSound = this.clickSound || 0;
 	
 	App.playEffect(sounds[this.clickSound]);

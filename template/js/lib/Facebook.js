@@ -92,7 +92,7 @@ if (typeof plugin.Facebook === "undefined") {
 		};
 		
 		module.loadPlayerImage = function(id) {
-			var dim = App.scale(App.getConfig("social-plugin-profile-image-width") || 100);
+			var dim = App.scale(App.config["social-plugin-profile-image-width"] || 100);
 			if (this.checkForFB()) {
 				FB.api("/" + id + "/picture?redirect=0&width=" + dim + "&height=" + dim, function(response) {
 					if (response && response.data && response.data.url) {

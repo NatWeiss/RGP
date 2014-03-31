@@ -1,7 +1,7 @@
 
 //
-// The main App object is a singleton providing boot code, main functions, and other commonly-used, globally-accessible functionality.
-
+// The main App object is a singleton providing boot code, main functions, and other commonly-used, globally-accessible methods.
+//
 // 1. All code in this file is applicable to any game project in general.
 // 2. If you need to extend the App object with project-specific code, use [HelloJavascript.js](HelloJavascript.html).
 //
@@ -11,7 +11,6 @@
 //
 // Get or create the App object.
 //
-
 var App = App || {};
 
 //
@@ -30,9 +29,28 @@ App.getInitialScene = function() {
 //
 App.isHtml5 = function() {
 	if (typeof this._isHtml5 === "undefined") {
+		App.assert(cc.sys);
 		this._isHtml5 = cc.sys.isNative ? false : true;
 	}
 	return this._isHtml5;
+};
+
+//
+// ###  App.isDesktop
+//
+// Return true if the app is running on a native desktop OS.
+//
+App.isDesktop = function() {
+	if (typeof this._isDesktop === "undefined") {
+		if (this.isHtml5()) {
+			this._isDesktop = false;
+		} else {
+			this._isDesktop = (cc.sys.os === cc.sys.OS_OSX
+				|| cc.sys.os === cc.sys.OS_WINDOWS
+				|| cc.sys.os === cc.sys.OS_LINUX);
+		}
+	}
+	return this._isDesktop;
 };
 
 //
@@ -130,13 +148,93 @@ App.centralize = function(x, y) {
 };
 
 //
+// ###  App.localizeCurrency
+//
+// Return the currency amount localized. Currently the method only localizes to the United States currency format.
+//
+App.localizeCurrency = function(amount) {
+	return "$" + parseFloat(amount).toFixed(2);
+};
+
+//
+// ###  App.getLanguageCode
+//
+// Return the current language code. Example: `en`.
+//
+App.getLanguageCode = function() {
+	var strings;
+	
+	if (typeof this._language === "undefined") {
+		this._language = cc.sys.language;
+
+		strings = App.config["strings"];
+		if (strings && typeof strings[this._language] === "undefined") {
+			cc.log("Don't have strings for language: " + this._language);
+			this._language = "en";
+		}
+	}
+	
+	return this._language;
+};
+
+//
+// ###  App.getLocalizedString
+//
+// Lookup and return a localized string. Configure localized strings in `App.config["strings"][languageCode]`.
+//
+App.getLocalizedString = function(key) {
+	var strings,
+		code = this.getLanguageCode();
+	
+	strings = App.config["strings"][code];
+	if (typeof strings[key] !== "undefined") {
+		return strings[key];
+	}
+	if (key && key.length) {
+		cc.log("Couldn't find string[" + code + "][" + key + "]");
+	}
+	return "";
+};
+
+//
+// ###  App.assert
+//
+// Throw an error if the given object is undefined or boolean is false.
+//
+App.assert = function(objOrBool, errMsg) {
+	if (typeof objOrBool === "undefined"
+	|| (typeof objOrBool === "boolean" && !objOrBool)
+	) {
+		errMsg = errMsg || "Couldn't load the game. Please try a newer browser.";
+		alert(errMsg);
+		debugger;
+		throw errMsg;
+	}
+};
+
+//
+// ###  App.getRunningLayer
+//
+// Returns the running scene's child layer. A scene creates a member variable named `layer` to be used by this method.
+//
+App.getRunningLayer = function() {
+	var node = cc.director.getRunningScene();
+	if (node) {
+		if (node.layer) {
+			node = node.layer;
+		}
+	}
+	return node;
+};
+
+//
 // ###  App.getResourcesToPreload
 //
 // Return an array of files to preload.
 //
 App.getResourcesToPreload = function() {
 	var dir = this.getResourceDir(),
-		files = this.getConfig("preload"),
+		files = App.config["preload"],
 		ret = [],
 		i;
 
@@ -159,7 +257,7 @@ App.getResourcesToPreload = function() {
 // Setup and load resources.
 //
 App.loadResources = function() {
-	var sheets = App.getConfig("spritesheets"),
+	var sheets = App.config["spritesheets"],
 		sheet,
 		i;
 
@@ -173,82 +271,59 @@ App.loadResources = function() {
 	}
 };
 
-App.getConfig = function(key) {
-	return this.config[key];
-};
-
-App.localizeCurrency = function(amount) {
-	return "$" + parseFloat(amount).toFixed(2);
-};
-
-App.getLanguageCode = function() {
-	var strings;
-	
-	if (typeof this._language === "undefined") {
-		this._language = cc.sys.language;
-
-		strings = this.getConfig("strings");
-		if (strings && typeof strings[this._language] === "undefined") {
-			cc.log("Don't have strings for language: " + this._language);
-			this._language = "en";
-		}
-	}
-	
-	return this._language;
-};
-
-App.getLocalizedString = function(key) {
-	var strings,
-		code = this.getLanguageCode();
-	
-	strings = this.getConfig("strings")[code];
-	if (typeof strings[key] !== "undefined") {
-		return strings[key];
-	}
-	if (key && key.length) {
-		cc.log("Couldn't find string[" + code + "][" + key + "]");
-	}
-	return "";
-};
-
-App.getRunningLayer = function() {
-	var node = cc.director.getRunningScene();
-	if (node) {
-		if (node.layer) {
-			node = node.layer;
-		}
-	}
-	return node;
-};
-
+//
+// ###  App.isFullscreenAvailable
+//
+// Return true if fullscreen mode is available on this platform.
+//
 App.isFullscreenAvailable = function() {
-	return this.isHtml5(); // or desktop...
+	return this.isHtml5() || this.isDesktop();
 };
 
+//
+// ###  App.isFullscreenEnabled
+//
+// Return true if fullscreen mode is enabled.
+//
 App.isFullscreenEnabled = function() {
 	return this._fullscreenEnabled ? true : false;
 };
 
+//
+// ###
+//
+// .
+//
 App.setFullscreenEnabled = function(enabled) {
 	if (this.isHtml5()) {
 		if (this.isFullscreenEnabled()) {
 			this.runPrefixMethod(document, "CancelFullScreen");
-			//cc.log("Cancelling fullscreen");
+			/*cc.log("Cancelling fullscreen");*/
 		}
 		else {
 			this.runPrefixMethod(document.getElementById("gameBody"), "RequestFullScreen");
-			//cc.log("Requesting fullscreen");
+			/*cc.log("Requesting fullscreen");*/
 		}
 	}
 
 	this._fullscreenEnabled = enabled ? true : false;
-	//cc.log("Is fullscreen? " + this.isFullscreenEnabled());
+	/*cc.log("Is fullscreen? " + this.isFullscreenEnabled());*/
 };
 
+//
+// ###
+//
+// .
+//
 App.toggleFullscreenEnabled = function() {
 	this.setFullscreenEnabled(!this.isFullscreenEnabled());
 };
 
+//
+// ###
+//
+// .
+//
 App.runPrefixMethod = function(obj, method) {
 	// from: http://www.sitepoint.com/html5-full-screen-api/
 	var pfx = ["webkit", "moz", "ms", "o", ""];
@@ -268,12 +343,22 @@ App.runPrefixMethod = function(obj, method) {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.isInitialLaunch = function() {
 	// use soundEnabled as an indicator of if we have previously launched the app
 	var v = cc.sys.localStorage.getItem("soundEnabled");
 	return (typeof v === "undefined" || v === null || v === "");
 };
 
+//
+// ###
+//
+// .
+//
 App.loadSoundEnabled = function() {
 	this._soundEnabled = cc.sys.localStorage.getItem("soundEnabled");
 	//cc.log("Loaded sound enabled: " + this._soundEnabled);
@@ -284,6 +369,11 @@ App.loadSoundEnabled = function() {
 	//cc.log("Loaded sound enabled: " + this._soundEnabled);
 };
 
+//
+// ###
+//
+// .
+//
 App.enableSound = function(enabled) {
 	this._soundEnabled = enabled ? true : false;
 	cc.sys.localStorage.setItem("soundEnabled", this._soundEnabled);
@@ -292,26 +382,51 @@ App.enableSound = function(enabled) {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.toggleSoundEnabled = function() {
 	this.enableSound(!this.isSoundEnabled());
 };
 
+//
+// ###
+//
+// .
+//
 App.isSoundEnabled = function() {
 	return this._soundEnabled ? true : false;
 };
 
+//
+// ###
+//
+// .
+//
 App.playEffect = function(filename) {
 	if (this.isSoundEnabled()) {
 		cc.audioEngine.playEffect(filename);
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.playMusic = function(filename) {
 	if (this.isSoundEnabled()) {
 		cc.audioEngine.playMusic(filename);
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.getHttpQueryParams = function() {
 	var loc,
 		i,
@@ -337,6 +452,11 @@ App.getHttpQueryParams = function() {
 	return this._GET;
 };
 
+//
+// ###
+//
+// .
+//
 App.alert = function(msg) {
 	if(typeof alert === "function") {
 		alert(msg);
@@ -345,6 +465,11 @@ App.alert = function(msg) {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.callRunningLayer = function(method, param1, param2, param3) {
 	scene = cc.director.getRunningScene();
 	if (scene && scene.layer && scene.layer[method]) {
@@ -352,6 +477,11 @@ App.callRunningLayer = function(method, param1, param2, param3) {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.loadAnalyticsPlugin = function() {
 	var self = this,
 		flurryApiKey,
@@ -362,7 +492,7 @@ App.loadAnalyticsPlugin = function() {
 	if (typeof FlurryAgent !== "undefined" && typeof App.config !== "undefined" && !this._initializedFlurry) {
 		this._initializedFlurry = true;
 		//cc.log("Loaded flurry after " + this._loadAnalyticsTries + " tries");
-		flurryApiKey = App.getConfig("flurry-api-key");
+		flurryApiKey = App.config["flurry-api-key"];
 		if (flurryApiKey) {
 			flurry = plugin.PluginManager.getInstance().loadPlugin("AnalyticsFlurry");
 			if (flurry) {
@@ -382,11 +512,16 @@ App.loadAnalyticsPlugin = function() {
 	this._loadAnalyticsTries = this._loadAnalyticsTries + 1;
 };
 
+//
+// ###
+//
+// .
+//
 App.getAdsPlugin = function() {
 	var name;
 	
 	if (typeof this._adsPlugin === "undefined" && typeof plugin !== "undefined") {
-		name = this.getConfig("ads-plugin-name");
+		name = App.config["ads-plugin-name"];
 
 		// try to load plugin
 		this._adsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
@@ -402,9 +537,14 @@ App.getAdsPlugin = function() {
 	return this._adsPlugin;
 };
 
+//
+// ###
+//
+// .
+//
 App.loadAdsPlugin = function() {
 	var plugin = this.getAdsPlugin(),
-		debug = this.getConfig("ads-plugin-debug");
+		debug = App.config["ads-plugin-debug"];
 
 	if (typeof plugin !== 'undefined') {
 		if (debug) {
@@ -413,20 +553,25 @@ App.loadAdsPlugin = function() {
 		}
 
 		plugin.configDeveloperInfo({
-			apiKey: this.getConfig("ads-plugin-api-key"),
-			mode: this.getConfig("ads-plugin-mode")
+			apiKey: App.config["ads-plugin-api-key"],
+			mode: App.config["ads-plugin-mode"]
 		});
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.getSocialPlugin = function() {
 	var name;
 	
 	if (typeof this._socialPlugin === "undefined") {
-		name = this.getConfig("social-plugin-name");
+		name = App.config["social-plugin-name"];
 		if (plugin[name]) {
 			this._socialPlugin = new plugin[name]();
-			this._socialPlugin.setDebugMode(this.getConfig("social-plugin-debug"));
+			this._socialPlugin.setDebugMode(App.config["social-plugin-debug"]);
 			this._socialPlugin.init();
 		} /*else {
 			this._socialPlugin = {
@@ -448,19 +593,29 @@ App.getSocialPlugin = function() {
 	return this._socialPlugin;
 };
 
+//
+// ###
+//
+// .
+//
 App.loadSocialPlugin = function() {
 	var plugin = this.getSocialPlugin();
 
 	if (typeof plugin !== "undefined") {
-		plugin.configDeveloperInfo(App.getConfig("social-plugin-init"));
+		plugin.configDeveloperInfo(App.config["social-plugin-init"]);
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.loadEconomyPlugin = function() {
-	var config = App.getConfig("economy-plugin-init");
+	var config = App.config["economy-plugin-init"];
 	
 	if (Soomla.CCSoomlaNdkBridge.setDebug) {
-		Soomla.CCSoomlaNdkBridge.setDebug(App.getConfig("economy-plugin-debug"));
+		Soomla.CCSoomlaNdkBridge.setDebug(App.config["economy-plugin-debug"]);
 	}
 
 	if (config && config.soomSec && config.customSecret) {
@@ -489,6 +644,11 @@ App.loadEconomyPlugin = function() {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.giveItem = function(itemId, amount) {
 	if (amount < 0) {
 		Soomla.storeInventory.takeItem(itemId, Math.abs(amount));
@@ -497,12 +657,17 @@ App.giveItem = function(itemId, amount) {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.onInitialLaunch = function() {
 	// set initial balances
 	var i,
 		itemId,
 		balance,
-		initialBalances = App.getConfig("economy-plugin-initial-balances"),
+		initialBalances = App.config["economy-plugin-initial-balances"],
 		currencies,
 		len = 0,
 		allZero = true;
@@ -534,6 +699,11 @@ App.onInitialLaunch = function() {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.requestUrl = function(url, callback, binary) {
 	var x,
 		loc,
@@ -582,6 +752,11 @@ App.requestUrl = function(url, callback, binary) {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.loadImage = function(url, callback) {
 	if (url.indexOf("://") == 0) {
 		return;
@@ -613,6 +788,11 @@ App.loadImage = function(url, callback) {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.bootHtml5 = function() {
 	var d = document;
 /*	var c = {
@@ -670,6 +850,11 @@ App.bootHtml5 = function() {
 */
 };
 
+//
+// ###
+//
+// .
+//
 App.bootX = function(global) {
 	//require("jsb.js");
 	//require("jsb_pluginx.js");
@@ -710,6 +895,11 @@ App.bootX = function(global) {
 	//App.addImageData("http://somewhere.com/something.png", array);
 };
 
+//
+// ###
+//
+// .
+//
 App.mainHtml5 = function() {
 	var winSize = this.getWinSize();
 	
@@ -721,10 +911,20 @@ App.mainHtml5 = function() {
 	App.addImageData = function() {};
 };
 
+//
+// ###
+//
+// .
+//
 App.mainX = function() {
 	App.mainCallback();
 };
 
+//
+// ###
+//
+// .
+//
 App.mainCallback = function() {
 	var Scene = App.getInitialScene(),
 		scene;
@@ -735,6 +935,11 @@ App.mainCallback = function() {
 	cc.director.runScene(scene);
 };
 
+//
+// ###
+//
+// .
+//
 App.main = function() {
 	var i,
 		sheets,
@@ -744,6 +949,8 @@ App.main = function() {
 		initialLaunch = this.isInitialLaunch();
 
 	this.loadSoundEnabled();
+
+	cc.defineGetterSetter(App, "winSize", App.getWinSize);
 
 	if (this.isHtml5())
 		this.mainHtml5();
@@ -780,16 +987,16 @@ App.main = function() {
 	}
 };
 
+//
+// ###
+//
+// .
+//
 App.boot = function(global) {
 	if (this.isHtml5())
 		this.bootHtml5(global);
 	else
 		this.bootX(global);
-
-	// window is not guaranteed until now
-	window.flurryAsyncInit = function() {
-		App.loadAnalyticsPlugin();
-	};
 
 	// embed main.js
 	cc.game.onStart = function(){
@@ -798,4 +1005,9 @@ App.boot = function(global) {
 	cc.game.run();
 };
 
+//
+// ###
+//
+// .
+//
 App.boot(this);

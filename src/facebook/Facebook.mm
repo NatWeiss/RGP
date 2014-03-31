@@ -75,7 +75,7 @@ void callRunningLayer(const string& method, const string& param1)
 void loadPlayerImageUrl(const string& playerId)
 {
 	jsval ret;
-	ScriptingCore::getInstance()->evalString("App.scale(App.getConfig(\"social-plugin-profile-image-width\"));", &ret);
+	ScriptingCore::getInstance()->evalString("App.scale(App.config[\"social-plugin-profile-image-width\"]);", &ret);
 	int dim = JSVAL_TO_INT(ret);
 	if (dim < 10)
 		dim = 120;

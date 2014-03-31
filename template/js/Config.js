@@ -33,7 +33,7 @@ App.config = {
 	},
 
 	"ads-plugin-name": "AdsMobFox",
-	"ads-plugin-debug": false,
+	"ads-plugin-debug": true,
 	"ads-plugin-api-key": "", // enter your api key
 	"ads-plugin-mode": "test", // "test" or "live"
 	
