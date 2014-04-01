@@ -124,7 +124,7 @@
 		419E8EA218A9CA7600232A34 /* jsb */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jsb; path = "../lib/cocos2dx-prebuilt/jsb"; sourceTree = "<group>"; };
 		419E8EB818A9F3C100232A34 /* cocos2d */ = {isa = PBXFileReference; lastKnownFileType = folder; name = cocos2d; path = "../lib/cocos2d-html5/cocos2d"; sourceTree = "<group>"; };
 		419E8EB918A9F3D200232A34 /* extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = extensions; path = "../lib/cocos2d-html5/extensions"; sourceTree = "<group>"; };
-		419E924E18AC3BDC00232A34 /* server.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = server.js; path = ../server/server.js; sourceTree = "<group>"; };
+		419E924E18AC3BDC00232A34 /* Server.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = Server.js; path = ../server/Server.js; sourceTree = "<group>"; };
 		41DFB47518EA1B9B003F8CD3 /* CCBoot.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = CCBoot.js; path = "../lib/cocos2d-html5/CCBoot.js"; sourceTree = "<group>"; };
 		41E177A8188794A700F6AD3C /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; name = res; path = ../res; sourceTree = "<group>"; };
 		41E17C151888B23F00F6AD3C /* AppDelegate.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = AppDelegate.cpp; path = ../src/AppDelegate.cpp; sourceTree = "<group>"; };
@@ -318,7 +318,7 @@
 				41E17C151888B23F00F6AD3C /* AppDelegate.cpp */,
 				4142034218C15A490075A075 /* index.html */,
 				41F0F5B018DABA5800F5FC64 /* project.json */,
-				419E924E18AC3BDC00232A34 /* server.js */,
+				419E924E18AC3BDC00232A34 /* Server.js */,
 				4152B77D1894795000BEF730 /* js */,
 				419E8EA218A9CA7600232A34 /* jsb */,
 				41E177A8188794A700F6AD3C /* res */,

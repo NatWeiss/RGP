@@ -18,10 +18,10 @@ cc.LoaderScene.prototype.init = function(){
 	cc.Scene.prototype.init.call(this);
 
 	/* Start loading the logo texture. */
-	cc.loader.loadImg(App.config["loading-image"],
+	cc.loader.loadImg(App.config["loader-image"],
 		{isCrossOrigin : false},
 		function(err, img){
-			var sizePercent = App.config["loading-image-win-size-percent"];
+			var sizePercent = App.config["loader-image-win-size-percent"];
 
 			self._initStage(img, cc.p(self._winSize.width * .5,
 				self._winSize.height * .6));

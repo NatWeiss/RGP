@@ -177,6 +177,18 @@ App.assert = function(objOrBool, errMsg) {
 };
 
 //
+// ###  App.clone
+//
+// Clone an object or array so the original can remained unchanged. If passed an undefined value, an empty array is returned.
+//
+App.clone = function(obj) {
+	if(typeof obj !== "undefined") {
+		return cc.clone(obj);
+	}
+	return [];
+};
+
+//
 // ###  App.localizeCurrency
 //
 // Return the currency amount localized. Currently the method only localizes to the United States currency format.
@@ -554,7 +566,12 @@ App.getSocialPlugin = function() {
 			this._socialPlugin = new plugin[name]();
 			this._socialPlugin.setDebugMode(App.config["social-plugin-debug"]);
 			this._socialPlugin.init();
-			this._socialPlugin.configDeveloperInfo(App.config["social-plugin-init"]);
+			this._socialPlugin.configDeveloperInfo({
+				appId: App.config["social-plugin-app-id"],
+				xfbml: false,
+				status: true,
+				cookie: true
+			});
 		}
 	}
 
@@ -568,16 +585,24 @@ App.getSocialPlugin = function() {
 //
 App.getEconomyPlugin = function() {
 	if (typeof this._economyPlugin === "undefined") {
-		var config = App.config["economy-plugin-init"];
+		var storeConfig = {
+				soomSec: App.config["economy-plugin"]["secret1"],
+				customSecret: App.config["economy-plugin"]["secret2"],
+				androidPublicKey: App.config["economy-plugin"]["android-public-key"]
+			};
 		
 		this._economyPlugin = Soomla;
 		
 		if (Soomla.CCSoomlaNdkBridge.setDebug) {
-			Soomla.CCSoomlaNdkBridge.setDebug(App.config["economy-plugin-debug"]);
+			Soomla.CCSoomlaNdkBridge.setDebug(App.config["economy-plugin"]["debug"]);
 		}
 
-		if (config && config.soomSec && config.customSecret) {
-			Soomla.StoreController.createShared(App.getStoreAssets(), config);
+		if (storeConfig && storeConfig.soomSec && storeConfig.customSecret) {
+			try{
+				Soomla.StoreController.createShared(App.getStoreAssets(), storeConfig);
+			} catch(e) {
+				cc.log("Error creating store or getting store assets: " + e);
+			}
 
 			Soomla.CCSoomlaNdkBridge.buy = function(
 				productId,
@@ -607,6 +632,141 @@ App.getEconomyPlugin = function() {
 	}
 	
 	return this._economyPlugin;
+};
+
+//
+// ###  App.getStoreAssets
+//
+// Returns the store assets object. Configured in `App.config["economy-plugin"]`.
+//
+App.getStoreAssets = function() {
+	var i,
+		a,
+		assets = {
+			categories: [],
+			currencies: [],
+			currencyPacks: [],
+			goods: {
+				singleUse: [],
+				lifetime: [],
+				equippable: [],
+				goodUpgrades: [],
+				goodPacks: []
+			},
+			nonConsumables: [],
+			version: 1
+		},
+		processItems = function(obj) {
+			var key,
+				func;
+			
+			key = "create_market_item";
+			if (obj[key]) {
+				func = Soomla.Models.PurchaseWithMarket.createWithMarketItem;
+				obj.purchasableItem = func(obj[key][0], obj[key][1]);
+				delete obj[key];
+			}
+
+			key = "create_virtual_item";
+			if (obj[key]) {
+				func = Soomla.Models.PurchaseWithVirtualItem.create;
+				obj.purchasableItem = func({
+					pvi_itemId: obj[key][0],
+					pvi_amount: obj[key][1]
+				});
+				delete obj[key];
+			}
+
+			key = "create_nonconsumable_item";
+			if (obj[key]) {
+				func = Soomla.Models.PurchaseWithMarket.create;
+				obj.purchasableItem = func({
+					marketItem: Soomla.Models.MarketItem.create({
+						productId: obj[key][0],
+						consumable: 0,
+						price: obj[key][1]
+					})
+				});
+				delete obj[key];
+			}
+			
+			return obj;
+		};
+	
+	/* Currencies. */
+	a = App.clone(App.config["economy-plugin"]["currencies"]);
+	for (i = 0; i < a.length; i += 1) {
+		assets.currencies.push(
+			Soomla.Models.VirtualCurrency.create(a[i])
+		);
+	}
+	
+	/* Currency packs. */
+	a = App.clone(App.config["economy-plugin"]["currency-packs"]);
+	for (i = 0; i < a.length; i += 1) {
+		assets.currencyPacks.push(
+			Soomla.Models.VirtualCurrencyPack.create(processItems(a[i]))
+		);
+	}
+
+	/* Single-use goods. */
+	a = App.clone(App.config["economy-plugin"]["single-use-goods"]);
+	for (i = 0; i < a.length; i += 1) {
+		assets.goods.singleUse.push(
+			Soomla.Models.SingleUseVG.create(processItems(a[i]))
+		);
+	}
+	
+	/* Lifetime goods. */
+	a = App.clone(App.config["economy-plugin"]["lifetime-goods"]);
+	for (i = 0; i < a.length; i += 1) {
+		assets.goods.lifetime.push(
+			Soomla.Models.LifetimeVG.create(processItems(a[i]))
+		);
+	}
+
+	/* Equippable goods. */
+	a = App.clone(App.config["economy-plugin"]["equippable-goods"]);
+	for (i = 0; i < a.length; i += 1) {
+		assets.goods.equippable.push(
+			Soomla.Models.EquippableVG.create(processItems(a[i]))
+		);
+	}
+
+	/* Good upgrades. */
+	a = App.clone(App.config["economy-plugin"]["good-upgrades"]);
+	for (i = 0; i < a.length; i += 1) {
+		assets.goods.goodUpgrades.push(
+			Soomla.Models.UpgradeVG.create(processItems(a[i]))
+		);
+	}
+
+	/* Good packs. */
+	a = App.clone(App.config["economy-plugin"]["good-packs"]);
+	for (i = 0; i < a.length; i += 1) {
+		assets.goods.goodPacks.push(
+			Soomla.Models.SingleUsePackVG.create(processItems(a[i]))
+		);
+	}
+
+	/* Non-consumables. */
+	a = App.clone(App.config["economy-plugin"]["non-consumables"]);
+	for (i = 0; i < a.length; i += 1) {
+		assets.nonConsumables.push(
+			Soomla.Models.NonConsumableItem.create(processItems(a[i]))
+		);
+	}
+	
+	/* Categories. */
+	a = App.clone(App.config["economy-plugin"]["categories"]);
+	for (i = 0; i < a.length; i += 1) {
+		assets.categories.push(
+			Soomla.Models.VirtualCategory.create(a[i])
+		);
+	}
+
+	/*cc.log(JSON.stringify(assets));*/
+	return Soomla.IStoreAssets.create(assets);
 };
 
 //
@@ -643,7 +803,7 @@ App.onInitialLaunch = function() {
 	var i,
 		itemId,
 		balance,
-		initialBalances = App.config["economy-plugin-initial-balances"],
+		initialBalances = App.config["economy-plugin"]["initial-balances"],
 		currencies,
 		len = 0,
 		allZero = true;

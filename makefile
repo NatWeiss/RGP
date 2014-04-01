@@ -36,13 +36,14 @@ docker:
 
 docco:
 	if [ -d docs ]; then rm -r docs; fi
-	cp README.md index.litcoffee
+	cp README.md README.litcoffee
 	#docco -l linear index.litcoffee
-	#docco -l linear template/server/server.js
+	#docco -l linear template/server/Server.js
 	#docco -l linear template/js/*.js
 	#docco -l linear template/js/lib/*.js
-	docco -l linear index.litcoffee template/server/server.js template/js/*.js template/js/lib/*.js
-	rm index.litcoffee
+	docco -l linear README.litcoffee template/server/Server.js template/js/*.js template/js/lib/AdsMobFox.js template/js/lib/Facebook.js
+	sed -i "" 's/README.litcoffee/README.md/g' docs/*.html
+	rm README.litcoffee
 
 icons:
 	cp rez/KandleIcon-iOS/Icon*.png template/proj.ios_mac/ios
@@ -63,7 +64,7 @@ lemonadex:
 	tools/create-project -n ${name} -k ${key} -p ${dest}
 	cp -r rez/${name}/res ${dest}/${name}/
 	cp rez/${name}/js/*.js ${dest}/${name}/js/
-	cp rez/${name}/server/server.js ${dest}/${name}/server/
+	cp rez/${name}/server/Server.js ${dest}/${name}/server/
 	rm -rf ${dest}/${name}/art
 	rm -f ${dest}/${name}/proj.html5/*-min.js
 	rm ${dest}/${name}/js/SceneHello.js

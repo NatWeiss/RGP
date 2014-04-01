@@ -231,7 +231,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 					module.purchasingItem = JSON.parse(JSON.stringify(x));
 					
 					if (self.buy) {
-						self.buy(module.purchasingItem.facebookProductUrl, module.onPaymentSuccess, module.onPaymentFailure);
+						self.buy(module.purchasingItem["facebook_product_url"], module.onPaymentSuccess, module.onPaymentFailure);
 					} else {
 						module.log("App has not implemented CCSoomlaNdkBridge.buy method");
 					}

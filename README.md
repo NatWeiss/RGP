@@ -18,20 +18,20 @@ Overview
 
 RapidGame Pro is a multi-platform game template which empowers developers to write games in **100% Javascript** while running native C++ code behind the scenes when possible. Knowledge of C++ is recommended, but not required.
 
-> As of the current release, RapidGame Pro is primarily geared for development on a Mac. If you know what you're doing, developing on Windows or Linux is possible. All the files are in place, though some customization may be necessary. Full support and documentation for Windows and Linux development is coming soon.
+> As of the current release, RapidGame Pro is primarily geared for development on a Mac. Developing on Windows or Linux is a beta feature. Full support and documentation for Windows and Linux development is planned.
 
 
 Folder Structure
 ----------------
 
     RapidGamePro/
+        README.md - Documentation overview in markdown format.
+        docs.html - Documentation overview ready for browser.
+        prebuild - Executable script which prebuilds the static libraries.
         docs/ - Documentation folder.
-        docs.html - Documentation overview.
         include/ - All the header files necessary to compile a native game client.
         LemonadeExchange/ - A complete example game.
         lib/ - Contains the static libraries after they have been prebuilt.
-        prebuild - Executable script which prebuils the static libraries.
-        README.md - Documentation overview in markdown format.
         src/ - Contains source files for the static libraries.
         template/ - Game template (do not modify, just use tools/create-project).
             art/ - Contains the sprites and sprite sheet.
@@ -78,7 +78,7 @@ Pre-building for Rapid Development
 
 At the heart of RapidGame Pro is the concept of rapid development.
 
-The default Cocos2d-X way is to create each game project with all of the files necessary for building from scratch. On the first build one must wait while 300+ source files are compiled. The first time a different architecture is selected (like switching from the simulator to the device) the 300+ files are again compiled. Whenever you clean the product, the entire source must once again be compiled.
+The default way is to create each game project with all of the files necessary for building from scratch. On the first build one must wait while 300+ source files are compiled. The first time a different architecture is selected -- for example, by switching to run the device instead of the simulator -- the 300+ files are again compiled. Whenever you clean the product, the entire source must once again be compiled.
 
 The problems are:
 
@@ -92,4 +92,18 @@ To prebuild Cocos2d-X and plugins:
 
     cd RapidGamePro
 	./prebuild
+
+When the `prebuild` command is finished, the static libraries will reside in `RapidGamePro/lib`. The library files are large because they incorporate object files for all architectures and platforms. When using the project creator, an absolute symlink is established to the `lib` folder so that:
+
+1. The static libraries reside in one and only one place.
+2. Each game project's folder can be copied or moved quickly and without disturbing the absolute symlink.
+
+
+Project Creator
+---------------
+
+The project creator tool...
+
+
+
 
