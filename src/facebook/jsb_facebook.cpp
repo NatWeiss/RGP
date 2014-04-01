@@ -72,10 +72,17 @@ static bool js_is_native_obj(JSContext *cx, JS::HandleObject obj, JS::HandleId i
 
 bool js_facebook_init(JSContext* cx, uint32_t argc, jsval* vp)
 {
-	const int numArgs = 0;
+	const int numArgs = 1;
 	if (argc == numArgs)
 	{
-		getNativeObj<Facebook>(cx, vp)->init();
+		bool ok = true;
+		__Dictionary* devInfoDict = nullptr;
+		ok &= jsval_to_ccdictionary(cx, JS_ARGV(cx, vp)[0], &devInfoDict);
+		JSB_PRECONDITION2(ok && devInfoDict, cx, false, "Error processing arguments");
+		
+		map<string,string> devInfo;
+		dictionaryToMap(devInfoDict, devInfo);
+		getNativeObj<Facebook>(cx, vp)->init(devInfo);
 		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
@@ -116,26 +123,6 @@ bool js_facebook_setDebugMode(JSContext* cx, uint32_t argc, jsval* vp)
 	{
 		bool enabled = JSVAL_TO_BOOLEAN(JS_ARGV(cx, vp)[0]);
 		getNativeObj<Facebook>(cx, vp)->setDebugMode(enabled);
-		JS_SET_RVAL(cx, vp, JSVAL_VOID);
-		return true;
-	}
-	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
-	return false;
-}
-
-bool js_facebook_configDeveloperInfo(JSContext* cx, uint32_t argc, jsval* vp)
-{
-	const int numArgs = 1;
-	if (argc == numArgs)
-	{
-		bool ok = true;
-		__Dictionary* devInfoDict = nullptr;
-		ok &= jsval_to_ccdictionary(cx, JS_ARGV(cx, vp)[0], &devInfoDict);
-		JSB_PRECONDITION2(ok && devInfoDict, cx, false, "Error processing arguments");
-		
-		map<string,string> devInfo;
-		dictionaryToMap(devInfoDict, devInfo);
-		getNativeObj<Facebook>(cx, vp)->configDeveloperInfo(devInfo);
 		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
@@ -291,11 +278,10 @@ void js_facebook_register(JSContext* cx, JSObject* global)
 
 	static JSFunctionSpec funcs[] =
 	{
-		JS_FN("init", js_facebook_init, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("init", js_facebook_init, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("isLoggedIn", js_facebook_isLoggedIn, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("isCanvasMode", js_facebook_isCanvasMode, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("setDebugMode", js_facebook_setDebugMode, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
-		JS_FN("configDeveloperInfo", js_facebook_configDeveloperInfo, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("login", js_facebook_login, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("logout", js_facebook_logout, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("requestPublishPermissions", js_facebook_requestPublishPermissions, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),

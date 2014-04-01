@@ -17,11 +17,10 @@ class Facebook
 		Facebook();
 		~Facebook();
 		
-		void init();
+		void init(const map<string,string>& info);
 		bool isLoggedIn() const;
 		bool isCanvasMode() const;
 		void setDebugMode(bool enabled);
-		void configDeveloperInfo(const map<string,string>& info);
 		void login(const string& permissions);
 		void logout();
 		void requestPublishPermissions(const string& permissions);

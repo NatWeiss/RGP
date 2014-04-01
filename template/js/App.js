@@ -183,7 +183,7 @@ App.assert = function(objOrBool, errMsg) {
 //
 App.clone = function(obj) {
 	if(typeof obj !== "undefined") {
-		return cc.clone(obj);
+		return JSON.parse(JSON.stringify(obj));
 	}
 	return [];
 };
@@ -565,8 +565,7 @@ App.getSocialPlugin = function() {
 		if (plugin[name]) {
 			this._socialPlugin = new plugin[name]();
 			this._socialPlugin.setDebugMode(App.config["social-plugin-debug"]);
-			this._socialPlugin.init();
-			this._socialPlugin.configDeveloperInfo({
+			this._socialPlugin.init({
 				appId: App.config["social-plugin-app-id"],
 				xfbml: false,
 				status: true,

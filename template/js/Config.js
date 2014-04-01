@@ -100,7 +100,7 @@ App.config = {
 //
 // ###  economy-plugin
 //
-// Settings for the virtual economy plugin. Generate random 32-character strings for `secret1` and `secret2`. Insert your Android public key obtained from your Google Play Developer Console.
+// Settings for the virtual economy plugin. Generate random 32-character strings for `secret1` and `secret2`. Insert your Android public key obtained from your Google Play Developer Console (optional).
 //
 	"economy-plugin": {
 		"name": "Soomla",
@@ -113,6 +113,9 @@ App.config = {
 			"description": "",
 			"itemId": "currency_example"
 		}],
+		"initial-balances": {
+			"currency_example": 10
+		},
 		"currency-packs": [{
 			"name": "Example Currency Pack",
 			"description": "",
@@ -125,9 +128,6 @@ App.config = {
 			],
 			"facebook_product_url": "http://cocos2dx.org/small_currency_pack1.html"
 		}],
-		"initial-balances": {
-			"currency_example": 10
-		},
 		"single-use-goods": [{
 			"name": "Example Single Use Good",
 			"description": "",

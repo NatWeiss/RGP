@@ -134,7 +134,7 @@ void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 					playerFirstNames["me"] = strVal([result objectForKey:@"first_name"]);
 					userId = strVal([result objectForKey:@"id"]);
 					//deleteRequests();
-					callRunningLayer("onGetPlayerName", playerFirstNames["me"].c_str());
+					callRunningLayer("onGetMyPlayerName", playerFirstNames["me"].c_str());
 					
 					//debugLog("%s Name: %s, First name: %s, User id: %s", kTag, playerNames["me"].c_str(), playerFirstNames["me"].c_str(), userId.c_str());
 				}
@@ -217,7 +217,7 @@ Facebook::~Facebook()
 {
 }
 
-void Facebook::init()
+void Facebook::init(const map<string,string>& info)
 {
 	debugLog("%s Init SDK v%s, App ID %s", kTag, this->getSDKVersion().c_str(), [FBSession.activeSession.appID UTF8String]);
 
@@ -228,6 +228,8 @@ void Facebook::init()
 			allowLoginUI:NO
 			completionHandler:sessionStateHandler];
 	}
+
+	// Developer info not used because the Info.plist already contains appId, etc.
 }
 
 bool Facebook::isLoggedIn() const
@@ -243,11 +245,6 @@ bool Facebook::isCanvasMode() const
 void Facebook::setDebugMode(bool b)
 {
 	debug = b;
-}
-
-// Developer info not used because the Info.plist contains appId, etc.
-void Facebook::configDeveloperInfo(const map<string,string>& info)
-{
 }
 
 void Facebook::login(const string& permissions)
