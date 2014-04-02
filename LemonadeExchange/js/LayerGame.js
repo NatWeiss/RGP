@@ -35,12 +35,15 @@ var LayerGame = (function(){
 		animateCurrencyAmountRate: 400,
 
 		init: function() {
-			var winSize = App.getWinSize();
+			var self = this,
+				winSize = App.getWinSize();
 			this._super();
+			
+			//App.getSocialPlugin().requestPublishPermissions("publish_actions");
 
 			// menu
 			this.menu = cc.Menu.create();
-			this.menu.setPosition(cc.PointZero());
+			this.menu.setPosition(cc.p());
 			this.addChild(this.menu, 1);
 
 			// everything else
@@ -56,7 +59,16 @@ var LayerGame = (function(){
 			// listen for when ads are finished
 			App.getAdsPlugin().setAdsListener(this);
 
-			this.setTouchEnabled(true);
+			// handle touch events
+			cc.eventManager.addListener({
+				event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+				onTouchesBegan: function(touches, event) {
+					if (touches) {
+						App.showTouchCircle(self, touches[0].getLocation());
+						App.playClickSound();
+					}
+				}
+			}, this);
 
 			return true;
 		},
@@ -66,7 +78,7 @@ var LayerGame = (function(){
 				winSize = App.getWinSize();
 			
 			// color stripe
-			layer = cc.LayerColor.create(cc.c4b(0,0,0,202), App.scale(590), winSize.height * 1.2);
+			layer = cc.LayerColor.create(cc.color(0,0,0,202), App.scale(590), winSize.height * 1.2);
 			layer.setPosition(winSize.width * .5 + App.scale(-144), winSize.height * -.1);
 			layer.setRotation(-2);
 			this.addChild(layer);
@@ -92,7 +104,7 @@ var LayerGame = (function(){
 			this.addChild(label, 1);
 
 			pos.x += App.scale(50);
-			sprite = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
+			sprite = cc.Sprite.create("#Lemonade.png");
 			sprite.setAnchorPoint(0, .5);
 			sprite.setPosition(pos);
 			sprite.setScale(0.5);
@@ -104,7 +116,7 @@ var LayerGame = (function(){
 			this.rateLabel.setPosition(pos);
 			this.addChild(this.rateLabel, 1);
 
-			this.rateIcon = cc.Sprite.createWithSpriteFrameName("Bux.png");
+			this.rateIcon = cc.Sprite.create("#Bux.png");
 			this.rateIcon.setAnchorPoint(0, .5);
 			this.rateIcon.setPosition(pos);
 			this.setRateIconPos();
@@ -113,7 +125,7 @@ var LayerGame = (function(){
 		},
 		
 		createPlayerDetails: function() {
-			var sprite,
+			var sprite = null,
 				playerImageUrl = App.getSocialPlugin().getPlayerImageUrl(),
 				font = App.getString("font"),
 				winSize = App.getWinSize(),
@@ -126,8 +138,10 @@ var LayerGame = (function(){
 			// player image
 			if (playerImageUrl) {
 				sprite = cc.Sprite.create(playerImageUrl);
-			} else {
-				sprite = cc.Sprite.createWithSpriteFrameName("BlankAvatar.png");
+				cc.log("Player image: " + sprite.getContentSize().width + "x" + sprite.getContentSize().height);
+			}
+			if (sprite === null) {
+				sprite = cc.Sprite.create("#BlankAvatar.png");
 			}
 			sprite.setAnchorPoint(0, .5);
 			sprite.setPosition(App.centralize(-420, 260));
@@ -141,7 +155,7 @@ var LayerGame = (function(){
 			this.addChild(this.playerNameLabel, 1);
 			
 			// lemonades
-			this.lemonadesIcon = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
+			this.lemonadesIcon = cc.Sprite.create("#Lemonade.png");
 			this.lemonadesIcon.setPosition(App.centralize(-395, 130));
 			this.addChild(this.lemonadesIcon, 1);
 			this.lemonadesIcon.setRotation(-2);
@@ -155,7 +169,7 @@ var LayerGame = (function(){
 			this.addChild(this.lemonadesLabel, 1);
 
 			// bux
-			this.buxIcon = cc.Sprite.createWithSpriteFrameName("Bux.png");
+			this.buxIcon = cc.Sprite.create("#Bux.png");
 			this.buxIcon.setPosition(App.centralize(-395, -20));
 			this.buxIcon.setScale(0.65);
 			this.addChild(this.buxIcon, 1);
@@ -266,7 +280,7 @@ var LayerGame = (function(){
 			if (id && id > 0) {
 				return plugin.getPlayerName(id);
 			}
-			friends = App.getConfig("anonymous-friends");
+			friends = App.config["anonymous-friends"];
 			if (friends) {
 				id = App.rand(friends.length);
 				return friends[id];
@@ -279,7 +293,7 @@ var LayerGame = (function(){
 				label,
 				sprite,
 				friendName = this.getFriendName(),
-				font = App.getConfig("font"),
+				font = App.config["font"],
 				winSize = App.getWinSize(),
 				fontSize = App.scale(50),
 				ySpacing = App.scale(70),
@@ -300,14 +314,14 @@ var LayerGame = (function(){
 			label.setPosition(pos);
 			this.exchangeLayer.addChild(label, 1);
 
-			sprite = cc.Sprite.createWithSpriteFrameName("Lemonade.png");
+			sprite = cc.Sprite.create("#Lemonade.png");
 			sprite.setAnchorPoint(0, .5);
 			sprite.setPosition(label.getPositionX() + label.getContentSize().width * .5, label.getPositionY());
 			sprite.setScale(0.55);
 			this.exchangeLayer.addChild(sprite, 1);
 
 			pos.y -= ySpacing;
-			this.finishExchangeSprite1 = cc.Sprite.createWithSpriteFrameName("Bux.png");
+			this.finishExchangeSprite1 = cc.Sprite.create("#Bux.png");
 			this.finishExchangeSprite1.setAnchorPoint(.5, .5);
 			this.finishExchangeSprite1.setPosition(pos);
 			this.finishExchangeSprite1.setScale(0.25);
@@ -331,7 +345,7 @@ var LayerGame = (function(){
 			this.finishExchangeLabel3.setPosition(pos);
 			this.exchangeLayer.addChild(this.finishExchangeLabel3, 1);
 			
-			this.finishExchangeSprite2 = cc.Sprite.createWithSpriteFrameName("Bux.png");
+			this.finishExchangeSprite2 = cc.Sprite.create("#Bux.png");
 			this.finishExchangeSprite2.setAnchorPoint(0, .5);
 			this.finishExchangeSprite2.setPosition(this.finishExchangeLabel3.getPositionX() + this.finishExchangeLabel3.getContentSize().width * .5, this.finishExchangeLabel3.getPositionY());
 			this.finishExchangeSprite2.setScale(0.55);
@@ -435,7 +449,7 @@ var LayerGame = (function(){
 			}
 
 			// glass
-			this.glass = cc.Sprite.createWithSpriteFrameName("GlassEmpty.png");
+			this.glass = cc.Sprite.create("#GlassEmpty.png");
 			glassSize = this.glass.getContentSize()
 			this.glass.setTag(TAG_LEMONADE);
 			this.glass.setPosition(App.centralize(100, 0));
@@ -448,7 +462,7 @@ var LayerGame = (function(){
 			}, 1.0, 0);
 			
 			// lemonade
-			this.lemonade = cc.Sprite.createWithSpriteFrameName("GlassFull.png");
+			this.lemonade = cc.Sprite.create("#GlassFull.png");
 			this.lemonade.setAnchorPoint(.5, .5);
 			this.lemonade.setPosition(glassSize.width * .5, glassSize.height * .5);
 			this.glass.addChild(this.lemonade, 1);
@@ -470,10 +484,9 @@ var LayerGame = (function(){
 		
 		drinkLemonade: function() {
 			var self = this,
-				winSize = App.getWinSize(),
-				audio = cc.AudioEngine.getInstance();
+				winSize = App.getWinSize();
 
-			audio.setMusicVolume(0.75);
+			cc.audioEngine.setMusicVolume(0.75);
 
 			this.glass.runAction(cc.Spawn.create(
 				cc.ScaleTo.create(1.0, 1, 1),
@@ -498,13 +511,13 @@ var LayerGame = (function(){
 				cc.RemoveSelf.create()
 			));
 			
-			if (typeof cc.ActionDrink !== 'undefined') {
-				this.lemonade.runAction(cc.ActionDrink.create(2.0));
+			if (typeof ActionDrink !== 'undefined') {
+				this.lemonade.runAction(ActionDrink.create(2.0));
 			}
 			
 			// streaks
 			for (i = 0; i < len; i += 1) {
-				streak = cc.Sprite.createWithSpriteFrameName("Streak.png");
+				streak = cc.Sprite.create("#Streak.png");
 				streak.setAnchorPoint(.5, -.5);
 				streak.setPosition(winSize.width * .5, winSize.height * .5);
 				streak.setRotation((i / len) * 360);
@@ -525,14 +538,13 @@ var LayerGame = (function(){
 		},
 		
 		smashGlass: function() {
-			var self = this,
-				audio = cc.AudioEngine.getInstance();
+			var self = this;
 
 			this.lemonade = null;
 			this.glass = null;
 			
 			App.playEffect("res/glass-breaking" + (1 + this.breakCount) + ".wav");
-			audio.setMusicVolume(1);
+			cc.audioEngine.setMusicVolume(1);
 
 			App.requestUrl("api/drink", this.onGetExchangeRate);
 			this.createGameMenu();
@@ -555,7 +567,7 @@ var LayerGame = (function(){
 				}
 			}
 			
-			circle = cc.Sprite.createWithSpriteFrameName("TouchCircle.png");
+			circle = cc.Sprite.create("#TouchCircle.png");
 			circle.setPosition(pos);
 			circle.setScale(2);
 			circle.setOpacity(96);
@@ -567,12 +579,6 @@ var LayerGame = (function(){
 				cc.RemoveSelf.create()
 			));
 			this.addChild(circle, 10);
-		},
-		
-		onTouchesBegan: function(touches, event) {
-			if (touches) {
-				App.showTouchCircle(this, touches[0].getLocation());
-			}
 		},
 		
 		addCurrencies: function(lemonades, bux) {
@@ -594,8 +600,7 @@ var LayerGame = (function(){
 			var self = this,
 				tag = sender.getTag(),
 				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
-				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades"),
-				director = cc.Director.getInstance();
+				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
 			
 			App.playClickSound();
 			App.showTouchCircle(this, null, sender);
@@ -642,14 +647,14 @@ var LayerGame = (function(){
 			}
 		},
 		
-		onGetPlayerName: function(name) {
+		onGetMyPlayerName: function(name) {
 			this.playerNameLabel.setString(name);
 		},
 		
 		enableButton: function(tag, enabled) {
 			var button = this.menu.getChildByTag(tag);
 			if (button) {
-				button.getNormalImage().setColor(enabled ? cc.c3b(255,255,255) : cc.c3b(128,128,128));
+				button.getNormalImage().setColor(enabled ? cc.color(255,255,255) : cc.color(128,128,128));
 				button.setEnabled(enabled);
 			}
 		},
@@ -703,7 +708,7 @@ var LayerGame = (function(){
 				if (currentBux < this.newBuxAmount) {
 					this.animateCurrencyAdd(this.buxIcon, "Bux.png");
 
-					sounds = App.getConfig("bux-sounds");
+					sounds = App.config["bux-sounds"];
 					App.playEffect(sounds[App.rand(sounds.length)]);
 				}
 				currentBux += this.animateBuxIncrement;
@@ -714,7 +719,7 @@ var LayerGame = (function(){
 				if (currentLemonades < this.newLemonadesAmount) {
 					this.animateCurrencyAdd(this.lemonadesIcon, "Lemonade.png");
 
-					sounds = App.getConfig("glass-sounds");
+					sounds = App.config["glass-sounds"];
 					App.playEffect(sounds[App.rand(sounds.length)]);
 				}
 				currentLemonades += this.animateLemonadesIncrement;
@@ -726,7 +731,7 @@ var LayerGame = (function(){
 		animateCurrencyAdd: function(destNode, filename) {
 			var angle = cc.DEGREES_TO_RADIANS(App.rand(180)),
 				radius = App.scale(300),
-				sprite = cc.Sprite.createWithSpriteFrameName(filename),
+				sprite = cc.Sprite.create("#" + filename),
 				rotation = App.rand(360 * 2);
 			sprite.setPosition(cc.pAdd(
 				destNode.getPosition(),
@@ -765,20 +770,12 @@ var LayerGame = (function(){
 			this.createGameMenu();
 		},
 
-		onAdsResult: function(code, msg) {
-			var scene;
-			
-			cc.log("Got ads result code: " + code + ", message: " + msg);
-			if (code == plugin.AdsResultCode.FullScreenViewDismissed) {
-				scene = cc.Director.getInstance().getRunningScene();
-				if (scene && scene.layer) {
-					scene.layer.addCurrencies(0, parseInt(scene.layer.exchangeRate * .5));
-				}
-			}
+		onAdDismissed(){
+			this.addCurrencies(0, parseInt(this.exchangeRate * .5));
 		},
 
 		onGetExchangeRate: function(response) {
-			var scene = cc.Director.getInstance().getRunningScene(),
+			var scene = cc.director.getRunningScene(),
 				multiplier = 100,
 				value;
 			

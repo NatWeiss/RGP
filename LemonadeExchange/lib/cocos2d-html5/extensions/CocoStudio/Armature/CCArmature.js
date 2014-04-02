@@ -26,36 +26,46 @@
  * Base class for ccs.Armature objects.
  * @class
  * @extends ccs.NodeRGBA
+ *
+ * @property {ccs.Bone}                 parentBone      - The parent bone of the armature node
+ * @property {ccs.ArmatureAnimation}    animation       - The animation
+ * @property {ccs.ArmatureData}         armatureData    - The armature data
+ * @property {String}                   name            - The name of the armature
+ * @property {cc.SpriteBatchNode}       batchNode       - The batch node of the armature
+ * @property {Number}                   version         - The version
+ * @property {Object}                   body            - The body of the armature
+ * @property {ccs.ColliderFilter}       colliderFilter  - <@writeonly> The collider filter of the armature
  */
 ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
-    _animation:null,
-    _armatureData:null,
-    _batchNode:null,
-    _name:"",
+    animation:null,
+    armatureData:null,
+    batchNode:null,
+    name:"",
     _textureAtlas:null,
     _parentBone:null,
     _boneDic:null,
     _topBoneList:null,
     _armatureIndexDic:null,
     _offsetPoint:null,
-    _version:0,
+    version:0,
     _armatureTransformDirty:true,
     _body:null,
     _textureAtlasDic:null,
     _blendFunc:null,
+    _className:"Armature",
     ctor:function () {
         cc.NodeRGBA.prototype.ctor.call(this);
-        this._animation = null;
-        this._armatureData = null;
-        this._batchNode = null;
-        this._name = "";
+        this.animation = null;
+        this.armatureData = null;
+        this.batchNode = null;
+        this.name = "";
         this._textureAtlas = null;
         this._parentBone = null;
         this._boneDic = null;
         this._topBoneList = null;
         this._armatureIndexDic = {};
         this._offsetPoint = cc.p(0, 0);
-        this._version = 0;
+        this.version = 0;
         this._armatureTransformDirty = true;
         this._body = null;
         this._textureAtlasDic = null;
@@ -74,14 +84,14 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
             this._parentBone = parentBone;
         }
         this.removeAllChildren();
-        this._animation = new ccs.ArmatureAnimation();
-        this._animation.init(this);
+        this.animation = new ccs.ArmatureAnimation();
+        this.animation.init(this);
         this._boneDic = {};
         this._topBoneList = [];
         this._textureAtlasDic = {};
         this._blendFunc = {src: cc.BLEND_SRC, dst: cc.BLEND_DST};
-        this._name = (!name) ? "" : name;
-        var armatureDataManager = ccs.ArmatureDataManager.getInstance();
+        this.name = (!name) ? "" : name;
+        var armatureDataManager = ccs.armatureDataManager;
         if (name != "") {
             //animationData
             var animationData = armatureDataManager.getAnimationData(name);
@@ -89,11 +99,11 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
                 cc.log("AnimationData not exist! ");
                 return false;
             }
-            this._animation.setAnimationData(animationData);
+            this.animation.setAnimationData(animationData);
 
             //armatureData
             var armatureData = armatureDataManager.getArmatureData(name);
-            this._armatureData = armatureData;
+            this.armatureData = armatureData;
 
             //boneDataDic
             var boneDataDic = armatureData.getBoneDataDic();
@@ -120,20 +130,20 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
             this.update(0);
             this.updateOffsetPoint();
         } else {
-            this._name = "new_armature";
-            this._armatureData = new ccs.ArmatureData();
-            this._armatureData.name = this._name;
+            this.name = "new_armature";
+            this.armatureData = new ccs.ArmatureData();
+            this.armatureData.name = this.name;
 
             var animationData = new ccs.AnimationData();
-            animationData.name = this._name;
+            animationData.name = this.name;
 
-            armatureDataManager.addArmatureData(this._name, this._armatureData);
-            armatureDataManager.addAnimationData(this._name, animationData);
+            armatureDataManager.addArmatureData(this.name, this.armatureData);
+            armatureDataManager.addAnimationData(this.name, animationData);
 
-            this._animation.setAnimationData(animationData);
+            this.animation.setAnimationData(animationData);
         }
-        if (cc.renderContextType === cc.WEBGL) {
-            this.setShaderProgram(cc.ShaderCache.getInstance().programForKey(cc.SHADER_POSITION_TEXTURE_UCOLOR));
+        if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
+            this.setShaderProgram(cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURE_UCOLOR));
         }
 
         this.setCascadeOpacityEnabled(true);
@@ -158,7 +168,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
         if (existedBone) {
             return existedBone;
         }
-        var boneData = this._armatureData.getBoneData(boneName);
+        var boneData = this.armatureData.getBoneData(boneName);
         var parentName = boneData.parentName;
         var bone = null;
         if (parentName != "") {
@@ -220,7 +230,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
 
         bone.setArmature(null);
         bone.removeFromParent(recursion);
-        cc.ArrayRemoveObject(this._topBoneList, bone);
+        cc.arrayRemoveObject(this._topBoneList, bone);
         delete  this._boneDic[bone.getName()];
         this.removeChild(bone, true);
     },
@@ -246,7 +256,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
         }
         var parentBone = bone.getParentBone();
         if(parentBone){
-            cc.ArrayRemoveObject(parentBone.getChildrenBone(), bone);
+            cc.arrayRemoveObject(parentBone.getChildrenBone(), bone);
             bone.setParentBone(null);
         }
 
@@ -254,7 +264,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
             var boneParent = this._boneDic[parentName];
             if (boneParent) {
                 boneParent.addChildBone(bone);
-                cc.ArrayRemoveObject(this._topBoneList,bone);
+                cc.arrayRemoveObject(this._topBoneList,bone);
             }else{
                 this._topBoneList.push(bone);
             }
@@ -275,7 +285,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
     updateOffsetPoint:function () {
         // Set contentsize and Calculate anchor point.
         var rect = this.boundingBox();
-        this.setContentSize(rect._size);
+        this.setContentSize(rect);
         var locOffsetPoint = this._offsetPoint;
         locOffsetPoint.x = -rect.x;
         locOffsetPoint.y = -rect.y;
@@ -285,7 +295,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
     },
 
     update:function (dt) {
-        this._animation.update(dt);
+        this.animation.update(dt);
         var locTopBoneList = this._topBoneList;
         for (var i = 0; i < locTopBoneList.length; i++) {
             locTopBoneList[i].update(dt);
@@ -300,10 +310,10 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
         if (this._transformDirty) {
             this._armatureTransformDirty = true;
             // Translate values
-            var x = this._position._x;
-            var y = this._position._y;
-            var apx = this._anchorPointInPoints._x, napx = -apx;
-            var apy = this._anchorPointInPoints._y, napy = -apy;
+            var x = this._position.x;
+            var y = this._position.y;
+            var apx = this._anchorPointInPoints.x, napx = -apx;
+            var apy = this._anchorPointInPoints.y, napy = -apy;
             var scx = this._scaleX, scy = this._scaleY;
 
             if (this._ignoreAnchorPointForPosition) {
@@ -368,8 +378,8 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
             this._armatureTransformDirty = true;
             var t = this._transform;// quick reference
             // base position
-            t.tx = this._position._x;
-            t.ty = this._position._y;
+            t.tx = this._position.x;
+            t.ty = this._position.y;
 
             // rotation Cos and Sin
             var Cos = 1, Sin = 0;
@@ -384,7 +394,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
             t.b = Sin;
 
             var lScaleX = this._scaleX, lScaleY = this._scaleY;
-            var appX = this._anchorPointInPoints._x, appY = this._anchorPointInPoints._y;
+            var appX = this._anchorPointInPoints.x, appY = this._anchorPointInPoints.y;
 
             // Firefox on Vista and XP crashes
             // GPU thread in case of scale(0.0, 0.0)
@@ -465,7 +475,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
      * @return {cc.rect}
      */
     boundingBox:function () {
-        var minx, miny, maxx, maxy = 0;
+        var minx = 0, miny = 0, maxx = 0, maxy = 0;
         var first = true;
         var boundingBox = cc.rect(0, 0, 0, 0);
         for (var i = 0; i < this._children.length; i++) {
@@ -541,15 +551,15 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
      * draw contour
      */
     drawContour: function () {
-        cc.drawingUtil.setDrawColor4B(255, 255, 255, 255);
-        cc.drawingUtil.setLineWidth(1);
+        cc._drawingUtil.setDrawColor(255, 255, 255, 255);
+        cc._drawingUtil.setLineWidth(1);
         for (var key in this._boneDic) {
             var bone = this._boneDic[key];
             var bodyList = bone.getColliderBodyList();
             for (var i = 0; i < bodyList.length; i++) {
                 var body = bodyList[i];
                 var vertexList = body.getCalculatedVertexList();
-                cc.drawingUtil.drawPoly(vertexList, vertexList.length, true);
+                cc._drawingUtil.drawPoly(vertexList, vertexList.length, true);
             }
         }
     },
@@ -567,7 +577,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
      * @return {ccs.ArmatureAnimation}
      */
     getAnimation:function () {
-        return this._animation;
+        return this.animation;
     },
 
     /**
@@ -575,7 +585,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
      * @param {ccs.ArmatureAnimation} animation
      */
     setAnimation:function (animation) {
-        this._animation = animation;
+        this.animation = animation;
     },
 
     /**
@@ -583,7 +593,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
      * @return {ccs.ArmatureData}
      */
     getArmatureData:function () {
-        return this._armatureData;
+        return this.armatureData;
     },
 
     /**
@@ -591,19 +601,19 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
      * @param {ccs.ArmatureData} armatureData
      */
     setArmatureData:function (armatureData) {
-        this._armatureData = armatureData;
+        this.armatureData = armatureData;
     },
     getName:function () {
-        return this._name;
+        return this.name;
     },
     setName:function (name) {
-        this._name = name;
+        this.name = name;
     },
     getBatchNode:function () {
-        return this._batchNode;
+        return this.batchNode;
     },
     setBatchNode:function (batchNode) {
-        this._batchNode = batchNode;
+        this.batchNode = batchNode;
     },
 
     /**
@@ -611,7 +621,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
      * @returns {Number}
      */
     getVersion:function () {
-        return this._version;
+        return this.version;
     },
 
     /**
@@ -619,7 +629,7 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
      * @param {Number} version
      */
     setVersion:function (version) {
-        this._version = version;
+        this.version = version;
     },
 
     /**
@@ -662,13 +672,27 @@ ccs.Armature = ccs.NodeRGBA.extend(/** @lends ccs.Armature# */{
 });
 
 
-if(cc.Browser.supportWebGL){
+if(cc._renderType == cc._RENDER_TYPE_WEBGL){
     //WebGL
     ccs.Armature.prototype.nodeToParentTransform = ccs.Armature.prototype._nodeToParentTransformForWebGL;
 }else{
     //Canvas
     ccs.Armature.prototype.nodeToParentTransform = ccs.Armature.prototype._nodeToParentTransformForCanvas;
 }
+
+window._p = ccs.Armature.prototype;
+
+/** @expose */
+_p.parentBone;
+cc.defineGetterSetter(_p, "parentBone", _p.getParentBone, _p.setParentBone);
+/** @expose */
+_p.body;
+cc.defineGetterSetter(_p, "body", _p.getBody, _p.setBody);
+/** @expose */
+_p.colliderFilter;
+cc.defineGetterSetter(_p, "colliderFilter", null, _p.setColliderFilter);
+
+delete window._p;
 
 /**
  * allocates and initializes a armature.

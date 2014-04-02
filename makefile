@@ -50,7 +50,7 @@ icons:
 	cp rez/KandleIcon-misc/favicon_32x32.ico template/proj.html5/favicon.ico
 	cp rez/KandleIcon-misc/KandleIcon-round_512x512x32.png template/proj.linux/Icon-512.png
 
-lemonadex: dest=~/Desktop
+lemonadex: dest=.
 lemonadex: name=LemonadeExchange
 lemonadex: key=com.wizardfu.lemonadex
 lemonadex:

@@ -11,76 +11,123 @@ sp.Skeleton = {
 /**
  * @method setToSetupPose
  */
-setToSetupPose : function () {},
+setToSetupPose : function (
+)
+{
+},
 
 /**
  * @method setBlendFunc
- * @param {const cocos2d::BlendFunc&}
+ * @param {cc.BlendFunc} arg0
  */
-setBlendFunc : function () {},
+setBlendFunc : function (
+blendfunc 
+)
+{
+},
 
 /**
  * @method onDraw
+ * @param {kmMat4} arg0
+ * @param {bool} arg1
  */
-onDraw : function () {},
+onDraw : function (
+kmmat4, 
+bool 
+)
+{
+},
 
 /**
  * @method setSlotsToSetupPose
  */
-setSlotsToSetupPose : function () {},
-
-/**
- * @method getAttachment
- * @return A value converted from C/C++ "spAttachment*"
- * @param {const char*}
- * @param {const char*}
- */
-getAttachment : function () {},
+setSlotsToSetupPose : function (
+)
+{
+},
 
 /**
  * @method setAttachment
- * @return A value converted from C/C++ "bool"
- * @param {const char*}
- * @param {const char*}
+ * @param {char} arg0
+ * @param {char} arg1
+ * @return {bool}
  */
-setAttachment : function () {},
+setAttachment : function (
+char, 
+char 
+)
+{
+    return false;
+},
 
 /**
  * @method getBlendFunc
- * @return A value converted from C/C++ "const cocos2d::BlendFunc&"
+ * @return {cc.BlendFunc}
  */
-getBlendFunc : function () {},
+getBlendFunc : function (
+)
+{
+    return cc.BlendFunc;
+},
 
 /**
  * @method setSkin
- * @return A value converted from C/C++ "bool"
- * @param {const char*}
+ * @param {char} arg0
+ * @return {bool}
  */
-setSkin : function () {},
-
-/**
- * @method findSlot
- * @return A value converted from C/C++ "spSlot*"
- * @param {const char*}
- */
-findSlot : function () {},
+setSkin : function (
+char 
+)
+{
+    return false;
+},
 
 /**
  * @method updateWorldTransform
  */
-updateWorldTransform : function () {},
+updateWorldTransform : function (
+)
+{
+},
 
 /**
  * @method setBonesToSetupPose
  */
-setBonesToSetupPose : function () {},
+setBonesToSetupPose : function (
+)
+{
+},
 
 /**
- * @method findBone
- * @return A value converted from C/C++ "spBone*"
- * @param {const char*}
- */
-findBone : function () {},
+ * @method createWithFile
+* @param {char|char} char
+* @param {char|spAtlas} char
+* @param {float|float} float
+* @return {sp.Skeleton|sp.Skeleton}
+*/
+createWithFile : function(
+char,
+spatlas,
+float 
+)
+{
+    return sp.Skeleton;
+},
+
+/**
+ * @method Skeleton
+ * @constructor
+* @param {char|spSkeletonData|char} char
+* @param {spAtlas|bool|char} spatlas
+* @param {float|float} float
+*/
+Skeleton : function(
+char,
+char,
+float 
+)
+{
+},
 
 };
 
@@ -90,67 +137,90 @@ findBone : function () {},
 sp.SkeletonAnimation = {
 
 /**
- * @method addAnimation
- * @return A value converted from C/C++ "spTrackEntry*"
- * @param {int}
- * @param {const char*}
- * @param {bool}
- * @param {float}
- */
-addAnimation : function () {},
-
-/**
- * @method getCurrent
- * @return A value converted from C/C++ "spTrackEntry*"
- */
-getCurrent : function () {},
-
-/**
- * @method setAnimationStateData
- * @param {spAnimationStateData*}
- */
-setAnimationStateData : function () {},
-
-/**
  * @method update
- * @param {float}
+ * @param {float} arg0
  */
-update : function () {},
+update : function (
+float 
+)
+{
+},
 
 /**
  * @method setMix
- * @param {const char*}
- * @param {const char*}
- * @param {float}
+ * @param {char} arg0
+ * @param {char} arg1
+ * @param {float} arg2
  */
-setMix : function () {},
-
-/**
- * @method setAnimation
- * @return A value converted from C/C++ "spTrackEntry*"
- * @param {int}
- * @param {const char*}
- * @param {bool}
- */
-setAnimation : function () {},
+setMix : function (
+char, 
+char, 
+float 
+)
+{
+},
 
 /**
  * @method clearTracks
  */
-clearTracks : function () {},
+clearTracks : function (
+)
+{
+},
 
 /**
  * @method clearTrack
  */
-clearTrack : function () {},
+clearTrack : function (
+)
+{
+},
 
 /**
  * @method onAnimationStateEvent
- * @param {int}
- * @param {spEventType}
- * @param {spEvent*}
- * @param {int}
+ * @param {int} arg0
+ * @param {spEventType} arg1
+ * @param {spEvent} arg2
+ * @param {int} arg3
  */
-onAnimationStateEvent : function () {},
+onAnimationStateEvent : function (
+int, 
+speventtype, 
+spevent, 
+int 
+)
+{
+},
+
+/**
+ * @method createWithFile
+* @param {char|char} char
+* @param {char|spAtlas} char
+* @param {float|float} float
+* @return {sp.SkeletonAnimation|sp.SkeletonAnimation}
+*/
+createWithFile : function(
+char,
+spatlas,
+float 
+)
+{
+    return sp.SkeletonAnimation;
+},
+
+/**
+ * @method SkeletonAnimation
+ * @constructor
+* @param {char|spSkeletonData|char} char
+* @param {spAtlas|char} spatlas
+* @param {float|float} float
+*/
+SkeletonAnimation : function(
+char,
+char,
+float 
+)
+{
+},
 
 };

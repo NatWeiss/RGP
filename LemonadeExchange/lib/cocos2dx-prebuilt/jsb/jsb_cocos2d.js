@@ -2,8 +2,6 @@
 // cocos2d constants
 //
 
-var cc = cc || {};
-
 cc.TARGET_PLATFORM = {
     WINDOWS:0,
     LINUX:1,
@@ -18,28 +16,28 @@ cc.TARGET_PLATFORM = {
     PC_BROWSER:101
 };
 
-cc.RESOLUTION_POLICY = {
+cc.ResolutionPolicy = {
     // The entire application is visible in the specified area without trying to preserve the original aspect ratio.
     // Distortion can occur, and the application may appear stretched or compressed.
-EXACT_FIT:0,
+    EXACT_FIT:0,
     // The entire application fills the specified area, without distortion but possibly with some cropping,
     // while maintaining the original aspect ratio of the application.
-NO_BORDER:1,
+    NO_BORDER:1,
     // The entire application is visible in the specified area without distortion while maintaining the original
     // aspect ratio of the application. Borders can appear on two sides of the application.
-SHOW_ALL:2,
+    SHOW_ALL:2,
     // The application takes the height of the design resolution size and modifies the width of the internal
     // canvas so that it fits the aspect ratio of the device
     // no distortion will occur however you must make sure your application works on different
     // aspect ratios
-FIXED_HEIGHT:3,
+    FIXED_HEIGHT:3,
     // The application takes the width of the design resolution size and modifies the height of the internal
     // canvas so that it fits the aspect ratio of the device
     // no distortion will occur however you must make sure your application works on different
     // aspect ratios
-FIXED_WIDTH:4,
-    
-UNKNOWN:5
+    FIXED_WIDTH:4,
+
+    UNKNOWN:5
 };
 
 cc.LANGUAGE_ENGLISH    = 0;
@@ -70,35 +68,14 @@ cc.TEXTURE_PIXELFORMAT_PVRTC4 = 8;
 cc.TEXTURE_PIXELFORMAT_PVRTC4 = 9;
 cc.TEXTURE_PIXELFORMAT_DEFAULT = cc.TEXTURE_PIXELFORMAT_RGBA8888;
 
-cc.TEXT_ALIGNMENT_LEFT  = 0;
-cc.TEXT_ALIGNMENT_CENTER = 1;
-cc.TEXT_ALIGNMENT_RIGHT = 2;
-
-cc.VERTICAL_TEXT_ALIGNMENT_TOP = 0;
-cc.VERTICAL_TEXT_ALIGNMENT_CENTER = 1;
-cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM = 2;
-
 cc.IMAGE_FORMAT_JPEG = 0;
 cc.IMAGE_FORMAT_PNG = 0;
 
 cc.PROGRESS_TIMER_TYPE_RADIAL = 0;
 cc.PROGRESS_TIMER_TYPE_BAR = 1;
 
-cc.PARTICLE_TYPE_FREE = 0;
-cc.PARTICLE_TYPE_RELATIVE = 1;
-cc.PARTICLE_TYPE_GROUPED = 2;
-cc.PARTICLE_DURATION_INFINITY = -1;
-cc.PARTICLE_MODE_GRAVITY = 0;
-cc.PARTICLE_MODE_RADIUS = 1;
-cc.PARTICLE_START_SIZE_EQUAL_TO_END_SIZE = -1;
-cc.PARTICLE_START_RADIUS_EQUAL_TO_END_RADIUS = -1;
-
 cc.TOUCH_ALL_AT_ONCE = 0;
 cc.TOUCH_ONE_BY_ONE = 1;
-
-cc.TMX_TILE_HORIZONTAL_FLAG = 0x80000000;
-cc.TMX_TILE_VERTICAL_FLAG = 0x40000000;
-cc.TMX_TILE_DIAGONAL_FLAG = 0x20000000;
 
 cc.TRANSITION_ORIENTATION_LEFT_OVER = 0;
 cc.TRANSITION_ORIENTATION_RIGHT_OVER = 1;
@@ -135,151 +112,16 @@ cc._reuse_size = {width:0, height:0};
 cc._reuse_rect = {x:0, y:0, width:0, height:0};
 cc._reuse_color3b = {r:255, g:255, b:255 };
 cc._reuse_color4b = {r:255, g:255, b:255, a:255 };
-cc.log = cc._cocosplayerLog || cc.log || log;
 
 //
-// Color 3B
-//
-cc.c3b = function( r, g, b )
-{
-    switch (arguments.length) {
-        case 0:
-            return {r:0, g:0, b:0 };
-        case 1:
-            if (r && r instanceof cc.c3b) {
-            	  return {r:r.r, g:r.g, b:r.b };
-            } else {
-                return {r:0, g:0, b:0 };
-            }
-        case 3:
-            return {r:r, g:g, b:b };
-        default:
-            throw "unknown argument type";
-            break;
-    }
-};
-
-cc.integerToColor3B = function (intValue) {
-    intValue = intValue || 0;
-
-    var offset = 0xff;
-    var retColor = {r:0, g:0, b:0 };
-    retColor.r = intValue & (offset);
-    retColor.g = (intValue >> 8) & offset;
-    retColor.b = (intValue >> 16) & offset;
-    return retColor;
-};
-
-cc._c3b = function( r, g, b )
-{
-    cc._reuse_color3b.r = r;
-    cc._reuse_color3b.g = g;
-    cc._reuse_color3b.b = b;
-    return cc._reuse_color3b;
-};
-
-cc.c3BEqual = function(color1, color2){
-    return color1.r === color2.r && color1.g === color2.g && color1.b === color2.b;
-};
-
-cc.white = function () {
-    return cc.c3b(255, 255, 255);
-};
-
-cc.yellow = function () {
-    return cc.c3b(255, 255, 0);
-};
-
-cc.blue = function () {
-    return cc.c3b(0, 0, 255);
-};
-
-cc.green = function () {
-    return cc.c3b(0, 255, 0);
-};
-
-cc.red = function () {
-    return cc.c3b(255, 0, 0);
-};
-
-cc.magenta = function () {
-    return cc.c3b(255, 0, 255);
-};
-
-cc.black = function () {
-    return cc.c3b(0, 0, 0);
-};
-
-cc.orange = function () {
-    return cc.c3b(255, 127, 0);
-};
-
-cc.gray = function () {
-    return cc.c3b(166, 166, 166);
-};
-
-//
-// Color 4B
-//
-cc.c4b = function( r, g, b, a )
-{
-    return {r:r, g:g, b:b, a:a };
-};
-cc._c4b = function( r, g, b, a )
-{
-    cc._reuse_color4b.r = r;
-    cc._reuse_color4b.g = g;
-    cc._reuse_color4b.b = b;
-    cc._reuse_color4b.a = a;
-    return cc._reuse_color4b;
-};
-// compatibility
-cc.c4 = cc.c4b;
-cc._c4 = cc._c4b;
-
-/**
- * convert Color3B to a string of color for style.
- * e.g.  Color3B(255,6,255)  to : "#ff06ff"
- * @param clr
- * @return {String}
- */
-cc.convertColor3BtoHexString = function (clr) {
-    var hR = clr.r.toString(16);
-    var hG = clr.g.toString(16);
-    var hB = clr.b.toString(16);
-    var stClr = "#" + (clr.r < 16 ? ("0" + hR) : hR) + (clr.g < 16 ? ("0" + hG) : hG) + (clr.b < 16 ? ("0" + hB) : hB);
-    return stClr;
-};
-
-//
-// Color 4F
-//
-cc.c4f = function( r, g, b, a )
-{
-    return {r:r, g:g, b:b, a:a };
-};
-
-cc.c4FFromccc3B = function (c) {
-    return cc.c4f(c.r / 255.0, c.g / 255.0, c.b / 255.0, 1.0);
-};
-
-cc.c4FFromccc4B = function (c) {
-    return cc.c4f(c.r / 255.0, c.g / 255.0, c.b / 255.0, c.a / 255.0);
-};
-
-cc.c4BFromccc4F = function (c) {
-    return cc.c4f(0 | (c.r * 255), 0 | (c.g * 255), 0 | (c.b * 255), 0 | (c.a * 255));
-};
-
-cc.c4FEqual = function (a, b) {
-    return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
-};
-
-//
-// Point
+// Basic sturcture : Point
 //
 cc.p = function( x, y )
 {
+    if (x == undefined)
+        return {x: 0, y: 0};
+    if (y == undefined)
+        return {x: x.x, y: x.y};
     return {x:x, y:y};
 };
 cc._p = function( x, y )
@@ -313,7 +155,7 @@ cc._g = function( x, y )
 };
 
 //
-// Size
+// Basic sturcture : Size
 //
 cc.size = function(w,h)
 {
@@ -446,106 +288,179 @@ cc.RectZero = function () {
     return cc.rect(0, 0, 0, 0);
 };
 
-//
-// Array: for cocos2d-html5 compatibility
-//
-
-/**
- * Returns index of first occurence of object, -1 if value not found.
- * @function
- * @param {Array} arr Source Array
- * @param {*} findObj find object
- * @return {Number} index of first occurence of value
- */
-cc.ArrayGetIndexOfObject = function (arr, findObj) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i] == findObj)
-            return i;
-    }
-    return -1;
+// Basic sturcture : Color
+cc.Color = function (r, g, b, a) {
+    this.r = r || 0;
+    this.g = g || 0;
+    this.b = b || 0;
+    this.a = a || 0;
 };
 
 /**
- * Returns a Boolean value that indicates whether value is present in the array.
- * @function
- * @param {Array} arr
- * @param {*} findObj
- * @return {Boolean}
+ *
+ * @param {Number|String|cc.Color} r
+ * @param {Number} g
+ * @param {Number} b
+ * @param {Number} a
+ * @returns {cc.Color}
  */
-cc.ArrayContainsObject = function (arr, findObj) {
-    return cc.ArrayGetIndexOfObject(arr, findObj) != -1;
+cc.color = function (r, g, b, a) {
+    if (r === undefined)
+        return {r: 0, g: 0, b: 0, a: 255};
+    if (typeof r === "string")
+        return cc.hexToColor(r);
+    if (typeof r === "object")
+        return {r: r.r, g: r.g, b: r.b, a: r.a};
+    return  {r: r, g: g, b: b, a: a };
 };
 
-cc.ArrayRemoveObject = function (arr, delObj) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i] == delObj) {
-            arr.splice(i, 1);
-        }
-    }
+/**
+ * returns true if both ccColor3B are equal. Otherwise it returns false.
+ * @param {cc.Color} color1
+ * @param {cc.Color} color2
+ * @return {Boolean}  true if both ccColor3B are equal. Otherwise it returns false.
+ */
+cc.colorEqual = function(color1, color2){
+    return color1.r === color2.r && color1.g === color2.g && color1.b === color2.b;
 };
 
-//
-// Helpers
-//
-cc.dump = function(obj)
-{
-    for( var i in obj )
-        cc.log( i + " = " + obj[i] );
+/**
+ * convert a string of color for style to Color.
+ * e.g. "#ff06ff"  to : cc.color(255,6,255)
+ * @param {String} hex
+ * @return {cc.Color}
+ */
+cc.hexToColor = function (hex) {
+    hex = hex.replace(/^#?/, "0x");
+    var c = parseInt(hex);
+    var r = c >> 16;
+    var g = (c >> 8) % 256;
+    var b = c % 256;
+    return cc.color(r, g, b);
 };
 
-// dump config info, but only in debug mode
-var sys = sys || undefined;
-cc.dumpConfig = function()
-{
-    if (sys) {
-        cc.dump(sys);
-        cc.dump(sys.capabilities);
-    }
+/**
+ * convert Color to a string of color for style.
+ * e.g.  cc.color(255,6,255)  to : "#ff06ff"
+ * @param {cc.Color} color
+ * @return {String}
+ */
+cc.colorToHex = function (color) {
+    var hR = color.r.toString(16);
+    var hG = color.g.toString(16);
+    var hB = color.b.toString(16);
+    var hex = "#" + (color.r < 16 ? ("0" + hR) : hR) + (color.g < 16 ? ("0" + hG) : hG) + (color.b < 16 ? ("0" + hB) : hB);
+    return hex;
 };
 
-//
-// Bindings Overrides
-//
-// MenuItemToggle
-cc.MenuItemToggle.create = function( /* var args */) {
-
-    var n = arguments.length;
-
-    if (typeof arguments[n-2] === 'function' || typeof arguments[n-1] === 'function') {
-        var args = Array.prototype.slice.call(arguments);
-        var obj = null;
-        if( typeof arguments[n-2] === 'function' )
-            obj = args.pop();
-
-        var func = args.pop();
-
-        // create it with arguments,
-        var item = cc.MenuItemToggle._create.apply(this, args);
-
-        // then set the callback
-        if( obj !== null )
-            item.setCallback(func, obj);
-        else
-            item.setCallback(func);
-        return item;
-    } else {
-        return cc.MenuItemToggle._create.apply(this, arguments);
-    }
+/**
+ * White color (255, 255, 255, 255)
+ * @returns {cc.Color}
+ * @private
+ */
+cc.color._getWhite = function(){
+    return cc.color(255, 255, 255, 255);
 };
 
-// LabelAtlas
-cc.LabelAtlas.create = function( a,b,c,d,e ) {
-
-    var n = arguments.length;
-
-    if ( n == 5) {
-        return cc.LabelAtlas._create(a,b,c,d,e.charCodeAt(0));
-    } else {
-        return cc.LabelAtlas._create.apply(this, arguments);
-    }
+/**
+ *  Yellow color (255, 255, 0, 255)
+ * @returns {cc.Color}
+ * @private
+ */
+cc.color._getYellow = function () {
+    return cc.color(255, 255, 0, 255);
 };
 
-cc.LayerMultiplex.create = cc.LayerMultiplex.createWithArray;
+/**
+ *  Blue color (0, 0, 255, 255)
+ * @type {cc.Color}
+ * @private
+ */
+cc.color._getBlue = function () {
+    return  cc.color(0, 0, 255, 255);
+};
+
+/**
+ *  Green Color (0, 255, 0, 255)
+ * @type {cc.Color}
+ * @private
+ */
+cc.color._getGreen = function () {
+    return cc.color(0, 255, 0, 255);
+};
+
+/**
+ *  Red Color (255, 0, 0, 255)
+ * @type {cc.Color}
+ * @private
+ */
+cc.color._getRed = function () {
+    return cc.color(255, 0, 0, 255);
+};
+
+/**
+ *  Magenta Color (255, 0, 255, 255)
+ * @type {cc.Color}
+ * @private
+ */
+cc.color._getMagenta = function () {
+    return cc.color(255, 0, 255, 255);
+};
+
+/**
+ *  Black Color (0, 0, 0, 255)
+ * @type {cc.Color}
+ * @private
+ */
+cc.color._getBlack = function () {
+    return cc.color(0, 0, 0, 255);
+};
+
+/**
+ *  Orange Color (255, 127, 0, 255)
+ * @type {cc.Color}
+ * @private
+ */
+cc.color._getOrange = function () {
+    return cc.color(255, 127, 0, 255);
+};
+
+/**
+ *  Gray Color (166, 166, 166, 255)
+ * @type {cc.Color}
+ * @private
+ */
+cc.color._getGray = function () {
+    return cc.color(166, 166, 166, 255);
+};
+var _proto = cc.color;
+/** @expose */
+_proto.WHITE;
+cc.defineGetterSetter(_proto, "WHITE", _proto._getWhite);
+/** @expose */
+_proto.YELLOW;
+cc.defineGetterSetter(_proto, "YELLOW", _proto._getYellow);
+/** @expose */
+_proto.BLUE;
+cc.defineGetterSetter(_proto, "BLUE", _proto._getBlue);
+/** @expose */
+_proto.GREEN;
+cc.defineGetterSetter(_proto, "GREEN", _proto._getGreen);
+/** @expose */
+_proto.RED;
+cc.defineGetterSetter(_proto, "RED", _proto._getRed);
+/** @expose */
+_proto.MAGENTA;
+cc.defineGetterSetter(_proto, "MAGENTA", _proto._getMagenta);
+/** @expose */
+_proto.BLACK;
+cc.defineGetterSetter(_proto, "BLACK", _proto._getBlack);
+/** @expose */
+_proto.ORANGE;
+cc.defineGetterSetter(_proto, "ORANGE", _proto._getOrange);
+/** @expose */
+_proto.GRAY;
+cc.defineGetterSetter(_proto, "GRAY", _proto._getGray);
 
 
 /**
@@ -678,21 +593,25 @@ cc.Layer.extend = cc.Class.extend;
 cc.LayerGradient.extend = cc.Class.extend;
 cc.LayerColor.extend = cc.Class.extend;
 cc.Sprite.extend = cc.Class.extend;
+cc.Menu.extend = cc.Class.extend;
+cc.MenuItem.extend = cc.Class.extend;
 cc.MenuItemFont.extend = cc.Class.extend;
+cc.MenuItemToggle.extend = cc.Class.extend;
 cc.Scene.extend = cc.Class.extend;
 cc.DrawNode.extend = cc.Class.extend;
+cc.ActionInterval.extend = cc.Class.extend;
 
 // Cocos2d-html5 supports multi scene resources preloading.
 // This is a compatible function for JSB.
 cc.Loader = cc.Class.extend({
-                            initWith:function (resources, selector, target) {
-                            if (selector) {
-                            this._selector = selector;
-                            this._target = target;
-                            }
-                            this._selector.call(this._target);
-                            }
-                            });
+	initWith:function (resources, selector, target) {
+		if (selector) {
+			this._selector = selector;
+			this._target = target;
+		}
+		this._selector.call(this._target);
+	}
+});
 
 cc.Loader.preload = function (resources, selector, target) {
     if (!this._instance) {
@@ -711,11 +630,203 @@ var ConfigType = {
 
 var __onParseConfig = function(type, str) {
     if (type === ConfigType.COCOSTUDIO) {
-        ccs.TriggerMng.getInstance().parse(JSON.parse(str));
+        ccs.triggerManager.parse(JSON.parse(str));
     }
 };
 
-cc.VisibleRect = {
+
+var _windowTimeIntervalId = 0;
+var _windowTimeFunHash = {};
+var WindowTimeFun = cc.Class.extend({
+    _code: null,
+    _intervalId: 0,
+    ctor: function (code) {
+        this._intervalId = _windowTimeIntervalId++;
+        this._code = code;
+    },
+    fun: function () {
+        if (!this._code) return;
+        var code = this._code;
+        if (typeof code == "string") {
+            Function(code)();
+        }
+        else if (typeof code == "function") {
+            code();
+        }
+    }
+});
+
+/**
+ * overwrite window's setTimeout
+ @param {String|Function} code
+ @param {number} delay
+ @return {number}
+ */
+var setTimeout = function (code, delay) {
+    var target = new WindowTimeFun(code);
+    cc.Director.getInstance().getScheduler().scheduleCallbackForTarget(target, target.fun, delay / 1000, 0, 0, false);
+    _windowTimeFunHash[target._intervalId] = target;
+    return target._intervalId;
+};
+
+/**
+ * overwrite window's setInterval
+ @param {String|Function} code
+ @param {number} delay
+ @return {number}
+ */
+var setInterval = function (code, delay) {
+    var target = new WindowTimeFun(code);
+    cc.Director.getInstance().getScheduler().scheduleCallbackForTarget(target, target.fun, delay / 1000, cc.REPEAT_FOREVER, 0, false);
+    _windowTimeFunHash[target._intervalId] = target;
+    return target._intervalId;
+};
+
+/**
+ * overwrite window's clearInterval
+ @param {number} intervalId
+ */
+var clearInterval = function (intervalId) {
+    var target = _windowTimeFunHash[intervalId];
+    if (target) {
+        cc.Director.getInstance().getScheduler().unscheduleCallbackForTarget(target, target.fun);
+        delete _windowTimeFunHash[intervalId];
+    }
+};
+var clearTimeout = clearInterval;
+
+
+// event listener type
+cc.EventListener.UNKNOWN = 0;
+cc.EventListener.TOUCH_ONE_BY_ONE = 1;
+cc.EventListener.TOUCH_ALL_AT_ONCE = 2;
+cc.EventListener.KEYBOARD = 3;
+cc.EventListener.MOUSE = 4;
+cc.EventListener.ACCELERATION = 5;
+cc.EventListener.CUSTOM = 6;
+
+cc.EventListener.create = function(argObj){
+    if(!argObj || !argObj.event){
+        throw "Invalid parameter.";
+    }
+    var listenerType = argObj.event;
+    delete argObj.event;
+
+    var listener = null;
+    if(listenerType === cc.EventListener.TOUCH_ONE_BY_ONE) {
+        listener = cc.EventListenerTouchOneByOne.create();
+        if (argObj.swallowTouches) {
+            listener.setSwallowTouches(argObj.swallowTouches);
+        }
+    }
+    else if(listenerType === cc.EventListener.TOUCH_ALL_AT_ONCE)
+        listener = cc.EventListenerTouchAllAtOnce.create();
+    else if(listenerType === cc.EventListener.MOUSE)
+        listener = cc.EventListenerMouse.create();
+    else if(listenerType === cc.EventListener.CUSTOM){
+        listener = cc.EventListenerCustom.create(argObj.eventName, argObj.callback);
+        delete argObj.eventName;
+        delete argObj.callback;
+    } else if(listenerType === cc.EventListener.KEYBOARD)
+        listener = cc.EventListenerKeyboard.create();
+    else if(listenerType === cc.EventListener.ACCELERATION){
+        listener = cc.EventListenerAcceleration.create(argObj.callback);
+        delete argObj.callback;
+    }
+    else
+    {
+        cc.log("Error: Invalid listener type.");
+    }
+
+    for(var key in argObj) {
+        listener[key] = argObj[key];
+    }
+
+    return listener;
+};
+
+
+// Event manager
+cc.eventManager.addListener = function(listener, nodeOrPriority) {
+    if(!(listener instanceof cc.EventListener)) {
+        listener = cc.EventListener.create(listener);
+    }
+
+    if (typeof nodeOrPriority == "number") {
+        if (nodeOrPriority == 0) {
+            cc.log("0 priority is forbidden for fixed priority since it's used for scene graph based priority.");
+            return;
+        }
+
+        cc.eventManager.addEventListenerWithFixedPriority(listener, nodeOrPriority);
+    } else {
+        cc.eventManager.addEventListenerWithSceneGraphPriority(listener, nodeOrPriority);
+    }
+};
+
+cc.eventManager.dispatchCustomEvent = function (eventName, optionalUserData) {
+    var ev = new cc.EventCustom(eventName);
+    ev.setUserData(optionalUserData);
+    this.dispatchEvent(ev);
+}
+
+cc.EventCustom.prototype.setUserData = function(userData) {
+    this._userData = userData;
+};
+
+cc.EventCustom.prototype.getUserData = function() {
+    return this._userData;
+};
+
+cc.inputManager = {
+    setAccelerometerEnabled: cc.Device.setAccelerometerEnabled,
+    setAccelerometerInterval: cc.Device.setAccelerometerInterval,
+    getDPI: cc.Device.getDPI
+};
+
+cc.EventListenerTouchOneByOne.prototype.clone = function() {
+    var ret = cc.EventListenerTouchOneByOne.create();
+    ret.onTouchBegan = this.onTouchBegan;
+    ret.onTouchMoved = this.onTouchMoved;
+    ret.onTouchEnded = this.onTouchEnded;
+    ret.onTouchCancelled = this.onTouchCancelled;
+    ret.setSwallowTouches(this.isSwallowTouches());
+    return ret;
+};
+
+cc.EventListenerTouchAllAtOnce.prototype.clone = function() {
+    var ret = cc.EventListenerTouchAllAtOnce.create();
+    ret.onTouchesBegan = this.onTouchesBegan;
+    ret.onTouchesMoved = this.onTouchesMoved;
+    ret.onTouchesEnded = this.onTouchesEnded;
+    ret.onTouchesCancelled = this.onTouchesCancelled;
+    return ret;
+};
+
+cc.EventListenerKeyboard.prototype.clone = function() {
+    var ret = cc.EventListenerKeyboard.create();
+    ret.onKeyPressed = this.onKeyPressed;
+    ret.onKeyReleased = this.onKeyReleased;
+    return ret;
+};
+
+cc.director = cc.Director.getInstance();
+
+cc.Director.EVENT_PROJECTION_CHANGED = "director_projection_changed";
+cc.Director.EVENT_AFTER_DRAW = "director_after_draw";
+cc.Director.EVENT_AFTER_VISIT = "director_after_visit";
+cc.Director.EVENT_AFTER_UPDATE = "director_after_update";
+
+cc.Director.prototype.runScene = function(scene){
+    if (!this.getRunningScene()) {
+        this.runWithScene(scene);
+    }
+    else {
+        this.replaceScene(scene);
+    }
+};
+
+cc.visibleRect = {
     _topLeft:cc.p(0,0),
     _topRight:cc.p(0,0),
     _top:cc.p(0,0),
@@ -729,6 +840,7 @@ cc.VisibleRect = {
     _height:0,
     _isInitialized: false,
     init:function(){
+
         var director = cc.Director.getInstance();
         var origin = director.getVisibleOrigin();
         var size = director.getVisibleSize();
@@ -736,88 +848,163 @@ cc.VisibleRect = {
         this._width = size.width;
         this._height = size.height;
 
-        var x = origin.x;
-        var y = origin.y;
         var w = this._width;
         var h = this._height;
 
-        var left = origin.x;
-        var right = origin.x + size.width;
-        var middle = origin.x + size.width/2;
-
         //top
-        this._top.y = this._topLeft.y = this._topRight.y = y + h;
-        this._topLeft.x = left;
-        this._top.x = middle;
-        this._topRight.x = right;
+        this._topLeft.y = h;
+        this._topRight.x = w;
+        this._topRight.y = h;
+        this._top.x = w/2;
+        this._top.y = h;
 
         //bottom
-
-        this._bottom.y = this._bottomRight.y = this._bottomLeft.y = y;
-        this._bottomLeft.x = left
-        this._bottom.x = middle;
-        this._bottomRight.x = right;
+        this._bottomRight.x = w;
+        this._bottom.x = w/2;
 
         //center
-        this._right.y = this._left.y = this._center.y = y + h/2;
-        this._center.x = middle;
-        
+        this._center.x = w/2;
+        this._center.y = h/2;
+
         //left
-        this._left.x = left;
+        this._left.y = h/2;
 
         //right
-        this._right.x = right;
+        this._right.x = w;
+        this._right.y = h/2;
     },
-
     lazyInit: function(){
         if (!this._isInitialized) {
             this.init();
             this._isInitialized = true;
         }
-    },
-    getWidth:function(){
-        this.lazyInit();
-        return this._width;
-    },
-    getHeight:function(){
-        this.lazyInit();
-        return this._height;
-    },
-    topLeft:function(){
-        this.lazyInit();        
-        return this._topLeft;
-    },
-    topRight:function(){
-        this.lazyInit();        
-        return this._topRight;
-    },
-    top:function(){
-        this.lazyInit();        
-        return this._top;
-    },
-    bottomLeft:function(){
-        this.lazyInit();        
-        return this._bottomLeft;
-    },
-    bottomRight:function(){
-        this.lazyInit();        
-        return this._bottomRight;
-    },
-    bottom:function(){
-        this.lazyInit();        
-        return this._bottom;
-    },
-    center:function(){
-        this.lazyInit();        
-        return this._center;
-    },
-    left:function(){
-        this.lazyInit();        
-        return this._left;
-    },
-    right:function(){
-        this.lazyInit();        
-        return this._right;
     }
 };
 
+cc.defineGetterSetter(cc.visibleRect, "width", function(){
+    this.lazyInit();
+    return this._width;
+});
+cc.defineGetterSetter(cc.visibleRect, "height", function(){
+    this.lazyInit();
+    return this._height;
+});
+cc.defineGetterSetter(cc.visibleRect, "topLeft", function(){
+    this.lazyInit();
+    return this._topLeft;
+});
+cc.defineGetterSetter(cc.visibleRect, "topRight", function(){
+    this.lazyInit();
+    return this._topRight;
+});
+cc.defineGetterSetter(cc.visibleRect, "top", function(){
+    this.lazyInit();
+    return this._top;
+});
+cc.defineGetterSetter(cc.visibleRect, "bottomLeft", function(){
+    this.lazyInit();
+    return this._bottomLeft;
+});
+cc.defineGetterSetter(cc.visibleRect, "bottomRight", function(){
+    this.lazyInit();
+    return this._bottomRight;
+});
+cc.defineGetterSetter(cc.visibleRect, "bottom", function(){
+    this.lazyInit();
+    return this._bottom;
+});
+cc.defineGetterSetter(cc.visibleRect, "center", function(){
+    this.lazyInit();
+    return this._center;
+});
+cc.defineGetterSetter(cc.visibleRect, "left", function(){
+    this.lazyInit();
+    return this._left;
+});
+cc.defineGetterSetter(cc.visibleRect, "right", function(){
+    this.lazyInit();
+    return this._right;
+});
+
+// Predefined font definition
+cc.FontDefinition = function () {
+    this.fontName = "Arial";
+    this.fontSize = 12;
+    this.textAlign = cc.TEXT_ALIGNMENT_CENTER;
+    this.verticalAlign = cc.VERTICAL_TEXT_ALIGNMENT_TOP;
+    this.fillStyle = cc.color(255, 255, 255, 255);
+    this.boundingWidth = 0;
+	this.boundingHeight = 0;
+
+    this.strokeEnabled = false;
+    this.strokeStyle = cc.color(255, 255, 255, 255);
+    this.lineWidth = 1;
+
+    this.shadowEnabled = false;
+    this.shadowOffsetX = 0;
+	this.shadowOffsetY = 0;
+    this.shadowBlur = 0;
+    this.shadowOpacity = 1.0;
+};
+
+
+// Array utils
+
+/**
+ * Verify Array's Type
+ * @param {Array} arr
+ * @param {function} type
+ * @return {Boolean}
+ * @function
+ */
+cc.arrayVerifyType = function (arr, type) {
+    if (arr && arr.length > 0) {
+        for (var i = 0; i < arr.length; i++) {
+            if (!(arr[i] instanceof  type)) {
+                cc.log("element type is wrong!");
+                return false;
+            }
+        }
+    }
+    return true;
+};
+
+/**
+ * Searches for the first occurance of object and removes it. If object is not found the function has no effect.
+ * @function
+ * @param {Array} arr Source Array
+ * @param {*} delObj  remove object
+ */
+cc.arrayRemoveObject = function (arr, delObj) {
+    for (var i = 0, l = arr.length; i < l; i++) {
+        if (arr[i] == delObj) {
+            arr.splice(i, 1);
+            break;
+        }
+    }
+};
+
+/**
+ * Removes from arr all values in minusArr. For each Value in minusArr, the first matching instance in arr will be removed.
+ * @function
+ * @param {Array} arr Source Array
+ * @param {Array} minusArr minus Array
+ */
+cc.arrayRemoveArray = function (arr, minusArr) {
+    for (var i = 0, l = minusArr.length; i < l; i++) {
+        cc.arrayRemoveObject(arr, minusArr[i]);
+    }
+};
+
+/**
+ * Inserts some objects at index
+ * @function
+ * @param {Array} arr
+ * @param {Array} addObjs
+ * @param {Number} index
+ * @return {Array}
+ */
+cc.arrayAppendObjectsToIndex = function(arr, addObjs,index){
+    arr.splice.apply(arr, [index, 0].concat(addObjs));
+    return arr;
+};

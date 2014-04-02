@@ -34,30 +34,22 @@ cc.ACTION_TAG_INVALID = -1;
  * Base class for cc.Action objects.
  * @class
  * @extends cc.Class
+ *
+ * @property {cc.Node}  target          - The target will be set with the 'startWithTarget' method. When the 'stop' method is called, target will be set to nil.
+ * @property {cc.Node}  originalTarget  - The original target of the action.
+ * @property {Number}   tag             - The tag of the action, can be used to find the action.
  */
 cc.Action = cc.Class.extend(/** @lends cc.Action# */{
     //***********variables*************
-    _originalTarget:null,
-
-    /** The "target".
-     The target will be set with the 'startWithTarget' method.
-     When the 'stop' method is called, target will be set to nil.
-     The target is 'assigned', it is not 'retained'.
-     */
-    _target:null,
-    _tag:cc.ACTION_TAG_INVALID,
+    originalTarget:null,
+    target:null,
+    tag:cc.ACTION_TAG_INVALID,
 
     //**************Public Functions***********
     ctor:function () {
-        this._originalTarget = null;
-        this._target = null;
-        this._tag = cc.ACTION_TAG_INVALID;
-    },
-    /**
-     * @return {String}
-     */
-    description:function () {
-        return "<cc.Action | Tag = " + this._tag + ">";
+        this.originalTarget = null;
+        this.target = null;
+        this.tag = cc.ACTION_TAG_INVALID;
     },
 
     /**
@@ -66,7 +58,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @return {object}
      */
     copy:function () {
-        return cc.clone(this);
+        return this.clone();
     },
 
     /**
@@ -75,9 +67,9 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      */
     clone:function () {
         var action = new cc.Action();
-        action._originalTarget = null;
-        action._target = null;
-        action._tag = this._tag;
+        action.originalTarget = null;
+        action.target = null;
+        action.tag = this.tag;
         return action;
     },
 
@@ -94,8 +86,8 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @param {cc.Node} target
      */
     startWithTarget:function (target) {
-        this._originalTarget = target;
-        this._target = target;
+        this.originalTarget = target;
+        this.target = target;
     },
 
     /**
@@ -103,7 +95,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * IMPORTANT: You should never call "action stop" manually. Instead, use: "target.stopAction(action);"
      */
     stop:function () {
-        this._target = null;
+        this.target = null;
     },
     /** called every frame with it's delta time. DON'T override unless you know what you are doing.
      *
@@ -132,7 +124,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @return {cc.Node}
      */
     getTarget:function () {
-        return this._target;
+        return this.target;
     },
 
     /** The action will modify the target properties.
@@ -140,7 +132,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @param {cc.Node} target
      */
     setTarget:function (target) {
-        this._target = target;
+        this.target = target;
     },
 
     /**
@@ -148,7 +140,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @return {cc.Node}
      */
     getOriginalTarget:function () {
-        return this._originalTarget;
+        return this.originalTarget;
     },
 
     /** Set the original target, since target can be nil. <br/>
@@ -158,7 +150,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @param {cc.Node} originalTarget
      */
     setOriginalTarget:function (originalTarget) {
-        this._originalTarget = originalTarget;
+        this.originalTarget = originalTarget;
     },
 
     /**
@@ -166,7 +158,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @return {Number}
      */
     getTag:function () {
-        return this._tag;
+        return this.tag;
     },
 
     /**
@@ -174,7 +166,7 @@ cc.Action = cc.Class.extend(/** @lends cc.Action# */{
      * @param {Number} tag
      */
     setTag:function (tag) {
-        this._tag = tag;
+        this.tag = tag;
     },
     /**
      * Currently JavaScript Bindigns (JSB), in some cases, needs to use retain and release. This is a bug in JSB,
@@ -426,7 +418,7 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
         this.rightBoundary = 0.0;
         this.topBoundary = 0.0;
         this.bottomBoundary = 0.0;
-        this._worldRect = cc.RectZero();
+        this._worldRect = cc.rect(0, 0, 0, 0);
     },
 
     clone:function () {
@@ -461,7 +453,7 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
         if(!followedNode)
             throw "cc.Follow.initWithAction(): followedNode must be non nil";
 
-        rect = rect || cc.RectZero();
+        rect = rect || cc.rect(0, 0, 0, 0);
         this._followedNode = followedNode;
         this._worldRect = rect;
 
@@ -469,7 +461,7 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
 
         this._boundaryFullyCovered = false;
 
-        var winSize = cc.Director.getInstance().getWinSize();
+        var winSize = cc.director.getWinSize();
         this._fullScreenSize = cc.p(winSize.width, winSize.height);
         this._halfScreenSize = cc.pMult(this._fullScreenSize, 0.5);
 
@@ -500,8 +492,8 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
      * @param {Number} dt
      */
     step:function (dt) {
-        var tempPosX = this._followedNode.getPositionX();
-        var tempPosY = this._followedNode.getPositionY();
+        var tempPosX = this._followedNode.x;
+        var tempPosY = this._followedNode.y;
         tempPosX = this._halfScreenSize.x - tempPosX;
         tempPosY = this._halfScreenSize.y - tempPosY;
 
@@ -510,10 +502,9 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
             if (this._boundaryFullyCovered)
                 return;
 
-            this._target.setPosition(cc.clampf(tempPosX, this.leftBoundary, this.rightBoundary),
-                cc.clampf(tempPosY, this.bottomBoundary, this.topBoundary));
+	        this.target.setPosition(cc.clampf(tempPosX, this.leftBoundary, this.rightBoundary), cc.clampf(tempPosY, this.bottomBoundary, this.topBoundary));
         } else {
-            this._target.setPosition(tempPosX, tempPosY);
+            this.target.setPosition(tempPosX, tempPosY);
         }
     },
 
@@ -521,14 +512,14 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
      * @return {Boolean}
      */
     isDone:function () {
-        return ( !this._followedNode.isRunning() );
+        return ( !this._followedNode.running );
     },
 
     /**
      * Stop the action.
      */
     stop:function () {
-        this._target = null;
+        this.target = null;
         cc.Action.prototype.stop.call(this);
     }
 });
@@ -550,7 +541,7 @@ cc.Follow = cc.Action.extend(/** @lends cc.Follow# */{
  * this.runAction(followAction);
  */
 cc.Follow.create = function (followedNode, rect) {
-    rect = rect || new cc.RectZero();
+    rect = rect || cc.rect(0, 0, 0, 0);
     var ret = new cc.Follow();
     if (rect != null && ret && ret.initWithTarget(followedNode, rect))
         return ret;

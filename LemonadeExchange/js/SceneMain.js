@@ -15,7 +15,7 @@ var SceneMain = (function() {
 			EFFECT_ORBIT_RADIUS = App.scale(EFFECT_ORBIT_RADIUS);
 			
 			// background
-			this.bg = cc.Sprite.createWithSpriteFrameName("Bg.png");
+			this.bg = cc.Sprite.create("#Bg.png");
 			this.bg.setAnchorPoint(0, 0);
 			this.bg.setScale(Math.max(
 				winSize.width / (this.bg.getContentSize().width - EFFECT_ORBIT_RADIUS * 2),

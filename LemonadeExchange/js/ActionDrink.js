@@ -5,13 +5,17 @@
  * @class
  * @extends cc.ActionInterval
  */
+
+// temporary workaround for not being able to extend an action when running on device
+if (!cc.sys.isNative) {
+
 //if (typeof cc.ActionInterval === 'undefined') {
 //	cc.ActionInterval = {};
 //}
-if (typeof cc.ActionInterval.extend === 'undefined') {
-	cc.ActionInterval.extend = cc.Class.extend;
-}
-cc.ActionDrink = cc.ActionInterval.extend(/** @lends cc.ActionDrink# */{
+//if (typeof cc.ActionInterval.extend === 'undefined') {
+//	cc.ActionInterval.extend = cc.Class.extend;
+//}
+var ActionDrink = cc.ActionInterval.extend(/** @lends cc.ActionDrink# */{
 //cc.ActionDrink = cc.Class.extend(/** @lends cc.ActionDrink# */{
     _originalRect:null,
     _originalPosition:null,
@@ -19,8 +23,8 @@ cc.ActionDrink = cc.ActionInterval.extend(/** @lends cc.ActionDrink# */{
     ctor:function () {
         cc.ActionInterval.prototype.ctor.call(this);
 
-        this._originalRect = cc.RectZero();
-        this._originalPosition = cc.PointZero();
+        this._originalRect = cc.rect();
+        this._originalPosition = cc.p();
     },
 
     /**
@@ -39,7 +43,7 @@ cc.ActionDrink = cc.ActionInterval.extend(/** @lends cc.ActionDrink# */{
      * @returns {cc.ActionDrink}
      */
     clone:function () {
-        var action = new cc.ActionDrink();
+        var action = new ActionDrink();
         action.initWithDuration(this._duration)
         return action;
     },
@@ -51,27 +55,27 @@ cc.ActionDrink = cc.ActionInterval.extend(/** @lends cc.ActionDrink# */{
         cc.ActionInterval.prototype.startWithTarget.call(this, target);
 		this._originalPosition.x = target.getPositionX();
 		this._originalPosition.y = target.getPositionY();
-		this._originalRect = new cc.Rect(target.getTextureRect());
+		this._originalRect = cc.rect(target.getTextureRect());
     },
 
     /**
      * @param {Number} time time as a percentage complete
 	 */
     update:function (time) {
-        if (this._target) {
-			var rect = new cc.Rect(this._originalRect),
+        if (this.target) {
+			var rect = cc.rect(this._originalRect),
 				y,
-				offset = cc.PointZero();
+				offset = cc.p();
 
-			rect._size.height *= (1.0 - time);
-			y = this._originalRect.getHeight() - rect.getHeight();
-			rect._origin.y += y;
+			rect.height *= (1.0 - time);
+			y = this._originalRect.height - rect.height;
+			rect.y += y;
 			offset.y = -y * .5;
 			
-			if (!cc.rectEqualToRect(rect, this._target.getTextureRect())) {
-				this._target.setTextureRect(rect);
-				this._target.setPositionX(this._originalPosition.x + offset.x);
-				this._target.setPositionY(this._originalPosition.y + offset.y);
+			if (!cc.rectEqualToRect(rect, this.target.getTextureRect())) {
+				this.target.setTextureRect(rect);
+				this.target.setPositionX(this._originalPosition.x + offset.x);
+				this.target.setPositionY(this._originalPosition.y + offset.y);
 			}
 	    }
     },
@@ -80,7 +84,7 @@ cc.ActionDrink = cc.ActionInterval.extend(/** @lends cc.ActionDrink# */{
      * reverse the action
      */
     reverse:function () {
-        return cc.ActionDrink.create(this._duration, cc.p(-this._positionDelta.x, -this._positionDelta.y));
+        return ActionDrink.create(this._duration, cc.p(-this._positionDelta.x, -this._positionDelta.y));
     }
 });
 
@@ -91,8 +95,10 @@ cc.ActionDrink = cc.ActionInterval.extend(/** @lends cc.ActionDrink# */{
  * // example
  * var actionTo = cc.ActionDrink.create(2);
  */
-cc.ActionDrink.create = function (duration) {
-    var drink = new cc.ActionDrink();
+ActionDrink.create = function(duration) {
+    var drink = new ActionDrink();
     drink.initWithDuration(duration);
     return drink;
 };
+
+} // end if not native

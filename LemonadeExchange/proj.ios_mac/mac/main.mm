@@ -14,13 +14,13 @@ using namespace cocos2d;
 int main(int argc, char *argv[])
 {
 	AppDelegate app;
-	EGLView eglView;
+/*	EGLView eglView;
 	
 	auto name = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"] UTF8String];
 	if( kFullscreen )
 		eglView.initWithFullScreen(name);
 	else
 		eglView.init(name, kWindowWidth, kWindowHeight);
-
+*/
 	return Application::getInstance()->run();
 }

@@ -20,7 +20,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			DEFAULT_SOOM_SEC = "DEFAULT",
 			DEFAULT_CUSTOM_SEC = "DEFAULT",
 			INVENTORY_ID = "soomla.inventory",
-			TAG = "SoomlaNDK:";
+			TAG = "SoomlaNDK: ";
 
 		var self = {},
 			module = {
@@ -33,10 +33,9 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			hasBase64 = (typeof btoa !== "undefined");
 		
 		// log
-		module.log = function() {
+		module.log = function(msg) {
 			if (DEBUG) {
-				[].unshift.call(arguments, TAG);
-				cc.log.apply(self, arguments);
+				cc.log(TAG + msg);
 			}
 		};
 		
@@ -70,10 +69,10 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 				return;
 			}
 			if (ALWAYS_RESET_INVENTORY) {
-				sys.localStorage.removeItem(INVENTORY_ID);
+				cc.sys.localStorage.removeItem(INVENTORY_ID);
 			}
 			
-			inventory = sys.localStorage.getItem(INVENTORY_ID);
+			inventory = cc.sys.localStorage.getItem(INVENTORY_ID);
 			if (inventory) {
 				try {
 					inventory = JSON.parse(module.decrypt(inventory));
@@ -92,7 +91,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 		// save inventory
 		module.saveInventory = function() {
 			var inventory = module.encrypt(JSON.stringify(module.storeInventory));
-			sys.localStorage.setItem(INVENTORY_ID, inventory);
+			cc.sys.localStorage.setItem(INVENTORY_ID, inventory);
 			module.log("Saved Soomla store inventory: " + JSON.stringify(module.storeInventory));
 		};
 		
@@ -232,7 +231,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 					module.purchasingItem = JSON.parse(JSON.stringify(x));
 					
 					if (self.buy) {
-						self.buy(module.purchasingItem.facebookProductUrl, module.onPaymentSuccess, module.onPaymentFailure);
+						self.buy(module.purchasingItem["facebook_product_url"], module.onPaymentSuccess, module.onPaymentFailure);
 					} else {
 						module.log("App has not implemented CCSoomlaNdkBridge.buy method");
 					}
@@ -362,7 +361,7 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			}
 
 			// assign return value
-			returnParams.result.return = ret;
+			returnParams.result["return"] = ret;
 			
 			// since we are using JSON stringify + parse theres no worries about object cloning! :)
 			return JSON.stringify(returnParams);

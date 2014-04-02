@@ -10,15 +10,20 @@
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFiles</key>
 	<array>
-		<string>Icon.png</string>
-		<string>Icon@2x.png</string>
-		<string>Icon-72.png</string>
-		<string>Icon-144.png</string>
+		<string>Icon-29.png</string>
+		<string>Icon-29@2x.png</string>
+		<string>Icon-40.png</string>
+		<string>Icon-40@2x.png</string>
+		<string>Icon-50.png</string>
+		<string>Icon-50@2x.png</string>
 		<string>Icon-57.png</string>
-		<string>Icon-114.png</string>
+		<string>Icon-57@2x.png</string>
+		<string>Icon-60.png</string>
+		<string>Icon-60@2x.png</string>
+		<string>Icon-72.png</string>
+		<string>Icon-72@2x.png</string>
 		<string>Icon-76.png</string>
-		<string>Icon-120.png</string>
-		<string>Icon-152.png</string>
+		<string>Icon-76@2x.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>com.wizardfu.lemonadex</string>
@@ -47,6 +52,19 @@
 	</dict>
 	<key>UIStatusBarHidden</key>
 	<true/>
+	<key>FacebookAppID</key>
+	<string>641151319281152</string>
+	<key>FacebookDisplayName</key>
+	<string>LemonadeExchange</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb641151319281152</string>
+			</array>
+		</dict>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeRight</string>

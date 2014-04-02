@@ -78,227 +78,6 @@ cc.associateWithNative = function (jsObj, superclass) {
 };
 
 /**
- * Is show bebug info on web page
- * @constant
- * @type {Boolean}
- */
-cc.IS_SHOW_DEBUG_ON_PAGE = cc.IS_SHOW_DEBUG_ON_PAGE || false;
-
-cc._logToWebPage = function (message) {
-    var logList = document.getElementById("logInfoList");
-    if (!logList) {
-        var logDiv = document.createElement("Div");
-        logDiv.setAttribute("id", "logInfoDiv");
-        cc.canvas.parentNode.appendChild(logDiv);
-        logDiv.setAttribute("width", "200");
-        logDiv.setAttribute("height", cc.canvas.height);
-        logDiv.style.zIndex = "99999";
-        logDiv.style.position = "absolute";
-        logDiv.style.top = "0";
-        logDiv.style.left = "0";
-
-        logList = document.createElement("ul");
-        logDiv.appendChild(logList);
-        logList.setAttribute("id", "logInfoList");
-        logList.style.height = cc.canvas.height + "px";
-        logList.style.color = "#fff";
-        logList.style.textAlign = "left";
-        logList.style.listStyle = "disc outside";
-        logList.style.fontSize = "12px";
-        logList.style.fontFamily = "arial";
-        logList.style.padding = "0 0 0 20px";
-        logList.style.margin = "0";
-        logList.style.textShadow = "0 0 3px #000";
-        logList.style.zIndex = "99998";
-        logList.style.position = "absolute";
-        logList.style.top = "0";
-        logList.style.left = "0";
-        logList.style.overflowY = "hidden";
-
-        var tempDiv = document.createElement("Div");
-        logDiv.appendChild(tempDiv);
-        tempDiv.style.width = "200px";
-        tempDiv.style.height = cc.canvas.height + "px";
-        tempDiv.style.opacity = "0.1";
-        tempDiv.style.background = "#fff";
-        tempDiv.style.border = "1px solid #dfdfdf";
-        tempDiv.style.borderRadius = "8px";
-    }
-    var addMessage = document.createElement("li");
-    //var now = new Date();
-    //addMessage.innerHTML = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + " " + now.getMilliseconds() + " " + message;
-    addMessage.innerHTML = message;
-    if (logList.childNodes.length == 0) {
-        logList.appendChild(addMessage);
-    } else {
-        logList.insertBefore(addMessage, logList.childNodes[0]);
-    }
-};
-
-/**
- * Output Debug message.
- * @function
- * @param {String} message
- */
-cc.log = function (message) {
-    if (!cc.IS_SHOW_DEBUG_ON_PAGE) {
-        console.log.apply(console, arguments);
-    } else {
-        cc._logToWebPage(message);
-    }
-};
-
-/**
- * Pop out a message box
- * @param {String} message
- * @function
- */
-cc.MessageBox = function (message) {
-    console.log(message);
-};
-
-/**
- * Output Assert message.
- * @function
- * @param {Boolean} cond If cond is false, assert.
- * @param {String} message
- */
-cc.Assert = function (cond, message) {
-    if (console.assert)
-        console.assert(cond, message);
-    else {
-        if (!cond) {
-            if (message)
-                alert(message);
-        }
-    }
-};
-
-/**
- * Update Debug setting.
- * @function
- */
-cc.initDebugSetting = function () {
-    // cocos2d debug
-    if (cc.COCOS2D_DEBUG == 0) {
-        cc.log = function () {
-        };
-        cc.logINFO = function () {
-        };
-        cc.logERROR = function () {
-        };
-        cc.Assert = function () {
-        };
-    } else if (cc.COCOS2D_DEBUG == 1) {
-        cc.logINFO = cc.log;
-        cc.logERROR = function () {
-        };
-    } else if (cc.COCOS2D_DEBUG > 1) {
-        cc.logINFO = cc.log;
-        cc.logERROR = cc.log;
-    }// COCOS2D_DEBUG
-};
-
-// Enum the language type supportted now
-/**
- * English language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_ENGLISH = 0;
-
-/**
- * Chinese language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_CHINESE = 1;
-
-/**
- * French language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_FRENCH = 2;
-
-/**
- * Italian language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_ITALIAN = 3;
-
-/**
- * German language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_GERMAN = 4;
-
-/**
- * Spanish language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_SPANISH = 5;
-
-/**
- * Russian language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_RUSSIAN = 6;
-
-/**
- * Korean language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_KOREAN = 7;
-
-/**
- * Japanese language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_JAPANESE = 8;
-
-/**
- * Hungarian language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_HUNGARIAN = 9;
-
-/**
- * Portuguese language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_PORTUGUESE = 10;
-
-/**
- * Arabic language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_ARABIC = 11;
-
-/**
- * Norwegian language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_NORWEGIAN = 12;
-
-/**
- * Polish language code
- * @constant
- * @type Number
- */
-cc.LANGUAGE_POLISH = 13;
-
-/**
  * keymap
  * @example
  * //Example
@@ -421,4 +200,149 @@ cc.KEY = {
     backslash:220,
     quote:222,
     space:32
+};
+
+
+/**
+ * Image Format:JPG
+ * @constant
+ * @type Number
+ */
+cc.FMT_JPG = 0;
+
+/**
+ * Image Format:PNG
+ * @constant
+ * @type Number
+ */
+cc.FMT_PNG = 1;
+
+/**
+ * Image Format:TIFF
+ * @constant
+ * @type Number
+ */
+cc.FMT_TIFF = 2;
+
+/**
+ * Image Format:RAWDATA
+ * @constant
+ * @type Number
+ */
+cc.FMT_RAWDATA = 3;
+
+/**
+ * Image Format:WEBP
+ * @constant
+ * @type Number
+ */
+cc.FMT_WEBP = 4;
+
+/**
+ * Image Format:UNKNOWN
+ * @constant
+ * @type Number
+ */
+cc.FMT_UNKNOWN = 5;
+
+cc.getImageFormatByData = function (imgData) {
+	// if it is a png file buffer.
+	if (imgData.length > 8) {
+		if (imgData[0] == 0x89
+			&& imgData[1] == 0x50
+			&& imgData[2] == 0x4E
+			&& imgData[3] == 0x47
+			&& imgData[4] == 0x0D
+			&& imgData[5] == 0x0A
+			&& imgData[6] == 0x1A
+			&& imgData[7] == 0x0A) {
+			return cc.FMT_PNG;
+		}
+	}
+
+	// if it is a tiff file buffer.
+	if (imgData.length > 2) {
+		if ((imgData[0] == 0x49 && imgData[1] == 0x49)
+			|| (imgData[0] == 0x4d && imgData[1] == 0x4d)
+			|| (imgData[0] == 0xff && imgData[1] == 0xd8)) {
+			return cc.FMT_TIFF;
+		}
+	}
+
+	return cc.FMT_UNKNOWN;
+};
+
+
+/**
+ * Common getter setter configuration function
+ * @function
+ * @param {Object}   proto      A class prototype or an object to config<br/>
+ * @param {String}   prop       Property name
+ * @param {function} getter     Getter function for the property
+ * @param {function} setter     Setter function for the property
+ * @param {String}   getterName Name of getter function for the property
+ * @param {String}   setterName Name of setter function for the property
+ */
+cc.defineGetterSetter = function (proto, prop, getter, setter, getterName, setterName)
+{
+	if (proto.__defineGetter__) {
+		getter && proto.__defineGetter__(prop, getter);
+		setter && proto.__defineSetter__(prop, setter);
+	}
+	else if (Object.defineProperty) {
+		var desc = { enumerable: false, configurable: true };
+		getter && (desc.get = getter);
+		setter && (desc.set = setter);
+		Object.defineProperty(proto, prop, desc);
+	}
+	else {
+		throw new Error("browser does not support getters");
+		return;
+	}
+
+	if(!getterName && !setterName) {
+		// Lookup getter/setter function
+		var hasGetter = (getter != null), hasSetter = (setter != undefined);
+		var props = Object.getOwnPropertyNames(proto);
+		for (var i = 0; i < props.length; i++) {
+			var name = props[i];
+			if( proto.__lookupGetter__(name) || typeof proto[name] !== "function" ) continue;
+			var func = proto[name];
+			if (hasGetter && func === getter) {
+				getterName = name;
+				if(!hasSetter || setterName) break;
+			}
+			if (hasSetter && func === setter) {
+				setterName = name;
+				if(!hasGetter || getterName) break;
+			}
+		}
+	}
+
+	// Found getter/setter
+	var ctor = proto.constructor;
+	if (getterName) {
+		if (!ctor.__getters__) {
+			ctor.__getters__ = {};
+		}
+		ctor.__getters__[getterName] = prop;
+	}
+	if (setterName) {
+		if (!ctor.__setters__) {
+			ctor.__setters__ = {};
+		}
+		ctor.__setters__[setterName] = prop;
+	}
+};
+
+/**
+ * copy an array's item to a new array (its performance is better than Array.slice)
+ * @param {Array} arr
+ * @returns {Array}
+ */
+cc.copyArray = function(arr){
+	var i, len = arr.length, arr_clone = new Array(len);
+	for (i = 0; i < len; i += 1)
+		arr_clone[i] = arr[i];
+	return arr_clone;
 };

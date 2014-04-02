@@ -1,6 +1,3 @@
-//
-// Prefix header for all source files of the 'HelloJavascript' target in the 'HelloJavascript' project
-//
 
 #ifdef __OBJC__
 	#import <Foundation/Foundation.h>

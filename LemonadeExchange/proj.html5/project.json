@@ -1,0 +1,30 @@
+{
+    "project_type": "javascript",
+
+    "debugMode": 1,
+    "showFPS": false,
+    "frameRate": 60,
+    "id": "gameCanvas",
+    "renderMode": 0,
+    "engineDir": "lib/cocos2d-html5",
+
+    "modules": [
+		"cocos2d",
+		"extensions",
+		"pluginx",
+		"chipmunk"
+		],
+
+    "jsList": [
+		"js/lib/aes.js",
+		"js/lib/underscore.js",
+		"js/lib/soomla.js",
+		"js/lib/SoomlaNdk.js",
+		"js/lib/AdsMobFox.js",
+		"js/lib/Facebook.js",
+		"js/Config.js",
+		"js/LemonadeExchange.js",
+		"js/SceneMain.js",
+		"js/Loader.js", "js/LayerGame.js", "js/LayerMenu.js", "js/ActionDrink.js"
+    ]
+}

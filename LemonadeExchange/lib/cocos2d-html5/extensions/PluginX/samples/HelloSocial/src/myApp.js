@@ -47,15 +47,15 @@ var MyLayer = cc.Layer.extend({
     init: function () {
         this._super();
 
-        MySocialManager.getInstance().loadSocialPlugin();
 
-        var size = cc.Director.getInstance().getVisibleSize();
+        var size = cc.director.getVisibleSize();
 
         var bg = cc.Sprite.create(s_Background);
-        bg.setPosition(size.width / 2, size.height / 2);
+        bg.x = size.width / 2;
+	    bg.y = size.height / 2;
         this.addChild(bg);
 
-        var eglView = cc.EGLView.getInstance();
+        var eglView = cc.view;
         var posBR = cc.p(eglView.getVisibleOrigin().x + eglView.getVisibleSize().width, eglView.getVisibleOrigin().y);
         var posBC = cc.p(eglView.getVisibleOrigin().x + eglView.getVisibleSize().width / 2, eglView.getVisibleOrigin().y);
         var posTL = cc.p(eglView.getVisibleOrigin().x, eglView.getVisibleOrigin().y + eglView.getVisibleSize().height);
@@ -65,11 +65,13 @@ var MyLayer = cc.Layer.extend({
             s_CloseSelected,
             this.menuCloseCallback,
             this);
-        closeItem.setPosition(posBR.x - 20, posBR.y + 20);
+        closeItem.x = posBR.x - 20;
+	    closeItem.y = posBR.y + 20;
 
         // create menu, it's an autorelease object
         var pMenu = cc.Menu.create(closeItem);
-        pMenu.setPosition(0, 0);
+        pMenu.x = 0;
+	    pMenu.y = 0;
         this.addChild(pMenu, 1);
 
         var posStep = cc.p(150, -150);
@@ -89,18 +91,21 @@ var MyLayer = cc.Layer.extend({
                 pos = cc.pAdd(beginPos, cc.p(posStep.x * row, posStep.y * line));
             }
             row += 1;
-            menuItem.setPosition(pos);
+            menuItem.x = pos.x;
+	        menuItem.y = pos.y;
         }
 
         var label = cc.LabelTTF.create("Reload all plugins", "Arial", 24);
         var menuItem = cc.MenuItemLabel.create(label, this.reloadPluginMenuCallback, this);
         menuItem.setAnchorPoint(0.5, 0);
         pMenu.addChild(menuItem, 0);
-        menuItem.setPosition(posBC);
+        menuItem.x = posBC.x;
+	    menuItem.y = posBC.y;
     },
     //a selector callback
     menuCloseCallback: function (sender) {
-		cc.Director.getInstance().end();
+        MySocialManager.getInstance().unloadSocialPlugin();
+        MySocialManager.getInstance().loadSocialPlugin();
     },
     eventMenuCallback: function (sender) {
         var info = {};
@@ -109,16 +114,10 @@ var MyLayer = cc.Layer.extend({
         info["SharedURLPath"] = "http://www.cocos2d-x.org";
 
         var mode = sender.getTag() - TAG_SHARE_BY_SNWEIBO + 1;
-		
-		//cc.log("MySocialManager: " + MySocialManager);
-		//cc.log("MySocialManager instance: " + MySocialManager.getInstance());
-		
         MySocialManager.getInstance().shareByMode(info, mode);
     },
     reloadPluginMenuCallback: function (sender) {
-        //MySocialManager.purgeManager();
-        MySocialManager.getInstance().unloadSocialPlugin();
-        MySocialManager.getInstance().loadSocialPlugin();
+        MySocialManager.purgeManager();
     }
 });
 

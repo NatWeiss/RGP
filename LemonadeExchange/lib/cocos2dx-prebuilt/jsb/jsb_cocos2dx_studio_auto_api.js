@@ -10,103 +10,178 @@ ccs.ActionObject = {
 
 /**
  * @method setCurrentTime
- * @param {float}
+ * @param {float} arg0
  */
-setCurrentTime : function () {},
+setCurrentTime : function (
+float 
+)
+{
+},
 
 /**
  * @method pause
  */
-pause : function () {},
+pause : function (
+)
+{
+},
 
 /**
  * @method setName
- * @param {const char*}
+ * @param {char} arg0
  */
-setName : function () {},
+setName : function (
+char 
+)
+{
+},
 
 /**
  * @method setUnitTime
- * @param {float}
+ * @param {float} arg0
  */
-setUnitTime : function () {},
+setUnitTime : function (
+float 
+)
+{
+},
 
 /**
  * @method getTotalTime
- * @return A value converted from C/C++ "float"
+ * @return {float}
  */
-getTotalTime : function () {},
+getTotalTime : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method getName
- * @return A value converted from C/C++ "const char*"
+ * @return {char}
  */
-getName : function () {},
+getName : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method stop
  */
-stop : function () {},
+stop : function (
+)
+{
+},
+
+/**
+ * @method play
+* @param {cc.CallFunc} callfunc
+*/
+play : function(
+callfunc 
+)
+{
+},
 
 /**
  * @method getCurrentTime
- * @return A value converted from C/C++ "float"
+ * @return {float}
  */
-getCurrentTime : function () {},
+getCurrentTime : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method removeActionNode
- * @param {cocostudio::ActionNode*}
+ * @param {ccs.ActionNode} arg0
  */
-removeActionNode : function () {},
+removeActionNode : function (
+actionnode 
+)
+{
+},
 
 /**
  * @method getLoop
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-getLoop : function () {},
+getLoop : function (
+)
+{
+    return false;
+},
 
 /**
  * @method addActionNode
- * @param {cocostudio::ActionNode*}
+ * @param {ccs.ActionNode} arg0
  */
-addActionNode : function () {},
+addActionNode : function (
+actionnode 
+)
+{
+},
 
 /**
  * @method getUnitTime
- * @return A value converted from C/C++ "float"
+ * @return {float}
  */
-getUnitTime : function () {},
+getUnitTime : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method isPlaying
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isPlaying : function () {},
+isPlaying : function (
+)
+{
+    return false;
+},
 
 /**
  * @method updateToFrameByTime
- * @param {float}
+ * @param {float} arg0
  */
-updateToFrameByTime : function () {},
+updateToFrameByTime : function (
+float 
+)
+{
+},
 
 /**
  * @method setLoop
- * @param {bool}
+ * @param {bool} arg0
  */
-setLoop : function () {},
+setLoop : function (
+bool 
+)
+{
+},
 
 /**
  * @method simulationActionUpdate
- * @param {float}
+ * @param {float} arg0
  */
-simulationActionUpdate : function () {},
+simulationActionUpdate : function (
+float 
+)
+{
+},
 
 /**
  * @method ActionObject
  * @constructor
  */
-ActionObject : function () {},
+ActionObject : function (
+)
+{
+},
 
 };
 
@@ -116,28 +191,60 @@ ActionObject : function () {},
 ccs.ActionManager = {
 
 /**
+ * @method playActionByName
+* @param {char|char} char
+* @param {char|char} char
+* @param {cc.CallFunc} callfunc
+* @return {ccs.ActionObject|ccs.ActionObject}
+*/
+playActionByName : function(
+char,
+char,
+callfunc 
+)
+{
+    return ccs.ActionObject;
+},
+
+/**
  * @method getActionByName
- * @return A value converted from C/C++ "cocostudio::ActionObject*"
- * @param {const char*}
- * @param {const char*}
+ * @param {char} arg0
+ * @param {char} arg1
+ * @return {ccs.ActionObject}
  */
-getActionByName : function () {},
+getActionByName : function (
+char, 
+char 
+)
+{
+    return ccs.ActionObject;
+},
 
 /**
  * @method releaseActions
  */
-releaseActions : function () {},
+releaseActions : function (
+)
+{
+},
 
 /**
  * @method destroyInstance
  */
-destroyInstance : function () {},
+destroyInstance : function (
+)
+{
+},
 
 /**
  * @method getInstance
- * @return A value converted from C/C++ "cocostudio::ActionManagerEx*"
+ * @return {ccs.ActionManagerEx}
  */
-getInstance : function () {},
+getInstance : function (
+)
+{
+    return ccs.ActionManagerEx;
+},
 
 };
 
@@ -148,27 +255,218 @@ ccs.BaseData = {
 
 /**
  * @method getColor
- * @return A value converted from C/C++ "cocos2d::Color4B"
+ * @return {Color4BObject}
  */
-getColor : function () {},
+getColor : function (
+)
+{
+    return cc.Color4B;
+},
 
 /**
  * @method setColor
- * @param {const cocos2d::Color4B&}
+ * @param {Color4BObject} arg0
  */
-setColor : function () {},
+setColor : function (
+color4b 
+)
+{
+},
 
 /**
  * @method create
- * @return A value converted from C/C++ "cocostudio::BaseData*"
+ * @return {ccs.BaseData}
  */
-create : function () {},
+create : function (
+)
+{
+    return ccs.BaseData;
+},
 
 /**
  * @method BaseData
  * @constructor
  */
-BaseData : function () {},
+BaseData : function (
+)
+{
+},
+
+};
+
+/**
+ * @class ProcessBase
+ */
+ccs.ProcessBase = {
+
+/**
+ * @method play
+ * @param {int} arg0
+ * @param {int} arg1
+ * @param {int} arg2
+ * @param {int} arg3
+ */
+play : function (
+int, 
+int, 
+int, 
+int 
+)
+{
+},
+
+/**
+ * @method pause
+ */
+pause : function (
+)
+{
+},
+
+/**
+ * @method getRawDuration
+ * @return {int}
+ */
+getRawDuration : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method resume
+ */
+resume : function (
+)
+{
+},
+
+/**
+ * @method setIsComplete
+ * @param {bool} arg0
+ */
+setIsComplete : function (
+bool 
+)
+{
+},
+
+/**
+ * @method stop
+ */
+stop : function (
+)
+{
+},
+
+/**
+ * @method update
+ * @param {float} arg0
+ */
+update : function (
+float 
+)
+{
+},
+
+/**
+ * @method getCurrentFrameIndex
+ * @return {int}
+ */
+getCurrentFrameIndex : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method isComplete
+ * @return {bool}
+ */
+isComplete : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method getCurrentPercent
+ * @return {float}
+ */
+getCurrentPercent : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method setIsPause
+ * @param {bool} arg0
+ */
+setIsPause : function (
+bool 
+)
+{
+},
+
+/**
+ * @method getProcessScale
+ * @return {float}
+ */
+getProcessScale : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method isPause
+ * @return {bool}
+ */
+isPause : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method isPlaying
+ * @return {bool}
+ */
+isPlaying : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method setProcessScale
+ * @param {float} arg0
+ */
+setProcessScale : function (
+float 
+)
+{
+},
+
+/**
+ * @method setIsPlaying
+ * @param {bool} arg0
+ */
+setIsPlaying : function (
+bool 
+)
+{
+},
+
+/**
+ * @method ProcessBase
+ * @constructor
+ */
+ProcessBase : function (
+)
+{
+},
 
 };
 
@@ -179,57 +477,94 @@ ccs.Tween = {
 
 /**
  * @method getAnimation
- * @return A value converted from C/C++ "cocostudio::ArmatureAnimation*"
+ * @return {ccs.ArmatureAnimation}
  */
-getAnimation : function () {},
+getAnimation : function (
+)
+{
+    return ccs.ArmatureAnimation;
+},
 
 /**
  * @method gotoAndPause
- * @param {int}
+ * @param {int} arg0
  */
-gotoAndPause : function () {},
+gotoAndPause : function (
+int 
+)
+{
+},
 
 /**
  * @method play
- * @param {cocostudio::MovementBoneData*}
- * @param {int}
- * @param {int}
- * @param {int}
- * @param {int}
+ * @param {ccs.MovementBoneData} arg0
+ * @param {int} arg1
+ * @param {int} arg2
+ * @param {int} arg3
+ * @param {int} arg4
  */
-play : function () {},
+play : function (
+movementbonedata, 
+int, 
+int, 
+int, 
+int 
+)
+{
+},
 
 /**
  * @method gotoAndPlay
- * @param {int}
+ * @param {int} arg0
  */
-gotoAndPlay : function () {},
+gotoAndPlay : function (
+int 
+)
+{
+},
 
 /**
  * @method init
- * @return A value converted from C/C++ "bool"
- * @param {cocostudio::Bone*}
+ * @param {ccs.Bone} arg0
+ * @return {bool}
  */
-init : function () {},
+init : function (
+bone 
+)
+{
+    return false;
+},
 
 /**
  * @method setAnimation
- * @param {cocostudio::ArmatureAnimation*}
+ * @param {ccs.ArmatureAnimation} arg0
  */
-setAnimation : function () {},
+setAnimation : function (
+armatureanimation 
+)
+{
+},
 
 /**
  * @method create
- * @return A value converted from C/C++ "cocostudio::Tween*"
- * @param {cocostudio::Bone*}
+ * @param {ccs.Bone} arg0
+ * @return {ccs.Tween}
  */
-create : function () {},
+create : function (
+bone 
+)
+{
+    return ccs.Tween;
+},
 
 /**
  * @method Tween
  * @constructor
  */
-Tween : function () {},
+Tween : function (
+)
+{
+},
 
 };
 
@@ -254,44 +589,182 @@ ccs.ColliderDetector = {
 
 /**
  * @method getBone
- * @return A value converted from C/C++ "cocostudio::Bone*"
+ * @return {ccs.Bone}
  */
-getBone : function () {},
+getBone : function (
+)
+{
+    return ccs.Bone;
+},
 
 /**
  * @method getActive
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-getActive : function () {},
+getActive : function (
+)
+{
+    return false;
+},
 
 /**
  * @method getColliderBodyList
- * @return A value converted from C/C++ "const cocos2d::Vector<cocostudio::ColliderBody *>&"
+ * @return {Array}
  */
-getColliderBodyList : function () {},
+getColliderBodyList : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method updateTransform
- * @param {kmMat4&}
+ * @param {kmMat4} arg0
  */
-updateTransform : function () {},
+updateTransform : function (
+kmmat4 
+)
+{
+},
 
 /**
  * @method removeAll
  */
-removeAll : function () {},
+removeAll : function (
+)
+{
+},
+
+/**
+ * @method init
+* @param {ccs.Bone} bone
+* @return {bool|bool}
+*/
+init : function(
+bone 
+)
+{
+    return false;
+},
 
 /**
  * @method setActive
- * @param {bool}
+ * @param {bool} arg0
  */
-setActive : function () {},
+setActive : function (
+bool 
+)
+{
+},
 
 /**
  * @method setBone
- * @param {cocostudio::Bone*}
+ * @param {ccs.Bone} arg0
  */
-setBone : function () {},
+setBone : function (
+bone 
+)
+{
+},
+
+/**
+ * @method create
+* @param {ccs.Bone} bone
+* @return {ccs.ColliderDetector|ccs.ColliderDetector}
+*/
+create : function(
+bone 
+)
+{
+    return ccs.ColliderDetector;
+},
+
+};
+
+/**
+ * @class DecorativeDisplay
+ */
+ccs.DecorativeDisplay = {
+
+/**
+ * @method getColliderDetector
+ * @return {ccs.ColliderDetector}
+ */
+getColliderDetector : function (
+)
+{
+    return ccs.ColliderDetector;
+},
+
+/**
+ * @method getDisplay
+ * @return {cc.Node}
+ */
+getDisplay : function (
+)
+{
+    return cc.Node;
+},
+
+/**
+ * @method setDisplay
+ * @param {cc.Node} arg0
+ */
+setDisplay : function (
+node 
+)
+{
+},
+
+/**
+ * @method init
+ * @return {bool}
+ */
+init : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method setDisplayData
+ * @param {ccs.DisplayData} arg0
+ */
+setDisplayData : function (
+displaydata 
+)
+{
+},
+
+/**
+ * @method getDisplayData
+ * @return {ccs.DisplayData}
+ */
+getDisplayData : function (
+)
+{
+    return ccs.DisplayData;
+},
+
+/**
+ * @method setColliderDetector
+ * @param {ccs.ColliderDetector} arg0
+ */
+setColliderDetector : function (
+colliderdetector 
+)
+{
+},
+
+/**
+ * @method create
+ * @return {ccs.DecorativeDisplay}
+ */
+create : function (
+)
+{
+    return ccs.DecorativeDisplay;
+},
 
 };
 
@@ -301,116 +774,259 @@ setBone : function () {},
 ccs.DisplayManager = {
 
 /**
- * @method getDisplayRenderNode
- * @return A value converted from C/C++ "cocos2d::Node*"
+ * @method getCurrentDecorativeDisplay
+ * @return {ccs.DecorativeDisplay}
  */
-getDisplayRenderNode : function () {},
+getCurrentDecorativeDisplay : function (
+)
+{
+    return ccs.DecorativeDisplay;
+},
+
+/**
+ * @method getDisplayRenderNode
+ * @return {cc.Node}
+ */
+getDisplayRenderNode : function (
+)
+{
+    return cc.Node;
+},
 
 /**
  * @method getAnchorPointInPoints
- * @return A value converted from C/C++ "cocos2d::Point"
+ * @return {PointObject}
  */
-getAnchorPointInPoints : function () {},
+getAnchorPointInPoints : function (
+)
+{
+    return cc.Point;
+},
+
+/**
+ * @method setCurrentDecorativeDisplay
+ * @param {ccs.DecorativeDisplay} arg0
+ */
+setCurrentDecorativeDisplay : function (
+decorativedisplay 
+)
+{
+},
 
 /**
  * @method getDisplayRenderNodeType
- * @return A value converted from C/C++ "cocostudio::DisplayType"
+ * @return {ccs.DisplayType}
  */
-getDisplayRenderNodeType : function () {},
+getDisplayRenderNodeType : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method removeDisplay
- * @param {int}
+ * @param {int} arg0
  */
-removeDisplay : function () {},
+removeDisplay : function (
+int 
+)
+{
+},
 
 /**
  * @method setForceChangeDisplay
- * @param {bool}
+ * @param {bool} arg0
  */
-setForceChangeDisplay : function () {},
+setForceChangeDisplay : function (
+bool 
+)
+{
+},
 
 /**
  * @method init
- * @return A value converted from C/C++ "bool"
- * @param {cocostudio::Bone*}
+ * @param {ccs.Bone} arg0
+ * @return {bool}
  */
-init : function () {},
+init : function (
+bone 
+)
+{
+    return false;
+},
 
 /**
  * @method getContentSize
- * @return A value converted from C/C++ "cocos2d::Size"
+ * @return {SizeObject}
  */
-getContentSize : function () {},
+getContentSize : function (
+)
+{
+    return cc.Size;
+},
 
 /**
  * @method getBoundingBox
- * @return A value converted from C/C++ "cocos2d::Rect"
+ * @return {RectObject}
  */
-getBoundingBox : function () {},
+getBoundingBox : function (
+)
+{
+    return cc.Rect;
+},
+
+/**
+ * @method addDisplay
+* @param {cc.Node|ccs.DisplayData} node
+* @param {int|int} int
+*/
+addDisplay : function(
+displaydata,
+int 
+)
+{
+},
+
+/**
+ * @method containPoint
+* @param {float|PointObject} float
+* @param {float} float
+* @return {bool|bool}
+*/
+containPoint : function(
+float,
+float 
+)
+{
+    return false;
+},
+
+/**
+ * @method initDisplayList
+ * @param {ccs.BoneData} arg0
+ */
+initDisplayList : function (
+bonedata 
+)
+{
+},
 
 /**
  * @method changeDisplayWithIndex
- * @param {int}
- * @param {bool}
+ * @param {int} arg0
+ * @param {bool} arg1
  */
-changeDisplayWithIndex : function () {},
+changeDisplayWithIndex : function (
+int, 
+bool 
+)
+{
+},
 
 /**
  * @method changeDisplayWithName
- * @param {const std::string&}
- * @param {bool}
+ * @param {String} arg0
+ * @param {bool} arg1
  */
-changeDisplayWithName : function () {},
+changeDisplayWithName : function (
+str, 
+bool 
+)
+{
+},
 
 /**
  * @method isForceChangeDisplay
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isForceChangeDisplay : function () {},
+isForceChangeDisplay : function (
+)
+{
+    return false;
+},
+
+/**
+ * @method getDecorativeDisplayByIndex
+ * @param {int} arg0
+ * @return {ccs.DecorativeDisplay}
+ */
+getDecorativeDisplayByIndex : function (
+int 
+)
+{
+    return ccs.DecorativeDisplay;
+},
 
 /**
  * @method getCurrentDisplayIndex
- * @return A value converted from C/C++ "int"
+ * @return {int}
  */
-getCurrentDisplayIndex : function () {},
+getCurrentDisplayIndex : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method getAnchorPoint
- * @return A value converted from C/C++ "cocos2d::Point"
+ * @return {PointObject}
  */
-getAnchorPoint : function () {},
+getAnchorPoint : function (
+)
+{
+    return cc.Point;
+},
 
 /**
  * @method getDecorativeDisplayList
- * @return A value converted from C/C++ "const cocos2d::Vector<cocostudio::DecorativeDisplay *>&"
+ * @return {Array}
  */
-getDecorativeDisplayList : function () {},
+getDecorativeDisplayList : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method isVisible
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isVisible : function () {},
+isVisible : function (
+)
+{
+    return false;
+},
 
 /**
  * @method setVisible
- * @param {bool}
+ * @param {bool} arg0
  */
-setVisible : function () {},
+setVisible : function (
+bool 
+)
+{
+},
 
 /**
  * @method create
- * @return A value converted from C/C++ "cocostudio::DisplayManager*"
- * @param {cocostudio::Bone*}
+ * @param {ccs.Bone} arg0
+ * @return {ccs.DisplayManager}
  */
-create : function () {},
+create : function (
+bone 
+)
+{
+    return ccs.DisplayManager;
+},
 
 /**
  * @method DisplayManager
  * @constructor
  */
-DisplayManager : function () {},
+DisplayManager : function (
+)
+{
+},
 
 };
 
@@ -421,190 +1037,350 @@ ccs.Bone = {
 
 /**
  * @method isTransformDirty
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isTransformDirty : function () {},
+isTransformDirty : function (
+)
+{
+    return false;
+},
 
 /**
  * @method isIgnoreMovementBoneData
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isIgnoreMovementBoneData : function () {},
+isIgnoreMovementBoneData : function (
+)
+{
+    return false;
+},
 
 /**
  * @method updateZOrder
  */
-updateZOrder : function () {},
+updateZOrder : function (
+)
+{
+},
 
 /**
  * @method getDisplayRenderNode
- * @return A value converted from C/C++ "cocos2d::Node*"
+ * @return {cc.Node}
  */
-getDisplayRenderNode : function () {},
+getDisplayRenderNode : function (
+)
+{
+    return cc.Node;
+},
 
 /**
  * @method isBlendDirty
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isBlendDirty : function () {},
+isBlendDirty : function (
+)
+{
+    return false;
+},
 
 /**
  * @method addChildBone
- * @param {cocostudio::Bone*}
+ * @param {ccs.Bone} arg0
  */
-addChildBone : function () {},
+addChildBone : function (
+bone 
+)
+{
+},
 
 /**
  * @method getWorldInfo
- * @return A value converted from C/C++ "cocostudio::BaseData*"
+ * @return {ccs.BaseData}
  */
-getWorldInfo : function () {},
+getWorldInfo : function (
+)
+{
+    return ccs.BaseData;
+},
 
 /**
  * @method getTween
- * @return A value converted from C/C++ "cocostudio::Tween*"
+ * @return {ccs.Tween}
  */
-getTween : function () {},
+getTween : function (
+)
+{
+    return ccs.Tween;
+},
 
 /**
  * @method getParentBone
- * @return A value converted from C/C++ "cocostudio::Bone*"
+ * @return {ccs.Bone}
  */
-getParentBone : function () {},
+getParentBone : function (
+)
+{
+    return ccs.Bone;
+},
 
 /**
  * @method updateColor
  */
-updateColor : function () {},
+updateColor : function (
+)
+{
+},
 
 /**
  * @method getName
- * @return A value converted from C/C++ "const std::string"
+ * @return {String}
  */
-getName : function () {},
+getName : function (
+)
+{
+    return ;
+},
 
 /**
  * @method setTransformDirty
- * @param {bool}
+ * @param {bool} arg0
  */
-setTransformDirty : function () {},
+setTransformDirty : function (
+bool 
+)
+{
+},
 
 /**
  * @method getDisplayRenderNodeType
- * @return A value converted from C/C++ "cocostudio::DisplayType"
+ * @return {ccs.DisplayType}
  */
-getDisplayRenderNodeType : function () {},
+getDisplayRenderNodeType : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method removeDisplay
- * @param {int}
+ * @param {int} arg0
  */
-removeDisplay : function () {},
+removeDisplay : function (
+int 
+)
+{
+},
 
 /**
  * @method setBoneData
- * @param {cocostudio::BoneData*}
+ * @param {ccs.BoneData} arg0
  */
-setBoneData : function () {},
+setBoneData : function (
+bonedata 
+)
+{
+},
+
+/**
+ * @method init
+* @param {String} str
+* @return {bool|bool}
+*/
+init : function(
+str 
+)
+{
+    return false;
+},
 
 /**
  * @method setParentBone
- * @param {cocostudio::Bone*}
+ * @param {ccs.Bone} arg0
  */
-setParentBone : function () {},
+setParentBone : function (
+bone 
+)
+{
+},
+
+/**
+ * @method addDisplay
+* @param {cc.Node|ccs.DisplayData} node
+* @param {int|int} int
+*/
+addDisplay : function(
+displaydata,
+int 
+)
+{
+},
 
 /**
  * @method setIgnoreMovementBoneData
- * @param {bool}
+ * @param {bool} arg0
  */
-setIgnoreMovementBoneData : function () {},
+setIgnoreMovementBoneData : function (
+bool 
+)
+{
+},
 
 /**
  * @method setName
- * @param {const std::string&}
+ * @param {String} arg0
  */
-setName : function () {},
+setName : function (
+str 
+)
+{
+},
 
 /**
  * @method removeFromParent
- * @param {bool}
+ * @param {bool} arg0
  */
-removeFromParent : function () {},
+removeFromParent : function (
+bool 
+)
+{
+},
 
 /**
  * @method getColliderDetector
- * @return A value converted from C/C++ "cocostudio::ColliderDetector*"
+ * @return {ccs.ColliderDetector}
  */
-getColliderDetector : function () {},
+getColliderDetector : function (
+)
+{
+    return ccs.ColliderDetector;
+},
 
 /**
  * @method getChildArmature
- * @return A value converted from C/C++ "cocostudio::Armature*"
+ * @return {ccs.Armature}
  */
-getChildArmature : function () {},
+getChildArmature : function (
+)
+{
+    return ccs.Armature;
+},
 
 /**
  * @method changeDisplayWithIndex
- * @param {int}
- * @param {bool}
+ * @param {int} arg0
+ * @param {bool} arg1
  */
-changeDisplayWithIndex : function () {},
+changeDisplayWithIndex : function (
+int, 
+bool 
+)
+{
+},
 
 /**
  * @method changeDisplayWithName
- * @param {const std::string&}
- * @param {bool}
+ * @param {String} arg0
+ * @param {bool} arg1
  */
-changeDisplayWithName : function () {},
+changeDisplayWithName : function (
+str, 
+bool 
+)
+{
+},
 
 /**
  * @method setArmature
- * @param {cocostudio::Armature*}
+ * @param {ccs.Armature} arg0
  */
-setArmature : function () {},
+setArmature : function (
+armature 
+)
+{
+},
 
 /**
  * @method setBlendDirty
- * @param {bool}
+ * @param {bool} arg0
  */
-setBlendDirty : function () {},
+setBlendDirty : function (
+bool 
+)
+{
+},
 
 /**
  * @method removeChildBone
- * @param {cocostudio::Bone*}
- * @param {bool}
+ * @param {ccs.Bone} arg0
+ * @param {bool} arg1
  */
-removeChildBone : function () {},
+removeChildBone : function (
+bone, 
+bool 
+)
+{
+},
 
 /**
  * @method setChildArmature
- * @param {cocostudio::Armature*}
+ * @param {ccs.Armature} arg0
  */
-setChildArmature : function () {},
+setChildArmature : function (
+armature 
+)
+{
+},
 
 /**
  * @method getNodeToArmatureTransform
- * @return A value converted from C/C++ "kmMat4"
+ * @return {kmMat4}
  */
-getNodeToArmatureTransform : function () {},
+getNodeToArmatureTransform : function (
+)
+{
+    return kmMat4;
+},
 
 /**
  * @method getDisplayManager
- * @return A value converted from C/C++ "cocostudio::DisplayManager*"
+ * @return {ccs.DisplayManager}
  */
-getDisplayManager : function () {},
+getDisplayManager : function (
+)
+{
+    return ccs.DisplayManager;
+},
 
 /**
  * @method getArmature
- * @return A value converted from C/C++ "cocostudio::Armature*"
+ * @return {ccs.Armature}
  */
-getArmature : function () {},
+getArmature : function (
+)
+{
+    return ccs.Armature;
+},
+
+/**
+ * @method create
+* @param {String} str
+* @return {ccs.Bone|ccs.Bone}
+*/
+create : function(
+str 
+)
+{
+    return ccs.Bone;
+},
 
 /**
  * @method Bone
  * @constructor
  */
-Bone : function () {},
+Bone : function (
+)
+{
+},
 
 };
 
@@ -615,9 +1391,13 @@ ccs.BatchNode = {
 
 /**
  * @method create
- * @return A value converted from C/C++ "cocostudio::BatchNode*"
+ * @return {ccs.BatchNode}
  */
-create : function () {},
+create : function (
+)
+{
+    return ccs.BatchNode;
+},
 
 };
 
@@ -628,112 +1408,186 @@ ccs.ArmatureAnimation = {
 
 /**
  * @method getSpeedScale
- * @return A value converted from C/C++ "float"
+ * @return {float}
  */
-getSpeedScale : function () {},
+getSpeedScale : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method pause
  */
-pause : function () {},
+pause : function (
+)
+{
+},
 
 /**
  * @method setSpeedScale
- * @param {float}
+ * @param {float} arg0
  */
-setSpeedScale : function () {},
+setSpeedScale : function (
+float 
+)
+{
+},
 
 /**
  * @method init
- * @return A value converted from C/C++ "bool"
- * @param {cocostudio::Armature*}
+ * @param {ccs.Armature} arg0
+ * @return {bool}
  */
-init : function () {},
+init : function (
+armature 
+)
+{
+    return false;
+},
 
 /**
  * @method playWithIndexes
- * @param {const std::vector<int, std::allocator<int> >&}
- * @param {int}
- * @param {bool}
+ * @param {Array} arg0
+ * @param {int} arg1
+ * @param {bool} arg2
  */
-playWithIndexes : function () {},
+playWithIndexes : function (
+array, 
+int, 
+bool 
+)
+{
+},
 
 /**
  * @method play
- * @param {const std::string&}
- * @param {int}
- * @param {int}
+ * @param {String} arg0
+ * @param {int} arg1
+ * @param {int} arg2
  */
-play : function () {},
+play : function (
+str, 
+int, 
+int 
+)
+{
+},
 
 /**
  * @method gotoAndPause
- * @param {int}
+ * @param {int} arg0
  */
-gotoAndPause : function () {},
+gotoAndPause : function (
+int 
+)
+{
+},
 
 /**
  * @method resume
  */
-resume : function () {},
+resume : function (
+)
+{
+},
 
 /**
  * @method stop
  */
-stop : function () {},
+stop : function (
+)
+{
+},
 
 /**
  * @method update
- * @param {float}
+ * @param {float} arg0
  */
-update : function () {},
+update : function (
+float 
+)
+{
+},
 
 /**
  * @method playWithIndex
- * @param {int}
- * @param {int}
- * @param {int}
+ * @param {int} arg0
+ * @param {int} arg1
+ * @param {int} arg2
  */
-playWithIndex : function () {},
+playWithIndex : function (
+int, 
+int, 
+int 
+)
+{
+},
 
 /**
  * @method getCurrentMovementID
- * @return A value converted from C/C++ "std::string"
+ * @return {String}
  */
-getCurrentMovementID : function () {},
+getCurrentMovementID : function (
+)
+{
+    return ;
+},
 
 /**
  * @method gotoAndPlay
- * @param {int}
+ * @param {int} arg0
  */
-gotoAndPlay : function () {},
+gotoAndPlay : function (
+int 
+)
+{
+},
 
 /**
  * @method playWithNames
- * @param {const std::vector<std::basic_string<char>, std::allocator<std::basic_string<char> > >&}
- * @param {int}
- * @param {bool}
+ * @param {Array} arg0
+ * @param {int} arg1
+ * @param {bool} arg2
  */
-playWithNames : function () {},
+playWithNames : function (
+array, 
+int, 
+bool 
+)
+{
+},
 
 /**
  * @method getMovementCount
- * @return A value converted from C/C++ "ssize_t"
+ * @return {long}
  */
-getMovementCount : function () {},
+getMovementCount : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method create
- * @return A value converted from C/C++ "cocostudio::ArmatureAnimation*"
- * @param {cocostudio::Armature*}
+ * @param {ccs.Armature} arg0
+ * @return {ccs.ArmatureAnimation}
  */
-create : function () {},
+create : function (
+armature 
+)
+{
+    return ccs.ArmatureAnimation;
+},
 
 /**
  * @method ArmatureAnimation
  * @constructor
  */
-ArmatureAnimation : function () {},
+ArmatureAnimation : function (
+)
+{
+},
 
 };
 
@@ -744,115 +1598,207 @@ ccs.ArmatureDataManager = {
 
 /**
  * @method getAnimationDatas
- * @return A value converted from C/C++ "const cocos2d::Map<std::basic_string<char>, cocostudio::AnimationData *>&"
+ * @return {MapObject}
  */
-getAnimationDatas : function () {},
+getAnimationDatas : function (
+)
+{
+    return map_object;
+},
 
 /**
  * @method removeAnimationData
- * @param {const std::string&}
+ * @param {String} arg0
  */
-removeAnimationData : function () {},
+removeAnimationData : function (
+str 
+)
+{
+},
 
 /**
  * @method addArmatureData
- * @param {const std::string&}
- * @param {cocostudio::ArmatureData*}
- * @param {const std::string&}
+ * @param {String} arg0
+ * @param {ccs.ArmatureData} arg1
+ * @param {String} arg2
  */
-addArmatureData : function () {},
+addArmatureData : function (
+str, 
+armaturedata, 
+str 
+)
+{
+},
+
+/**
+ * @method addArmatureFileInfo
+* @param {String|String} str
+* @param {String} str
+* @param {String} str
+*/
+addArmatureFileInfo : function(
+str,
+str,
+str 
+)
+{
+},
 
 /**
  * @method removeArmatureFileInfo
- * @param {const std::string&}
+ * @param {String} arg0
  */
-removeArmatureFileInfo : function () {},
+removeArmatureFileInfo : function (
+str 
+)
+{
+},
 
 /**
  * @method getTextureData
- * @return A value converted from C/C++ "cocostudio::TextureData*"
- * @param {const std::string&}
+ * @param {String} arg0
+ * @return {ccs.TextureData}
  */
-getTextureData : function () {},
+getTextureData : function (
+str 
+)
+{
+    return ccs.TextureData;
+},
 
 /**
  * @method getArmatureData
- * @return A value converted from C/C++ "cocostudio::ArmatureData*"
- * @param {const std::string&}
+ * @param {String} arg0
+ * @return {ccs.ArmatureData}
  */
-getArmatureData : function () {},
+getArmatureData : function (
+str 
+)
+{
+    return ccs.ArmatureData;
+},
 
 /**
  * @method getAnimationData
- * @return A value converted from C/C++ "cocostudio::AnimationData*"
- * @param {const std::string&}
+ * @param {String} arg0
+ * @return {ccs.AnimationData}
  */
-getAnimationData : function () {},
+getAnimationData : function (
+str 
+)
+{
+    return ccs.AnimationData;
+},
 
 /**
  * @method addAnimationData
- * @param {const std::string&}
- * @param {cocostudio::AnimationData*}
- * @param {const std::string&}
+ * @param {String} arg0
+ * @param {ccs.AnimationData} arg1
+ * @param {String} arg2
  */
-addAnimationData : function () {},
+addAnimationData : function (
+str, 
+animationdata, 
+str 
+)
+{
+},
 
 /**
  * @method init
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-init : function () {},
+init : function (
+)
+{
+    return false;
+},
 
 /**
  * @method removeArmatureData
- * @param {const std::string&}
+ * @param {String} arg0
  */
-removeArmatureData : function () {},
+removeArmatureData : function (
+str 
+)
+{
+},
 
 /**
  * @method getArmatureDatas
- * @return A value converted from C/C++ "const cocos2d::Map<std::basic_string<char>, cocostudio::ArmatureData *>&"
+ * @return {MapObject}
  */
-getArmatureDatas : function () {},
+getArmatureDatas : function (
+)
+{
+    return map_object;
+},
 
 /**
  * @method removeTextureData
- * @param {const std::string&}
+ * @param {String} arg0
  */
-removeTextureData : function () {},
+removeTextureData : function (
+str 
+)
+{
+},
 
 /**
  * @method addTextureData
- * @param {const std::string&}
- * @param {cocostudio::TextureData*}
- * @param {const std::string&}
+ * @param {String} arg0
+ * @param {ccs.TextureData} arg1
+ * @param {String} arg2
  */
-addTextureData : function () {},
+addTextureData : function (
+str, 
+texturedata, 
+str 
+)
+{
+},
 
 /**
  * @method isAutoLoadSpriteFile
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isAutoLoadSpriteFile : function () {},
+isAutoLoadSpriteFile : function (
+)
+{
+    return false;
+},
 
 /**
  * @method addSpriteFrameFromFile
- * @param {const std::string&}
- * @param {const std::string&}
- * @param {const std::string&}
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
  */
-addSpriteFrameFromFile : function () {},
+addSpriteFrameFromFile : function (
+str, 
+str, 
+str 
+)
+{
+},
 
 /**
  * @method destroyInstance
  */
-destroyInstance : function () {},
+destroyInstance : function (
+)
+{
+},
 
 /**
  * @method getInstance
- * @return A value converted from C/C++ "cocostudio::ArmatureDataManager*"
+ * @return {ccs.ArmatureDataManager}
  */
-getInstance : function () {},
+getInstance : function (
+)
+{
+    return ccs.ArmatureDataManager;
+},
 
 };
 
@@ -863,139 +1809,258 @@ ccs.Armature = {
 
 /**
  * @method getBone
- * @return A value converted from C/C++ "cocostudio::Bone*"
- * @param {const std::string&}
+ * @param {String} arg0
+ * @return {ccs.Bone}
  */
-getBone : function () {},
+getBone : function (
+str 
+)
+{
+    return ccs.Bone;
+},
 
 /**
  * @method changeBoneParent
- * @param {cocostudio::Bone*}
- * @param {const std::string&}
+ * @param {ccs.Bone} arg0
+ * @param {String} arg1
  */
-changeBoneParent : function () {},
+changeBoneParent : function (
+bone, 
+str 
+)
+{
+},
 
 /**
  * @method setAnimation
- * @param {cocostudio::ArmatureAnimation*}
+ * @param {ccs.ArmatureAnimation} arg0
  */
-setAnimation : function () {},
+setAnimation : function (
+armatureanimation 
+)
+{
+},
 
 /**
  * @method getBoneAtPoint
- * @return A value converted from C/C++ "cocostudio::Bone*"
- * @param {float}
- * @param {float}
+ * @param {float} arg0
+ * @param {float} arg1
+ * @return {ccs.Bone}
  */
-getBoneAtPoint : function () {},
+getBoneAtPoint : function (
+float, 
+float 
+)
+{
+    return ccs.Bone;
+},
 
 /**
  * @method getArmatureTransformDirty
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-getArmatureTransformDirty : function () {},
+getArmatureTransformDirty : function (
+)
+{
+    return false;
+},
 
 /**
  * @method setVersion
- * @param {float}
+ * @param {float} arg0
  */
-setVersion : function () {},
+setVersion : function (
+float 
+)
+{
+},
 
 /**
  * @method updateOffsetPoint
  */
-updateOffsetPoint : function () {},
+updateOffsetPoint : function (
+)
+{
+},
 
 /**
  * @method getParentBone
- * @return A value converted from C/C++ "cocostudio::Bone*"
+ * @return {ccs.Bone}
  */
-getParentBone : function () {},
+getParentBone : function (
+)
+{
+    return ccs.Bone;
+},
 
 /**
  * @method setArmatureData
- * @param {cocostudio::ArmatureData*}
+ * @param {ccs.ArmatureData} arg0
  */
-setArmatureData : function () {},
+setArmatureData : function (
+armaturedata 
+)
+{
+},
 
 /**
  * @method removeBone
- * @param {cocostudio::Bone*}
- * @param {bool}
+ * @param {ccs.Bone} arg0
+ * @param {bool} arg1
  */
-removeBone : function () {},
+removeBone : function (
+bone, 
+bool 
+)
+{
+},
 
 /**
  * @method getBatchNode
- * @return A value converted from C/C++ "cocostudio::BatchNode*"
+ * @return {ccs.BatchNode}
  */
-getBatchNode : function () {},
+getBatchNode : function (
+)
+{
+    return ccs.BatchNode;
+},
 
 /**
  * @method getName
- * @return A value converted from C/C++ "const std::string&"
+ * @return {String}
  */
-getName : function () {},
+getName : function (
+)
+{
+    return ;
+},
+
+/**
+ * @method init
+* @param {String|String} str
+* @param {ccs.Bone} bone
+* @return {bool|bool|bool}
+*/
+init : function(
+str,
+bone 
+)
+{
+    return false;
+},
 
 /**
  * @method setParentBone
- * @param {cocostudio::Bone*}
+ * @param {ccs.Bone} arg0
  */
-setParentBone : function () {},
+setParentBone : function (
+bone 
+)
+{
+},
 
 /**
  * @method drawContour
  */
-drawContour : function () {},
+drawContour : function (
+)
+{
+},
 
 /**
  * @method setBatchNode
- * @param {cocostudio::BatchNode*}
+ * @param {ccs.BatchNode} arg0
  */
-setBatchNode : function () {},
+setBatchNode : function (
+batchnode 
+)
+{
+},
 
 /**
  * @method setName
- * @param {const std::string&}
+ * @param {String} arg0
  */
-setName : function () {},
+setName : function (
+str 
+)
+{
+},
 
 /**
  * @method addBone
- * @param {cocostudio::Bone*}
- * @param {const std::string&}
+ * @param {ccs.Bone} arg0
+ * @param {String} arg1
  */
-addBone : function () {},
+addBone : function (
+bone, 
+str 
+)
+{
+},
 
 /**
  * @method getArmatureData
- * @return A value converted from C/C++ "cocostudio::ArmatureData*"
+ * @return {ccs.ArmatureData}
  */
-getArmatureData : function () {},
+getArmatureData : function (
+)
+{
+    return ccs.ArmatureData;
+},
 
 /**
  * @method getVersion
- * @return A value converted from C/C++ "float"
+ * @return {float}
  */
-getVersion : function () {},
+getVersion : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method getAnimation
- * @return A value converted from C/C++ "cocostudio::ArmatureAnimation*"
+ * @return {ccs.ArmatureAnimation}
  */
-getAnimation : function () {},
+getAnimation : function (
+)
+{
+    return ccs.ArmatureAnimation;
+},
 
 /**
  * @method getBoneDic
- * @return A value converted from C/C++ "const cocos2d::Map<std::basic_string<char>, cocostudio::Bone *>&"
+ * @return {MapObject}
  */
-getBoneDic : function () {},
+getBoneDic : function (
+)
+{
+    return map_object;
+},
+
+/**
+ * @method create
+* @param {String|String} str
+* @param {ccs.Bone} bone
+* @return {ccs.Armature|ccs.Armature|ccs.Armature}
+*/
+create : function(
+str,
+bone 
+)
+{
+    return ccs.Armature;
+},
 
 /**
  * @method Armature
  * @constructor
  */
-Armature : function () {},
+Armature : function (
+)
+{
+},
 
 };
 
@@ -1006,59 +2071,108 @@ ccs.Skin = {
 
 /**
  * @method getBone
- * @return A value converted from C/C++ "cocostudio::Bone*"
+ * @return {ccs.Bone}
  */
-getBone : function () {},
+getBone : function (
+)
+{
+    return ccs.Bone;
+},
 
 /**
  * @method getNodeToWorldTransformAR
- * @return A value converted from C/C++ "kmMat4"
+ * @return {kmMat4}
  */
-getNodeToWorldTransformAR : function () {},
+getNodeToWorldTransformAR : function (
+)
+{
+    return kmMat4;
+},
 
 /**
  * @method initWithFile
- * @return A value converted from C/C++ "bool"
- * @param {const std::string&}
+ * @param {String} arg0
+ * @return {bool}
  */
-initWithFile : function () {},
+initWithFile : function (
+str 
+)
+{
+    return false;
+},
 
 /**
  * @method getDisplayName
- * @return A value converted from C/C++ "const std::string&"
+ * @return {String}
  */
-getDisplayName : function () {},
+getDisplayName : function (
+)
+{
+    return ;
+},
 
 /**
  * @method updateArmatureTransform
  */
-updateArmatureTransform : function () {},
+updateArmatureTransform : function (
+)
+{
+},
 
 /**
  * @method initWithSpriteFrameName
- * @return A value converted from C/C++ "bool"
- * @param {const std::string&}
+ * @param {String} arg0
+ * @return {bool}
  */
-initWithSpriteFrameName : function () {},
+initWithSpriteFrameName : function (
+str 
+)
+{
+    return false;
+},
 
 /**
  * @method setBone
- * @param {cocostudio::Bone*}
+ * @param {ccs.Bone} arg0
  */
-setBone : function () {},
+setBone : function (
+bone 
+)
+{
+},
+
+/**
+ * @method create
+* @param {String} str
+* @return {ccs.Skin|ccs.Skin}
+*/
+create : function(
+str 
+)
+{
+    return ccs.Skin;
+},
 
 /**
  * @method createWithSpriteFrameName
- * @return A value converted from C/C++ "cocostudio::Skin*"
- * @param {const std::string&}
+ * @param {String} arg0
+ * @return {ccs.Skin}
  */
-createWithSpriteFrameName : function () {},
+createWithSpriteFrameName : function (
+str 
+)
+{
+    return ccs.Skin;
+},
 
 /**
  * @method Skin
  * @constructor
  */
-Skin : function () {},
+Skin : function (
+)
+{
+},
 
 };
 
@@ -1069,82 +2183,129 @@ ccs.ComAttribute = {
 
 /**
  * @method getFloat
- * @return A value converted from C/C++ "float"
- * @param {const std::string&}
- * @param {float}
+ * @param {String} arg0
+ * @param {float} arg1
+ * @return {float}
  */
-getFloat : function () {},
+getFloat : function (
+str, 
+float 
+)
+{
+    return 0;
+},
 
 /**
  * @method getString
- * @return A value converted from C/C++ "std::string"
- * @param {const std::string&}
- * @param {const std::string&}
+ * @param {String} arg0
+ * @param {String} arg1
+ * @return {String}
  */
-getString : function () {},
+getString : function (
+str, 
+str 
+)
+{
+    return ;
+},
 
 /**
  * @method setFloat
- * @param {const std::string&}
- * @param {float}
+ * @param {String} arg0
+ * @param {float} arg1
  */
-setFloat : function () {},
+setFloat : function (
+str, 
+float 
+)
+{
+},
 
 /**
  * @method setString
- * @param {const std::string&}
- * @param {const std::string&}
+ * @param {String} arg0
+ * @param {String} arg1
  */
-setString : function () {},
+setString : function (
+str, 
+str 
+)
+{
+},
 
 /**
  * @method getBool
- * @return A value converted from C/C++ "bool"
- * @param {const std::string&}
- * @param {bool}
+ * @param {String} arg0
+ * @param {bool} arg1
+ * @return {bool}
  */
-getBool : function () {},
+getBool : function (
+str, 
+bool 
+)
+{
+    return false;
+},
 
 /**
  * @method setInt
- * @param {const std::string&}
- * @param {int}
+ * @param {String} arg0
+ * @param {int} arg1
  */
-setInt : function () {},
+setInt : function (
+str, 
+int 
+)
+{
+},
 
 /**
  * @method parse
- * @return A value converted from C/C++ "bool"
- * @param {const std::string&}
+ * @param {String} arg0
+ * @return {bool}
  */
-parse : function () {},
+parse : function (
+str 
+)
+{
+    return false;
+},
 
 /**
  * @method getInt
- * @return A value converted from C/C++ "int"
- * @param {const std::string&}
- * @param {int}
+ * @param {String} arg0
+ * @param {int} arg1
+ * @return {int}
  */
-getInt : function () {},
+getInt : function (
+str, 
+int 
+)
+{
+    return 0;
+},
 
 /**
  * @method setBool
- * @param {const std::string&}
- * @param {bool}
+ * @param {String} arg0
+ * @param {bool} arg1
  */
-setBool : function () {},
+setBool : function (
+str, 
+bool 
+)
+{
+},
 
 /**
  * @method create
- * @return A value converted from C/C++ "cocostudio::ComAttribute*"
+ * @return {ccs.ComAttribute}
  */
-create : function () {},
-
-/**
- * @method createInstance
- * @return A value converted from C/C++ "cocos2d::Object*"
- */
-createInstance : function () {},
+create : function (
+)
+{
+    return ccs.ComAttribute;
+},
 
 };
 
@@ -1156,145 +2317,264 @@ ccs.ComAudio = {
 /**
  * @method stopAllEffects
  */
-stopAllEffects : function () {},
+stopAllEffects : function (
+)
+{
+},
 
 /**
  * @method getEffectsVolume
- * @return A value converted from C/C++ "float"
+ * @return {float}
  */
-getEffectsVolume : function () {},
+getEffectsVolume : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method stopEffect
- * @param {unsigned int}
+ * @param {unsigned int} arg0
  */
-stopEffect : function () {},
+stopEffect : function (
+int 
+)
+{
+},
 
 /**
  * @method getBackgroundMusicVolume
- * @return A value converted from C/C++ "float"
+ * @return {float}
  */
-getBackgroundMusicVolume : function () {},
+getBackgroundMusicVolume : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method willPlayBackgroundMusic
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-willPlayBackgroundMusic : function () {},
+willPlayBackgroundMusic : function (
+)
+{
+    return false;
+},
 
 /**
  * @method setBackgroundMusicVolume
- * @param {float}
+ * @param {float} arg0
  */
-setBackgroundMusicVolume : function () {},
+setBackgroundMusicVolume : function (
+float 
+)
+{
+},
 
 /**
  * @method end
  */
-end : function () {},
+end : function (
+)
+{
+},
+
+/**
+ * @method stopBackgroundMusic
+* @param {bool} bool
+*/
+stopBackgroundMusic : function(
+bool 
+)
+{
+},
 
 /**
  * @method pauseBackgroundMusic
  */
-pauseBackgroundMusic : function () {},
+pauseBackgroundMusic : function (
+)
+{
+},
 
 /**
  * @method isBackgroundMusicPlaying
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isBackgroundMusicPlaying : function () {},
+isBackgroundMusicPlaying : function (
+)
+{
+    return false;
+},
 
 /**
  * @method isLoop
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isLoop : function () {},
+isLoop : function (
+)
+{
+    return false;
+},
 
 /**
  * @method resumeAllEffects
  */
-resumeAllEffects : function () {},
+resumeAllEffects : function (
+)
+{
+},
 
 /**
  * @method pauseAllEffects
  */
-pauseAllEffects : function () {},
+pauseAllEffects : function (
+)
+{
+},
 
 /**
  * @method preloadBackgroundMusic
- * @param {const char*}
+ * @param {char} arg0
  */
-preloadBackgroundMusic : function () {},
+preloadBackgroundMusic : function (
+char 
+)
+{
+},
+
+/**
+ * @method playBackgroundMusic
+* @param {char|char} char
+* @param {bool} bool
+*/
+playBackgroundMusic : function(
+char,
+bool 
+)
+{
+},
+
+/**
+ * @method playEffect
+* @param {char|char} char
+* @param {bool} bool
+* @return {unsigned int|unsigned int|unsigned int}
+*/
+playEffect : function(
+char,
+bool 
+)
+{
+    return 0;
+},
 
 /**
  * @method preloadEffect
- * @param {const char*}
+ * @param {char} arg0
  */
-preloadEffect : function () {},
+preloadEffect : function (
+char 
+)
+{
+},
 
 /**
  * @method setLoop
- * @param {bool}
+ * @param {bool} arg0
  */
-setLoop : function () {},
+setLoop : function (
+bool 
+)
+{
+},
 
 /**
  * @method unloadEffect
- * @param {const char*}
+ * @param {char} arg0
  */
-unloadEffect : function () {},
+unloadEffect : function (
+char 
+)
+{
+},
 
 /**
  * @method rewindBackgroundMusic
  */
-rewindBackgroundMusic : function () {},
+rewindBackgroundMusic : function (
+)
+{
+},
 
 /**
  * @method pauseEffect
- * @param {unsigned int}
+ * @param {unsigned int} arg0
  */
-pauseEffect : function () {},
+pauseEffect : function (
+int 
+)
+{
+},
 
 /**
  * @method resumeBackgroundMusic
  */
-resumeBackgroundMusic : function () {},
+resumeBackgroundMusic : function (
+)
+{
+},
 
 /**
  * @method setFile
- * @param {const char*}
+ * @param {char} arg0
  */
-setFile : function () {},
+setFile : function (
+char 
+)
+{
+},
 
 /**
  * @method setEffectsVolume
- * @param {float}
+ * @param {float} arg0
  */
-setEffectsVolume : function () {},
+setEffectsVolume : function (
+float 
+)
+{
+},
 
 /**
  * @method getFile
- * @return A value converted from C/C++ "const char*"
+ * @return {char}
  */
-getFile : function () {},
+getFile : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method resumeEffect
- * @param {unsigned int}
+ * @param {unsigned int} arg0
  */
-resumeEffect : function () {},
+resumeEffect : function (
+int 
+)
+{
+},
 
 /**
  * @method create
- * @return A value converted from C/C++ "cocostudio::ComAudio*"
+ * @return {ccs.ComAudio}
  */
-create : function () {},
-
-/**
- * @method createInstance
- * @return A value converted from C/C++ "cocos2d::Object*"
- */
-createInstance : function () {},
+create : function (
+)
+{
+    return ccs.ComAudio;
+},
 
 };
 
@@ -1305,63 +2585,103 @@ ccs.InputDelegate = {
 
 /**
  * @method isAccelerometerEnabled
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isAccelerometerEnabled : function () {},
+isAccelerometerEnabled : function (
+)
+{
+    return false;
+},
 
 /**
  * @method setKeypadEnabled
- * @param {bool}
+ * @param {bool} arg0
  */
-setKeypadEnabled : function () {},
+setKeypadEnabled : function (
+bool 
+)
+{
+},
 
 /**
  * @method getTouchMode
- * @return A value converted from C/C++ "cocos2d::Touch::DispatchMode"
+ * @return {cc.Touch::DispatchMode}
  */
-getTouchMode : function () {},
+getTouchMode : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method setAccelerometerEnabled
- * @param {bool}
+ * @param {bool} arg0
  */
-setAccelerometerEnabled : function () {},
+setAccelerometerEnabled : function (
+bool 
+)
+{
+},
 
 /**
  * @method isKeypadEnabled
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isKeypadEnabled : function () {},
+isKeypadEnabled : function (
+)
+{
+    return false;
+},
 
 /**
  * @method isTouchEnabled
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-isTouchEnabled : function () {},
+isTouchEnabled : function (
+)
+{
+    return false;
+},
 
 /**
  * @method setTouchPriority
- * @param {int}
+ * @param {int} arg0
  */
-setTouchPriority : function () {},
+setTouchPriority : function (
+int 
+)
+{
+},
 
 /**
  * @method getTouchPriority
- * @return A value converted from C/C++ "int"
+ * @return {int}
  */
-getTouchPriority : function () {},
+getTouchPriority : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method setTouchEnabled
- * @param {bool}
+ * @param {bool} arg0
  */
-setTouchEnabled : function () {},
+setTouchEnabled : function (
+bool 
+)
+{
+},
 
 /**
  * @method setTouchMode
- * @param {cocos2d::Touch::DispatchMode}
+ * @param {cc.Touch::DispatchMode} arg0
  */
-setTouchMode : function () {},
+setTouchMode : function (
+dispatchmode 
+)
+{
+},
 
 };
 
@@ -1372,21 +2692,22 @@ ccs.ComController = {
 
 /**
  * @method create
- * @return A value converted from C/C++ "cocostudio::ComController*"
+ * @return {ccs.ComController}
  */
-create : function () {},
-
-/**
- * @method createInstance
- * @return A value converted from C/C++ "cocos2d::Object*"
- */
-createInstance : function () {},
+create : function (
+)
+{
+    return ccs.ComController;
+},
 
 /**
  * @method ComController
  * @constructor
  */
-ComController : function () {},
+ComController : function (
+)
+{
+},
 
 };
 
@@ -1397,21 +2718,37 @@ ccs.ComRender = {
 
 /**
  * @method setNode
- * @param {cocos2d::Node*}
+ * @param {cc.Node} arg0
  */
-setNode : function () {},
+setNode : function (
+node 
+)
+{
+},
 
 /**
  * @method getNode
- * @return A value converted from C/C++ "cocos2d::Node*"
+ * @return {cc.Node}
  */
-getNode : function () {},
+getNode : function (
+)
+{
+    return cc.Node;
+},
 
 /**
- * @method createInstance
- * @return A value converted from C/C++ "cocos2d::Object*"
- */
-createInstance : function () {},
+ * @method create
+* @param {cc.Node} node
+* @param {char} char
+* @return {ccs.ComRender|ccs.ComRender}
+*/
+create : function(
+node,
+char 
+)
+{
+    return ccs.ComRender;
+},
 
 };
 
@@ -1422,28 +2759,55 @@ ccs.GUIReader = {
 
 /**
  * @method widgetFromJsonFile
- * @return A value converted from C/C++ "cocos2d::gui::Widget*"
- * @param {const char*}
+ * @param {char} arg0
+ * @return {ccui.Widget}
  */
-widgetFromJsonFile : function () {},
+widgetFromJsonFile : function (
+char 
+)
+{
+    return ccui.Widget;
+},
+
+/**
+ * @method getFilePath
+ * @return {String}
+ */
+getFilePath : function (
+)
+{
+    return ;
+},
 
 /**
  * @method getVersionInteger
- * @return A value converted from C/C++ "int"
- * @param {const char*}
+ * @param {char} arg0
+ * @return {int}
  */
-getVersionInteger : function () {},
+getVersionInteger : function (
+char 
+)
+{
+    return 0;
+},
 
 /**
  * @method destroyInstance
  */
-destroyInstance : function () {},
+destroyInstance : function (
+)
+{
+},
 
 /**
  * @method getInstance
- * @return A value converted from C/C++ "cocostudio::GUIReader*"
+ * @return {ccs.GUIReader}
  */
-getInstance : function () {},
+getInstance : function (
+)
+{
+    return ccs.GUIReader;
+},
 
 };
 
@@ -1454,33 +2818,54 @@ ccs.SceneReader = {
 
 /**
  * @method createNodeWithSceneFile
- * @return A value converted from C/C++ "cocos2d::Node*"
- * @param {const std::string&}
+ * @param {String} arg0
+ * @return {cc.Node}
  */
-createNodeWithSceneFile : function () {},
+createNodeWithSceneFile : function (
+str 
+)
+{
+    return cc.Node;
+},
 
 /**
  * @method getNodeByTag
- * @return A value converted from C/C++ "cocos2d::Node*"
- * @param {int}
+ * @param {int} arg0
+ * @return {cc.Node}
  */
-getNodeByTag : function () {},
+getNodeByTag : function (
+int 
+)
+{
+    return cc.Node;
+},
 
 /**
  * @method destroyInstance
  */
-destroyInstance : function () {},
+destroyInstance : function (
+)
+{
+},
 
 /**
  * @method sceneReaderVersion
- * @return A value converted from C/C++ "const char*"
+ * @return {char}
  */
-sceneReaderVersion : function () {},
+sceneReaderVersion : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method getInstance
- * @return A value converted from C/C++ "cocostudio::SceneReader*"
+ * @return {ccs.SceneReader}
  */
-getInstance : function () {},
+getInstance : function (
+)
+{
+    return ccs.SceneReader;
+},
 
 };

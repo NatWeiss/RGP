@@ -23,7 +23,8 @@ var LayerMenu = (function(){
 		buttonMinimize: null,
 
 		init: function(canResume) {
-			var winSize = App.getWinSize(),
+			var self = this,
+				winSize = App.getWinSize(),
 				layer,
 				sprite,
 				label,
@@ -42,7 +43,7 @@ var LayerMenu = (function(){
 			this.addChild(this.menu, 2);
 
 			// logo
-			this.logo = cc.Sprite.createWithSpriteFrameName("Logo.png");
+			this.logo = cc.Sprite.create("#Logo.png");
 			this.logo.setPosition(App.centralize(0, 114));
 			this.addChild(this.logo, 1);
 			//if (!canResume) {
@@ -60,7 +61,7 @@ var LayerMenu = (function(){
 			//}
 			
 			// button layer
-			layer = cc.LayerColor.create(cc.c4b(0,0,0,202), winSize.width * 1.2, App.scale(215));
+			layer = cc.LayerColor.create(cc.color(0,0,0,202), winSize.width * 1.2, App.scale(215));
 			layer.setPosition(App.scale(-20), winSize.height * .5 - App.scale(290) - winSize.height);
 			layer.setRotation(-2);
 			this.addChild(layer, 1);
@@ -120,7 +121,16 @@ var LayerMenu = (function(){
 			
 			this.scheduleUpdate();
 
-			this.setTouchEnabled(true);
+			// handle touch events
+			cc.eventManager.addListener({
+				event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+				onTouchesBegan: function(touches, event) {
+					if (touches) {
+						App.showTouchCircle(self, touches[0].getLocation());
+						App.playClickSound();
+					}
+				}
+			}, this);
 
 			return true;
 		},
@@ -133,26 +143,18 @@ var LayerMenu = (function(){
 		},
 		
 		playMusic: function() {
-			var song = App.getConfig("songs")[this.songNumber]
+			var song = App.config["songs"][this.songNumber]
 			
-			if (!cc.AudioEngine.getInstance().isMusicPlaying()) {
+			if (!cc.audioEngine.isMusicPlaying()) {
 				App.playEffect("res/music-start.wav");
 				App.playMusic(song.file);
-				this.songNumber = (this.songNumber + 1) % App.getConfig("songs").length;
-			}
-		},
-		
-		onTouchesBegan: function(touches, event) {
-			if (touches) {
-				App.showTouchCircle(this, touches[0].getLocation());
+				this.songNumber = (this.songNumber + 1) % App.config["songs"].length;
 			}
 		},
 		
 		menuButtonCallback: function(sender) {
 			var self = this,
 				tag = sender.getTag(),
-				director = cc.Director.getInstance(),
-				audio = cc.AudioEngine.getInstance(),
 				socialPlugin;
 			
 			App.playClickSound();
@@ -165,15 +167,15 @@ var LayerMenu = (function(){
 			
 			// login to facebook
 			else if (tag == TAG_LOGIN_LOGOUT) {
+				this.buttonLogin.setEnabled(false);
+				this.buttonLogout.setEnabled(false);
+
 				socialPlugin = App.getSocialPlugin();
 				if (socialPlugin.isLoggedIn()) {
 					socialPlugin.logout();
 				} else {
-					socialPlugin.login(App.getConfig("social-plugin-login"));
+					socialPlugin.login(App.config["social-plugin-login-permissions"]);
 				}
-
-				this.buttonLogin.setEnabled(false);
-				this.buttonLogout.setEnabled(false);
 			}
 			
 			// show info scene

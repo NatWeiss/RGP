@@ -24,7 +24,7 @@
 
 
 plugin.PluginType = {
-    ADS:["AdSense","AdsMobFox"],
+    ADS:["AdSense", "AdsMobFox"],
     ANALYTICS:["AdsGoogle","AnalyticsFlurry"],
     IAP:[""],
     SOCIAL:["SocialTwitter","SocialFacebook","SocialQzone","SocialQQWeibo","SocialWeibo"]

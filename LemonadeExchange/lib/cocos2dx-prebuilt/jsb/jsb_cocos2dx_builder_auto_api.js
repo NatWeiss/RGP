@@ -10,255 +10,406 @@ cc.BuilderAnimationManager = {
 
 /**
  * @method moveAnimationsFromNode
- * @param {cocos2d::Node*}
- * @param {cocos2d::Node*}
+ * @param {cc.Node} arg0
+ * @param {cc.Node} arg1
  */
-moveAnimationsFromNode : function () {},
+moveAnimationsFromNode : function (
+node, 
+node 
+)
+{
+},
 
 /**
  * @method setAutoPlaySequenceId
- * @param {int}
+ * @param {int} arg0
  */
-setAutoPlaySequenceId : function () {},
+setAutoPlaySequenceId : function (
+int 
+)
+{
+},
 
 /**
  * @method getDocumentCallbackNames
- * @return A value converted from C/C++ "cocos2d::ValueVector&"
+ * @return {Array}
  */
-getDocumentCallbackNames : function () {},
+getDocumentCallbackNames : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method actionForSoundChannel
- * @return A value converted from C/C++ "cocos2d::Object*"
- * @param {cocosbuilder::CCBSequenceProperty*}
+ * @param {cc.CCBSequenceProperty} arg0
+ * @return {cc.Sequence}
  */
-actionForSoundChannel : function () {},
+actionForSoundChannel : function (
+ccbsequenceproperty 
+)
+{
+    return cc.Sequence;
+},
 
 /**
  * @method setBaseValue
- * @param {const cocos2d::Value&}
- * @param {cocos2d::Node*}
- * @param {const std::string&}
+ * @param {cc.Value} arg0
+ * @param {cc.Node} arg1
+ * @param {String} arg2
  */
-setBaseValue : function () {},
+setBaseValue : function (
+value, 
+node, 
+str 
+)
+{
+},
 
 /**
  * @method getDocumentOutletNodes
- * @return A value converted from C/C++ "cocos2d::Vector<cocos2d::Node *>&"
+ * @return {Array}
  */
-getDocumentOutletNodes : function () {},
+getDocumentOutletNodes : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method getLastCompletedSequenceName
- * @return A value converted from C/C++ "std::string"
+ * @return {String}
  */
-getLastCompletedSequenceName : function () {},
+getLastCompletedSequenceName : function (
+)
+{
+    return ;
+},
 
 /**
  * @method setRootNode
- * @param {cocos2d::Node*}
+ * @param {cc.Node} arg0
  */
-setRootNode : function () {},
+setRootNode : function (
+node 
+)
+{
+},
 
 /**
  * @method runAnimationsForSequenceNamedTweenDuration
- * @param {const char*}
- * @param {float}
+ * @param {char} arg0
+ * @param {float} arg1
  */
-runAnimationsForSequenceNamedTweenDuration : function () {},
+runAnimationsForSequenceNamedTweenDuration : function (
+char, 
+float 
+)
+{
+},
 
 /**
  * @method addDocumentOutletName
- * @param {std::string}
+ * @param {String} arg0
  */
-addDocumentOutletName : function () {},
-
-/**
- * @method getSequences
- * @return A value converted from C/C++ "cocos2d::Vector<cocosbuilder::CCBSequence *>&"
- */
-getSequences : function () {},
+addDocumentOutletName : function (
+str 
+)
+{
+},
 
 /**
  * @method getRootContainerSize
- * @return A value converted from C/C++ "const cocos2d::Size&"
+ * @return {SizeObject}
  */
-getRootContainerSize : function () {},
+getRootContainerSize : function (
+)
+{
+    return cc.Size;
+},
 
 /**
  * @method setDocumentControllerName
- * @param {const std::string&}
+ * @param {String} arg0
  */
-setDocumentControllerName : function () {},
+setDocumentControllerName : function (
+str 
+)
+{
+},
 
 /**
  * @method setObject
- * @param {cocos2d::Object*}
- * @param {cocos2d::Node*}
- * @param {const std::string&}
+ * @param {cc.Ref} arg0
+ * @param {cc.Node} arg1
+ * @param {String} arg2
  */
-setObject : function () {},
+setObject : function (
+ref, 
+node, 
+str 
+)
+{
+},
 
 /**
  * @method getContainerSize
- * @return A value converted from C/C++ "const cocos2d::Size&"
- * @param {cocos2d::Node*}
+ * @param {cc.Node} arg0
+ * @return {SizeObject}
  */
-getContainerSize : function () {},
+getContainerSize : function (
+node 
+)
+{
+    return cc.Size;
+},
 
 /**
  * @method actionForCallbackChannel
- * @return A value converted from C/C++ "cocos2d::Object*"
- * @param {cocosbuilder::CCBSequenceProperty*}
+ * @param {cc.CCBSequenceProperty} arg0
+ * @return {cc.Sequence}
  */
-actionForCallbackChannel : function () {},
+actionForCallbackChannel : function (
+ccbsequenceproperty 
+)
+{
+    return cc.Sequence;
+},
 
 /**
  * @method getDocumentOutletNames
- * @return A value converted from C/C++ "cocos2d::ValueVector&"
+ * @return {Array}
  */
-getDocumentOutletNames : function () {},
+getDocumentOutletNames : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method addDocumentCallbackControlEvents
- * @param {cocos2d::extension::Control::EventType}
+ * @param {cc.Control::EventType} arg0
  */
-addDocumentCallbackControlEvents : function () {},
+addDocumentCallbackControlEvents : function (
+eventtype 
+)
+{
+},
 
 /**
  * @method init
- * @return A value converted from C/C++ "bool"
+ * @return {bool}
  */
-init : function () {},
+init : function (
+)
+{
+    return false;
+},
 
 /**
  * @method getKeyframeCallbacks
- * @return A value converted from C/C++ "cocos2d::ValueVector&"
+ * @return {Array}
  */
-getKeyframeCallbacks : function () {},
+getKeyframeCallbacks : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method getDocumentCallbackControlEvents
- * @return A value converted from C/C++ "cocos2d::ValueVector&"
+ * @return {Array}
  */
-getDocumentCallbackControlEvents : function () {},
+getDocumentCallbackControlEvents : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method setRootContainerSize
- * @param {const cocos2d::Size&}
+ * @param {SizeObject} arg0
  */
-setRootContainerSize : function () {},
+setRootContainerSize : function (
+size 
+)
+{
+},
 
 /**
  * @method runAnimationsForSequenceIdTweenDuration
- * @param {int}
- * @param {float}
+ * @param {int} arg0
+ * @param {float} arg1
  */
-runAnimationsForSequenceIdTweenDuration : function () {},
+runAnimationsForSequenceIdTweenDuration : function (
+int, 
+float 
+)
+{
+},
 
 /**
  * @method getRunningSequenceName
- * @return A value converted from C/C++ "const char*"
+ * @return {char}
  */
-getRunningSequenceName : function () {},
+getRunningSequenceName : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method getAutoPlaySequenceId
- * @return A value converted from C/C++ "int"
+ * @return {int}
  */
-getAutoPlaySequenceId : function () {},
+getAutoPlaySequenceId : function (
+)
+{
+    return 0;
+},
 
 /**
  * @method addDocumentCallbackName
- * @param {std::string}
+ * @param {String} arg0
  */
-addDocumentCallbackName : function () {},
+addDocumentCallbackName : function (
+str 
+)
+{
+},
 
 /**
  * @method getRootNode
- * @return A value converted from C/C++ "cocos2d::Node*"
+ * @return {cc.Node}
  */
-getRootNode : function () {},
+getRootNode : function (
+)
+{
+    return cc.Node;
+},
 
 /**
  * @method addDocumentOutletNode
- * @param {cocos2d::Node*}
+ * @param {cc.Node} arg0
  */
-addDocumentOutletNode : function () {},
+addDocumentOutletNode : function (
+node 
+)
+{
+},
 
 /**
  * @method setDelegate
- * @param {cocosbuilder::CCBAnimationManagerDelegate*}
+ * @param {cc.CCBAnimationManagerDelegate} arg0
  */
-setDelegate : function () {},
+setDelegate : function (
+ccbanimationmanagerdelegate 
+)
+{
+},
 
 /**
  * @method getSequenceDuration
- * @return A value converted from C/C++ "float"
- * @param {const char*}
+ * @param {char} arg0
+ * @return {float}
  */
-getSequenceDuration : function () {},
+getSequenceDuration : function (
+char 
+)
+{
+    return 0;
+},
 
 /**
  * @method addDocumentCallbackNode
- * @param {cocos2d::Node*}
+ * @param {cc.Node} arg0
  */
-addDocumentCallbackNode : function () {},
-
-/**
- * @method getDelegate
- * @return A value converted from C/C++ "cocosbuilder::CCBAnimationManagerDelegate*"
- */
-getDelegate : function () {},
+addDocumentCallbackNode : function (
+node 
+)
+{
+},
 
 /**
  * @method runAnimationsForSequenceNamed
- * @param {const char*}
+ * @param {char} arg0
  */
-runAnimationsForSequenceNamed : function () {},
+runAnimationsForSequenceNamed : function (
+char 
+)
+{
+},
 
 /**
  * @method getSequenceId
- * @return A value converted from C/C++ "int"
- * @param {const char*}
+ * @param {char} arg0
+ * @return {int}
  */
-getSequenceId : function () {},
+getSequenceId : function (
+char 
+)
+{
+    return 0;
+},
 
 /**
  * @method setCallFunc
- * @param {cocos2d::CallFunc*}
- * @param {const std::string&}
+ * @param {cc.CallFunc} arg0
+ * @param {String} arg1
  */
-setCallFunc : function () {},
+setCallFunc : function (
+callfunc, 
+str 
+)
+{
+},
 
 /**
  * @method getDocumentCallbackNodes
- * @return A value converted from C/C++ "cocos2d::Vector<cocos2d::Node *>&"
+ * @return {Array}
  */
-getDocumentCallbackNodes : function () {},
+getDocumentCallbackNodes : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method setSequences
- * @param {const cocos2d::Vector<cocosbuilder::CCBSequence *>&}
+ * @param {Array} arg0
  */
-setSequences : function () {},
+setSequences : function (
+array 
+)
+{
+},
 
 /**
  * @method debug
  */
-debug : function () {},
+debug : function (
+)
+{
+},
 
 /**
  * @method getDocumentControllerName
- * @return A value converted from C/C++ "std::string"
+ * @return {String}
  */
-getDocumentControllerName : function () {},
+getDocumentControllerName : function (
+)
+{
+    return ;
+},
 
 /**
  * @method CCBAnimationManager
  * @constructor
  */
-CCBAnimationManager : function () {},
+CCBAnimationManager : function (
+)
+{
+},
 
 };
 
@@ -269,118 +420,213 @@ cc._Reader = {
 
 /**
  * @method getAnimationManager
- * @return A value converted from C/C++ "cocosbuilder::CCBAnimationManager*"
+ * @return {cc.CCBAnimationManager}
  */
-getAnimationManager : function () {},
+getAnimationManager : function (
+)
+{
+    return cc.CCBAnimationManager;
+},
 
 /**
  * @method setAnimationManager
- * @param {cocosbuilder::CCBAnimationManager*}
+ * @param {cc.CCBAnimationManager} arg0
  */
-setAnimationManager : function () {},
+setAnimationManager : function (
+ccbanimationmanager 
+)
+{
+},
 
 /**
  * @method addOwnerOutletName
- * @param {std::string}
+ * @param {String} arg0
  */
-addOwnerOutletName : function () {},
+addOwnerOutletName : function (
+str 
+)
+{
+},
 
 /**
  * @method getOwnerCallbackNames
- * @return A value converted from C/C++ "cocos2d::ValueVector"
+ * @return {Array}
  */
-getOwnerCallbackNames : function () {},
+getOwnerCallbackNames : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method addDocumentCallbackControlEvents
- * @param {cocos2d::extension::Control::EventType}
+ * @param {cc.Control::EventType} arg0
  */
-addDocumentCallbackControlEvents : function () {},
+addDocumentCallbackControlEvents : function (
+eventtype 
+)
+{
+},
 
 /**
  * @method setCCBRootPath
- * @param {const char*}
+ * @param {char} arg0
  */
-setCCBRootPath : function () {},
+setCCBRootPath : function (
+char 
+)
+{
+},
 
 /**
  * @method addOwnerOutletNode
- * @param {cocos2d::Node*}
+ * @param {cc.Node} arg0
  */
-addOwnerOutletNode : function () {},
+addOwnerOutletNode : function (
+node 
+)
+{
+},
 
 /**
  * @method getOwnerCallbackNodes
- * @return A value converted from C/C++ "cocos2d::Vector<cocos2d::Node *>&"
+ * @return {Array}
  */
-getOwnerCallbackNodes : function () {},
+getOwnerCallbackNodes : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method readSoundKeyframesForSeq
- * @return A value converted from C/C++ "bool"
- * @param {cocosbuilder::CCBSequence*}
+ * @param {cc.CCBSequence} arg0
+ * @return {bool}
  */
-readSoundKeyframesForSeq : function () {},
+readSoundKeyframesForSeq : function (
+ccbsequence 
+)
+{
+    return false;
+},
 
 /**
  * @method getCCBRootPath
- * @return A value converted from C/C++ "const std::string&"
+ * @return {String}
  */
-getCCBRootPath : function () {},
+getCCBRootPath : function (
+)
+{
+    return ;
+},
 
 /**
  * @method getOwnerCallbackControlEvents
- * @return A value converted from C/C++ "cocos2d::ValueVector&"
+ * @return {Array}
  */
-getOwnerCallbackControlEvents : function () {},
+getOwnerCallbackControlEvents : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method getOwnerOutletNodes
- * @return A value converted from C/C++ "cocos2d::Vector<cocos2d::Node *>&"
+ * @return {Array}
  */
-getOwnerOutletNodes : function () {},
+getOwnerOutletNodes : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method readUTF8
- * @return A value converted from C/C++ "std::string"
+ * @return {String}
  */
-readUTF8 : function () {},
+readUTF8 : function (
+)
+{
+    return ;
+},
 
 /**
  * @method addOwnerCallbackControlEvents
- * @param {cocos2d::extension::Control::EventType}
+ * @param {cc.Control::EventType} arg0
  */
-addOwnerCallbackControlEvents : function () {},
+addOwnerCallbackControlEvents : function (
+eventtype 
+)
+{
+},
 
 /**
  * @method getOwnerOutletNames
- * @return A value converted from C/C++ "cocos2d::ValueVector"
+ * @return {Array}
  */
-getOwnerOutletNames : function () {},
+getOwnerOutletNames : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method readCallbackKeyframesForSeq
- * @return A value converted from C/C++ "bool"
- * @param {cocosbuilder::CCBSequence*}
+ * @param {cc.CCBSequence} arg0
+ * @return {bool}
  */
-readCallbackKeyframesForSeq : function () {},
+readCallbackKeyframesForSeq : function (
+ccbsequence 
+)
+{
+    return false;
+},
 
 /**
  * @method getAnimationManagersForNodes
- * @return A value converted from C/C++ "cocos2d::Vector<cocosbuilder::CCBAnimationManager *>&"
+ * @return {Array}
  */
-getAnimationManagersForNodes : function () {},
+getAnimationManagersForNodes : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method getNodesWithAnimationManagers
- * @return A value converted from C/C++ "cocos2d::Vector<cocos2d::Node *>&"
+ * @return {Array}
  */
-getNodesWithAnimationManagers : function () {},
+getNodesWithAnimationManagers : function (
+)
+{
+    return new Array();
+},
 
 /**
  * @method setResolutionScale
- * @param {float}
+ * @param {float} arg0
  */
-setResolutionScale : function () {},
+setResolutionScale : function (
+float 
+)
+{
+},
+
+/**
+ * @method CCBReader
+ * @constructor
+* @param {cc.CCBReader|cc.NodeLoaderLibrary} ccbreader
+* @param {cc.CCBMemberVariableAssigner} ccbmembervariableassigner
+* @param {cc.CCBSelectorResolver} ccbselectorresolver
+* @param {cc.NodeLoaderListener} nodeloaderlistener
+*/
+CCBReader : function(
+nodeloaderlibrary,
+ccbmembervariableassigner,
+ccbselectorresolver,
+nodeloaderlistener 
+)
+{
+},
 
 };

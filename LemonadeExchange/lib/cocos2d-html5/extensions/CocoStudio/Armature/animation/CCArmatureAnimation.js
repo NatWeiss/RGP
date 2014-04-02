@@ -36,7 +36,7 @@ ccs.MovementEventType = {
  * @class
  * @extends ccs.Class
  */
-ccs.AnimationEvent = ccs.Class.extend({
+ccs.AnimationEvent = ccs.Class.extend(/** @lends ccs.AnimationEvent# */{
     _arguments:null,
     _callFunc:null,
     _selectorTarget:null,
@@ -77,9 +77,16 @@ ccs.FrameEvent = function () {
  * Base class for ccs.ArmatureAnimation objects.
  * @class
  * @extends ccs.ProcessBase
+ * 
+ * @property {ccs.AnimationData}    animationData       - Animation data
+ * @property {Object}               userObject          - User custom object
+ * @property {Boolean}              ignoreFrameEvent    - Indicate whether the frame event is ignored
+ * @property {Number}               speedScale          - Animation play speed scale
+ * @property {Number}               animationScale      - Animation play speed scale
+ * 
  */
 ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation# */{
-    _animationData:null,
+    animationData:null,
     _movementData:null,
     _armature:null,
     _movementID:"",
@@ -89,17 +96,17 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
     _frameEvent:null,
     _movementEvent:null,
     _speedScale:1,
-    _ignoreFrameEvent:false,
+    ignoreFrameEvent:false,
     _frameEventQueue:null,
     _movementEventQueue:null,
-    _userObject:null,
+    userObject:null,
     _movementList: null,
     _onMovementList: false,
     _movementListLoop: false,
     _movementIndex: 0,
     ctor:function () {
         ccs.ProcessBase.prototype.ctor.call(this);
-        this._animationData = null;
+        this.animationData = null;
         this._movementData = null;
         this._movementID = "";
         this._armature = null;
@@ -109,10 +116,10 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
         this._frameEvent = null;
         this._movementEvent = null;
         this._speedScale = 1;
-        this._ignoreFrameEvent = false;
+        this.ignoreFrameEvent = false;
         this._frameEventQueue = [];
         this._movementEventQueue = [];
-        this._userObject = null;
+        this.userObject = null;
         this._movementList = [];
         this._onMovementList = false;
         this._movementListLoop = false;
@@ -208,11 +215,11 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
      * armature.getAnimation().play("run",-1,-1,0,-1);//not loop play
      */
     play:function (animationName, durationTo, durationTween, loop, tweenEasing) {
-        if (this._animationData == null) {
-            cc.log("this._animationData can not be null");
+        if (this.animationData == null) {
+            cc.log("this.animationData can not be null");
             return;
         }
-        this._movementData = this._animationData.getMovement(animationName);
+        this._movementData = this.animationData.getMovement(animationName);
         if (this._movementData == null) {
             cc.log("this._movementData can not be null");
             return;
@@ -246,14 +253,14 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
         ccs.ProcessBase.prototype.play.call(this, durationTo, tweenEasing);
 
         if (this._rawDuration == 0) {
-            this._loopType = CC_ANIMATION_TYPE_SINGLE_FRAME;
+            this._loopType = ccs.ANIMATION_TYPE_SINGLE_FRAME;
         }
         else {
             if (loop) {
-                this._loopType = CC_ANIMATION_TYPE_TO_LOOP_FRONT;
+                this._loopType = ccs.ANIMATION_TYPE_TO_LOOP_FRONT;
             }
             else {
-                this._loopType = CC_ANIMATION_TYPE_NO_LOOP;
+                this._loopType = ccs.ANIMATION_TYPE_NO_LOOP;
             }
             this._durationTween = durationTween;
         }
@@ -345,8 +352,8 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
             return;
         }
 
-        var ignoreFrameEvent = this._ignoreFrameEvent;
-        this._ignoreFrameEvent = true;
+        var ignoreFrameEvent = this.ignoreFrameEvent;
+        this.ignoreFrameEvent = true;
         this._isPlaying = true;
         this._isComplete = this._isPause = false;
 
@@ -359,7 +366,7 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
             tween.gotoAndPlay(frameIndex);
         }
         this._armature.update(0);
-        this._ignoreFrameEvent = ignoreFrameEvent;
+        this.ignoreFrameEvent = ignoreFrameEvent;
     },
 
     /**
@@ -386,7 +393,7 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
         if (typeof loop == "undefined") {
             loop = -1;
         }
-        var moveNames = this._animationData.movementNames;
+        var moveNames = this.animationData.movementNames;
         if (animationIndex < -1 || animationIndex >= moveNames.length) {
             return;
         }
@@ -419,7 +426,7 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
         this._onMovementList = true;
         this._movementIndex = 0;
 
-        var movName = this._animationData.movementNames;
+        var movName = this.animationData.movementNames;
 
         for (var i = 0; i < movementIndexes.length; i++) {
             var name = movName[movementIndexes[i]];
@@ -434,7 +441,7 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
      * @return {Number}
      */
     getMovementCount:function () {
-        return this._animationData.getMovementCount();
+        return this.animationData.getMovementCount();
     },
 
     update:function (dt) {
@@ -447,9 +454,9 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
         var frameEvents = this._frameEventQueue;
         while (frameEvents.length > 0) {
             var frameEvent = frameEvents.shift();
-            this._ignoreFrameEvent = true;
+            this.ignoreFrameEvent = true;
             this.callFrameEvent([frameEvent.bone, frameEvent.frameEventName, frameEvent.originFrameIndex, frameEvent.currentFrameIndex]);
-            this._ignoreFrameEvent = false;
+            this.ignoreFrameEvent = false;
         }
 
         var movementEvents = this._movementEventQueue;
@@ -466,8 +473,8 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
         var locCurrentPercent = this._currentPercent;
         if (locCurrentPercent >= 1) {
             switch (this._loopType) {
-                case CC_ANIMATION_TYPE_NO_LOOP:
-                    this._loopType = CC_ANIMATION_TYPE_MAX;
+                case ccs.ANIMATION_TYPE_NO_LOOP:
+                    this._loopType = ccs.ANIMATION_TYPE_MAX;
                     this._currentFrame = (locCurrentPercent - 1) * this._nextFrameIndex;
                     locCurrentPercent = this._currentFrame / this._durationTween;
                     if (locCurrentPercent < 1.0) {
@@ -475,16 +482,16 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
                         this.movementEvent(this._armature, ccs.MovementEventType.start, this._movementID);
                         break;
                     }
-                case CC_ANIMATION_TYPE_MAX:
-                case CC_ANIMATION_TYPE_SINGLE_FRAME:
+                case ccs.ANIMATION_TYPE_MAX:
+                case ccs.ANIMATION_TYPE_SINGLE_FRAME:
                     locCurrentPercent = 1;
                     this._isComplete = true;
                     this._isPlaying = false;
                     this.movementEvent(this._armature, ccs.MovementEventType.complete, this._movementID);
                     this.updateMovementList();
                     break;
-                case CC_ANIMATION_TYPE_TO_LOOP_FRONT:
-                    this._loopType = CC_ANIMATION_TYPE_LOOP_FRONT;
+                case ccs.ANIMATION_TYPE_TO_LOOP_FRONT:
+                    this._loopType = ccs.ANIMATION_TYPE_LOOP_FRONT;
                     locCurrentPercent = ccs.fmodf(locCurrentPercent, 1);
                     this._currentFrame = this._nextFrameIndex == 0 ? 0 : ccs.fmodf(this._currentFrame, this._nextFrameIndex);
                     this._nextFrameIndex = this._durationTween > 0 ? this._durationTween : 1;
@@ -583,7 +590,7 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
      * @param {ccs.AnimationData} aniData
      */
     setAnimationData:function (aniData) {
-        this._animationData = aniData;
+        this.animationData = aniData;
     },
 
     /**
@@ -591,14 +598,14 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
      * @return {ccs.AnimationData}
      */
     getAnimationData:function () {
-        return this._animationData;
+        return this.animationData;
     },
     /**
      * userObject setter
      * @param {Object} userObject
      */
     setUserObject:function (userObject) {
-        this._userObject = userObject;
+        this.userObject = userObject;
     },
 
     /**
@@ -606,25 +613,37 @@ ccs.ArmatureAnimation = ccs.ProcessBase.extend(/** @lends ccs.ArmatureAnimation#
      * @return {Object}
      */
     getUserObject:function () {
-        return this._userObject;
+        return this.userObject;
     },
 
     /**
-     * Determines if the frame event is ignore
+     * Determines if the frame event is ignored
      * @returns {boolean}
      */
     isIgnoreFrameEvent:function(){
-        return this._ignoreFrameEvent;
+        return this.ignoreFrameEvent;
     },
 
     /**
-     * Sets whether the frame event is ignore
+     * Sets whether the frame event is ignored
      * @param {Boolean} bool
      */
     setIgnoreFrameEvent:function(bool){
-        this._ignoreFrameEvent = bool;
+        this.ignoreFrameEvent = bool;
     }
 });
+
+window._p = ccs.ArmatureAnimation.prototype;
+
+// Extended properties
+/** @expose */
+_p.speedScale;
+cc.defineGetterSetter(_p, "speedScale", _p.getSpeedScale, _p.setSpeedScale);
+/** @expose */
+_p.animationScale;
+cc.defineGetterSetter(_p, "animationScale", _p.getAnimationScale, _p.setAnimationScale);
+
+delete window._p;
 
 /**
  * allocates and initializes a ArmatureAnimation.
