@@ -148,7 +148,6 @@
 		41F1A50E1894BF9D006E818E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		41F1A5101894BFA9006E818E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		41F1A5121894C12A006E818E /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		41F1A63D18972040006E818E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
 		41F1A6421897320F006E818E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
 		A922753D1517C094001B78AA /* LemonadeExchange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LemonadeExchange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A92275411517C094001B78AA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -313,7 +312,6 @@
 		A92275321517C094001B78AA = {
 			isa = PBXGroup;
 			children = (
-				41F1A63D18972040006E818E /* README.md */,
 				41E17C161888B24000F6AD3C /* AppDelegate.h */,
 				41E17C151888B23F00F6AD3C /* AppDelegate.cpp */,
 				4142034218C15A490075A075 /* index.html */,

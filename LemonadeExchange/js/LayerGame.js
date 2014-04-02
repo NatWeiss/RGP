@@ -1,7 +1,4 @@
 
-//
-//
-//
 var LayerGame = (function(){
 	var TAG_PAUSE = 0,
 		TAG_DRINK_LEMONADE = 1,
@@ -92,7 +89,7 @@ var LayerGame = (function(){
 		
 		createExchangeRate: function() {
 			var pos = App.centralize(-120, 220),
-				font = App.getString("font"),
+				font = App.config["font"],
 				label,
 				sprite,
 				winSize = App.getWinSize();
@@ -127,7 +124,7 @@ var LayerGame = (function(){
 		createPlayerDetails: function() {
 			var sprite = null,
 				playerImageUrl = App.getSocialPlugin().getPlayerImageUrl(),
-				font = App.getString("font"),
+				font = App.config["font"],
 				winSize = App.getWinSize(),
 				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
 				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
@@ -553,7 +550,11 @@ var LayerGame = (function(){
 		},
 		
 		watchVideo: function() {
-			App.getAdsPlugin().showAds(plugin.AdsType.FullScreenAd, 0, plugin.AdsPos.Center);
+			App.getAdsPlugin().showAds({
+				type: plugin.AdsType.FullScreenAd,
+				size: 0,
+				position: plugin.AdsPos.Center
+			});
 		},
 		
 		showTouchArea: function(pos) {
@@ -770,7 +771,7 @@ var LayerGame = (function(){
 			this.createGameMenu();
 		},
 
-		onAdDismissed(){
+		onAdDismissed: function(){
 			this.addCurrencies(0, parseInt(this.exchangeRate * .5));
 		},
 

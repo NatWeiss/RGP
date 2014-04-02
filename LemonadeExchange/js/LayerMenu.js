@@ -1,8 +1,4 @@
 
-
-//
-// begin module pattern
-//
 var LayerMenu = (function(){
 
 	var TAG_PLAY_RESUME = 0,
@@ -203,4 +199,5 @@ var LayerMenu = (function(){
 			}
 		}
 	}); // end of layer extend
+
 }()); // end of module

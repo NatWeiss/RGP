@@ -261,7 +261,7 @@ App.getRunningLayer = function() {
 //
 App.callRunningLayer = function(methodName, param1, param2, param3) {
 	var layer = this.getRunningLayer();
-	if (layer[methodName]) {
+	if (layer && layer[methodName]) {
 		layer[methodName](param1, param2, param3);
 	} else {
 		cc.log("Couldn't find method '" + methodName + "' in running scene or layer.");
