@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>AdsMobFox.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>AdsMobFox.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="README.html">
+                    README.md
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="App.html">
+                    App.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Config.html">
+                    Config.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ConfigServer.html">
+                    ConfigServer.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="HelloJavascript.html">
+                    HelloJavascript.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Loader.html">
+                    Loader.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="SceneHello.html">
+                    SceneHello.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="AdsMobFox.html">
+                    AdsMobFox.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Facebook.html">
+                    Facebook.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Server.html">
+                    Server.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+      
+        
+        <p>Implements the MobFox advertisements plugin for HTML5 clients. Native clients will supercede this by having already defined <code>plugin.AdsMobFox</code> (see <code>src/mobfox</code>).</p>
+<p>Conforms to the <code>InterfaceAds</code> protocol. Loaded by <code>pluginx</code>.</p>
+<p>Uses the module pattern. The object <code>module</code> will contain all private variables used by the plugin. Public methods will be returned by the module and accessible via the <code>plugin.AdsMobFox</code> constructor.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> plugin = plugin || {};</pre></div>
+        
+      
+        
+        <h3 id="adstype">AdsType</h3>
+<p>Types of advertisements to be dislayed.</p>
+
+        
+          <div class='highlight'><pre>plugin.AdsType = {
+	BannerAd: <span class="hljs-number">0</span>,
+	FullScreenAd: <span class="hljs-number">1</span>
+};</pre></div>
+        
+      
+        
+        <h3 id="adspos">AdsPos</h3>
+<p>Positions for advertisements to be dislayed.</p>
+
+        
+          <div class='highlight'><pre>plugin.AdsPos = {
+	Center: <span class="hljs-number">0</span>,
+	Top: <span class="hljs-number">1</span>,
+	TopLeft: <span class="hljs-number">2</span>,
+	TopRight: <span class="hljs-number">3</span>,
+	Bottom: <span class="hljs-number">4</span>,
+	BottomLeft: <span class="hljs-number">5</span>,
+	BottomRight: <span class="hljs-number">6</span>
+};</pre></div>
+        
+      
+        
+        <h3 id="module">module</h3>
+<p>Begin the module pattern.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> plugin.AdsMobFox === <span class="hljs-string">"undefined"</span>) {
+
+	plugin.AdsMobFox = (<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+		<span class="hljs-keyword">var</span> logPrefix = <span class="hljs-string">"MobFox: "</span>,
+			module = {
+				devInfo: {},
+				debug: <span class="hljs-literal">false</span>,
+				layer: <span class="hljs-literal">null</span>,
+				adUrl: <span class="hljs-string">""</span>,
+				geoData: <span class="hljs-literal">null</span>,
+				doShowAds: <span class="hljs-literal">null</span>
+			};</pre></div>
+        
+      
+        
+        <h3 id="module-log">module.log</h3>
+<p>Logs the given message to the console if the module has debug mode enabled. Log messages are prefixed with the module’s <code>logPrefix</code>.</p>
+
+        
+          <div class='highlight'><pre>		module.log = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(msg)</span> {</span>
+			<span class="hljs-keyword">if</span> (module.debug) {
+				cc.log(logPrefix + msg);
+			}
+		};</pre></div>
+        
+      
+        
+        <h3 id="module-getipaddress">module.getIPAddress</h3>
+<p>Requests and stores the client’s IP address and geo data.</p>
+
+        
+          <div class='highlight'><pre>		module.getIPAddress = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			App.requestUrl(<span class="hljs-string">"http://api.hostip.info/get_json.php?position=true"</span>,
+				<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response, status)</span>{</span>
+					<span class="hljs-keyword">if</span> (!response || !response.length) {
+						module.log(<span class="hljs-string">"Couldn't get client's IP address, status: "</span>	+ status);
+						<span class="hljs-keyword">return</span>;
+					}
+					<span class="hljs-keyword">try</span> {
+						module.geoData = <span class="hljs-built_in">JSON</span>.parse(response);
+						module.log(<span class="hljs-string">"Client's IP address: "</span> + module.geoData.ip);
+						<span class="hljs-keyword">if</span> (module.doShowAds) {
+							module.showAds(module.doShowAds);
+						}
+					} <span class="hljs-keyword">catch</span>(e) {
+						module.log(<span class="hljs-string">""</span> + e);
+					}
+				}
+			);
+		};</pre></div>
+        
+      
+        
+        <h3 id="module-showads">module.showAds</h3>
+<p>Shows an advertisement given the info object. Uses <a href="http://www.cocos2d-x.org/forums/19/topics/38739">corsproxy.com</a> to prevent browser warnings.</p>
+
+        
+          <div class='highlight'><pre>		module.showAds = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(infoObj)</span> {</span>
+			<span class="hljs-keyword">var</span> typeEnum = infoObj[<span class="hljs-string">"type"</span>] || <span class="hljs-number">0</span>,
+				sizeEnum = infoObj[<span class="hljs-string">"size"</span>] || <span class="hljs-number">0</span>,
+				posEnum = infoObj[<span class="hljs-string">"position"</span>] || <span class="hljs-number">0</span>,
+				uuid = App.getUUID();
+		
+			<span class="hljs-comment">/* Wait until client geo data is full. */</span>
+			<span class="hljs-keyword">if</span> (module.geoData === <span class="hljs-literal">null</span>) {
+				module.log(<span class="hljs-string">"Client IP data not full, waiting..."</span>);
+				module.doShowAds = App.clone(infoObj);
+				<span class="hljs-keyword">return</span>;
+			}
+			module.doShowAds = <span class="hljs-literal">null</span>;
+
+			<span class="hljs-comment">/* Remove any existing ad. */</span>
+			module.hideAds();
+			
+			<span class="hljs-comment">/* Proceed with showing ad. */</span>
+			<span class="hljs-keyword">var</span> doVideo = <span class="hljs-literal">false</span>,
+				isFullscreen = (typeEnum === plugin.AdsType.FullScreenAd),
+				url = <span class="hljs-string">"http://my.mobfox.com/"</span> + (doVideo ? <span class="hljs-string">"v"</span> :<span class="hljs-string">""</span>) + <span class="hljs-string">"request.php"</span>,
+				params = {
+					rt: <span class="hljs-string">"api"</span>,
+					s: module.devInfo.apiKey,
+					i: module.geoData.ip,
+					p: window.location,
+					m: module.devInfo.mode,
+					c_mraid: <span class="hljs-number">1</span>,
+					o: uuid,
+					v: <span class="hljs-string">"2.0"</span>,
+					u: navigator.userAgent,
+					no_markup: <span class="hljs-number">1</span>,
+					allow_mr: <span class="hljs-number">1</span>,
+					longitude: module.geoData.lng,
+					latitude: module.geoData.lat
+				};
+			<span class="hljs-keyword">if</span> (isFullscreen) {
+				params[<span class="hljs-string">"adspace.width"</span>] = <span class="hljs-built_in">parseInt</span>(App.winSize.width);
+				params[<span class="hljs-string">"adspace.height"</span>] = <span class="hljs-built_in">parseInt</span>(App.winSize.height);
+				posEnum = plugin.AdsPos.Center;
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (typeEnum === plugin.AdsType.BannerAd) {
+				<span class="hljs-keyword">if</span> (sizeEnum &gt; <span class="hljs-number">0</span>) {
+					params[<span class="hljs-string">"adspace.width"</span>] = <span class="hljs-built_in">parseInt</span>(App.winSize.width);
+					params[<span class="hljs-string">"adspace.height"</span>] = (App.winSize.width &gt;= <span class="hljs-number">1024</span> ? <span class="hljs-number">90</span> : <span class="hljs-number">50</span>);
+				}
+			}
+
+			<span class="hljs-comment">/* Encode url. */</span>
+			url = App.insert(url, <span class="hljs-string">"://"</span>, <span class="hljs-string">"www.corsproxy.com/"</span>),
+			url += App.encodeURIComponents(params);
+			module.log(<span class="hljs-string">"Requesting: "</span> + url);
+			
+			<span class="hljs-comment">/* Get the ad data. */</span>
+			module.requestUrl(url, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(adResponse, adStatus)</span> {</span>
+				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> adResponse !== <span class="hljs-string">"undefined"</span>) {
+					<span class="hljs-keyword">var</span> html = adResponse,
+						imageUrl = App.between(html, <span class="hljs-string">"src=\""</span>, <span class="hljs-string">"\""</span>);
+
+					module.log(<span class="hljs-string">"Ad response: "</span> + html);
+					<span class="hljs-keyword">if</span> (!imageUrl.length) {
+						module.log(<span class="hljs-string">"No ad url found"</span>);
+						<span class="hljs-keyword">return</span>;
+					}
+					imageUrl = App.insert(imageUrl, <span class="hljs-string">"://"</span>, <span class="hljs-string">"www.corsproxy.com/"</span>);
+					module.adUrl = App.between(html, <span class="hljs-string">"href=\""</span>, <span class="hljs-string">"\""</span>);
+					
+					module.log(<span class="hljs-string">"Image: "</span> + imageUrl + <span class="hljs-string">", click URL:"</span> + module.adUrl);
+					
+					App.loadImage(imageUrl, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+						module.showImage(imageUrl, typeEnum, sizeEnum, posEnum);
+					});
+				} <span class="hljs-keyword">else</span> {
+					module.log(<span class="hljs-string">"Error retrieving ad data, status: "</span> + adStatus);
+				}
+			});
+		};</pre></div>
+        
+      
+        
+        <h3 id="module-showimage">module.showImage</h3>
+<p>Displays the given advertisement image URL with given parameters.</p>
+
+        
+          <div class='highlight'><pre>		module.showImage = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(imageUrl, typeEnum, sizeEnum, posEnum)</span> {</span>
+			<span class="hljs-keyword">var</span> sprite,
+				scene,
+				menu,
+				closeButton = <span class="hljs-literal">null</span>,
+				normalSprite,
+				selectedSprite,
+				disabledSprite;
+			
+			<span class="hljs-comment">/* Create layer and sprite. */</span>
+			module.layer = cc.Layer.create();
+			sprite = cc.MenuItemImage.create(
+				imageUrl,
+				imageUrl,
+				<span class="hljs-literal">null</span>,
+				module.clickAdCallback,
+				module
+			);
+			
+			<span class="hljs-comment">/* Set sprite position. */</span>
+			<span class="hljs-keyword">if</span> (posEnum === plugin.AdsPos.Center) {
+				sprite.setPosition(App.winSize.width * <span class="hljs-number">.5</span>, App.winSize.height * <span class="hljs-number">.5</span>);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (posEnum === plugin.AdsPos.Top) {
+				sprite.setAnchorPoint(cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">1</span>));
+				sprite.setPosition(App.winSize.width * <span class="hljs-number">.5</span>, App.winSize.height);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (posEnum === plugin.AdsPos.TopLeft) {
+				sprite.setAnchorPoint(cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>));
+				sprite.setPosition(<span class="hljs-number">0</span>, App.winSize.height);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (posEnum === plugin.AdsPos.TopRight) {
+				sprite.setAnchorPoint(cc.p(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>));
+				sprite.setPosition(App.winSize.width, App.winSize.height);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (posEnum === plugin.AdsPos.Bottom) {
+				sprite.setAnchorPoint(cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">0</span>));
+				sprite.setPosition(App.winSize.width * <span class="hljs-number">.5</span>, <span class="hljs-number">0</span>);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (posEnum === plugin.AdsPos.BottomLeft) {
+				sprite.setAnchorPoint(cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>));
+				sprite.setPosition(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (posEnum === plugin.AdsPos.BottomRight) {
+				sprite.setAnchorPoint(cc.p(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>));
+				sprite.setPosition(App.winSize.width, <span class="hljs-number">0</span>);
+			}
+			
+			<span class="hljs-comment">/* Close button for fullscreen ad. */</span>
+			<span class="hljs-keyword">if</span> (typeEnum == plugin.AdsType.FullScreenAd) {
+				normalSprite = cc.Sprite.create(<span class="hljs-string">"#close-button.png"</span>);
+				selectedSprite = cc.Sprite.create(<span class="hljs-string">"#close-button.png"</span>);
+				disabledSprite = cc.Sprite.create(<span class="hljs-string">"#close-button.png"</span>);
+				<span class="hljs-keyword">if</span> (normalSprite &amp;&amp; selectedSprite) {
+					selectedSprite.setColor(cc.color(<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>));
+					closeButton = cc.MenuItemSprite.create(
+						normalSprite,
+						selectedSprite,
+						disabledSprite,
+						module.closeAdCallback,
+						module
+					);
+					closeButton.setAnchorPoint(cc.p(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>));
+					closeButton.x = sprite.x + sprite.width * <span class="hljs-number">.5</span>;
+					closeButton.y = sprite.y + sprite.height * <span class="hljs-number">.5</span>;
+					closeButton.y -= App.winSize.height;
+					closeButton.runAction(cc.EaseOut.create(
+						cc.MoveBy.create(<span class="hljs-number">0.5</span>, cc.p(<span class="hljs-number">0</span>, App.winSize.height)),
+						<span class="hljs-number">3.0</span>)
+					);
+					<span class="hljs-keyword">if</span> (App.winSize.width &lt; <span class="hljs-number">1024</span>) {
+						closeButton.setScale(<span class="hljs-number">.5</span>);
+					}
+
+					<span class="hljs-comment">/* Make the content size of the clickable image smaller than
+					the close button so they don't conflict. (Because of a bug in
+					cocos2d-html5 2.2.2 that prevents the top-most menu item from
+					being clicked.) */</span>
+					<span class="hljs-keyword">var</span> w = closeButton.width;
+					<span class="hljs-keyword">var</span> size = sprite.getContentSize();
+					sprite.setContentSize(size.width - w, size.height);
+					sprite.setPositionX(sprite.x - w * <span class="hljs-number">.5</span>);
+				}
+			}
+
+			<span class="hljs-comment">/* Run an action. */</span>
+			sprite.y -= App.winSize.height;
+			sprite.runAction(cc.EaseOut.create(
+				cc.MoveBy.create(<span class="hljs-number">0.5</span>, cc.p(<span class="hljs-number">0</span>, App.winSize.height)),
+				<span class="hljs-number">3.0</span>)
+			);
+
+			<span class="hljs-comment">/* Create the menu. */</span>
+			menu = cc.Menu.create();
+			menu.addChild(sprite);
+			<span class="hljs-keyword">if</span> (closeButton) {
+				menu.addChild(closeButton, <span class="hljs-number">1</span>);
+			}
+			menu.setPosition(cc.p());
+
+			<span class="hljs-comment">/* Add children. */</span>
+			module.layer.addChild(menu);
+			scene = cc.director.getRunningScene()
+			<span class="hljs-keyword">if</span> (scene) {
+				scene.addChild(module.layer, <span class="hljs-number">1000</span>);
+			}
+		};</pre></div>
+        
+      
+        
+        <h3 id="module-hideads">module.hideAds</h3>
+<p>Hides the current advertisement. Safe to be called if there is no advertisement.</p>
+
+        
+          <div class='highlight'><pre>		module.hideAds = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">if</span> (module.layer) {
+				module.log(<span class="hljs-string">"Hiding ads, layer: "</span> + module.layer);
+				
+				module.layer.stopAllActions();
+				module.layer.runAction(cc.Sequence.create(
+					cc.EaseIn.create(
+						cc.MoveBy.create(<span class="hljs-number">0.5</span>, cc.p(<span class="hljs-number">0</span>, -App.winSize.height)),
+						<span class="hljs-number">3.0</span>),
+					cc.RemoveSelf(<span class="hljs-literal">true</span>)
+				));
+				module.layer = <span class="hljs-literal">null</span>;
+			}
+		};</pre></div>
+        
+      
+        
+        <h3 id="module-clickadcallback">module.clickAdCallback</h3>
+<p>Callback used when the advertisement is clicked.</p>
+
+        
+          <div class='highlight'><pre>		module.clickAdCallback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(menuItem)</span> {</span>
+			module.log(<span class="hljs-string">"Clicked ad, visiting: "</span> + module.adUrl);
+			<span class="hljs-keyword">if</span> (module.adUrl.length) {
+				cc.openURL(module.adUrl);
+			}
+		};</pre></div>
+        
+      
+        
+        <h3 id="module-closeadcallback">module.closeAdCallback</h3>
+<p>Callback used when the advertisement is closed.</p>
+
+        
+          <div class='highlight'><pre>		module.closeAdCallback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(menuItem)</span> {</span>
+			module.hideAds();
+			App.callRunningLayer(<span class="hljs-string">"onAdDismissed"</span>);
+		};</pre></div>
+        
+      
+        
+        <h3 id="public-methods">Public Methods</h3>
+<p>Here begins the public methods accessible via creating a new <code>plugin.AdsMobFox</code>.</p>
+
+        
+          <div class='highlight'><pre>		<span class="hljs-keyword">return</span> cc.Class.extend({
+		
+			init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+			},</pre></div>
+        
+      
+        
+        <h3 id="adsmobfox-configdeveloperinfo">AdsMobFox.configDeveloperInfo</h3>
+<p>Configures the plugin with the given developer info object.</p>
+
+        
+          <div class='highlight'><pre>			configDeveloperInfo: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(devInfo)</span> {</span>
+				module.devInfo = devInfo;
+				module.getIPAddress();
+				module.log(<span class="hljs-string">"Set API key to: "</span> + module.devInfo.apiKey);
+			},</pre></div>
+        
+      
+        
+        <h3 id="adsmobfox-showads">AdsMobFox.showAds</h3>
+<p>Shows an advertisement given the info object. Properties of the info object are <code>type</code>, <code>size</code> and <code>position</code> which are all enums. See <code>plugin.AdsType</code> and <code>plugin.AdsPos</code>.</p>
+
+        
+          <div class='highlight'><pre>			showAds: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(infoObj)</span> {</span>
+				module.showAds(infoObj);
+			},</pre></div>
+        
+      
+        
+        <h3 id="adsmobfox-hideads">AdsMobFox.hideAds</h3>
+<p>Hides the current advertisement. Safe to be called even if there is no advertisement.</p>
+
+        
+          <div class='highlight'><pre>			hideAds: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(infoObj)</span> {</span>
+				module.hideAds();
+			},</pre></div>
+        
+      
+        
+        <h3 id="adsmobfox-querypoints">AdsMobFox.queryPoints</h3>
+<p>Unused.</p>
+
+        
+          <div class='highlight'><pre>			queryPoints: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+				module.log(<span class="hljs-string">"Has no points API"</span>);
+			},</pre></div>
+        
+      
+        
+        <h3 id="adsmobfox-spendpoints">AdsMobFox.spendPoints</h3>
+<p>Unused.</p>
+
+        
+          <div class='highlight'><pre>			spendPoints: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(points)</span> {</span>
+				module.log(<span class="hljs-string">"Has no points API"</span>);
+			},</pre></div>
+        
+      
+        
+        <h3 id="adsmobfox-setdebugmode">AdsMobFox.setDebugMode</h3>
+<p>Enables or disables debug mode. In debug mode, messages are logged to the console.</p>
+
+        
+          <div class='highlight'><pre>			setDebugMode: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(debug)</span> {</span>
+				module.debug = (debug ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>);
+			},</pre></div>
+        
+      
+        
+        <h3 id="adsmobfox-getsdkversion">AdsMobFox.getSDKVersion</h3>
+<p>Returns the SDK version.</p>
+
+        
+          <div class='highlight'><pre>			getSDKVersion: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+				<span class="hljs-keyword">return</span> <span class="hljs-string">"unknown"</span>;
+			},</pre></div>
+        
+      
+        
+        <h3 id="adsmobfox-getpluginversion">AdsMobFox.getPluginVersion</h3>
+<p>Returns the plugin version.</p>
+
+        
+          <div class='highlight'><pre>			getPluginVersion: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+				<span class="hljs-keyword">return</span> plugin.Version;
+			}
+
+		}); <span class="hljs-comment">// end cc.Class extend</span>
+	
+	}()); <span class="hljs-comment">// end module pattern</span>
+
+} <span class="hljs-comment">// end if undefined</span></pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
