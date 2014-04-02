@@ -784,12 +784,12 @@ App.giveItem = function(itemId, amount) {
 //
 // ###   App.isInitialLaunch
 //
-// Returns true if this is the first time the app is being launched. It determines this based on whether the `soundEnabled` key exists within local storage. Deleting this key will essentially reset the app into thinking it's the first run.
+// Returns true if this is the first time the app is being launched. It determines this based on whether the `uuid` key exists within local storage. Deleting this key will essentially reset the app into thinking it's the first run.
 //
-// Must be called before `App.loadSoundEnabled`, which creates the `soundEnabled` key.
+// Must be called before `App.getUUID()`, which creates the `uuid` key.
 //
 App.isInitialLaunch = function() {
-	var v = cc.sys.localStorage.getItem("soundEnabled");
+	var v = cc.sys.localStorage.getItem("uuid");
 	return (typeof v === "undefined" || v === null || v === "");
 };
 
@@ -833,6 +833,29 @@ App.onInitialLaunch = function() {
 			Soomla.storeInventory.giveItem(itemId, balance);
 		}
 	}
+};
+
+//
+// ###  App.getUUID
+//
+// Gets or creates a unique identifier for the current device.
+//
+App.getUUID = function(length) {
+	if (typeof this._uuid === "undefined") {
+		this._uuid = cc.sys.localStorage.getItem("uuid") || "";
+		
+		if (this._uuid.length === 0) {
+			length = length || 32;
+			for (var i = 0; i < length; i += 1) {
+				this._uuid += Math.floor(Math.random() * 16).toString(16);
+			}
+			cc.sys.localStorage.setItem("uuid", this._uuid);
+			cc.log("Generated UUID for the first time: " + this._uuid);
+		} else {
+			cc.log("Already had UUID: " + this._uuid);
+		}
+	}
+	return this._uuid;
 };
 
 //
@@ -918,6 +941,52 @@ App.requestUrl = function(url, callback, binary) {
 	} else {
 		throw "Your browser does not support XMLHTTPRequest.";
 	}
+};
+
+//
+// ###  App.between
+//
+// Return the substring of `string` between `prefix` and `suffix`.
+//
+App.between = function(string, prefix, suffix) {
+	var startPos = string.indexOf(prefix),
+		endPos = string.indexOf(suffix, startPos + prefix.length);
+	if (startPos > 0 && endPos > 0) {
+		startPos += prefix.length;
+		return string.substring(startPos, endPos);
+	}
+	return "";
+};
+
+//
+// ###  App.insert
+//
+// Return the given `string` with `insert` inserted after `after`.
+//
+App.insert = function(string, after, insert) {
+	var pos = string.indexOf(after) + after.length;
+	if (pos > 0) {
+		return string.substr(0, pos) + insert + string.substr(pos);
+	}
+	return string;
+};
+
+//
+// ###  App.encodeURIComponents
+//
+// Return a URI string with components encoded given an object of associated key value pairs to encode.
+//
+App.encodeURIComponents = function(o) {
+	var ret = "",
+		count = 0;
+	for (var key in o) {
+		if (typeof o[key] !== "undefined") {
+			ret += (count === 0 ? "?" : "&") +
+				key + "=" + encodeURIComponent(o[key]);
+			count += 1;
+		}
+	}
+	return ret;
 };
 
 //
@@ -1024,6 +1093,7 @@ App.main = function() {
 		dirs = [],
 		initialLaunch = this.isInitialLaunch();
 
+	this.getUUID();
 	this.loadSoundEnabled();
 
 	cc.defineGetterSetter(App, "winSize", App.getWinSize);

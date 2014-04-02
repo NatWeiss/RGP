@@ -28,22 +28,16 @@ release:
 	open ../releases
 	open -a /Applications/YemuZip.app/
 
-docker:
-	if [ -d docs ]; then rm -r docs; fi
-	#cp README.md index.litcoffee
-	docker -o docs -i template -c manni -s yes -I --extras fileSearch -x lib/*
-	#rm index.litcoffee
-
 docco:
 	if [ -d docs ]; then rm -r docs; fi
 	cp README.md README.litcoffee
-	#docco -l linear index.litcoffee
-	#docco -l linear template/server/Server.js
-	#docco -l linear template/js/*.js
-	#docco -l linear template/js/lib/*.js
 	docco -l linear README.litcoffee template/server/Server.js template/js/*.js template/js/lib/AdsMobFox.js template/js/lib/Facebook.js
 	sed -i "" 's/README.litcoffee/README.md/g' docs/*.html
 	rm README.litcoffee
+
+docker:
+	if [ -d docs ]; then rm -r docs; fi
+	docker -o docs -i template -c manni -s yes -I --extras fileSearch -x lib/*
 
 icons:
 	cp rez/KandleIcon-iOS/Icon*.png template/proj.ios_mac/ios
@@ -75,3 +69,6 @@ lemonadex:
 	sed -i "" 's/Loader\.js/Loader\.js", "js\/LayerGame\.js", "js\/LayerMenu\.js", "js\/ActionDrink\.js/g' ${dest}/${name}/proj.html5/project.json
 	sed -i "" 's/MyFacebookAppID/641151319281152/g' ${dest}/${name}/proj.ios_mac/ios/Info.plist
 
+minify:
+	if [ -f template/proj.html5/*-min.js ]; then rm template/proj.html5/*-min.js; fi
+	template/minify
