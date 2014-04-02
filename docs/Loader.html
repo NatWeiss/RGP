@@ -120,10 +120,10 @@
 	cc.Scene.prototype.init.call(<span class="hljs-keyword">this</span>);
 
 	<span class="hljs-comment">/* Start loading the logo texture. */</span>
-	cc.loader.loadImg(App.config[<span class="hljs-string">"loader-image"</span>],
+	cc.loader.loadImg(App.config[<span class="hljs-string">"loader"</span>][<span class="hljs-string">"image"</span>],
 		{isCrossOrigin : <span class="hljs-literal">false</span>},
 		<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err, img)</span>{</span>
-			<span class="hljs-keyword">var</span> sizePercent = App.config[<span class="hljs-string">"loader-image-win-size-percent"</span>];
+			<span class="hljs-keyword">var</span> sizePercent = App.config[<span class="hljs-string">"loader"</span>][<span class="hljs-string">"image-win-size-percent"</span>];
 
 			self._initStage(img, cc.p(self._winSize.width * <span class="hljs-number">.5</span>,
 				self._winSize.height * <span class="hljs-number">.6</span>));
@@ -136,18 +136,18 @@
 	);
 
 	<span class="hljs-comment">/* Create background color. */</span>
-	<span class="hljs-keyword">this</span>._bgLayer = cc.LayerColor.create(App.config[<span class="hljs-string">"loader-bg-color"</span>]);
+	<span class="hljs-keyword">this</span>._bgLayer = cc.LayerColor.create(App.config[<span class="hljs-string">"loader"</span>][<span class="hljs-string">"bg-color"</span>]);
 	<span class="hljs-keyword">this</span>._bgLayer.setPosition(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
 	<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>._bgLayer, <span class="hljs-number">0</span>);
 
 	<span class="hljs-comment">/* Create label. */</span>
 	<span class="hljs-keyword">this</span>._label = cc.LabelTTF.create(
-		App.config[<span class="hljs-string">"loader-text"</span>] || <span class="hljs-string">"Loading..."</span>,
-		App.config[<span class="hljs-string">"loader-text-font"</span>] || <span class="hljs-string">"Arial"</span>,
-		App.config[<span class="hljs-string">"loader-text-size"</span>] || <span class="hljs-number">20</span>
+		App.config[<span class="hljs-string">"loader"</span>][<span class="hljs-string">"text"</span>] || <span class="hljs-string">"Loading..."</span>,
+		App.config[<span class="hljs-string">"loader"</span>][<span class="hljs-string">"text-font"</span>] || <span class="hljs-string">"Arial"</span>,
+		App.config[<span class="hljs-string">"loader"</span>][<span class="hljs-string">"text-size"</span>] || <span class="hljs-number">20</span>
 	);
 	<span class="hljs-keyword">this</span>._label.setColor(
-		App.config[<span class="hljs-string">"loader-text-color"</span>] || cc.color(<span class="hljs-number">180</span>,<span class="hljs-number">180</span>,<span class="hljs-number">180</span>,<span class="hljs-number">255</span>)
+		App.config[<span class="hljs-string">"loader"</span>][<span class="hljs-string">"text-color"</span>] || cc.color(<span class="hljs-number">180</span>,<span class="hljs-number">180</span>,<span class="hljs-number">180</span>,<span class="hljs-number">255</span>)
 	);
 	<span class="hljs-keyword">this</span>._label.setPosition(<span class="hljs-keyword">this</span>._winSize.width * <span class="hljs-number">.5</span>, <span class="hljs-keyword">this</span>._winSize.height * <span class="hljs-number">.265</span>);
 	<span class="hljs-keyword">this</span>._bgLayer.addChild(<span class="hljs-keyword">this</span>._label, <span class="hljs-number">10</span>);
@@ -158,7 +158,7 @@
 		<span class="hljs-keyword">this</span>._winSize.height * <span class="hljs-number">.025</span>
 	);
 	<span class="hljs-keyword">this</span>._loadingBar = cc.LayerColor.create(
-		App.config[<span class="hljs-string">"loader-bar-color"</span>] || cc.color(<span class="hljs-number">9</span>,<span class="hljs-number">9</span>,<span class="hljs-number">10</span>,<span class="hljs-number">255</span>),
+		App.config[<span class="hljs-string">"loader"</span>][<span class="hljs-string">"bar-color"</span>] || cc.color(<span class="hljs-number">9</span>,<span class="hljs-number">9</span>,<span class="hljs-number">10</span>,<span class="hljs-number">255</span>),
 		<span class="hljs-keyword">this</span>._loadingBarSize.width,
 		<span class="hljs-keyword">this</span>._loadingBarSize.height
 	);

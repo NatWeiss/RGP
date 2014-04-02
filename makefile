@@ -69,6 +69,17 @@ lemonadex:
 	sed -i "" 's/Loader\.js/Loader\.js", "js\/LayerGame\.js", "js\/LayerMenu\.js", "js\/ActionDrink\.js/g' ${dest}/${name}/proj.html5/project.json
 	sed -i "" 's/MyFacebookAppID/641151319281152/g' ${dest}/${name}/proj.ios_mac/ios/Info.plist
 
+save-lemonadex:
+	cp LemonadeExchange/js/ActionDrink.js rez/LemonadeExchange/js/
+	cp LemonadeExchange/js/Config.js rez/LemonadeExchange/js/
+	cp LemonadeExchange/js/Layer*.js rez/LemonadeExchange/js/
+	cp LemonadeExchange/js/LemonadeExchange.js rez/LemonadeExchange/js/
+	cp LemonadeExchange/js/SceneMain.js rez/LemonadeExchange/js/
+	cp -r LemonadeExchange/res/* rez/LemonadeExchange/res/
+	cp LemonadeExchange/server/Server.js rez/LemonadeExchange/server/
+	cp LemonadeExchange/upload rez/LemonadeExchange/
+	echo "Note: doesn't save App.js!"
+
 minify:
 	if [ -f template/proj.html5/*-min.js ]; then rm template/proj.html5/*-min.js; fi
 	template/minify

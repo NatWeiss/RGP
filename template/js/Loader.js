@@ -18,10 +18,10 @@ cc.LoaderScene.prototype.init = function(){
 	cc.Scene.prototype.init.call(this);
 
 	/* Start loading the logo texture. */
-	cc.loader.loadImg(App.config["loader-image"],
+	cc.loader.loadImg(App.config["loader"]["image"],
 		{isCrossOrigin : false},
 		function(err, img){
-			var sizePercent = App.config["loader-image-win-size-percent"];
+			var sizePercent = App.config["loader"]["image-win-size-percent"];
 
 			self._initStage(img, cc.p(self._winSize.width * .5,
 				self._winSize.height * .6));
@@ -34,18 +34,18 @@ cc.LoaderScene.prototype.init = function(){
 	);
 
 	/* Create background color. */
-	this._bgLayer = cc.LayerColor.create(App.config["loader-bg-color"]);
+	this._bgLayer = cc.LayerColor.create(App.config["loader"]["bg-color"]);
 	this._bgLayer.setPosition(0, 0);
 	this.addChild(this._bgLayer, 0);
 
 	/* Create label. */
 	this._label = cc.LabelTTF.create(
-		App.config["loader-text"] || "Loading...",
-		App.config["loader-text-font"] || "Arial",
-		App.config["loader-text-size"] || 20
+		App.config["loader"]["text"] || "Loading...",
+		App.config["loader"]["text-font"] || "Arial",
+		App.config["loader"]["text-size"] || 20
 	);
 	this._label.setColor(
-		App.config["loader-text-color"] || cc.color(180,180,180,255)
+		App.config["loader"]["text-color"] || cc.color(180,180,180,255)
 	);
 	this._label.setPosition(this._winSize.width * .5, this._winSize.height * .265);
 	this._bgLayer.addChild(this._label, 10);
@@ -56,7 +56,7 @@ cc.LoaderScene.prototype.init = function(){
 		this._winSize.height * .025
 	);
 	this._loadingBar = cc.LayerColor.create(
-		App.config["loader-bar-color"] || cc.color(9,9,10,255),
+		App.config["loader"]["bar-color"] || cc.color(9,9,10,255),
 		this._loadingBarSize.width,
 		this._loadingBarSize.height
 	);

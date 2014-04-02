@@ -145,7 +145,7 @@ if (typeof plugin.AdsMobFox === "undefined") {
 			module.log("Requesting: " + url);
 			
 			/* Get the ad data. */
-			module.requestUrl(url, function(adResponse, adStatus) {
+			App.requestUrl(url, function(adResponse, adStatus) {
 				if (typeof adResponse !== "undefined") {
 					var html = adResponse,
 						imageUrl = App.between(html, "src=\"", "\"");

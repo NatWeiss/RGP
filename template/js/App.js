@@ -484,8 +484,8 @@ App.playMusic = function(filename) {
 // Get the analytics plugin. The first time this is called, the plugin is loaded and configured.
 //
 App.getAnalyticsPlugin = function() {
-	var self = this,
-		name,
+	var name,
+		apiKey,
 		p;
 
 	if (typeof this._analyticsPlugin === "undefined") {
@@ -499,13 +499,16 @@ App.getAnalyticsPlugin = function() {
 			/*cc.log("Loading analytics plugin after "
 				+ this._loadAnalyticsTries + " tries");*/
 
-			name = App.config["analytics-plugin-name"];
-			if (apiKey && manager && name) {
+			name = App.config["analytics-plugin"]["name"];
+			apiKey = App.config["analytics-plugin"]["api-key"];
+			if (name && apiKey) {
 				p = plugin.PluginManager.getInstance().loadPlugin(name);
 				if (p) {
-					p.setDebugMode(App.config["analytics-plugin-debug"]);
-					p.startSession(App.config["analytics-plugin-api-key"]);
+					p.setDebugMode(App.config["analytics-plugin"]["debug"]);
+					p.startSession(apiKey);
 					this._analyticsPlugin = p;
+					cc.log("Analytics plugin session started with API key: " +
+						apiKey.substr(0,4) + "...");
 				}
 			} else {
 				cc.log("Analytics plugin: API key has not been set");
@@ -514,7 +517,7 @@ App.getAnalyticsPlugin = function() {
 			/* Try to load plugin up to 10 times with a 250ms delay between tries. */
 			if (this._loadAnalyticsTries < 10) {
 				setTimeout(function(){
-					self.getAnalyticsPlugin();
+					App.getAnalyticsPlugin();
 				}, 250);
 			}
 		}
@@ -531,7 +534,7 @@ App.getAnalyticsPlugin = function() {
 //
 App.getAdsPlugin = function() {
 	if (typeof this._adsPlugin === "undefined" && typeof plugin !== "undefined") {
-		var name = App.config["ads-plugin-name"];
+		var name = App.config["ads-plugin"]["name"];
 
 		this._adsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
 		
@@ -541,10 +544,10 @@ App.getAdsPlugin = function() {
 		}
 		
 		if (this._adsPlugin) {
-			this._adsPlugin.setDebugMode(App.config["ads-plugin-debug"]);
+			this._adsPlugin.setDebugMode(App.config["ads-plugin"]["debug"]);
 			this._adsPlugin.configDeveloperInfo({
-				apiKey: App.config["ads-plugin-api-key"],
-				mode: App.config["ads-plugin-mode"]
+				apiKey: App.config["ads-plugin"]["api-key"],
+				mode: App.config["ads-plugin"]["mode"]
 			});
 		}
 	}
@@ -561,12 +564,12 @@ App.getSocialPlugin = function() {
 	var name;
 	
 	if (typeof this._socialPlugin === "undefined") {
-		name = App.config["social-plugin-name"];
+		name = App.config["social-plugin"]["name"];
 		if (plugin[name]) {
 			this._socialPlugin = new plugin[name]();
-			this._socialPlugin.setDebugMode(App.config["social-plugin-debug"]);
+			this._socialPlugin.setDebugMode(App.config["social-plugin"]["debug"]);
 			this._socialPlugin.init({
-				appId: App.config["social-plugin-app-id"],
+				appId: App.config["social-plugin"]["app-id"],
 				xfbml: false,
 				status: true,
 				cookie: true

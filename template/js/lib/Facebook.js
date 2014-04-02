@@ -175,7 +175,8 @@ if (typeof plugin.Facebook === "undefined") {
 //
 		module.loadPlayerImage = function(id) {
 			var request,
-				dim = App.scale(App.config["social-plugin-profile-image-width"] || 100);
+				config = App.config["social-plugin"],
+				dim = App.scale(config["profile-image-width"] || 100);
 			if (this.checkForFB()) {
 				request = "/" + id + "/picture?redirect=0" +
 					"&width=" + dim + "&height=" + dim;

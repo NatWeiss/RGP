@@ -381,7 +381,7 @@
         
           <div class='highlight'><pre>App.callRunningLayer = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(methodName, param1, param2, param3)</span> {</span>
 	<span class="hljs-keyword">var</span> layer = <span class="hljs-keyword">this</span>.getRunningLayer();
-	<span class="hljs-keyword">if</span> (layer[methodName]) {
+	<span class="hljs-keyword">if</span> (layer &amp;&amp; layer[methodName]) {
 		layer[methodName](param1, param2, param3);
 	} <span class="hljs-keyword">else</span> {
 		cc.log(<span class="hljs-string">"Couldn't find method '"</span> + methodName + <span class="hljs-string">"' in running scene or layer."</span>);
@@ -618,8 +618,8 @@
 
         
           <div class='highlight'><pre>App.getAnalyticsPlugin = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-	<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
-		name,
+	<span class="hljs-keyword">var</span> name,
+		apiKey,
 		p;
 
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>._analyticsPlugin === <span class="hljs-string">"undefined"</span>) {
@@ -633,13 +633,16 @@
 			<span class="hljs-comment">/*cc.log("Loading analytics plugin after "
 				+ this._loadAnalyticsTries + " tries");*/</span>
 
-			name = App.config[<span class="hljs-string">"analytics-plugin-name"</span>];
-			<span class="hljs-keyword">if</span> (apiKey &amp;&amp; manager &amp;&amp; name) {
+			name = App.config[<span class="hljs-string">"analytics-plugin"</span>][<span class="hljs-string">"name"</span>];
+			apiKey = App.config[<span class="hljs-string">"analytics-plugin"</span>][<span class="hljs-string">"api-key"</span>];
+			<span class="hljs-keyword">if</span> (name &amp;&amp; apiKey) {
 				p = plugin.PluginManager.getInstance().loadPlugin(name);
 				<span class="hljs-keyword">if</span> (p) {
-					p.setDebugMode(App.config[<span class="hljs-string">"analytics-plugin-debug"</span>]);
-					p.startSession(App.config[<span class="hljs-string">"analytics-plugin-api-key"</span>]);
+					p.setDebugMode(App.config[<span class="hljs-string">"analytics-plugin"</span>][<span class="hljs-string">"debug"</span>]);
+					p.startSession(apiKey);
 					<span class="hljs-keyword">this</span>._analyticsPlugin = p;
+					cc.log(<span class="hljs-string">"Analytics plugin session started with API key: "</span> +
+						apiKey.substr(<span class="hljs-number">0</span>,<span class="hljs-number">4</span>) + <span class="hljs-string">"..."</span>);
 				}
 			} <span class="hljs-keyword">else</span> {
 				cc.log(<span class="hljs-string">"Analytics plugin: API key has not been set"</span>);
@@ -648,7 +651,7 @@
 			<span class="hljs-comment">/* Try to load plugin up to 10 times with a 250ms delay between tries. */</span>
 			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._loadAnalyticsTries &lt; <span class="hljs-number">10</span>) {
 				setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-					self.getAnalyticsPlugin();
+					App.getAnalyticsPlugin();
 				}, <span class="hljs-number">250</span>);
 			}
 		}
@@ -666,7 +669,7 @@
         
           <div class='highlight'><pre>App.getAdsPlugin = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>._adsPlugin === <span class="hljs-string">"undefined"</span> &amp;&amp; <span class="hljs-keyword">typeof</span> plugin !== <span class="hljs-string">"undefined"</span>) {
-		<span class="hljs-keyword">var</span> name = App.config[<span class="hljs-string">"ads-plugin-name"</span>];
+		<span class="hljs-keyword">var</span> name = App.config[<span class="hljs-string">"ads-plugin"</span>][<span class="hljs-string">"name"</span>];
 
 		<span class="hljs-keyword">this</span>._adsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
 		
@@ -676,10 +679,10 @@
 		}
 		
 		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._adsPlugin) {
-			<span class="hljs-keyword">this</span>._adsPlugin.setDebugMode(App.config[<span class="hljs-string">"ads-plugin-debug"</span>]);
+			<span class="hljs-keyword">this</span>._adsPlugin.setDebugMode(App.config[<span class="hljs-string">"ads-plugin"</span>][<span class="hljs-string">"debug"</span>]);
 			<span class="hljs-keyword">this</span>._adsPlugin.configDeveloperInfo({
-				apiKey: App.config[<span class="hljs-string">"ads-plugin-api-key"</span>],
-				mode: App.config[<span class="hljs-string">"ads-plugin-mode"</span>]
+				apiKey: App.config[<span class="hljs-string">"ads-plugin"</span>][<span class="hljs-string">"api-key"</span>],
+				mode: App.config[<span class="hljs-string">"ads-plugin"</span>][<span class="hljs-string">"mode"</span>]
 			});
 		}
 	}
@@ -697,12 +700,12 @@
 	<span class="hljs-keyword">var</span> name;
 	
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>._socialPlugin === <span class="hljs-string">"undefined"</span>) {
-		name = App.config[<span class="hljs-string">"social-plugin-name"</span>];
+		name = App.config[<span class="hljs-string">"social-plugin"</span>][<span class="hljs-string">"name"</span>];
 		<span class="hljs-keyword">if</span> (plugin[name]) {
 			<span class="hljs-keyword">this</span>._socialPlugin = <span class="hljs-keyword">new</span> plugin[name]();
-			<span class="hljs-keyword">this</span>._socialPlugin.setDebugMode(App.config[<span class="hljs-string">"social-plugin-debug"</span>]);
+			<span class="hljs-keyword">this</span>._socialPlugin.setDebugMode(App.config[<span class="hljs-string">"social-plugin"</span>][<span class="hljs-string">"debug"</span>]);
 			<span class="hljs-keyword">this</span>._socialPlugin.init({
-				appId: App.config[<span class="hljs-string">"social-plugin-app-id"</span>],
+				appId: App.config[<span class="hljs-string">"social-plugin"</span>][<span class="hljs-string">"app-id"</span>],
 				xfbml: <span class="hljs-literal">false</span>,
 				status: <span class="hljs-literal">true</span>,
 				cookie: <span class="hljs-literal">true</span>
@@ -991,9 +994,9 @@
 				<span class="hljs-keyword">this</span>._uuid += <span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">16</span>).toString(<span class="hljs-number">16</span>);
 			}
 			cc.sys.localStorage.setItem(<span class="hljs-string">"uuid"</span>, <span class="hljs-keyword">this</span>._uuid);
-			module.log(<span class="hljs-string">"Generated UUID for the first time: "</span> + <span class="hljs-keyword">this</span>._uuid);
+			<span class="hljs-comment">/*cc.log("Generated UUID for the first time: " + this._uuid);*/</span>
 		} <span class="hljs-keyword">else</span> {
-			module.log(<span class="hljs-string">"Already had UUID: "</span> + <span class="hljs-keyword">this</span>._uuid);
+			<span class="hljs-comment">/*cc.log("Already had UUID: " + this._uuid);*/</span>
 		}
 	}
 	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._uuid;

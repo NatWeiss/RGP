@@ -53,9 +53,6 @@ var LayerGame = (function(){
 			App.createButton(this, "ButtonBack.png", TAG_PAUSE, App.centralize(-430, -290),
 				cc.p(0, 0), cc.p(winSize.width * .5, winSize.height), 0.5, 0.25, 1.5);
 
-			// listen for when ads are finished
-			App.getAdsPlugin().setAdsListener(this);
-
 			// handle touch events
 			cc.eventManager.addListener({
 				event: cc.EventListener.TOUCH_ALL_AT_ONCE,
@@ -498,7 +495,7 @@ var LayerGame = (function(){
 				winSize = App.getWinSize(),
 				streak,
 				i,
-				len = App.getInt("total-drinking-streaks");
+				len = App.config["total-drinking-streaks"];
 
 			App.playEffect("res/drink.wav");
 
@@ -546,7 +543,7 @@ var LayerGame = (function(){
 			App.requestUrl("api/drink", this.onGetExchangeRate);
 			this.createGameMenu();
 		
-			this.breakCount = (this.breakCount + 1) % App.getInt("total-glass-breaking-sounds");
+			this.breakCount = (this.breakCount + 1) % App.config["total-glass-breaking-sounds"];
 		},
 		
 		watchVideo: function() {

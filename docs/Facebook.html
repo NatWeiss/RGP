@@ -282,7 +282,8 @@
         
           <div class='highlight'><pre>		module.loadPlayerImage = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> {</span>
 			<span class="hljs-keyword">var</span> request,
-				dim = App.scale(App.config[<span class="hljs-string">"social-plugin-profile-image-width"</span>] || <span class="hljs-number">100</span>);
+				config = App.config[<span class="hljs-string">"social-plugin"</span>],
+				dim = App.scale(config[<span class="hljs-string">"profile-image-width"</span>] || <span class="hljs-number">100</span>);
 			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.checkForFB()) {
 				request = <span class="hljs-string">"/"</span> + id + <span class="hljs-string">"/picture?redirect=0"</span> +
 					<span class="hljs-string">"&amp;width="</span> + dim + <span class="hljs-string">"&amp;height="</span> + dim;
