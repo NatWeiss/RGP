@@ -850,9 +850,9 @@ App.getUUID = function(length) {
 				this._uuid += Math.floor(Math.random() * 16).toString(16);
 			}
 			cc.sys.localStorage.setItem("uuid", this._uuid);
-			cc.log("Generated UUID for the first time: " + this._uuid);
+			/*cc.log("Generated UUID for the first time: " + this._uuid);*/
 		} else {
-			cc.log("Already had UUID: " + this._uuid);
+			/*cc.log("Already had UUID: " + this._uuid);*/
 		}
 	}
 	return this._uuid;
