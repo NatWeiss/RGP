@@ -476,6 +476,21 @@ if (typeof plugin.Facebook === "undefined") {
 					}
 				}, responseTimeout * 1000);
 			},
+
+//
+// ###  Facebook.showUI
+//
+// Shows the Facebook [UI](https://developers.facebook.com/docs/javascript/reference/FB.ui/) with the given settings, calling the running layer's `onSocialUIResponse` when finished.
+//
+// Requests dialog reference [here](https://developers.facebook.com/docs/reference/dialogs/requests/).
+//
+			showUI: function(infoObj) {
+				if (module.checkForFB()) {
+					FB.ui(infoObj, function(response){
+						App.callRunningLayer("onSocialUIResponse", response);
+					});
+				}
+			},
 			
 //
 // ###  Facebook.setDebugMode

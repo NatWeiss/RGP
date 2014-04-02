@@ -377,34 +377,30 @@ var LayerGame = (function(){
 		},
 		
 		createLemonadeGiver: function() {
-			//
-			// https://developers.facebook.com/docs/reference/dialogs/requests/
-			// https://developers.facebook.com/docs/games/requests
-			//
-			var self = this;
-			
-			FB.ui({
+			App.getSocialPlugin().showUI({
 				method: "apprequests",
 				message: "You've been gifted some lemonade!",
 				max_recipients: 1,
 				title: "Give Some Lemonade"
-			}, function(response){
-				var i,
-					len;
-				cc.log("Friend picker response: " + JSON.stringify(response));
+			});
+		},
+		
+		onSocialUIResponse: function(response) {
+			var i,
+				len;
+			cc.log("Friend picker response: " + JSON.stringify(response));
 
-				if (response && response.request && response.to.length) {
-					len = response.to.length;
-					for (i = 0; i < len; i += 1) {
-						cc.log(response.request + "_" + response.to[i]);
-					}
-					
-					self.addCurrencies(-1, 0);
-					App.requestUrl("api/give", self.onGetExchangeRate);
+			if (response && response.request && response.to.length) {
+				len = response.to.length;
+				for (i = 0; i < len; i += 1) {
+					cc.log(response.request + "_" + response.to[i]);
 				}
 				
-				self.enableButtons();
-			});
+				self.addCurrencies(-1, 0);
+				App.requestUrl("api/give", self.onGetExchangeRate);
+			}
+			
+			this.enableButtons();
 		},
 		
 		onEnter: function() {

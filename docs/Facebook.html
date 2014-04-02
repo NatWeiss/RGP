@@ -598,6 +598,21 @@
         
       
         
+        <h3 id="facebook-showui">Facebook.showUI</h3>
+<p>Shows the Facebook <a href="https://developers.facebook.com/docs/javascript/reference/FB.ui/">UI</a> with the given settings, calling the running layer’s <code>onSocialUIResponse</code> when finished.</p>
+<p>Requests dialog reference <a href="https://developers.facebook.com/docs/reference/dialogs/requests/">here</a>.</p>
+
+        
+          <div class='highlight'><pre>			showUI: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(infoObj)</span> {</span>
+				<span class="hljs-keyword">if</span> (module.checkForFB()) {
+					FB.ui(infoObj, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span>{</span>
+						App.callRunningLayer(<span class="hljs-string">"onSocialUIResponse"</span>, response);
+					});
+				}
+			},</pre></div>
+        
+      
+        
         <h3 id="facebook-setdebugmode">Facebook.setDebugMode</h3>
 <p>Sets debug mode to the given value. In debug mode, messages are logged to the console.</p>
 
