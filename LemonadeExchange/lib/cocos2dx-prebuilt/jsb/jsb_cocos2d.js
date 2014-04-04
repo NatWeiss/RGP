@@ -1,3 +1,4 @@
+cc.log("jsb_cocos2d.js");
 //
 // cocos2d constants
 //

@@ -1077,10 +1077,18 @@ App.boot = function(global) {
 		}
 	}
 
-	/* Embed main.js. */
+	/* Embed the equivalent of main.js for faster loading. */
 	cc.game.onStart = function(){
 		App.main();
 	};
+
+	/*
+	Native client boot happens like this:
+		1. cc.game.run() ->
+		2. cc.game.prepare() ->
+		3. jsb.js ->
+		4. jsb_cocos2d.js, etc...
+	*/
 	cc.game.run();
 };
 

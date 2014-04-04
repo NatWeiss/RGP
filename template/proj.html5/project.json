@@ -13,7 +13,7 @@
 		"extensions",
 		"pluginx",
 		"chipmunk"
-		],
+	],
 
     "jsList": [
 		"js/lib/aes.js",

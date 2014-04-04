@@ -36,6 +36,7 @@ var LayerGame = (function(){
 				winSize = App.getWinSize();
 			this._super();
 			
+			// test publish actions
 			//App.getSocialPlugin().requestPublishPermissions("publish_actions");
 
 			// menu
@@ -501,10 +502,6 @@ var LayerGame = (function(){
 				cc.RemoveSelf.create()
 			));
 			
-			if (typeof ActionDrink !== 'undefined') {
-				this.lemonade.runAction(ActionDrink.create(2.0));
-			}
-			
 			// streaks
 			for (i = 0; i < len; i += 1) {
 				streak = cc.Sprite.create("#Streak.png");
@@ -519,12 +516,51 @@ var LayerGame = (function(){
 					cc.EaseOut.create(cc.FadeOut.create(1), 3.0),
 					cc.RemoveSelf.create()
 				));
-				this.addChild(streak, 25);
+				this.addChild(streak, 1);
 			}
+			
+			// drink
+			this._originalLemonadePos = cc.p(this.lemonade.getPosition());
+			this._originalLemonadeRect = cc.rect(this.lemonade.getTextureRect());
+			this.schedule(this.animateDrink, 0, cc.REPEAT_FOREVER);
 
+			// smash glass
 			this.schedule(function(){self.smashGlass()}, 3.5, 0);
 			
 			this.drinkCount += 1;
+		},
+		
+		animateDrink: function(delta) {
+			var originalRect = this._originalLemonadeRect,
+				originalPos = this._originalLemonadePos,
+				rect = cc.rect(originalRect),
+				target = this.lemonade,
+				offset = cc.p(),
+				duration = 2,
+				percent,
+				y;
+
+			this.drinkElapsed = this.drinkElapsed || 0;
+			this.drinkElapsed += delta;
+			percent = Math.min(this.drinkElapsed / duration, 1);
+
+			rect.height *= (1.0 - percent);
+			y = originalRect.height - rect.height;
+			rect.y += y;
+			offset.y = -y * .5;
+			
+			if (rect.height == 0) {
+				target.setVisible(false);
+			} else if (!cc.rectEqualToRect(rect, target.getTextureRect())) {
+				target.setTextureRect(rect);
+				target.x = offset.x + originalPos.x;
+				target.y = offset.y + originalPos.y;
+			}
+			
+			if (this.drinkElapsed > duration) {
+				this.drinkElapsed = 0;
+				this.unschedule(this.animateDrink);
+			}
 		},
 		
 		smashGlass: function() {

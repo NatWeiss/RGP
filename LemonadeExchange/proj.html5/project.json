@@ -13,7 +13,7 @@
 		"extensions",
 		"pluginx",
 		"chipmunk"
-		],
+	],
 
     "jsList": [
 		"js/lib/aes.js",
@@ -25,6 +25,6 @@
 		"js/Config.js",
 		"js/LemonadeExchange.js",
 		"js/SceneMain.js",
-		"js/Loader.js", "js/LayerGame.js", "js/LayerMenu.js", "js/ActionDrink.js"
+		"js/Loader.js", "js/LayerGame.js", "js/LayerMenu.js"
     ]
 }
