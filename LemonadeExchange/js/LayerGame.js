@@ -1,4 +1,13 @@
 
+//
+// The layer which runs the game mechanics. Displays player details, current exchange rate and options to drink, give, buy, sell, earn or purchase lemonades and/or bux. Communicates with the server using the server's [api](Server.html).
+//
+
+//
+// ###  App
+//
+// Get or create the App object.
+//
 var LayerGame = (function(){
 	var TAG_PAUSE = 0,
 		TAG_DRINK_LEMONADE = 1,

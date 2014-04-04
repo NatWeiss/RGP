@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Server.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>Server.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="App.html">
+                    App.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Config.html">
+                    Config.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ConfigServer.html">
+                    ConfigServer.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LayerGame.html">
+                    LayerGame.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LayerMenu.html">
+                    LayerMenu.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LemonadeExchange.html">
+                    LemonadeExchange.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Loader.html">
+                    Loader.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="SceneMain.html">
+                    SceneMain.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="AdsMobFox.html">
+                    AdsMobFox.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Facebook.html">
+                    Facebook.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Server.html">
+                    Server.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+      
+        
+        <p>A simple Node.js game server that:</p>
+<ol>
+<li>Sends static files as requested.</li>
+<li>Provides a basic API to game clients.</li>
+</ol>
+<p>Keep it running on your own host using <a href="http://blog.nodejitsu.com/keep-a-nodejs-server-up-with-forever/">forever</a>. Remember the -g option on install.</p>
+<p>Here’s a <a href="http://stackoverflow.com/a/14272874">post</a> about using SSL and some example code:</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-comment">/*
+var https = require("https");
+var fs = require("fs");
+var protocolHttps = https.createServer({
+	key: fs.readFileSync("key.pem"),
+	cert: fs.readFileSync("cert.pem")
+}, server).listen(443);
+*/</span></pre></div>
+        
+      
+        
+        <h3 id="setup">Setup</h3>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> config = <span class="hljs-built_in">require</span>(<span class="hljs-string">"../js/ConfigServer"</span>),
+	express = <span class="hljs-built_in">require</span>(<span class="hljs-string">"express"</span>),
+	server = express(),
+	protocolHttp = server.listen(config.serverPort || <span class="hljs-number">8000</span>),
+	io = <span class="hljs-built_in">require</span>(<span class="hljs-string">"socket.io"</span>),
+	sockets = io.listen(protocolHttp),
+	self = {};
+
+console.log(<span class="hljs-string">"Started server on port: "</span> + config.serverPort);</pre></div>
+        
+      
+        
+        <h3 id="static-files">Static Files</h3>
+<p>Serve static files as requested.</p>
+
+        
+          <div class='highlight'><pre>server.use(<span class="hljs-string">"/"</span>, express.static(__dirname + <span class="hljs-string">"/../proj.html5/"</span>));
+server.use(<span class="hljs-string">"/lib/"</span>, express.static(__dirname + <span class="hljs-string">"/../lib/"</span>));
+server.use(<span class="hljs-string">"/res/"</span>, express.static(__dirname + <span class="hljs-string">"/../res/"</span>));
+server.use(<span class="hljs-string">"/js/"</span>, express.static(__dirname + <span class="hljs-string">"/../js/"</span>));
+server.get(<span class="hljs-string">"/"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req,res)</span>{</span>res.sendfile(<span class="hljs-string">"index.html"</span>);});</pre></div>
+        
+      
+        
+        <h3 id="public-api">Public API</h3>
+
+        
+          <div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+	<span class="hljs-keyword">var</span> i,
+		exchangeRate = <span class="hljs-number">10.0</span>,
+		minRate = <span class="hljs-number">0.01</span>,
+		maxRate = <span class="hljs-number">9999.99</span>,
+		multipliers = {
+			drink: <span class="hljs-number">1.5</span>,
+			give: <span class="hljs-number">0.75</span>,
+			buy: <span class="hljs-number">1.1</span>,
+			sell: <span class="hljs-number">0.909</span>
+		},
+		modifyExchangeRateRequest = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
+			<span class="hljs-keyword">var</span> components = req.url.split(<span class="hljs-string">"/"</span>),
+				method = components.pop();
+			exchangeRate *= multipliers[method];
+			exchangeRate = <span class="hljs-built_in">Math</span>.min(exchangeRate, maxRate);
+			exchangeRate = <span class="hljs-built_in">Math</span>.max(exchangeRate, minRate);
+			console.log(<span class="hljs-string">"["</span> + method + <span class="hljs-string">"] Exchange rate is now "</span> + exchangeRate);
+			res.send(exchangeRate + <span class="hljs-string">""</span>);
+		};</pre></div>
+        
+      
+        
+        <h3 id="-api-exchange-rate-"><code>api/exchange-rate</code></h3>
+<p>Returns the current exchange rate.</p>
+
+        
+          <div class='highlight'><pre>	server.get(<span class="hljs-string">"/api/exchange-rate"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req,res)</span>{</span>
+		res.send(exchangeRate + <span class="hljs-string">""</span>);
+	});</pre></div>
+        
+      
+        
+        <h3 id="-api-"><code>api/...</code></h3>
+<p>Provide <code>api/drink</code>, <code>api/give</code>, <code>api/buy</code> and <code>api/sell</code>, all of which modify the current exchange rate.</p>
+
+        
+          <div class='highlight'><pre>	<span class="hljs-keyword">for</span> (i <span class="hljs-keyword">in</span> multipliers) {
+		server.get(<span class="hljs-string">"/api/"</span> + i, modifyExchangeRateRequest);
+	}
+}());</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

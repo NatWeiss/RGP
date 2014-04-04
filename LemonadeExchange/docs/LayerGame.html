@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>LayerGame.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>LayerGame.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="App.html">
+                    App.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Config.html">
+                    Config.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ConfigServer.html">
+                    ConfigServer.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LayerGame.html">
+                    LayerGame.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LayerMenu.html">
+                    LayerMenu.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LemonadeExchange.html">
+                    LemonadeExchange.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Loader.html">
+                    Loader.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="SceneMain.html">
+                    SceneMain.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="AdsMobFox.html">
+                    AdsMobFox.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Facebook.html">
+                    Facebook.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Server.html">
+                    Server.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+      
+        
+        <p>The layer which runs the game mechanics. Displays player details, current exchange rate and options to drink, give, buy, sell, earn or purchase lemonades and/or bux. Communicates with the server using the server’s <a href="Server.html">api</a>.</p>
+
+        
+      
+        
+        <h3 id="app">App</h3>
+<p>Get or create the App object.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> LayerGame = (<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+	<span class="hljs-keyword">var</span> TAG_PAUSE = <span class="hljs-number">0</span>,
+		TAG_DRINK_LEMONADE = <span class="hljs-number">1</span>,
+		TAG_GIVE_LEMONADE = <span class="hljs-number">2</span>,
+		TAG_BUY_LEMONADE = <span class="hljs-number">3</span>,
+		TAG_SELL_LEMONADE = <span class="hljs-number">4</span>,
+		TAG_EARN_BUX = <span class="hljs-number">5</span>,
+		TAG_PURCHASE_BUX = <span class="hljs-number">6</span>,
+		TAG_SMALL_BUX_PACK = <span class="hljs-number">7</span>,
+		TAG_MEDIUM_BUX_PACK = <span class="hljs-number">8</span>,
+		TAG_LEMONADE = <span class="hljs-number">9</span>;
+
+	<span class="hljs-keyword">return</span> cc.Layer.extend( {
+		menu: <span class="hljs-literal">null</span>,
+		playerNameLabel: <span class="hljs-literal">null</span>,
+		lemonadesLabel: <span class="hljs-literal">null</span>,
+		buxLabel: <span class="hljs-literal">null</span>,
+		lemonadesIcon: <span class="hljs-literal">null</span>,
+		buxIcon: <span class="hljs-literal">null</span>,
+		rateLabel: <span class="hljs-literal">null</span>,
+		rateIcon: <span class="hljs-literal">null</span>,
+		glass: <span class="hljs-literal">null</span>,
+		lemonade: <span class="hljs-literal">null</span>,
+		exchangeRate: <span class="hljs-number">10</span>,
+		drinkCount: <span class="hljs-number">0</span>,
+		breakCount: <span class="hljs-number">0</span>,
+		newLemonadesAmount: <span class="hljs-number">0</span>,
+		newBuxAmount: <span class="hljs-number">0</span>,
+		animateLemonadesIncrement: <span class="hljs-number">1</span>,
+		animateBuxIncrement: <span class="hljs-number">5</span>,
+		animateCurrencyAmountRate: <span class="hljs-number">400</span>,
+
+		init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+				winSize = App.getWinSize();
+			<span class="hljs-keyword">this</span>._super();</pre></div>
+        
+      
+        
+        <p>test publish actions
+App.getSocialPlugin().requestPublishPermissions(“publish_actions”);</p>
+
+        
+      
+        
+        <p>menu</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.menu = cc.Menu.create();
+			<span class="hljs-keyword">this</span>.menu.setPosition(cc.p());
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.menu, <span class="hljs-number">1</span>);</pre></div>
+        
+      
+        
+        <p>everything else</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.createBg();
+			<span class="hljs-keyword">this</span>.createExchangeRate();
+			<span class="hljs-keyword">this</span>.createPlayerDetails();
+			<span class="hljs-keyword">this</span>.createGameMenu();</pre></div>
+        
+      
+        
+        <p>back</p>
+
+        
+          <div class='highlight'><pre>			App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonBack.png"</span>, TAG_PAUSE, App.centralize(-<span class="hljs-number">430</span>, -<span class="hljs-number">290</span>),
+				cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>), cc.p(winSize.width * <span class="hljs-number">.5</span>, winSize.height), <span class="hljs-number">0.5</span>, <span class="hljs-number">0.25</span>, <span class="hljs-number">1.5</span>);</pre></div>
+        
+      
+        
+        <p>handle touch events</p>
+
+        
+          <div class='highlight'><pre>			cc.eventManager.addListener({
+				event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+				onTouchesBegan: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(touches, event)</span> {</span>
+					<span class="hljs-keyword">if</span> (touches) {
+						App.showTouchCircle(self, touches[<span class="hljs-number">0</span>].getLocation());
+						App.playClickSound();
+					}
+				}
+			}, <span class="hljs-keyword">this</span>);
+
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+		},
+		
+		createBg: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> layer,
+				winSize = App.getWinSize();</pre></div>
+        
+      
+        
+        <p>color stripe</p>
+
+        
+          <div class='highlight'><pre>			layer = cc.LayerColor.create(cc.color(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">202</span>), App.scale(<span class="hljs-number">590</span>), winSize.height * <span class="hljs-number">1.2</span>);
+			layer.setPosition(winSize.width * <span class="hljs-number">.5</span> + App.scale(-<span class="hljs-number">144</span>), winSize.height * -<span class="hljs-number">.1</span>);
+			layer.setRotation(-<span class="hljs-number">2</span>);
+			<span class="hljs-keyword">this</span>.addChild(layer);
+			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
+				cc.EaseOut.create(cc.RotateBy.create(<span class="hljs-number">1.5</span>, <span class="hljs-number">1</span>), <span class="hljs-number">1.2</span>),
+				cc.EaseOut.create(cc.RotateBy.create(<span class="hljs-number">1.7</span>, -<span class="hljs-number">1</span>), <span class="hljs-number">1.2</span>)
+			)));
+			layer.setPositionX(layer.getPositionX() + winSize.width);
+			layer.runAction(cc.EaseOut.create(cc.MoveBy.create(<span class="hljs-number">0.5</span>, cc.p(-winSize.width, <span class="hljs-number">0</span>)), <span class="hljs-number">1.5</span>));
+		},
+		
+		createExchangeRate: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> pos = App.centralize(-<span class="hljs-number">120</span>, <span class="hljs-number">220</span>),
+				font = App.config[<span class="hljs-string">"font"</span>],
+				label,
+				sprite,
+				winSize = App.getWinSize();</pre></div>
+        
+      
+        
+        <p>exchange rate</p>
+
+        
+          <div class='highlight'><pre>			label = cc.LabelTTF.create(<span class="hljs-string">"1"</span>, font, App.scale(<span class="hljs-number">80</span>));
+			label.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			label.setPosition(pos);
+			<span class="hljs-keyword">this</span>.addChild(label, <span class="hljs-number">1</span>);
+
+			pos.x += App.scale(<span class="hljs-number">50</span>);
+			sprite = cc.Sprite.create(<span class="hljs-string">"#Lemonade.png"</span>);
+			sprite.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			sprite.setPosition(pos);
+			sprite.setScale(<span class="hljs-number">0.5</span>);
+			<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">1</span>);
+
+			pos.x += App.scale(<span class="hljs-number">80</span>);
+			<span class="hljs-keyword">this</span>.rateLabel = cc.LabelTTF.create(<span class="hljs-string">" = "</span>, font, App.scale(<span class="hljs-number">80</span>));
+			<span class="hljs-keyword">this</span>.rateLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.rateLabel.setPosition(pos);
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.rateLabel, <span class="hljs-number">1</span>);
+
+			<span class="hljs-keyword">this</span>.rateIcon = cc.Sprite.create(<span class="hljs-string">"#Bux.png"</span>);
+			<span class="hljs-keyword">this</span>.rateIcon.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.rateIcon.setPosition(pos);
+			<span class="hljs-keyword">this</span>.setRateIconPos();
+			<span class="hljs-keyword">this</span>.rateIcon.setScale(<span class="hljs-number">0.55</span>	);
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.rateIcon, <span class="hljs-number">1</span>);
+		},
+		
+		createPlayerDetails: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> sprite = <span class="hljs-literal">null</span>,
+				playerImageUrl = App.getSocialPlugin().getPlayerImageUrl(),
+				font = App.config[<span class="hljs-string">"font"</span>],
+				winSize = App.getWinSize(),
+				numBux = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_bux"</span>),
+				numLemonades = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_lemonades"</span>);
+			
+			<span class="hljs-keyword">this</span>.newLemonadesAmount = numLemonades;
+			<span class="hljs-keyword">this</span>.newBuxAmount = numBux;</pre></div>
+        
+      
+        
+        <p>player image</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">if</span> (playerImageUrl) {
+				sprite = cc.Sprite.create(playerImageUrl);
+				cc.log(<span class="hljs-string">"Player image: "</span> + sprite.getContentSize().width + <span class="hljs-string">"x"</span> + sprite.getContentSize().height);
+			}
+			<span class="hljs-keyword">if</span> (sprite === <span class="hljs-literal">null</span>) {
+				sprite = cc.Sprite.create(<span class="hljs-string">"#BlankAvatar.png"</span>);
+			}
+			sprite.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			sprite.setPosition(App.centralize(-<span class="hljs-number">420</span>, <span class="hljs-number">260</span>));
+			sprite.setScale(App.scale(<span class="hljs-number">60</span>) / sprite.getContentSize().width);
+			<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">1</span>);</pre></div>
+        
+      
+        
+        <p>player name</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerFirstName(), font, App.scale(<span class="hljs-number">48</span>));
+			<span class="hljs-keyword">this</span>.playerNameLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.playerNameLabel.setPosition(App.centralize(-<span class="hljs-number">330</span>, <span class="hljs-number">260</span>));
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.playerNameLabel, <span class="hljs-number">1</span>);</pre></div>
+        
+      
+        
+        <p>lemonades</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.lemonadesIcon = cc.Sprite.create(<span class="hljs-string">"#Lemonade.png"</span>);
+			<span class="hljs-keyword">this</span>.lemonadesIcon.setPosition(App.centralize(-<span class="hljs-number">395</span>, <span class="hljs-number">130</span>));
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.lemonadesIcon, <span class="hljs-number">1</span>);
+			<span class="hljs-keyword">this</span>.lemonadesIcon.setRotation(-<span class="hljs-number">2</span>);
+			<span class="hljs-keyword">this</span>.lemonadesIcon.runAction(cc.RepeatForever.create(cc.Sequence.create(
+				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.2</span>, <span class="hljs-number">4</span>), <span class="hljs-number">3.0</span>),
+				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.5</span>, -<span class="hljs-number">4</span>), <span class="hljs-number">3.0</span>)
+			)));
+			<span class="hljs-keyword">this</span>.lemonadesLabel = cc.LabelTTF.create(<span class="hljs-string">""</span> + numLemonades, font, App.scale(<span class="hljs-number">80</span>));
+			<span class="hljs-keyword">this</span>.lemonadesLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.lemonadesLabel.setPosition(App.centralize(-<span class="hljs-number">330</span>, <span class="hljs-number">130</span>));
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.lemonadesLabel, <span class="hljs-number">1</span>);</pre></div>
+        
+      
+        
+        <p>bux</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.buxIcon = cc.Sprite.create(<span class="hljs-string">"#Bux.png"</span>);
+			<span class="hljs-keyword">this</span>.buxIcon.setPosition(App.centralize(-<span class="hljs-number">395</span>, -<span class="hljs-number">20</span>));
+			<span class="hljs-keyword">this</span>.buxIcon.setScale(<span class="hljs-number">0.65</span>);
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.buxIcon, <span class="hljs-number">1</span>);
+			<span class="hljs-keyword">this</span>.buxIcon.setRotation(-<span class="hljs-number">4</span>);
+			<span class="hljs-keyword">this</span>.buxIcon.runAction(cc.RepeatForever.create(cc.Sequence.create(
+				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.2</span>, <span class="hljs-number">8</span>), <span class="hljs-number">3.0</span>),
+				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.5</span>, -<span class="hljs-number">8</span>), <span class="hljs-number">3.0</span>)
+			)));
+			<span class="hljs-keyword">this</span>.buxLabel = cc.LabelTTF.create(<span class="hljs-string">""</span> + numBux, font, App.scale(<span class="hljs-number">60</span>));
+			<span class="hljs-keyword">this</span>.buxLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.buxLabel.setPosition(App.centralize(-<span class="hljs-number">310</span>, -<span class="hljs-number">20</span>));
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.buxLabel, <span class="hljs-number">1</span>);
+		},
+		
+		createGameMenu: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> pos = App.centralize(-<span class="hljs-number">120</span>, <span class="hljs-number">70</span>),
+				ySpacing,
+				delayPer,
+				winSize = App.getWinSize(),
+				numBux = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_bux"</span>),
+				numLemonades = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_lemonades"</span>);</pre></div>
+        
+      
+        
+        <p>buttons</p>
+
+        
+          <div class='highlight'><pre>			delayPer = <span class="hljs-number">0.25</span>;
+			ySpacing = App.scale(<span class="hljs-number">115</span>);
+			App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonDrink.png"</span>, TAG_DRINK_LEMONADE, pos,
+				cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, delayPer * <span class="hljs-number">1</span>, <span class="hljs-number">1.5</span>);
+			pos.y -= ySpacing;
+			App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonGive.png"</span>, TAG_GIVE_LEMONADE, pos,
+				cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, delayPer * <span class="hljs-number">2</span>, <span class="hljs-number">1.5</span>);
+			pos.y -= ySpacing;
+			App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonEarn.png"</span>, TAG_EARN_BUX, pos,
+				cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, delayPer * <span class="hljs-number">3</span>, <span class="hljs-number">1.5</span>);
+
+			pos = App.centralize(<span class="hljs-number">154</span>, <span class="hljs-number">70</span>);
+			App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonBuy.png"</span>, TAG_BUY_LEMONADE, pos,
+				cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, delayPer * <span class="hljs-number">4</span>, <span class="hljs-number">1.5</span>);
+			pos.y -= ySpacing;
+			App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonSell.png"</span>, TAG_SELL_LEMONADE, pos,
+				cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, delayPer * <span class="hljs-number">5</span>, <span class="hljs-number">1.5</span>);
+			pos.y -= ySpacing;
+			App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonPurchase.png"</span>, TAG_PURCHASE_BUX, pos,
+				cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, delayPer * <span class="hljs-number">6</span>, <span class="hljs-number">1.5</span>);
+			
+			<span class="hljs-keyword">this</span>.enableButtons();
+		},
+		
+		removeMenuItems: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(tags)</span> {</span>
+			<span class="hljs-keyword">var</span> i,
+				button;
+			<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; tags.length; i += <span class="hljs-number">1</span>) {
+				button = <span class="hljs-keyword">this</span>.menu.getChildByTag(tags[i]);
+				<span class="hljs-keyword">if</span> (button) {
+					button.removeFromParent();
+				}
+			}
+		},
+		
+		removeGameMenu: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">this</span>.removeMenuItems([
+				TAG_DRINK_LEMONADE,
+				TAG_GIVE_LEMONADE,
+				TAG_EARN_BUX,
+				TAG_BUY_LEMONADE,
+				TAG_SELL_LEMONADE,
+				TAG_PURCHASE_BUX
+			]);
+		},
+		
+		createPurchaseMenu: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> pos = App.centralize(-<span class="hljs-number">130</span>, -<span class="hljs-number">30</span>),
+				item,
+				delayPer,
+				button,
+				winSize = App.getWinSize();</pre></div>
+        
+      
+        
+        <p>buttons</p>
+
+        
+          <div class='highlight'><pre>			delayPer = <span class="hljs-number">0.25</span>;
+			item = Soomla.storeInfo.getItemByItemId(<span class="hljs-string">"small_bux_pack"</span>);
+			button = App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonProduct.png"</span>, TAG_SMALL_BUX_PACK, pos,
+				cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, delayPer * <span class="hljs-number">1</span>, <span class="hljs-number">1.5</span>);
+			App.addCurrencyToButton(button,
+				item.currency_amount,
+				App.localizeCurrency(item.purchasableItem.marketItem.price),
+				<span class="hljs-string">"small_bux_pack.png"</span>);
+
+			pos = App.centralize(<span class="hljs-number">154</span>, -<span class="hljs-number">30</span>);
+			item = Soomla.storeInfo.getItemByItemId(<span class="hljs-string">"medium_bux_pack"</span>);
+			button = App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonProduct.png"</span>, TAG_MEDIUM_BUX_PACK, pos,
+				cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, delayPer * <span class="hljs-number">2</span>, <span class="hljs-number">1.5</span>);
+			App.addCurrencyToButton(button,
+				item.currency_amount,
+				App.localizeCurrency(item.purchasableItem.marketItem.price),
+				<span class="hljs-string">"medium_bux_pack.png"</span>);
+		},
+		
+		removePurchaseMenu: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">this</span>.removeMenuItems([
+				TAG_SMALL_BUX_PACK,
+				TAG_MEDIUM_BUX_PACK
+			]);
+		},
+		
+		getFriendName: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> plugin = App.getSocialPlugin(),
+				id = plugin.getRandomFriendId(),
+				friends;
+			<span class="hljs-keyword">if</span> (id &amp;&amp; id &gt; <span class="hljs-number">0</span>) {
+				<span class="hljs-keyword">return</span> plugin.getPlayerName(id);
+			}
+			friends = App.config[<span class="hljs-string">"anonymous-friends"</span>];
+			<span class="hljs-keyword">if</span> (friends) {
+				id = App.rand(friends.length);
+				<span class="hljs-keyword">return</span> friends[id];
+			}
+			<span class="hljs-keyword">return</span> <span class="hljs-string">"Bruce Lee"</span>;
+		},
+		
+		createExchangeItems: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(verb)</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+				label,
+				sprite,
+				friendName = <span class="hljs-keyword">this</span>.getFriendName(),
+				font = App.config[<span class="hljs-string">"font"</span>],
+				winSize = App.getWinSize(),
+				fontSize = App.scale(<span class="hljs-number">50</span>),
+				ySpacing = App.scale(<span class="hljs-number">70</span>),
+				pos = App.centralize(<span class="hljs-number">120</span>, <span class="hljs-number">120</span>);
+			
+			<span class="hljs-keyword">this</span>.exchangeVerb = verb;
+			<span class="hljs-keyword">this</span>.exchangeLayer = cc.Layer.create();
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.exchangeLayer, <span class="hljs-number">1</span>);
+			
+			label = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, fontSize);
+			label.setAnchorPoint(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>);
+			label.setPosition(pos);
+			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(label, <span class="hljs-number">1</span>);
+
+			pos.y -= ySpacing;
+			label = cc.LabelTTF.create(<span class="hljs-string">"wants to "</span> + <span class="hljs-keyword">this</span>.exchangeVerb + <span class="hljs-string">" 1 "</span>, font, fontSize);
+			label.setAnchorPoint(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>);
+			label.setPosition(pos);
+			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(label, <span class="hljs-number">1</span>);
+
+			sprite = cc.Sprite.create(<span class="hljs-string">"#Lemonade.png"</span>);
+			sprite.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			sprite.setPosition(label.getPositionX() + label.getContentSize().width * <span class="hljs-number">.5</span>, label.getPositionY());
+			sprite.setScale(<span class="hljs-number">0.55</span>);
+			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(sprite, <span class="hljs-number">1</span>);
+
+			pos.y -= ySpacing;
+			<span class="hljs-keyword">this</span>.finishExchangeSprite1 = cc.Sprite.create(<span class="hljs-string">"#Bux.png"</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite1.setAnchorPoint(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite1.setPosition(pos);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite1.setScale(<span class="hljs-number">0.25</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite1.runAction(cc.RepeatForever.create(
+				cc.RotateBy.create(<span class="hljs-number">1.0</span>, <span class="hljs-number">360</span>)
+			));
+			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(<span class="hljs-keyword">this</span>.finishExchangeSprite1, <span class="hljs-number">1</span>);
+			
+			pos.y -= ySpacing;
+			<span class="hljs-keyword">this</span>.finishExchangeLabel1 = cc.LabelTTF.create(<span class="hljs-keyword">this</span>.exchangeVerb === <span class="hljs-string">"buy"</span> ? <span class="hljs-string">"Bought by"</span> : <span class="hljs-string">"Sold to"</span>, font, fontSize);
+			<span class="hljs-keyword">this</span>.finishExchangeLabel1.setPosition(pos);
+			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(<span class="hljs-keyword">this</span>.finishExchangeLabel1, <span class="hljs-number">1</span>);
+
+			pos.y -= ySpacing;
+			<span class="hljs-keyword">this</span>.finishExchangeLabel2 = cc.LabelTTF.create(friendName, font, fontSize);
+			<span class="hljs-keyword">this</span>.finishExchangeLabel2.setPosition(pos);
+			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(<span class="hljs-keyword">this</span>.finishExchangeLabel2, <span class="hljs-number">1</span>);
+
+			pos.y -= ySpacing;
+			<span class="hljs-keyword">this</span>.finishExchangeLabel3 = cc.LabelTTF.create(<span class="hljs-string">"for "</span> + <span class="hljs-keyword">this</span>.exchangeRate + <span class="hljs-string">" "</span>, font, fontSize);
+			<span class="hljs-keyword">this</span>.finishExchangeLabel3.setPosition(pos);
+			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(<span class="hljs-keyword">this</span>.finishExchangeLabel3, <span class="hljs-number">1</span>);
+			
+			<span class="hljs-keyword">this</span>.finishExchangeSprite2 = cc.Sprite.create(<span class="hljs-string">"#Bux.png"</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite2.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite2.setPosition(<span class="hljs-keyword">this</span>.finishExchangeLabel3.getPositionX() + <span class="hljs-keyword">this</span>.finishExchangeLabel3.getContentSize().width * <span class="hljs-number">.5</span>, <span class="hljs-keyword">this</span>.finishExchangeLabel3.getPositionY());
+			<span class="hljs-keyword">this</span>.finishExchangeSprite2.setScale(<span class="hljs-number">0.55</span>);
+			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(<span class="hljs-keyword">this</span>.finishExchangeSprite2, <span class="hljs-number">1</span>);
+			
+			<span class="hljs-keyword">this</span>.finishExchangeLabel1.setVisible(<span class="hljs-literal">false</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeLabel2.setVisible(<span class="hljs-literal">false</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeLabel3.setVisible(<span class="hljs-literal">false</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite2.setVisible(<span class="hljs-literal">false</span>);
+			
+			<span class="hljs-keyword">this</span>.schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>self.finishExchange();}, <span class="hljs-number">5.0</span>, <span class="hljs-number">0</span>);
+		},
+		
+		finishExchange: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+			
+			<span class="hljs-keyword">this</span>.finishExchangeLabel1.setVisible(<span class="hljs-literal">true</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeLabel2.setVisible(<span class="hljs-literal">true</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeLabel3.setVisible(<span class="hljs-literal">true</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite2.setVisible(<span class="hljs-literal">true</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite1.setVisible(<span class="hljs-literal">false</span>);
+			
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.exchangeVerb === <span class="hljs-string">"buy"</span>) {
+				<span class="hljs-keyword">this</span>.addCurrencies(<span class="hljs-number">1</span>, -<span class="hljs-keyword">this</span>.exchangeRate);
+				App.requestUrl(<span class="hljs-string">"api/buy"</span>, <span class="hljs-keyword">this</span>.onGetExchangeRate);
+			} <span class="hljs-keyword">else</span> {
+				<span class="hljs-keyword">this</span>.addCurrencies(-<span class="hljs-number">1</span>, <span class="hljs-keyword">this</span>.exchangeRate);
+				App.requestUrl(<span class="hljs-string">"api/sell"</span>, <span class="hljs-keyword">this</span>.onGetExchangeRate);
+			}
+
+			<span class="hljs-keyword">this</span>.schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+				self.exchangeLayer.removeFromParent();
+				self.createGameMenu();
+			}, <span class="hljs-number">4.0</span>, <span class="hljs-number">0</span>);
+		},
+		
+		createLemonadeGiver: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			App.getSocialPlugin().showUI({
+				method: <span class="hljs-string">"apprequests"</span>,
+				message: <span class="hljs-string">"You've been gifted some lemonade!"</span>,
+				max_recipients: <span class="hljs-number">1</span>,
+				title: <span class="hljs-string">"Give Some Lemonade"</span>
+			});
+		},
+		
+		onSocialUIResponse: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> {</span>
+			<span class="hljs-keyword">var</span> i,
+				len;
+			cc.log(<span class="hljs-string">"Friend picker response: "</span> + <span class="hljs-built_in">JSON</span>.stringify(response));
+
+			<span class="hljs-keyword">if</span> (response &amp;&amp; response.request &amp;&amp; response.to.length) {
+				len = response.to.length;
+				<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; len; i += <span class="hljs-number">1</span>) {
+					cc.log(response.request + <span class="hljs-string">"_"</span> + response.to[i]);
+				}
+				
+				self.addCurrencies(-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+				App.requestUrl(<span class="hljs-string">"api/give"</span>, self.onGetExchangeRate);
+			}
+			
+			<span class="hljs-keyword">this</span>.enableButtons();
+		},
+		
+		onEnter: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">this</span>._super();
+			App.requestUrl(<span class="hljs-string">"api/exchange-rate"</span>, <span class="hljs-keyword">this</span>.onGetExchangeRate);
+		},
+		
+		setRateIconPos: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> x = <span class="hljs-keyword">this</span>.rateLabel.getPositionX();
+			x += <span class="hljs-keyword">this</span>.rateLabel.getContentSize().width;
+			<span class="hljs-keyword">this</span>.rateIcon.setPositionX(x);
+		},
+		
+		giveLemonade: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> numLemonades = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_lemonades"</span>);
+			<span class="hljs-keyword">if</span> (numLemonades &lt;= <span class="hljs-number">0</span>) {
+				App.playEffect(<span class="hljs-string">"res/music-stop.wav"</span>);
+				<span class="hljs-keyword">return</span>;
+			}
+
+			<span class="hljs-keyword">this</span>.slideGlass();
+		},
+		
+		slideGlass: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+				glassSize,
+				winSize = App.getWinSize();
+
+			App.playEffect(<span class="hljs-string">"res/glass-sliding.wav"</span>);
+
+			<span class="hljs-keyword">this</span>.addCurrencies(-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.glass !== <span class="hljs-literal">null</span>) {
+				<span class="hljs-keyword">this</span>.glass.removeFromParent();
+				<span class="hljs-keyword">this</span>.glass = <span class="hljs-literal">null</span>;
+			}</pre></div>
+        
+      
+        
+        <p>glass</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.glass = cc.Sprite.create(<span class="hljs-string">"#GlassEmpty.png"</span>);
+			glassSize = <span class="hljs-keyword">this</span>.glass.getContentSize()
+			<span class="hljs-keyword">this</span>.glass.setTag(TAG_LEMONADE);
+			<span class="hljs-keyword">this</span>.glass.setPosition(App.centralize(<span class="hljs-number">100</span>, <span class="hljs-number">0</span>));
+			<span class="hljs-keyword">this</span>.glass.setScale(<span class="hljs-number">0.35</span>);
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.glass, <span class="hljs-number">2</span>);
+
+			<span class="hljs-keyword">this</span>.slideIn(<span class="hljs-keyword">this</span>.glass);
+			<span class="hljs-keyword">this</span>.schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+				self.showTouchArea(self.glass.getPosition());
+			}, <span class="hljs-number">1.0</span>, <span class="hljs-number">0</span>);</pre></div>
+        
+      
+        
+        <p>lemonade</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.lemonade = cc.Sprite.create(<span class="hljs-string">"#GlassFull.png"</span>);
+			<span class="hljs-keyword">this</span>.lemonade.setAnchorPoint(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.lemonade.setPosition(glassSize.width * <span class="hljs-number">.5</span>, glassSize.height * <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.glass.addChild(<span class="hljs-keyword">this</span>.lemonade, <span class="hljs-number">1</span>);
+			
+			<span class="hljs-keyword">this</span>.schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>self.drinkLemonade();}, <span class="hljs-number">1.0</span>, <span class="hljs-number">0</span>);
+		},
+		
+		slideIn: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(node)</span> {</span>
+			<span class="hljs-keyword">var</span> winSize = App.getWinSize(),
+				movement = cc.p(-winSize.width, <span class="hljs-number">0</span>);
+			
+			node.setPosition(cc.pSub(node.getPosition(), movement));
+			node.runAction(cc.Sequence.create(
+				cc.EaseOut.create(cc.MoveBy.create(<span class="hljs-number">0.7</span>, movement), <span class="hljs-number">1.5</span>),
+				cc.RotateBy.create(<span class="hljs-number">0.08</span>, -<span class="hljs-number">5</span>, <span class="hljs-number">0</span>),
+				cc.RotateBy.create(<span class="hljs-number">0.08</span>, <span class="hljs-number">5</span>, <span class="hljs-number">0</span>)
+			));
+		},
+		
+		drinkLemonade: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+				winSize = App.getWinSize();
+
+			cc.audioEngine.setMusicVolume(<span class="hljs-number">0.75</span>);
+
+			<span class="hljs-keyword">this</span>.glass.runAction(cc.Spawn.create(
+				cc.ScaleTo.create(<span class="hljs-number">1.0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>),
+				cc.MoveTo.create(<span class="hljs-number">1.0</span>, cc.p(winSize.width * <span class="hljs-number">.5</span>, winSize.height * <span class="hljs-number">.5</span>))
+			));
+
+			<span class="hljs-keyword">this</span>.schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>self.drinkingLemonade();}, <span class="hljs-number">1.0</span>, <span class="hljs-number">0</span>);
+		},
+		
+		drinkingLemonade: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+				winSize = App.getWinSize(),
+				streak,
+				i,
+				len = App.config[<span class="hljs-string">"total-drinking-streaks"</span>];
+
+			App.playEffect(<span class="hljs-string">"res/drink.wav"</span>);
+
+			<span class="hljs-keyword">this</span>.glass.runAction(cc.Sequence.create(
+				cc.DelayTime.create(<span class="hljs-number">3.2</span>),
+				cc.MoveBy.create(<span class="hljs-number">0.2</span>, cc.p(<span class="hljs-number">0</span>, -winSize.height * <span class="hljs-number">2</span>)),
+				cc.RemoveSelf.create()
+			));</pre></div>
+        
+      
+        
+        <p>streaks</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; len; i += <span class="hljs-number">1</span>) {
+				streak = cc.Sprite.create(<span class="hljs-string">"#Streak.png"</span>);
+				streak.setAnchorPoint(<span class="hljs-number">.5</span>, -<span class="hljs-number">.5</span>);
+				streak.setPosition(winSize.width * <span class="hljs-number">.5</span>, winSize.height * <span class="hljs-number">.5</span>);
+				streak.setRotation((i / len) * <span class="hljs-number">360</span>);
+				streak.setOpacity(<span class="hljs-number">0</span>);
+				streak.runAction(cc.RotateBy.create(<span class="hljs-number">3</span>, <span class="hljs-number">360</span>, <span class="hljs-number">360</span>));
+				streak.runAction(cc.Sequence.create(
+					cc.EaseIn.create(cc.FadeTo.create(<span class="hljs-number">0.5</span>, i % <span class="hljs-number">2</span> === <span class="hljs-number">0</span> ? <span class="hljs-number">255</span> : <span class="hljs-number">196</span>), <span class="hljs-number">1.5</span>),
+					cc.DelayTime.create(<span class="hljs-number">1.5</span>),
+					cc.EaseOut.create(cc.FadeOut.create(<span class="hljs-number">1</span>), <span class="hljs-number">3.0</span>),
+					cc.RemoveSelf.create()
+				));
+				<span class="hljs-keyword">this</span>.addChild(streak, <span class="hljs-number">1</span>);
+			}</pre></div>
+        
+      
+        
+        <p>drink</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>._originalLemonadePos = cc.p(<span class="hljs-keyword">this</span>.lemonade.getPosition());
+			<span class="hljs-keyword">this</span>._originalLemonadeRect = cc.rect(<span class="hljs-keyword">this</span>.lemonade.getTextureRect());
+			<span class="hljs-keyword">this</span>.schedule(<span class="hljs-keyword">this</span>.animateDrink, <span class="hljs-number">0</span>, cc.REPEAT_FOREVER);</pre></div>
+        
+      
+        
+        <p>smash glass</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>self.smashGlass()}, <span class="hljs-number">3.5</span>, <span class="hljs-number">0</span>);
+			
+			<span class="hljs-keyword">this</span>.drinkCount += <span class="hljs-number">1</span>;
+		},
+		
+		animateDrink: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(delta)</span> {</span>
+			<span class="hljs-keyword">var</span> originalRect = <span class="hljs-keyword">this</span>._originalLemonadeRect,
+				originalPos = <span class="hljs-keyword">this</span>._originalLemonadePos,
+				rect = cc.rect(originalRect),
+				target = <span class="hljs-keyword">this</span>.lemonade,
+				offset = cc.p(),
+				duration = <span class="hljs-number">2</span>,
+				percent,
+				y;
+
+			<span class="hljs-keyword">this</span>.drinkElapsed = <span class="hljs-keyword">this</span>.drinkElapsed || <span class="hljs-number">0</span>;
+			<span class="hljs-keyword">this</span>.drinkElapsed += delta;
+			percent = <span class="hljs-built_in">Math</span>.min(<span class="hljs-keyword">this</span>.drinkElapsed / duration, <span class="hljs-number">1</span>);
+
+			rect.height *= (<span class="hljs-number">1.0</span> - percent);
+			y = originalRect.height - rect.height;
+			rect.y += y;
+			offset.y = -y * <span class="hljs-number">.5</span>;
+			
+			<span class="hljs-keyword">if</span> (rect.height == <span class="hljs-number">0</span>) {
+				target.setVisible(<span class="hljs-literal">false</span>);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!cc.rectEqualToRect(rect, target.getTextureRect())) {
+				target.setTextureRect(rect);
+				target.x = offset.x + originalPos.x;
+				target.y = offset.y + originalPos.y;
+			}
+			
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.drinkElapsed &gt; duration) {
+				<span class="hljs-keyword">this</span>.drinkElapsed = <span class="hljs-number">0</span>;
+				<span class="hljs-keyword">this</span>.unschedule(<span class="hljs-keyword">this</span>.animateDrink);
+			}
+		},
+		
+		smashGlass: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+
+			<span class="hljs-keyword">this</span>.lemonade = <span class="hljs-literal">null</span>;
+			<span class="hljs-keyword">this</span>.glass = <span class="hljs-literal">null</span>;
+			
+			App.playEffect(<span class="hljs-string">"res/glass-breaking"</span> + (<span class="hljs-number">1</span> + <span class="hljs-keyword">this</span>.breakCount) + <span class="hljs-string">".wav"</span>);
+			cc.audioEngine.setMusicVolume(<span class="hljs-number">1</span>);
+
+			App.requestUrl(<span class="hljs-string">"api/drink"</span>, <span class="hljs-keyword">this</span>.onGetExchangeRate);
+			<span class="hljs-keyword">this</span>.createGameMenu();
+		
+			<span class="hljs-keyword">this</span>.breakCount = (<span class="hljs-keyword">this</span>.breakCount + <span class="hljs-number">1</span>) % App.config[<span class="hljs-string">"total-glass-breaking-sounds"</span>];
+		},
+		
+		watchVideo: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			App.getAdsPlugin().showAds({
+				type: plugin.AdsType.FullScreenAd,
+				size: <span class="hljs-number">0</span>,
+				position: plugin.AdsPos.Center
+			});
+		},
+		
+		showTouchArea: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(pos)</span> {</span>
+			<span class="hljs-keyword">var</span> circle;
+			
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> pos === <span class="hljs-string">"undefined"</span>) {
+				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.menu &amp;&amp; <span class="hljs-keyword">this</span>.menu._selectedItem) {
+					pos = <span class="hljs-keyword">this</span>.menu._selectedItem.getPosition();
+				} <span class="hljs-keyword">else</span> {
+					<span class="hljs-keyword">return</span>;
+				}
+			}
+			
+			circle = cc.Sprite.create(<span class="hljs-string">"#TouchCircle.png"</span>);
+			circle.setPosition(pos);
+			circle.setScale(<span class="hljs-number">2</span>);
+			circle.setOpacity(<span class="hljs-number">96</span>);
+			circle.runAction(cc.Sequence.create(
+				cc.Spawn.create(
+					cc.FadeOut.create(<span class="hljs-number">1</span>),
+					cc.ScaleBy.create(<span class="hljs-number">1</span>, <span class="hljs-number">1.5</span>, <span class="hljs-number">1.5</span>)
+				),
+				cc.RemoveSelf.create()
+			));
+			<span class="hljs-keyword">this</span>.addChild(circle, <span class="hljs-number">10</span>);
+		},
+		
+		addCurrencies: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(lemonades, bux)</span> {</span>
+			lemonades = <span class="hljs-built_in">parseInt</span>(lemonades);
+			bux = <span class="hljs-built_in">parseInt</span>(bux);
+
+			<span class="hljs-keyword">if</span> (lemonades) {
+				App.giveItem(<span class="hljs-string">"currency_lemonades"</span>, lemonades);
+			}
+			<span class="hljs-keyword">if</span> (bux) {
+				App.giveItem(<span class="hljs-string">"currency_bux"</span>, bux);
+			}
+			<span class="hljs-keyword">if</span> (lemonades || bux) {
+				<span class="hljs-keyword">this</span>.onCurrencyUpdate();
+			}
+		},
+		
+		menuButtonCallback: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(sender)</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+				tag = sender.getTag(),
+				numBux = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_bux"</span>),
+				numLemonades = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_lemonades"</span>);
+			
+			App.playClickSound();
+			App.showTouchCircle(<span class="hljs-keyword">this</span>, <span class="hljs-literal">null</span>, sender);
+			<span class="hljs-keyword">this</span>.enableButton(tag, <span class="hljs-literal">false</span>);
+			
+			<span class="hljs-keyword">if</span> (tag == TAG_PAUSE) {
+				<span class="hljs-keyword">this</span>.getParent().createLayer(LayerMenu, <span class="hljs-literal">true</span>);
+			}
+			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_DRINK_LEMONADE) {
+				<span class="hljs-keyword">if</span> (numLemonades &gt; <span class="hljs-number">0</span>) {
+					<span class="hljs-keyword">this</span>.removeGameMenu();
+					<span class="hljs-keyword">this</span>.giveLemonade();
+				}
+			}
+			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_GIVE_LEMONADE) {
+				<span class="hljs-keyword">if</span> (numLemonades &gt; <span class="hljs-number">0</span>) {
+					<span class="hljs-keyword">this</span>.createLemonadeGiver();
+				}
+			}
+			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_BUY_LEMONADE) {
+				<span class="hljs-keyword">if</span> (numBux &gt; <span class="hljs-keyword">this</span>.exchangeRate) {
+					<span class="hljs-keyword">this</span>.removeGameMenu();
+					<span class="hljs-keyword">this</span>.createExchangeItems(<span class="hljs-string">"buy"</span>);
+				}
+			}
+			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_SELL_LEMONADE) {
+				<span class="hljs-keyword">if</span> (numLemonades &gt; <span class="hljs-number">0</span>) {
+					<span class="hljs-keyword">this</span>.removeGameMenu();
+					<span class="hljs-keyword">this</span>.createExchangeItems(<span class="hljs-string">"sell"</span>);
+				}
+			}
+			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_PURCHASE_BUX) {
+				<span class="hljs-keyword">this</span>.removeGameMenu();
+				<span class="hljs-keyword">this</span>.createPurchaseMenu();
+			}
+			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_EARN_BUX) {
+				<span class="hljs-keyword">this</span>.watchVideo();
+			}
+			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_SMALL_BUX_PACK) {
+				Soomla.storeController.buyMarketItem(<span class="hljs-string">"small_bux_pack"</span>);
+			}
+			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_MEDIUM_BUX_PACK) {
+				Soomla.storeController.buyMarketItem(<span class="hljs-string">"medium_bux_pack"</span>);
+			}
+		},
+		
+		onGetMyPlayerName: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
+			<span class="hljs-keyword">this</span>.playerNameLabel.setString(name);
+		},
+		
+		enableButton: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(tag, enabled)</span> {</span>
+			<span class="hljs-keyword">var</span> button = <span class="hljs-keyword">this</span>.menu.getChildByTag(tag);
+			<span class="hljs-keyword">if</span> (button) {
+				button.getNormalImage().setColor(enabled ? cc.color(<span class="hljs-number">255</span>,<span class="hljs-number">255</span>,<span class="hljs-number">255</span>) : cc.color(<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>));
+				button.setEnabled(enabled);
+			}
+		},
+		
+		onCurrencyUpdate: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+				numAnimations,
+				numBux = <span class="hljs-built_in">parseInt</span>(<span class="hljs-keyword">this</span>.buxLabel.getString()),
+				numLemonades = <span class="hljs-built_in">parseInt</span>(<span class="hljs-keyword">this</span>.lemonadesLabel.getString());
+			
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.newBuxAmount || <span class="hljs-keyword">this</span>.newLemonadesAmount) {
+				<span class="hljs-keyword">this</span>.unscheduleAllCallbacks();
+				<span class="hljs-keyword">this</span>.buxLabel.setString(<span class="hljs-keyword">this</span>.newBuxAmount);
+				<span class="hljs-keyword">this</span>.lemonadesLabel.setString(<span class="hljs-keyword">this</span>.newLemonadesAmount);
+			}
+			
+			<span class="hljs-keyword">this</span>.newBuxAmount = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_bux"</span>),
+			<span class="hljs-keyword">this</span>.newLemonadesAmount = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_lemonades"</span>);
+			
+			<span class="hljs-keyword">this</span>.animateBuxIncrement = <span class="hljs-built_in">Math</span>.max(<span class="hljs-built_in">parseInt</span>(<span class="hljs-built_in">Math</span>.abs(<span class="hljs-keyword">this</span>.newBuxAmount - numBux) / <span class="hljs-number">10</span>), <span class="hljs-number">1</span>);
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.newBuxAmount &lt; numBux) {
+				<span class="hljs-keyword">this</span>.animateBuxIncrement = -<span class="hljs-keyword">this</span>.animateBuxIncrement;
+			}
+			<span class="hljs-keyword">this</span>.animateLemonadesIncrement = <span class="hljs-number">1</span>;
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.newLemonadesAmount &lt; numLemonades) {
+				<span class="hljs-keyword">this</span>.animateLemonadesIncrement = -<span class="hljs-keyword">this</span>.animateLemonadesIncrement;
+			}
+
+			numAnimations = <span class="hljs-built_in">parseInt</span>(<span class="hljs-built_in">Math</span>.max(
+				<span class="hljs-built_in">Math</span>.abs((<span class="hljs-keyword">this</span>.newBuxAmount - numBux) / <span class="hljs-keyword">this</span>.animateBuxIncrement),
+				<span class="hljs-built_in">Math</span>.abs((<span class="hljs-keyword">this</span>.newLemonadesAmount - numLemonades) / <span class="hljs-keyword">this</span>.animateLemonadesIncrement)
+			)) - <span class="hljs-number">1</span>;
+
+			<span class="hljs-keyword">this</span>.enableButtons();
+			
+			self.animateCurrencyAmounts();
+			<span class="hljs-keyword">if</span> (numAnimations &gt; <span class="hljs-number">0</span>) {
+				<span class="hljs-keyword">this</span>.schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+					self.animateCurrencyAmounts();
+				}, self.animateCurrencyAmountRate / <span class="hljs-number">1000</span>, numAnimations);
+			}
+		},
+		
+		animateCurrencyAmounts: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> sprite,
+				currentBux = <span class="hljs-built_in">parseInt</span>(<span class="hljs-keyword">this</span>.buxLabel.getString()),
+				currentLemonades = <span class="hljs-built_in">parseInt</span>(<span class="hljs-keyword">this</span>.lemonadesLabel.getString()),
+				sounds;
+			
+			<span class="hljs-keyword">if</span> (currentBux !== <span class="hljs-keyword">this</span>.newBuxAmount) {
+				<span class="hljs-keyword">if</span> (currentBux &lt; <span class="hljs-keyword">this</span>.newBuxAmount) {
+					<span class="hljs-keyword">this</span>.animateCurrencyAdd(<span class="hljs-keyword">this</span>.buxIcon, <span class="hljs-string">"Bux.png"</span>);
+
+					sounds = App.config[<span class="hljs-string">"bux-sounds"</span>];
+					App.playEffect(sounds[App.rand(sounds.length)]);
+				}
+				currentBux += <span class="hljs-keyword">this</span>.animateBuxIncrement;
+				currentBux = <span class="hljs-built_in">Math</span>[<span class="hljs-keyword">this</span>.animateBuxIncrement &gt; <span class="hljs-number">0</span> ? <span class="hljs-string">"min"</span> : <span class="hljs-string">"max"</span>](currentBux, <span class="hljs-keyword">this</span>.newBuxAmount);
+				<span class="hljs-keyword">this</span>.buxLabel.setString(currentBux);
+			}
+			<span class="hljs-keyword">if</span> (currentLemonades !== <span class="hljs-keyword">this</span>.newLemonadesAmount) {
+				<span class="hljs-keyword">if</span> (currentLemonades &lt; <span class="hljs-keyword">this</span>.newLemonadesAmount) {
+					<span class="hljs-keyword">this</span>.animateCurrencyAdd(<span class="hljs-keyword">this</span>.lemonadesIcon, <span class="hljs-string">"Lemonade.png"</span>);
+
+					sounds = App.config[<span class="hljs-string">"glass-sounds"</span>];
+					App.playEffect(sounds[App.rand(sounds.length)]);
+				}
+				currentLemonades += <span class="hljs-keyword">this</span>.animateLemonadesIncrement;
+				currentLemonades = <span class="hljs-built_in">Math</span>[<span class="hljs-keyword">this</span>.animateLemonadesIncrement &gt; <span class="hljs-number">0</span> ? <span class="hljs-string">"min"</span> : <span class="hljs-string">"max"</span>](currentLemonades, <span class="hljs-keyword">this</span>.newLemonadesAmount);
+				<span class="hljs-keyword">this</span>.lemonadesLabel.setString(currentLemonades);
+			}
+		},
+		
+		animateCurrencyAdd: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(destNode, filename)</span> {</span>
+			<span class="hljs-keyword">var</span> angle = cc.DEGREES_TO_RADIANS(App.rand(<span class="hljs-number">180</span>)),
+				radius = App.scale(<span class="hljs-number">300</span>),
+				sprite = cc.Sprite.create(<span class="hljs-string">"#"</span> + filename),
+				rotation = App.rand(<span class="hljs-number">360</span> * <span class="hljs-number">2</span>);
+			sprite.setPosition(cc.pAdd(
+				destNode.getPosition(),
+				cc.p(<span class="hljs-built_in">Math</span>.sin(angle) * radius, <span class="hljs-built_in">Math</span>.cos(angle) * radius)
+			));
+			sprite.setRotation(rotation);
+			sprite.setScale(destNode.getScale());
+			sprite.setOpacity(<span class="hljs-number">0</span>);
+			sprite.runAction(cc.Sequence.create(
+				cc.FadeIn.create(<span class="hljs-number">1.0</span>),
+				cc.FadeOut.create(<span class="hljs-number">0.2</span>)
+			));
+			sprite.runAction(cc.EaseOut.create(cc.RotateBy.create(<span class="hljs-number">1.0</span>, -rotation), <span class="hljs-number">1.5</span>));
+			sprite.runAction(cc.MoveTo.create(<span class="hljs-number">1.0</span>, destNode.getPosition()));
+			sprite.runAction(cc.Sequence.create(
+				cc.DelayTime.create(<span class="hljs-number">1.2</span>),
+				cc.RemoveSelf.create()
+			));
+			<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">10</span>);
+		},
+		
+		enableButtons: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> numBux = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_bux"</span>),
+				numLemonades = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_lemonades"</span>);
+
+			<span class="hljs-keyword">this</span>.enableButton(TAG_DRINK_LEMONADE, numLemonades &gt; <span class="hljs-number">0</span>);
+			<span class="hljs-keyword">this</span>.enableButton(TAG_GIVE_LEMONADE, numLemonades &gt; <span class="hljs-number">0</span>);
+			<span class="hljs-keyword">this</span>.enableButton(TAG_BUY_LEMONADE, numBux &gt; <span class="hljs-keyword">this</span>.exchangeRate);
+			<span class="hljs-keyword">this</span>.enableButton(TAG_SELL_LEMONADE, numLemonades &gt; <span class="hljs-number">0</span>);
+			<span class="hljs-keyword">this</span>.enableButton(TAG_EARN_BUX, <span class="hljs-literal">true</span>);
+			<span class="hljs-keyword">this</span>.enableButton(TAG_PURCHASE_BUX, <span class="hljs-literal">true</span>);
+		},
+		
+		onPaymentComplete: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">this</span>.removePurchaseMenu();
+			<span class="hljs-keyword">this</span>.createGameMenu();
+		},
+
+		onAdDismissed: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+			<span class="hljs-keyword">this</span>.addCurrencies(<span class="hljs-number">0</span>, <span class="hljs-built_in">parseInt</span>(<span class="hljs-keyword">this</span>.exchangeRate * <span class="hljs-number">.5</span>));
+		},
+
+		onGetExchangeRate: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> {</span>
+			<span class="hljs-keyword">var</span> scene = cc.director.getRunningScene(),
+				multiplier = <span class="hljs-number">100</span>,
+				value;
+			
+			<span class="hljs-keyword">if</span> (scene &amp;&amp; scene.layer) {
+				<span class="hljs-keyword">if</span> ((<span class="hljs-built_in">parseInt</span>(response) + <span class="hljs-string">""</span>).length &gt;= <span class="hljs-number">3</span>) {
+					multiplier = <span class="hljs-number">1</span>;
+				} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-built_in">parseFloat</span>(response) &gt; <span class="hljs-number">50</span>) {
+					multiplier = <span class="hljs-number">10</span>;
+				}
+
+				value = <span class="hljs-built_in">parseInt</span>(<span class="hljs-built_in">parseFloat</span>(response) * multiplier) / multiplier;
+				<span class="hljs-keyword">if</span> (multiplier == <span class="hljs-number">100</span>) {
+					value = value.toFixed(<span class="hljs-number">2</span>);
+				}
+				<span class="hljs-keyword">if</span> (value &lt; <span class="hljs-number">0.01</span>) {
+					value = <span class="hljs-number">0.01</span>;
+				}
+				scene.layer.exchangeRate = <span class="hljs-built_in">parseInt</span>(value);
+				scene.layer.rateLabel.setString(<span class="hljs-string">" = "</span> + value);
+				scene.layer.setRateIconPos();
+				scene.layer.enableButtons();
+			}
+		}
+
+	}); <span class="hljs-comment">// end layer extend</span>
+
+}()); <span class="hljs-comment">// end module pattern</span></pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

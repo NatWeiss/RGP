@@ -34,6 +34,9 @@ docco:
 	docco -l linear README.litcoffee template/server/Server.js template/js/*.js template/js/lib/AdsMobFox.js template/js/lib/Facebook.js
 	sed -i "" 's/README.litcoffee/README.md/g' docs/*.html
 	rm README.litcoffee
+	#
+	if [ -d LemonadeExchange/docs ]; then rm -r LemonadeExchange/docs; fi
+	docco -o LemonadeExchange/docs -l linear LemonadeExchange/server/Server.js LemonadeExchange/js/*.js LemonadeExchange/js/lib/AdsMobFox.js LemonadeExchange/js/lib/Facebook.js
 
 docker:
 	if [ -d docs ]; then rm -r docs; fi

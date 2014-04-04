@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>LemonadeExchange.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>LemonadeExchange.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="App.html">
+                    App.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Config.html">
+                    Config.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ConfigServer.html">
+                    ConfigServer.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LayerGame.html">
+                    LayerGame.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LayerMenu.html">
+                    LayerMenu.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LemonadeExchange.html">
+                    LemonadeExchange.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Loader.html">
+                    Loader.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="SceneMain.html">
+                    SceneMain.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="AdsMobFox.html">
+                    AdsMobFox.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Facebook.html">
+                    Facebook.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Server.html">
+                    Server.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+      
+        
+        <p>Extend the <a href="App.html">App</a> object with project-specific functions.</p>
+
+        
+      
+        
+        <h3 id="app">App</h3>
+<p>Get or create the App object.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> App = App || {};</pre></div>
+        
+      
+        
+        <h3 id="app-playclicksound">App.playClickSound</h3>
+<p>Play one of the click sounds in sequential order.</p>
+
+        
+          <div class='highlight'><pre>App.playClickSound = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">var</span> sounds = App.config[<span class="hljs-string">"click-sounds"</span>];
+	<span class="hljs-keyword">this</span>.clickSound = <span class="hljs-keyword">this</span>.clickSound || <span class="hljs-number">0</span>;
+	
+	App.playEffect(sounds[<span class="hljs-keyword">this</span>.clickSound]);
+	
+	<span class="hljs-keyword">this</span>.clickSound = (<span class="hljs-keyword">this</span>.clickSound + <span class="hljs-number">1</span>) % sounds.length;
+};</pre></div>
+        
+      
+        
+        <h3 id="app-showtouchcircle">App.showTouchCircle</h3>
+<p>Show an expanding, fading circle at the given position or the given item’s position.</p>
+
+        
+          <div class='highlight'><pre>App.showTouchCircle = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(parentNode, pos, item)</span> {</span>
+	<span class="hljs-keyword">var</span> circle;
+	
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> pos === <span class="hljs-string">"undefined"</span> || pos === <span class="hljs-literal">null</span>) {
+		<span class="hljs-keyword">if</span> (item) {
+			pos = cc.p(
+				item.getPositionX() + (item.getAnchorPoint().x ?
+					<span class="hljs-number">0</span> : item.getContentSize().width * <span class="hljs-number">.5</span>),
+				item.getPositionY() + (item.getAnchorPoint().y ?
+					<span class="hljs-number">0</span> : item.getContentSize().height * <span class="hljs-number">.5</span>)
+			);
+		} <span class="hljs-keyword">else</span> {
+			<span class="hljs-keyword">return</span>;
+		}
+	}
+	
+	circle = cc.Sprite.create(<span class="hljs-string">"#TouchCircle.png"</span>);
+	<span class="hljs-keyword">if</span> (circle === <span class="hljs-literal">null</span>) {
+		<span class="hljs-keyword">return</span>;
+	}
+	circle.setPosition(pos);
+	circle.setScale(<span class="hljs-number">0.5</span>);
+	circle.runAction(cc.Sequence.create(
+		cc.DelayTime.create(<span class="hljs-number">0.5</span>),
+		cc.FadeOut.create(<span class="hljs-number">1</span>),
+		cc.RemoveSelf.create()
+	));
+	parentNode.addChild(circle, <span class="hljs-number">10</span>);
+
+	circle = cc.Sprite.create(<span class="hljs-string">"#TouchCircle.png"</span>);
+	circle.setPosition(pos);
+	circle.setScale(<span class="hljs-number">0.5</span>);
+	circle.runAction(cc.Spawn.create(
+		cc.FadeOut.create(<span class="hljs-number">1.5</span>),
+		cc.Sequence.create(
+			cc.ScaleBy.create(<span class="hljs-number">1.5</span>, <span class="hljs-number">2.5</span>, <span class="hljs-number">2.5</span>),
+			cc.RemoveSelf.create()
+		)
+	));
+	parentNode.addChild(circle, <span class="hljs-number">11</span>);
+};</pre></div>
+        
+      
+        
+        <h3 id="app-getinitiallayer">App.getInitialLayer</h3>
+<p>Get the initial layer to run.</p>
+
+        
+          <div class='highlight'><pre>App.getInitialLayer = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">return</span> LayerMenu;
+};</pre></div>
+        
+      
+        
+        <h3 id="app-createbutton">App.createButton</h3>
+<p>Creates a button.</p>
+
+        
+          <div class='highlight'><pre>App.createButton = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(obj, spriteFilename, tag, position, anchorPoint, movement, duration, delay, easeRate)</span> {</span>
+	<span class="hljs-keyword">var</span> winSize = App.getWinSize(),
+		normalSprite = cc.Sprite.create(<span class="hljs-string">"#"</span> + spriteFilename),
+		selectedSprite = cc.Sprite.create(<span class="hljs-string">"#"</span> + spriteFilename),
+		disabledSprite = cc.Sprite.create(<span class="hljs-string">"#"</span> + spriteFilename),
+		button;
+	selectedSprite.setColor(cc.color(<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>));
+
+	button = cc.MenuItemSprite.create(normalSprite, selectedSprite, disabledSprite, obj.menuButtonCallback, obj);
+	button.setTag(tag);
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> movement !== <span class="hljs-string">"undefined"</span>) {
+		button.setPosition(cc.pSub(position, movement));
+		button.runAction(cc.Sequence.create(
+			cc.DelayTime.create(delay),
+			cc.EaseOut.create(cc.MoveBy.create(duration, movement), easeRate ? easeRate : <span class="hljs-number">1.5</span>)
+		));
+	} <span class="hljs-keyword">else</span> {
+		button.setPosition(position);
+	}
+	button.setAnchorPoint(anchorPoint);
+	obj.menu.addChild(button);
+
+	<span class="hljs-keyword">return</span> button;
+};</pre></div>
+        
+      
+        
+        <h3 id="app-addcurrencytobutton">App.addCurrencyToButton</h3>
+<p>Adds a currency amount to the given button.</p>
+
+        
+          <div class='highlight'><pre>App.addCurrencyToButton = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(button, amount, currencyAmount, spriteFrameName)</span> {</span>
+	<span class="hljs-keyword">var</span> label,
+		sprite,
+		margin = App.scale(<span class="hljs-number">12</span>),
+		shadowDistance = App.scale(<span class="hljs-number">4</span>),
+		buttonSize = button.getContentSize(),
+		font = App.config[<span class="hljs-string">"font"</span>];
+
+	sprite = cc.Sprite.create(<span class="hljs-string">"#"</span> + spriteFrameName);
+	sprite.setPosition(buttonSize.width * <span class="hljs-number">.5</span>, buttonSize.height * <span class="hljs-number">.5</span>);
+	sprite.setScale(<span class="hljs-number">0.9</span>);
+	button.addChild(sprite);
+
+	label = cc.LabelTTF.create(amount, font, App.scale(<span class="hljs-number">50</span>));
+	label.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
+	label.setPosition(margin * <span class="hljs-number">1.5</span>, buttonSize.height - margin);
+	button.addChild(label, <span class="hljs-number">1</span>);
+
+	label = cc.LabelTTF.create(amount, font, App.scale(<span class="hljs-number">50</span>));
+	label.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">1</span>);
+	label.setColor(App.config[<span class="hljs-string">"font-shadow-color"</span>]);
+	label.setPosition(margin * <span class="hljs-number">1.5</span>, buttonSize.height - margin - shadowDistance);
+	button.addChild(label);
+
+	label = cc.LabelTTF.create(currencyAmount, font, App.scale(<span class="hljs-number">50</span>));
+	label.setAnchorPoint(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+	label.setPosition(buttonSize.width - margin * <span class="hljs-number">1.5</span>, margin);
+	button.addChild(label, <span class="hljs-number">1</span>);
+
+	label = cc.LabelTTF.create(currencyAmount, font, App.scale(<span class="hljs-number">50</span>));
+	label.setAnchorPoint(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+	label.setColor(App.config[<span class="hljs-string">"font-shadow-color"</span>]);
+	label.setPosition(buttonSize.width - margin * <span class="hljs-number">1.5</span>, margin - shadowDistance);
+	button.addChild(label);
+};</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

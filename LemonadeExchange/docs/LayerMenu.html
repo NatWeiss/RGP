@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>LayerMenu.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>LayerMenu.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="App.html">
+                    App.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Config.html">
+                    Config.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="ConfigServer.html">
+                    ConfigServer.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LayerGame.html">
+                    LayerGame.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LayerMenu.html">
+                    LayerMenu.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="LemonadeExchange.html">
+                    LemonadeExchange.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Loader.html">
+                    Loader.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="SceneMain.html">
+                    SceneMain.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="AdsMobFox.html">
+                    AdsMobFox.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Facebook.html">
+                    Facebook.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="Server.html">
+                    Server.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+          <div class='highlight'><pre>
+<span class="hljs-keyword">var</span> LayerMenu = (<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+
+	<span class="hljs-keyword">var</span> TAG_PLAY_RESUME = <span class="hljs-number">0</span>,
+		TAG_LOGIN_LOGOUT = <span class="hljs-number">1</span>,
+		TAG_TOGGLE_SOUND = <span class="hljs-number">2</span>,
+		TAG_TOGGLE_FULLSCREEN = <span class="hljs-number">3</span>,
+		TAG_INFO = <span class="hljs-number">4</span>;
+
+	<span class="hljs-keyword">return</span> cc.Layer.extend({
+		songNumber: <span class="hljs-number">0</span>,
+		logo: <span class="hljs-literal">null</span>,
+		menu: <span class="hljs-literal">null</span>,
+		buttonLogin: <span class="hljs-literal">null</span>,
+		buttonLogout: <span class="hljs-literal">null</span>,
+		buttonSound: <span class="hljs-literal">null</span>,
+		buttonNoSound: <span class="hljs-literal">null</span>,
+		buttonFullscreen: <span class="hljs-literal">null</span>,
+		buttonMinimize: <span class="hljs-literal">null</span>,
+
+		init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(canResume)</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+				winSize = App.getWinSize(),
+				layer,
+				sprite,
+				label,
+				button,
+				loggedIn,
+				pos = cc.p(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>),
+				xSpacing = App.scale(<span class="hljs-number">300</span>),
+				numButtons = <span class="hljs-number">2</span>;
+			<span class="hljs-keyword">this</span>._super();
+
+			<span class="hljs-keyword">this</span>.playMusic();</pre></div>
+        
+      
+        
+        <p>menu</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.menu = cc.Menu.create();
+			<span class="hljs-keyword">this</span>.menu.setPosition(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.menu, <span class="hljs-number">2</span>);</pre></div>
+        
+      
+        
+        <p>logo</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.logo = cc.Sprite.create(<span class="hljs-string">"#Logo.png"</span>);
+			<span class="hljs-keyword">this</span>.logo.setPosition(App.centralize(<span class="hljs-number">0</span>, <span class="hljs-number">114</span>));
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.logo, <span class="hljs-number">1</span>);</pre></div>
+        
+      
+        
+        <p>if (!canResume) {</p>
+
+        
+          <div class='highlight'><pre>				<span class="hljs-keyword">this</span>.logo.setPositionY(<span class="hljs-keyword">this</span>.logo.getPositionY() + winSize.height);
+				<span class="hljs-keyword">this</span>.logo.runAction(cc.Sequence.create(
+					cc.EaseOut.create(cc.MoveBy.create(<span class="hljs-number">0.333</span>, cc.p(<span class="hljs-number">0</span>, -winSize.height)), <span class="hljs-number">1.1</span>),
+					cc.EaseOut.create(cc.ScaleBy.create(<span class="hljs-number">0.1</span>, <span class="hljs-number">1.1</span>), <span class="hljs-number">2.0</span>),
+					cc.EaseOut.create(cc.ScaleBy.create(<span class="hljs-number">0.2</span>, <span class="hljs-number">1</span> / <span class="hljs-number">1.1</span>), <span class="hljs-number">1.5</span>)
+				));
+				<span class="hljs-keyword">this</span>.logo.setRotation(-<span class="hljs-number">2</span>);
+				<span class="hljs-keyword">this</span>.logo.runAction(cc.RepeatForever.create(cc.Sequence.create(
+					cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.2</span>, <span class="hljs-number">4</span>), <span class="hljs-number">3.0</span>),
+					cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.5</span>, -<span class="hljs-number">4</span>), <span class="hljs-number">3.0</span>)
+				)));</pre></div>
+        
+      
+        
+        <p>}</p>
+
+        
+      
+        
+        <p>button layer</p>
+
+        
+          <div class='highlight'><pre>			layer = cc.LayerColor.create(cc.color(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">202</span>), winSize.width * <span class="hljs-number">1.2</span>, App.scale(<span class="hljs-number">215</span>));
+			layer.setPosition(App.scale(-<span class="hljs-number">20</span>), winSize.height * <span class="hljs-number">.5</span> - App.scale(<span class="hljs-number">290</span>) - winSize.height);
+			layer.setRotation(-<span class="hljs-number">2</span>);
+			<span class="hljs-keyword">this</span>.addChild(layer, <span class="hljs-number">1</span>);
+			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
+				cc.EaseOut.create(cc.RotateBy.create(<span class="hljs-number">1.5</span>, <span class="hljs-number">1</span>), <span class="hljs-number">1.2</span>),
+				cc.EaseOut.create(cc.RotateBy.create(<span class="hljs-number">1.7</span>, -<span class="hljs-number">1</span>), <span class="hljs-number">1.2</span>)
+			)));
+			layer.runAction(cc.EaseOut.create(cc.MoveBy.create(<span class="hljs-number">0.5</span>, cc.p(<span class="hljs-number">0</span>, winSize.height)), <span class="hljs-number">1.5</span>));</pre></div>
+        
+      
+        
+        <p>buttons</p>
+
+        
+          <div class='highlight'><pre>			pos = App.centralize(<span class="hljs-number">0</span>,-<span class="hljs-number">183</span>);
+			pos.x -= ((numButtons - <span class="hljs-number">1</span>) * <span class="hljs-number">.5</span>) * xSpacing;
+			button = App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonPlay.png"</span>, TAG_PLAY_RESUME, pos,
+				cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>), cc.p(winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, <span class="hljs-number">1.0</span>, <span class="hljs-number">1.5</span>);
+			button.runAction(cc.RepeatForever.create(cc.Sequence.create(
+				cc.DelayTime.create(<span class="hljs-number">1.5</span>),
+				cc.ScaleBy.create(<span class="hljs-number">0.2</span>, <span class="hljs-number">1.02</span>),
+				cc.ScaleBy.create(<span class="hljs-number">0.1</span>, <span class="hljs-number">1</span> / <span class="hljs-number">1.02</span>)
+			)));
+
+			pos.x += xSpacing;
+			<span class="hljs-keyword">this</span>.buttonLogin = App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonLogin.png"</span>, TAG_LOGIN_LOGOUT, pos,
+				cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>), cc.p(winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1.5</span>);
+			<span class="hljs-keyword">this</span>.buttonLogout = App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonLogout.png"</span>, TAG_LOGIN_LOGOUT, pos,
+				cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>), cc.p(winSize.width, <span class="hljs-number">0</span>), <span class="hljs-number">0.5</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1.5</span>);
+			loggedIn = App.getSocialPlugin().isLoggedIn();
+			<span class="hljs-keyword">this</span>.buttonLogin.setVisible(!loggedIn);
+			<span class="hljs-keyword">this</span>.buttonLogout.setVisible(loggedIn);</pre></div>
+        
+      
+        
+        <p>pos.x += xSpacing;
+button = App.createButton(this, “ButtonAbout.png”, TAG_INFO, pos,
+cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.4, 1.5);</p>
+
+        
+          <div class='highlight'><pre>
+			<span class="hljs-keyword">this</span>.buttonSound = App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonSound.png"</span>, TAG_TOGGLE_SOUND,
+				App.centralize(-<span class="hljs-number">420</span>, <span class="hljs-number">260</span>),
+				cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>), cc.p(winSize.width * <span class="hljs-number">.5</span>, -winSize.height), <span class="hljs-number">0.5</span>, <span class="hljs-number">0.25</span>, <span class="hljs-number">1.5</span>);
+			<span class="hljs-keyword">this</span>.buttonNoSound = App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonNoSound.png"</span>, TAG_TOGGLE_SOUND,
+				App.centralize(-<span class="hljs-number">420</span>, <span class="hljs-number">260</span>),
+				cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>), cc.p(winSize.width * <span class="hljs-number">.5</span>, -winSize.height), <span class="hljs-number">0.5</span>, <span class="hljs-number">0.25</span>, <span class="hljs-number">1.5</span>);
+			<span class="hljs-keyword">this</span>.buttonSound.setScale(<span class="hljs-number">0.8</span>);
+			<span class="hljs-keyword">this</span>.buttonNoSound.setScale(<span class="hljs-number">0.8</span>);
+			<span class="hljs-keyword">this</span>.buttonSound.setVisible(App.isSoundEnabled());
+			<span class="hljs-keyword">this</span>.buttonNoSound.setVisible(!App.isSoundEnabled());
+
+			<span class="hljs-keyword">this</span>.buttonFullscreen = App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonFullscreen.png"</span>, TAG_TOGGLE_FULLSCREEN,
+				App.centralize(<span class="hljs-number">420</span>, <span class="hljs-number">260</span>),
+				cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width * <span class="hljs-number">.5</span>, -winSize.height), <span class="hljs-number">0.5</span>, <span class="hljs-number">0.25</span>, <span class="hljs-number">1.5</span>);
+			<span class="hljs-keyword">this</span>.buttonMinimize = App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonMinimize.png"</span>, TAG_TOGGLE_FULLSCREEN,
+				App.centralize(<span class="hljs-number">420</span>, <span class="hljs-number">260</span>),
+				cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>), cc.p(-winSize.width * <span class="hljs-number">.5</span>, -winSize.height), <span class="hljs-number">0.5</span>, <span class="hljs-number">0.25</span>, <span class="hljs-number">1.5</span>);
+			<span class="hljs-keyword">this</span>.buttonFullscreen.setScale(<span class="hljs-number">0.8</span>);
+			<span class="hljs-keyword">this</span>.buttonMinimize.setScale(<span class="hljs-number">0.8</span>);
+			<span class="hljs-keyword">this</span>.buttonMinimize.setVisible(<span class="hljs-literal">false</span>);
+			<span class="hljs-keyword">if</span> (!App.isHtml5()) {
+				<span class="hljs-keyword">this</span>.buttonFullscreen.setVisible(<span class="hljs-literal">false</span>);
+			}
+			
+			<span class="hljs-keyword">this</span>.scheduleUpdate();</pre></div>
+        
+      
+        
+        <p>handle touch events</p>
+
+        
+          <div class='highlight'><pre>			cc.eventManager.addListener({
+				event: cc.EventListener.TOUCH_ALL_AT_ONCE,
+				onTouchesBegan: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(touches, event)</span> {</span>
+					<span class="hljs-keyword">if</span> (touches) {
+						App.showTouchCircle(self, touches[<span class="hljs-number">0</span>].getLocation());
+						App.playClickSound();
+					}
+				}
+			}, <span class="hljs-keyword">this</span>);
+
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+		},
+		
+		onGetLoginStatus: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(loggedIn)</span> {</span>
+			<span class="hljs-keyword">this</span>.buttonLogin.setVisible(!loggedIn);
+			<span class="hljs-keyword">this</span>.buttonLogout.setVisible(loggedIn);
+			<span class="hljs-keyword">this</span>.buttonLogin.setEnabled(<span class="hljs-literal">true</span>);
+			<span class="hljs-keyword">this</span>.buttonLogout.setEnabled(<span class="hljs-literal">true</span>);
+		},
+		
+		playMusic: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">var</span> song = App.config[<span class="hljs-string">"songs"</span>][<span class="hljs-keyword">this</span>.songNumber]
+			
+			<span class="hljs-keyword">if</span> (!cc.audioEngine.isMusicPlaying()) {
+				App.playEffect(<span class="hljs-string">"res/music-start.wav"</span>);
+				App.playMusic(song.file);
+				<span class="hljs-keyword">this</span>.songNumber = (<span class="hljs-keyword">this</span>.songNumber + <span class="hljs-number">1</span>) % App.config[<span class="hljs-string">"songs"</span>].length;
+			}
+		},
+		
+		menuButtonCallback: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(sender)</span> {</span>
+			<span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+				tag = sender.getTag(),
+				socialPlugin;
+			
+			App.playClickSound();
+			App.showTouchCircle(<span class="hljs-keyword">this</span>, <span class="hljs-literal">null</span>, sender);</pre></div>
+        
+      
+        
+        <p>play</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">if</span> (tag == TAG_PLAY_RESUME) {
+				<span class="hljs-keyword">this</span>.getParent().createLayer(LayerGame, <span class="hljs-literal">true</span>);
+			}</pre></div>
+        
+      
+        
+        <p>login to facebook</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_LOGIN_LOGOUT) {
+				<span class="hljs-keyword">this</span>.buttonLogin.setEnabled(<span class="hljs-literal">false</span>);
+				<span class="hljs-keyword">this</span>.buttonLogout.setEnabled(<span class="hljs-literal">false</span>);
+
+				socialPlugin = App.getSocialPlugin();
+				<span class="hljs-keyword">if</span> (socialPlugin.isLoggedIn()) {
+					socialPlugin.logout();
+				} <span class="hljs-keyword">else</span> {
+					socialPlugin.login(App.config[<span class="hljs-string">"social-plugin-login-permissions"</span>]);
+				}
+			}</pre></div>
+        
+      
+        
+        <p>show info scene</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_INFO) {
+			}</pre></div>
+        
+      
+        
+        <p>toggle sound</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_TOGGLE_SOUND) {
+				<span class="hljs-keyword">if</span> (App.isSoundEnabled()) {
+					App.playEffect(<span class="hljs-string">"res/music-stop.wav"</span>);
+				}
+				App.toggleSoundEnabled();
+				<span class="hljs-keyword">if</span> (App.isSoundEnabled()) {
+					<span class="hljs-keyword">this</span>.playMusic();
+				}
+				<span class="hljs-keyword">this</span>.buttonSound.setVisible(App.isSoundEnabled());
+				<span class="hljs-keyword">this</span>.buttonNoSound.setVisible(!App.isSoundEnabled());
+			}</pre></div>
+        
+      
+        
+        <p>toggle fullscreen</p>
+
+        
+          <div class='highlight'><pre>			<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tag == TAG_TOGGLE_FULLSCREEN) {
+				App.toggleFullscreenEnabled();
+				<span class="hljs-keyword">this</span>.buttonFullscreen.setVisible(!App.isFullscreenEnabled());
+				<span class="hljs-keyword">this</span>.buttonMinimize.setVisible(App.isFullscreenEnabled());
+			}
+		}
+	}); <span class="hljs-comment">// end of layer extend</span>
+
+}()); <span class="hljs-comment">// end of module</span></pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
