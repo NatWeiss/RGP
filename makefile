@@ -54,11 +54,12 @@ lemonadex: dest=.
 lemonadex: name=LemonadeExchange
 lemonadex: key=com.wizardfu.lemonadex
 lemonadex:
+	mv ${dest}/${name} ${dest}/${name}.old
 	rm -rf ${dest}/${name}
 	tools/create-project -n ${name} -k ${key} -p ${dest}
-	cp -r rez/${name}/res ${dest}/${name}/
-	cp rez/${name}/js/*.js ${dest}/${name}/js/
-	cp rez/${name}/server/Server.js ${dest}/${name}/server/
+	cp -r ${dest}/${name}.old/res ${dest}/${name}/
+	cp ${dest}/${name}.old/js/*.js ${dest}/${name}/js/
+	cp ${dest}/${name}.old/server/Server.js ${dest}/${name}/server/
 	rm -rf ${dest}/${name}/art
 	rm -f ${dest}/${name}/proj.html5/*-min.js
 	rm ${dest}/${name}/js/SceneHello.js
@@ -68,6 +69,7 @@ lemonadex:
 	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/minified.js
 	sed -i "" 's/Loader\.js/Loader\.js", "js\/LayerGame\.js", "js\/LayerMenu\.js/g' ${dest}/${name}/proj.html5/project.json
 	sed -i "" 's/MyFacebookAppID/641151319281152/g' ${dest}/${name}/proj.ios_mac/ios/Info.plist
+	rm -rf ${dest}/${name}.old
 
 save-lemonadex:
 	cp LemonadeExchange/js/Config.js rez/LemonadeExchange/js/
