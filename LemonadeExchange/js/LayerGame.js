@@ -1,12 +1,12 @@
 
 //
-// The layer which runs the game mechanics. Displays player details, current exchange rate and options to drink, give, buy, sell, earn or purchase lemonades and/or bux. Communicates with the server using the server's [api](Server.html).
+// The layer which runs the game mechanics. Displays player details, current exchange rate and options to drink, give, buy, sell, earn or purchase lemonades and/or bux. Communicates with the server using the server's [API](Server.html).
 //
 
 //
-// ###  App
+// ###  LayerGame
 //
-// Get or create the App object.
+// Uses the module pattern to define some private variables. Returns a constructor.
 //
 var LayerGame = (function(){
 	var TAG_PAUSE = 0,
@@ -20,6 +20,11 @@ var LayerGame = (function(){
 		TAG_MEDIUM_BUX_PACK = 8,
 		TAG_LEMONADE = 9;
 
+//
+// ###  Public
+//
+// Here begins the public `LayerGame` class.
+//
 	return cc.Layer.extend( {
 		menu: null,
 		playerNameLabel: null,
@@ -40,30 +45,36 @@ var LayerGame = (function(){
 		animateBuxIncrement: 5,
 		animateCurrencyAmountRate: 400,
 
+//
+// ###  LayerGame.init
+//
+// Setup the labels, sprites, etc. Start animations. Register for events.
+//
 		init: function() {
 			var self = this,
 				winSize = App.getWinSize();
 			this._super();
 			
-			// test publish actions
-			//App.getSocialPlugin().requestPublishPermissions("publish_actions");
+			/* Test publish actions. */
+			/*App.getSocialPlugin().requestPublishPermissions("publish_actions");*/
 
-			// menu
+			/* Create the menu. */
 			this.menu = cc.Menu.create();
 			this.menu.setPosition(cc.p());
 			this.addChild(this.menu, 1);
 
-			// everything else
+			/* Create everything else. */
 			this.createBg();
 			this.createExchangeRate();
 			this.createPlayerDetails();
-			this.createGameMenu();
+			this.createActionButtons();
 
-			// back
-			App.createButton(this, "ButtonBack.png", TAG_PAUSE, App.centralize(-430, -290),
-				cc.p(0, 0), cc.p(winSize.width * .5, winSize.height), 0.5, 0.25, 1.5);
+			/* Create the back button. */
+			App.createButton(this, "ButtonBack.png", TAG_PAUSE,
+				App.centralize(-430, -290), cc.p(0, 0),
+				cc.p(winSize.width * .5, winSize.height), 0.5, 0.25, 1.5);
 
-			// handle touch events
+			/* Handle touch events. */
 			cc.eventManager.addListener({
 				event: cc.EventListener.TOUCH_ALL_AT_ONCE,
 				onTouchesBegan: function(touches, event) {
@@ -77,23 +88,40 @@ var LayerGame = (function(){
 			return true;
 		},
 		
+//
+// ###  LayerGame.createBg
+//
+// Create the background layer.
+//
 		createBg: function() {
 			var layer,
 				winSize = App.getWinSize();
 			
-			// color stripe
-			layer = cc.LayerColor.create(cc.color(0,0,0,202), App.scale(590), winSize.height * 1.2);
-			layer.setPosition(winSize.width * .5 + App.scale(-144), winSize.height * -.1);
+			layer = cc.LayerColor.create(
+				cc.color(0,0,0,202),
+				App.scale(590),
+				winSize.height * 1.2
+			);
+			layer.x = winSize.width * .5 + App.scale(-144);
+			layer.y = winSize.height * -.1;
 			layer.setRotation(-2);
 			this.addChild(layer);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseOut.create(cc.RotateBy.create(1.5, 1), 1.2),
 				cc.EaseOut.create(cc.RotateBy.create(1.7, -1), 1.2)
 			)));
-			layer.setPositionX(layer.getPositionX() + winSize.width);
-			layer.runAction(cc.EaseOut.create(cc.MoveBy.create(0.5, cc.p(-winSize.width, 0)), 1.5));
+			layer.x = layer.x + winSize.width;
+			layer.runAction(cc.EaseOut.create(
+				cc.MoveBy.create(0.5, cc.p(-winSize.width, 0)),
+				1.5
+			));
 		},
 		
+//
+// ###  LayerGame.createExchangeRate
+//
+// Create the exchange rate labels and sprites.
+//
 		createExchangeRate: function() {
 			var pos = App.centralize(-120, 220),
 				font = App.config["font"],
@@ -101,7 +129,6 @@ var LayerGame = (function(){
 				sprite,
 				winSize = App.getWinSize();
 			
-			// exchange rate
 			label = cc.LabelTTF.create("1", font, App.scale(80));
 			label.setAnchorPoint(0, .5);
 			label.setPosition(pos);
@@ -124,12 +151,42 @@ var LayerGame = (function(){
 			this.rateIcon.setAnchorPoint(0, .5);
 			this.rateIcon.setPosition(pos);
 			this.setRateIconPos();
-			this.rateIcon.setScale(0.55	);
+			this.rateIcon.setScale(0.55);
 			this.addChild(this.rateIcon, 1);
 		},
-		
+
+//
+// ###  LayerGame.createPlayerImage
+//
+// Create the player image.
+//
+		createPlayerImage: function(url) {
+			if (this.playerImage) {
+				this.playerImage.removeFromParent(true);
+			}
+			this.playerImage = null;
+
+			if (url) {
+				this.playerImage = cc.Sprite.create(url);
+				cc.log("Player image: " + this.playerImage.width +
+					"x" + this.playerImage.height);
+			}
+			if (this.playerImage === null) {
+				this.playerImage = cc.Sprite.create("#BlankAvatar.png");
+			}
+
+			this.playerImage.setAnchorPoint(0, .5);
+			this.playerImage.setPosition(App.centralize(-420, 260));
+			this.playerImage.setScale(App.scale(60) / this.playerImage.width);
+			this.addChild(this.playerImage, 1);
+		},
+//
+// ###  LayerGame.createPlayerDetails
+//
+// Create the player detail labels and sprites.
+//
 		createPlayerDetails: function() {
-			var sprite = null,
+			var name = App.getSocialPlugin().getPlayerFirstName(),
 				playerImageUrl = App.getSocialPlugin().getPlayerImageUrl(),
 				font = App.config["font"],
 				winSize = App.getWinSize(),
@@ -138,27 +195,18 @@ var LayerGame = (function(){
 			
 			this.newLemonadesAmount = numLemonades;
 			this.newBuxAmount = numBux;
+			numLemonades = "" + numLemonades;
 			
-			// player image
-			if (playerImageUrl) {
-				sprite = cc.Sprite.create(playerImageUrl);
-				cc.log("Player image: " + sprite.getContentSize().width + "x" + sprite.getContentSize().height);
-			}
-			if (sprite === null) {
-				sprite = cc.Sprite.create("#BlankAvatar.png");
-			}
-			sprite.setAnchorPoint(0, .5);
-			sprite.setPosition(App.centralize(-420, 260));
-			sprite.setScale(App.scale(60) / sprite.getContentSize().width);
-			this.addChild(sprite, 1);
+			/* Create the player's profile image. */
+			this.createPlayerImage(playerImageUrl);
 			
-			// player name
-			this.playerNameLabel = cc.LabelTTF.create(App.getSocialPlugin().getPlayerFirstName(), font, App.scale(48));
+			/* Create the player's name label. */
+			this.playerNameLabel = cc.LabelTTF.create(name, font, App.scale(48));
 			this.playerNameLabel.setAnchorPoint(0, .5);
 			this.playerNameLabel.setPosition(App.centralize(-330, 260));
 			this.addChild(this.playerNameLabel, 1);
 			
-			// lemonades
+			/* Create the lemonades currency label. */
 			this.lemonadesIcon = cc.Sprite.create("#Lemonade.png");
 			this.lemonadesIcon.setPosition(App.centralize(-395, 130));
 			this.addChild(this.lemonadesIcon, 1);
@@ -167,12 +215,12 @@ var LayerGame = (function(){
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 4), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -4), 3.0)
 			)));
-			this.lemonadesLabel = cc.LabelTTF.create("" + numLemonades, font, App.scale(80));
+			this.lemonadesLabel = cc.LabelTTF.create(numLemonades, font, App.scale(80));
 			this.lemonadesLabel.setAnchorPoint(0, .5);
 			this.lemonadesLabel.setPosition(App.centralize(-330, 130));
 			this.addChild(this.lemonadesLabel, 1);
 
-			// bux
+			/* Create the bux currency label. */
 			this.buxIcon = cc.Sprite.create("#Bux.png");
 			this.buxIcon.setPosition(App.centralize(-395, -20));
 			this.buxIcon.setScale(0.65);
@@ -188,17 +236,19 @@ var LayerGame = (function(){
 			this.addChild(this.buxLabel, 1);
 		},
 		
-		createGameMenu: function() {
+//
+// ###  LayerGame.createActionButtons
+//
+// Create the buttons for drink, give, buy, sell, etc.
+//
+		createActionButtons: function() {
 			var pos = App.centralize(-120, 70),
-				ySpacing,
-				delayPer,
+				ySpacing = App.scale(115),
+				delayPer = 0.25,
 				winSize = App.getWinSize(),
 				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
 				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
 			
-			// buttons
-			delayPer = 0.25;
-			ySpacing = App.scale(115);
 			App.createButton(this, "ButtonDrink.png", TAG_DRINK_LEMONADE, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 1, 1.5);
 			pos.y -= ySpacing;
@@ -218,43 +268,24 @@ var LayerGame = (function(){
 			App.createButton(this, "ButtonPurchase.png", TAG_PURCHASE_BUX, pos,
 				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 6, 1.5);
 			
-			this.enableButtons();
+			this.enableActionButtons();
 		},
-		
-		removeMenuItems: function(tags) {
-			var i,
-				button;
-			for (i = 0; i < tags.length; i += 1) {
-				button = this.menu.getChildByTag(tags[i]);
-				if (button) {
-					button.removeFromParent();
-				}
-			}
-		},
-		
-		removeGameMenu: function() {
-			this.removeMenuItems([
-				TAG_DRINK_LEMONADE,
-				TAG_GIVE_LEMONADE,
-				TAG_EARN_BUX,
-				TAG_BUY_LEMONADE,
-				TAG_SELL_LEMONADE,
-				TAG_PURCHASE_BUX
-			]);
-		},
-		
-		createPurchaseMenu: function() {
+
+//
+// ###  LayerGame.createPurchaseButtons
+//
+// Create the buttons for purchasing more bux.
+//
+		createPurchaseButtons: function() {
 			var pos = App.centralize(-130, -30),
 				item,
-				delayPer,
+				delayPer = 0.25,
 				button,
 				winSize = App.getWinSize();
 
-			// buttons
-			delayPer = 0.25;
 			item = Soomla.storeInfo.getItemByItemId("small_bux_pack");
-			button = App.createButton(this, "ButtonProduct.png", TAG_SMALL_BUX_PACK, pos,
-				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 1, 1.5);
+			button = App.createButton(this, "ButtonProduct.png", TAG_SMALL_BUX_PACK,
+				pos, cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 1, 1.5);
 			App.addCurrencyToButton(button,
 				item.currency_amount,
 				App.localizeCurrency(item.purchasableItem.marketItem.price),
@@ -262,40 +293,24 @@ var LayerGame = (function(){
 
 			pos = App.centralize(154, -30);
 			item = Soomla.storeInfo.getItemByItemId("medium_bux_pack");
-			button = App.createButton(this, "ButtonProduct.png", TAG_MEDIUM_BUX_PACK, pos,
-				cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 2, 1.5);
+			button = App.createButton(this, "ButtonProduct.png", TAG_MEDIUM_BUX_PACK,
+				pos, cc.p(0, .5), cc.p(-winSize.width, 0), 0.5, delayPer * 2, 1.5);
 			App.addCurrencyToButton(button,
 				item.currency_amount,
 				App.localizeCurrency(item.purchasableItem.marketItem.price),
 				"medium_bux_pack.png");
 		},
 		
-		removePurchaseMenu: function() {
-			this.removeMenuItems([
-				TAG_SMALL_BUX_PACK,
-				TAG_MEDIUM_BUX_PACK
-			]);
-		},
-		
-		getFriendName: function() {
-			var plugin = App.getSocialPlugin(),
-				id = plugin.getRandomFriendId(),
-				friends;
-			if (id && id > 0) {
-				return plugin.getPlayerName(id);
-			}
-			friends = App.config["anonymous-friends"];
-			if (friends) {
-				id = App.rand(friends.length);
-				return friends[id];
-			}
-			return "Bruce Lee";
-		},
-		
+//
+// ###  LayerGame.createExchangeItems
+//
+// Create the labels and sprites for an exchange.
+//
 		createExchangeItems: function(verb) {
 			var self = this,
 				label,
 				sprite,
+				str,
 				friendName = this.getFriendName(),
 				font = App.config["font"],
 				winSize = App.getWinSize(),
@@ -307,20 +322,22 @@ var LayerGame = (function(){
 			this.exchangeLayer = cc.Layer.create();
 			this.addChild(this.exchangeLayer, 1);
 			
-			label = cc.LabelTTF.create(App.getSocialPlugin().getPlayerName(), font, fontSize);
+			str = App.getSocialPlugin().getPlayerName();
+			label = cc.LabelTTF.create(str, font, fontSize);
 			label.setAnchorPoint(.5, .5);
 			label.setPosition(pos);
 			this.exchangeLayer.addChild(label, 1);
 
 			pos.y -= ySpacing;
-			label = cc.LabelTTF.create("wants to " + this.exchangeVerb + " 1 ", font, fontSize);
+			str = "wants to " + this.exchangeVerb + " 1 ";
+			label = cc.LabelTTF.create(str, font, fontSize);
 			label.setAnchorPoint(.5, .5);
 			label.setPosition(pos);
 			this.exchangeLayer.addChild(label, 1);
 
 			sprite = cc.Sprite.create("#Lemonade.png");
 			sprite.setAnchorPoint(0, .5);
-			sprite.setPosition(label.getPositionX() + label.getContentSize().width * .5, label.getPositionY());
+			sprite.setPosition(label.x + label.width * .5, label.y);
 			sprite.setScale(0.55);
 			this.exchangeLayer.addChild(sprite, 1);
 
@@ -335,7 +352,8 @@ var LayerGame = (function(){
 			this.exchangeLayer.addChild(this.finishExchangeSprite1, 1);
 			
 			pos.y -= ySpacing;
-			this.finishExchangeLabel1 = cc.LabelTTF.create(this.exchangeVerb === "buy" ? "Bought by" : "Sold to", font, fontSize);
+			str = (this.exchangeVerb === "buy" ? "Bought by" : "Sold to");
+			this.finishExchangeLabel1 = cc.LabelTTF.create(str, font, fontSize);
 			this.finishExchangeLabel1.setPosition(pos);
 			this.exchangeLayer.addChild(this.finishExchangeLabel1, 1);
 
@@ -345,13 +363,16 @@ var LayerGame = (function(){
 			this.exchangeLayer.addChild(this.finishExchangeLabel2, 1);
 
 			pos.y -= ySpacing;
-			this.finishExchangeLabel3 = cc.LabelTTF.create("for " + this.exchangeRate + " ", font, fontSize);
+			str = "for " + this.exchangeRate + " ";
+			this.finishExchangeLabel3 = cc.LabelTTF.create(str, font, fontSize);
 			this.finishExchangeLabel3.setPosition(pos);
 			this.exchangeLayer.addChild(this.finishExchangeLabel3, 1);
 			
 			this.finishExchangeSprite2 = cc.Sprite.create("#Bux.png");
 			this.finishExchangeSprite2.setAnchorPoint(0, .5);
-			this.finishExchangeSprite2.setPosition(this.finishExchangeLabel3.getPositionX() + this.finishExchangeLabel3.getContentSize().width * .5, this.finishExchangeLabel3.getPositionY());
+			this.finishExchangeSprite2.x = this.finishExchangeLabel3.x +
+				this.finishExchangeLabel3.width * .5;
+			this.finishExchangeSprite2.y = this.finishExchangeLabel3.y;
 			this.finishExchangeSprite2.setScale(0.55);
 			this.exchangeLayer.addChild(this.finishExchangeSprite2, 1);
 			
@@ -363,6 +384,25 @@ var LayerGame = (function(){
 			this.schedule(function(){self.finishExchange();}, 5.0, 0);
 		},
 		
+//
+// ###  LayerGame.createLemonadeGiver
+//
+// Create the UI for giving lemonade to a friend.
+//
+		createLemonadeGiver: function() {
+			App.getSocialPlugin().showUI({
+				method: "apprequests",
+				message: "You've been gifted some lemonade!",
+				max_recipients: 1,
+				title: "Give Some Lemonade"
+			});
+		},
+		
+//
+// ###  LayerGame.finishExchange
+//
+// Finish the exchange.
+//
 		finishExchange: function() {
 			var self = this;
 			
@@ -382,51 +422,18 @@ var LayerGame = (function(){
 
 			this.schedule(function(){
 				self.exchangeLayer.removeFromParent();
-				self.createGameMenu();
+				self.createActionButtons();
 			}, 4.0, 0);
 		},
 		
-		createLemonadeGiver: function() {
-			App.getSocialPlugin().showUI({
-				method: "apprequests",
-				message: "You've been gifted some lemonade!",
-				max_recipients: 1,
-				title: "Give Some Lemonade"
-			});
-		},
-		
-		onSocialUIResponse: function(response) {
-			var i,
-				len;
-			cc.log("Friend picker response: " + JSON.stringify(response));
-
-			if (response && response.request && response.to.length) {
-				len = response.to.length;
-				for (i = 0; i < len; i += 1) {
-					cc.log(response.request + "_" + response.to[i]);
-				}
-				
-				self.addCurrencies(-1, 0);
-				App.requestUrl("api/give", self.onGetExchangeRate);
-			}
-			
-			this.enableButtons();
-		},
-		
-		onEnter: function() {
-			this._super();
-			App.requestUrl("api/exchange-rate", this.onGetExchangeRate);
-		},
-		
-		setRateIconPos: function() {
-			var x = this.rateLabel.getPositionX();
-			x += this.rateLabel.getContentSize().width;
-			this.rateIcon.setPositionX(x);
-		},
-		
-		giveLemonade: function() {
-			var numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
-			if (numLemonades <= 0) {
+//
+// ###  LayerGame.startDrinkingLemonade
+//
+// Start drinking a lemonade.
+//
+		startDrinkingLemonade: function() {
+			var lemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
+			if (lemonades <= 0) {
 				App.playEffect("res/music-stop.wav");
 				return;
 			}
@@ -434,6 +441,11 @@ var LayerGame = (function(){
 			this.slideGlass();
 		},
 		
+//
+// ###  LayerGame.slideGlass
+//
+// Slide the lemonade glass into the scene.
+//
 		slideGlass: function() {
 			var self = this,
 				glassSize,
@@ -448,7 +460,7 @@ var LayerGame = (function(){
 				this.glass = null;
 			}
 
-			// glass
+			/* Create the glass sprite. */
 			this.glass = cc.Sprite.create("#GlassEmpty.png");
 			glassSize = this.glass.getContentSize()
 			this.glass.setTag(TAG_LEMONADE);
@@ -461,7 +473,7 @@ var LayerGame = (function(){
 				self.showTouchArea(self.glass.getPosition());
 			}, 1.0, 0);
 			
-			// lemonade
+			/* Create the lemonade sprite. */
 			this.lemonade = cc.Sprite.create("#GlassFull.png");
 			this.lemonade.setAnchorPoint(.5, .5);
 			this.lemonade.setPosition(glassSize.width * .5, glassSize.height * .5);
@@ -470,6 +482,11 @@ var LayerGame = (function(){
 			this.schedule(function(){self.drinkLemonade();}, 1.0, 0);
 		},
 		
+//
+// ###  LayerGame.slideIn
+//
+// Run the actions to make a node look like it is sliding into the scene.
+//
 		slideIn: function(node) {
 			var winSize = App.getWinSize(),
 				movement = cc.p(-winSize.width, 0);
@@ -482,6 +499,11 @@ var LayerGame = (function(){
 			));
 		},
 		
+//
+// ###  LayerGame.drinkLemonade
+//
+// Drink the lemonade.
+//
 		drinkLemonade: function() {
 			var self = this,
 				winSize = App.getWinSize();
@@ -496,6 +518,11 @@ var LayerGame = (function(){
 			this.schedule(function(){self.drinkingLemonade();}, 1.0, 0);
 		},
 		
+//
+// ###  LayerGame.drinkingLemonade
+//
+// Continue drinking the lemonade.
+//
 		drinkingLemonade: function() {
 			var self = this,
 				winSize = App.getWinSize(),
@@ -511,7 +538,7 @@ var LayerGame = (function(){
 				cc.RemoveSelf.create()
 			));
 			
-			// streaks
+			/* Create the streaks. */
 			for (i = 0; i < len; i += 1) {
 				streak = cc.Sprite.create("#Streak.png");
 				streak.setAnchorPoint(.5, -.5);
@@ -528,17 +555,56 @@ var LayerGame = (function(){
 				this.addChild(streak, 1);
 			}
 			
-			// drink
+			/* Start the drinking animation. */
 			this._originalLemonadePos = cc.p(this.lemonade.getPosition());
 			this._originalLemonadeRect = cc.rect(this.lemonade.getTextureRect());
 			this.schedule(this.animateDrink, 0, cc.REPEAT_FOREVER);
 
-			// smash glass
+			/* Schedule the glass smashing. */
 			this.schedule(function(){self.smashGlass()}, 3.5, 0);
 			
 			this.drinkCount += 1;
 		},
 		
+//
+// ###  LayerGame.smashGlass
+//
+// Smash the empty lemonade glass.
+//
+		smashGlass: function() {
+			var self = this,
+				total = App.config["total-glass-breaking-sounds"];
+
+			this.lemonade = null;
+			this.glass = null;
+			
+			App.playEffect("res/glass-breaking" + (1 + this.breakCount) + ".wav");
+			cc.audioEngine.setMusicVolume(1);
+
+			App.requestUrl("api/drink", this.onGetExchangeRate);
+			this.createActionButtons();
+		
+			this.breakCount = (this.breakCount + 1) % total;
+		},
+		
+//
+// ###  LayerGame.viewAdvertisement
+//
+// View an advertisement.
+//
+		viewAdvertisement: function() {
+			App.getAdsPlugin().showAds({
+				type: plugin.AdsType.FullScreenAd,
+				size: 0,
+				position: plugin.AdsPos.Center
+			});
+		},
+		
+//
+// ###  LayerGame.animateDrink
+//
+// Animate drinking the lemonade. The glass will go from full to empty.
+//
 		animateDrink: function(delta) {
 			var originalRect = this._originalLemonadeRect,
 				originalPos = this._originalLemonadePos,
@@ -572,29 +638,79 @@ var LayerGame = (function(){
 			}
 		},
 		
-		smashGlass: function() {
-			var self = this;
-
-			this.lemonade = null;
-			this.glass = null;
+//
+// ###  LayerGame.animateCurrencies
+//
+// Animate adding or subtracting currencies.
+//
+		animateCurrencies: function() {
+			var sprite,
+				bux = parseInt(this.buxLabel.getString()),
+				lemonades = parseInt(this.lemonadesLabel.getString()),
+				sounds,
+				funcName;
 			
-			App.playEffect("res/glass-breaking" + (1 + this.breakCount) + ".wav");
-			cc.audioEngine.setMusicVolume(1);
+			if (bux !== this.newBuxAmount) {
+				if (bux < this.newBuxAmount) {
+					this.animateCurrencyAdd(this.buxIcon, "Bux.png");
 
-			App.requestUrl("api/drink", this.onGetExchangeRate);
-			this.createGameMenu();
-		
-			this.breakCount = (this.breakCount + 1) % App.config["total-glass-breaking-sounds"];
+					sounds = App.config["bux-sounds"];
+					App.playEffect(sounds[App.rand(sounds.length)]);
+				}
+				bux += this.animateBuxIncrement;
+				funcName = this.animateBuxIncrement > 0 ? "min" : "max";
+				bux = Math[funcName](bux, this.newBuxAmount);
+				this.buxLabel.setString(bux);
+			}
+			if (lemonades !== this.newLemonadesAmount) {
+				if (lemonades < this.newLemonadesAmount) {
+					this.animateCurrencyAdd(this.lemonadesIcon, "Lemonade.png");
+
+					sounds = App.config["glass-sounds"];
+					App.playEffect(sounds[App.rand(sounds.length)]);
+				}
+				lemonades += this.animateLemonadesIncrement;
+				funcName = this.animateLemonadesIncrement > 0 ? "min" : "max";
+				lemonades = Math[funcName](lemonades, this.newLemonadesAmount);
+				this.lemonadesLabel.setString(lemonades);
+			}
 		},
 		
-		watchVideo: function() {
-			App.getAdsPlugin().showAds({
-				type: plugin.AdsType.FullScreenAd,
-				size: 0,
-				position: plugin.AdsPos.Center
-			});
+//
+// ###  LayerGame.animateCurrencyAdd
+//
+// Animate adding an amount to a certain currency.
+//
+		animateCurrencyAdd: function(destNode, filename) {
+			var angle = cc.DEGREES_TO_RADIANS(App.rand(180)),
+				radius = App.scale(300),
+				sprite = cc.Sprite.create("#" + filename),
+				rotation = App.rand(360 * 2);
+			sprite.setPosition(cc.pAdd(
+				destNode.getPosition(),
+				cc.p(Math.sin(angle) * radius, Math.cos(angle) * radius)
+			));
+			sprite.setRotation(rotation);
+			sprite.setScale(destNode.getScale());
+			sprite.setOpacity(0);
+			sprite.runAction(cc.Sequence.create(
+				cc.FadeIn.create(1.0),
+				cc.FadeOut.create(0.2)
+			));
+			sprite.runAction(cc.EaseOut.create(cc.RotateBy.create(1.0, -rotation), 1.5));
+			sprite.runAction(cc.MoveTo.create(1.0, destNode.getPosition()));
+			sprite.runAction(cc.Sequence.create(
+				cc.DelayTime.create(1.2),
+				cc.RemoveSelf.create()
+			));
+			this.addChild(sprite, 10);
 		},
 		
+//
+// ###  LayerGame.showTouchArea
+//
+// Animate the given position as if being clicked or tapped.
+//
 		showTouchArea: function(pos) {
 			var circle;
 			
@@ -620,6 +736,11 @@ var LayerGame = (function(){
 			this.addChild(circle, 10);
 		},
 		
+//
+// ###  LayerGame.addCurrencies
+//
+// Add the given currency amount to the player's inventory.
+//
 		addCurrencies: function(lemonades, bux) {
 			lemonades = parseInt(lemonades);
 			bux = parseInt(bux);
@@ -635,6 +756,40 @@ var LayerGame = (function(){
 			}
 		},
 		
+//
+// ###  LayerGame.getFriendName
+//
+// Return a random friend's name.
+//
+		getFriendName: function() {
+			var plugin = App.getSocialPlugin(),
+				id = plugin.getRandomFriendId(),
+				friends;
+			if (id && id > 0) {
+				return plugin.getPlayerName(id);
+			}
+			friends = App.config["anonymous-friends"];
+			if (friends) {
+				id = App.rand(friends.length);
+				return friends[id];
+			}
+			return "Bruce Lee";
+		},
+		
+//
+// ###  LayerGame.setRateIconPos
+//
+// Set the position of the exchange rate icon.
+//
+		setRateIconPos: function() {
+			this.rateIcon.x = this.rateLabel.x + this.rateLabel.width;
+		},
+		
+//
+// ###  LayerGame.menuButtonCallback
+//
+// Callback for when a button is clicked. Determines which button was clicked by tag.
+//
 		menuButtonCallback: function(sender) {
 			var self = this,
 				tag = sender.getTag(),
@@ -650,8 +805,8 @@ var LayerGame = (function(){
 			}
 			else if (tag == TAG_DRINK_LEMONADE) {
 				if (numLemonades > 0) {
-					this.removeGameMenu();
-					this.giveLemonade();
+					this.removeActionButtons();
+					this.startDrinkingLemonade();
 				}
 			}
 			else if (tag == TAG_GIVE_LEMONADE) {
@@ -661,22 +816,22 @@ var LayerGame = (function(){
 			}
 			else if (tag == TAG_BUY_LEMONADE) {
 				if (numBux > this.exchangeRate) {
-					this.removeGameMenu();
+					this.removeActionButtons();
 					this.createExchangeItems("buy");
 				}
 			}
 			else if (tag == TAG_SELL_LEMONADE) {
 				if (numLemonades > 0) {
-					this.removeGameMenu();
+					this.removeActionButtons();
 					this.createExchangeItems("sell");
 				}
 			}
 			else if (tag == TAG_PURCHASE_BUX) {
-				this.removeGameMenu();
-				this.createPurchaseMenu();
+				this.removeActionButtons();
+				this.createPurchaseButtons();
 			}
 			else if (tag == TAG_EARN_BUX) {
-				this.watchVideo();
+				this.viewAdvertisement();
 			}
 			else if (tag == TAG_SMALL_BUX_PACK) {
 				Soomla.storeController.buyMarketItem("small_bux_pack");
@@ -686,18 +841,80 @@ var LayerGame = (function(){
 			}
 		},
 		
+//
+// ###  LayerGame.onEnter
+//
+// Called when the layer enters the scene. Updates the exchange rate.
+//
+		onEnter: function() {
+			this._super();
+			App.requestUrl("api/exchange-rate", this.onGetExchangeRate);
+		},
+		
+//
+// ###  LayerGame.onGetExchangeRate
+//
+// Called when the exchange rate is updated.
+//
+		onGetExchangeRate: function(response) {
+			var scene = cc.director.getRunningScene(),
+				multiplier = 100,
+				value;
+			
+			if (scene && scene.layer) {
+				if ((parseInt(response) + "").length >= 3) {
+					multiplier = 1;
+				} else if (parseFloat(response) > 50) {
+					multiplier = 10;
+				}
+
+				value = parseInt(parseFloat(response) * multiplier) / multiplier;
+				if (multiplier == 100) {
+					value = value.toFixed(2);
+				}
+				if (value < 0.01) {
+					value = 0.01;
+				}
+				scene.layer.exchangeRate = parseInt(value);
+				scene.layer.rateLabel.setString(" = " + value);
+				scene.layer.setRateIconPos();
+				scene.layer.enableActionButtons();
+			}
+		},
+		
+//
+// ###  LayerGame.onPaymentComplete
+//
+// Called when a payment is completed.
+//
+		onPaymentComplete: function() {
+			this.removePurchaseButtons();
+			this.createActionButtons();
+		},
+
+//
+// ###  LayerGame.onAdDismissed
+//
+// Called when the advertisement is dismissed.
+//
+		onAdDismissed: function(){
+			this.addCurrencies(0, parseInt(this.exchangeRate * .5));
+		},
+
+//
+// ###  LayerGame.onGetMyPlayerName
+//
+// Called when the player's name is retrieved.
+//
 		onGetMyPlayerName: function(name) {
 			this.playerNameLabel.setString(name);
 		},
 		
-		enableButton: function(tag, enabled) {
-			var button = this.menu.getChildByTag(tag);
-			if (button) {
-				button.getNormalImage().setColor(enabled ? cc.color(255,255,255) : cc.color(128,128,128));
-				button.setEnabled(enabled);
-			}
-		},
-		
+//
+// ###  LayerGame.onCurrencyUpdate
+//
+// Called when a currency amount is updated.
+//
 		onCurrencyUpdate: function() {
 			var self = this,
 				numAnimations,
@@ -727,72 +944,72 @@ var LayerGame = (function(){
 				Math.abs((this.newLemonadesAmount - numLemonades) / this.animateLemonadesIncrement)
 			)) - 1;
 
-			this.enableButtons();
+			this.enableActionButtons();
 			
-			self.animateCurrencyAmounts();
+			self.animateCurrencies();
 			if (numAnimations > 0) {
 				this.schedule(function(){
-					self.animateCurrencyAmounts();
+					self.animateCurrencies();
 				}, self.animateCurrencyAmountRate / 1000, numAnimations);
 			}
 		},
 		
-		animateCurrencyAmounts: function() {
-			var sprite,
-				currentBux = parseInt(this.buxLabel.getString()),
-				currentLemonades = parseInt(this.lemonadesLabel.getString()),
-				sounds;
+//
+// ###  LayerGame.onSocialUIResponse
+//
+// Called when the social UI has completed.
+//
+		onSocialUIResponse: function(response) {
+			var i,
+				len;
+			cc.log("Friend picker response: " + JSON.stringify(response));
+
+			if (response && response.request && response.to.length) {
+				len = response.to.length;
+				for (i = 0; i < len; i += 1) {
+					cc.log(response.request + "_" + response.to[i]);
+				}
+				
+				self.addCurrencies(-1, 0);
+				App.requestUrl("api/give", self.onGetExchangeRate);
+			}
 			
-			if (currentBux !== this.newBuxAmount) {
-				if (currentBux < this.newBuxAmount) {
-					this.animateCurrencyAdd(this.buxIcon, "Bux.png");
+			this.enableActionButtons();
+		},
 
-					sounds = App.config["bux-sounds"];
-					App.playEffect(sounds[App.rand(sounds.length)]);
-				}
-				currentBux += this.animateBuxIncrement;
-				currentBux = Math[this.animateBuxIncrement > 0 ? "min" : "max"](currentBux, this.newBuxAmount);
-				this.buxLabel.setString(currentBux);
-			}
-			if (currentLemonades !== this.newLemonadesAmount) {
-				if (currentLemonades < this.newLemonadesAmount) {
-					this.animateCurrencyAdd(this.lemonadesIcon, "Lemonade.png");
-
-					sounds = App.config["glass-sounds"];
-					App.playEffect(sounds[App.rand(sounds.length)]);
-				}
-				currentLemonades += this.animateLemonadesIncrement;
-				currentLemonades = Math[this.animateLemonadesIncrement > 0 ? "min" : "max"](currentLemonades, this.newLemonadesAmount);
-				this.lemonadesLabel.setString(currentLemonades);
+//
+// ###  LayerGame.onPlayerImageLoaded
+//
+// Called when the player image has finished loading.
+//
+		onPlayerImageLoaded: function(id, url) {
+			if (id === "me") {
+				this.createPlayerImage(url);
 			}
 		},
 		
-		animateCurrencyAdd: function(destNode, filename) {
-			var angle = cc.DEGREES_TO_RADIANS(App.rand(180)),
-				radius = App.scale(300),
-				sprite = cc.Sprite.create("#" + filename),
-				rotation = App.rand(360 * 2);
-			sprite.setPosition(cc.pAdd(
-				destNode.getPosition(),
-				cc.p(Math.sin(angle) * radius, Math.cos(angle) * radius)
-			));
-			sprite.setRotation(rotation);
-			sprite.setScale(destNode.getScale());
-			sprite.setOpacity(0);
-			sprite.runAction(cc.Sequence.create(
-				cc.FadeIn.create(1.0),
-				cc.FadeOut.create(0.2)
-			));
-			sprite.runAction(cc.EaseOut.create(cc.RotateBy.create(1.0, -rotation), 1.5));
-			sprite.runAction(cc.MoveTo.create(1.0, destNode.getPosition()));
-			sprite.runAction(cc.Sequence.create(
-				cc.DelayTime.create(1.2),
-				cc.RemoveSelf.create()
-			));
-			this.addChild(sprite, 10);
+//
+// ###  LayerGame.enableButton
+//
+// Enables or disables a button by the given tag.
+//
+		enableButton: function(tag, enabled) {
+			var button = this.menu.getChildByTag(tag),
+				color = (enabled ? cc.color(255,255,255,255) : cc.color(128,128,128,255));
+			if (button) {
+				button.getNormalImage().setColor(color);
+				button.setEnabled(enabled);
+			} else {
+				cc.log("Couldnt get button by tag " + tag);
+			}
 		},
 		
-		enableButtons: function() {
+//
+// ###  LayerGame.enableActionButtons
+//
+// Automatically enables or disables all action buttons.
+//
+		enableActionButtons: function() {
 			var numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
 				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
 
@@ -804,39 +1021,48 @@ var LayerGame = (function(){
 			this.enableButton(TAG_PURCHASE_BUX, true);
 		},
 		
-		onPaymentComplete: function() {
-			this.removePurchaseMenu();
-			this.createGameMenu();
-		},
-
-		onAdDismissed: function(){
-			this.addCurrencies(0, parseInt(this.exchangeRate * .5));
-		},
-
-		onGetExchangeRate: function(response) {
-			var scene = cc.director.getRunningScene(),
-				multiplier = 100,
-				value;
-			
-			if (scene && scene.layer) {
-				if ((parseInt(response) + "").length >= 3) {
-					multiplier = 1;
-				} else if (parseFloat(response) > 50) {
-					multiplier = 10;
+//
+// ###  LayerGame.removeButtons
+//
+// Remove buttons with the given tags. `tags` is an array.
+//
+		removeButtons: function(tags) {
+			var i,
+				button;
+			for (i = 0; i < tags.length; i += 1) {
+				button = this.menu.getChildByTag(tags[i]);
+				if (button) {
+					button.removeFromParent();
 				}
-
-				value = parseInt(parseFloat(response) * multiplier) / multiplier;
-				if (multiplier == 100) {
-					value = value.toFixed(2);
-				}
-				if (value < 0.01) {
-					value = 0.01;
-				}
-				scene.layer.exchangeRate = parseInt(value);
-				scene.layer.rateLabel.setString(" = " + value);
-				scene.layer.setRateIconPos();
-				scene.layer.enableButtons();
 			}
+		},
+		
+//
+// ###  LayerGame.removeActionButtons
+//
+// Remove the game menu items.
+//
+		removeActionButtons: function() {
+			this.removeButtons([
+				TAG_DRINK_LEMONADE,
+				TAG_GIVE_LEMONADE,
+				TAG_EARN_BUX,
+				TAG_BUY_LEMONADE,
+				TAG_SELL_LEMONADE,
+				TAG_PURCHASE_BUX
+			]);
+		},
+		
+//
+// ###  LayerGame.removePurchaseButtons
+//
+// Remove the purchase menu items.
+//
+		removePurchaseButtons: function() {
+			this.removeButtons([
+				TAG_SMALL_BUX_PACK,
+				TAG_MEDIUM_BUX_PACK
+			]);
 		}
 
 	}); // end layer extend
