@@ -163,12 +163,12 @@ server.get(<span class="hljs-string">"/"</span>, <span class="hljs-function"><sp
 	<span class="hljs-keyword">var</span> i,
 		exchangeRate = <span class="hljs-number">10.0</span>,
 		minRate = <span class="hljs-number">0.01</span>,
-		maxRate = <span class="hljs-number">9999.99</span>,
+		maxRate = <span class="hljs-number">999.99</span>,
 		multipliers = {
-			drink: <span class="hljs-number">1.5</span>,
-			give: <span class="hljs-number">0.75</span>,
-			buy: <span class="hljs-number">1.1</span>,
-			sell: <span class="hljs-number">0.909</span>
+			drink: <span class="hljs-number">1.15</span>,
+			give: <span class="hljs-number">.89</span>,
+			buy: <span class="hljs-number">1.02</span>,
+			sell: <span class="hljs-number">.985</span>
 		},
 		modifyExchangeRateRequest = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
 			<span class="hljs-keyword">var</span> components = req.url.split(<span class="hljs-string">"/"</span>),
@@ -182,7 +182,7 @@ server.get(<span class="hljs-string">"/"</span>, <span class="hljs-function"><sp
         
       
         
-        <h3 id="-api-exchange-rate-"><code>api/exchange-rate</code></h3>
+        <h3 id="api-exchange-rate">api/exchange-rate</h3>
 <p>Returns the current exchange rate.</p>
 
         
@@ -192,7 +192,7 @@ server.get(<span class="hljs-string">"/"</span>, <span class="hljs-function"><sp
         
       
         
-        <h3 id="-api-"><code>api/...</code></h3>
+        <h3 id="api-">api/…</h3>
 <p>Provide <code>api/drink</code>, <code>api/give</code>, <code>api/buy</code> and <code>api/sell</code>, all of which modify the current exchange rate.</p>
 
         

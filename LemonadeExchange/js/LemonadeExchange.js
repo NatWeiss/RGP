@@ -150,3 +150,28 @@ App.addCurrencyToButton = function(button, amount, currencyAmount, spriteFrameNa
 	label.setPosition(buttonSize.width - margin * 1.5, margin - shadowDistance);
 	button.addChild(label);
 };
+
+//
+// ###  App.startMusic
+//
+// Starts music playing, cycling through the available songs. Safe to be called even if music is already playing.
+//
+App.startMusic = function() {
+	var self = this,
+		song;
+	
+	if (!this._didPlaySong
+	&& App.isSoundEnabled()
+	&& !cc.audioEngine.isMusicPlaying()) {
+		this._songNumber = this._songNumber || 0;
+		song = App.config["songs"][this._songNumber]
+		
+		App.playEffect("res/music-start.wav");
+		App.playMusic(song.file);
+		
+		this._songNumber = (this._songNumber + 1) % App.config["songs"].length;
+		this._didPlaySong = true;
+		setTimeout(function(){self._didPlaySong = false;}, 1000);
+	}
+};
+

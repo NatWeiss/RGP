@@ -48,12 +48,12 @@ server.get("/", function(req,res){res.sendfile("index.html");});
 	var i,
 		exchangeRate = 10.0,
 		minRate = 0.01,
-		maxRate = 9999.99,
+		maxRate = 999.99,
 		multipliers = {
-			drink: 1.5,
-			give: 0.75,
-			buy: 1.1,
-			sell: 0.909
+			drink: 1.15,
+			give: .89,
+			buy: 1.02,
+			sell: .985
 		},
 		modifyExchangeRateRequest = function(req, res) {
 			var components = req.url.split("/"),
@@ -66,7 +66,7 @@ server.get("/", function(req,res){res.sendfile("index.html");});
 		};
 
 //
-// ###  `api/exchange-rate`
+// ###  api/exchange-rate
 //
 // Returns the current exchange rate.
 //
@@ -75,7 +75,7 @@ server.get("/", function(req,res){res.sendfile("index.html");});
 	});
 	
 //
-// ###  `api/...`
+// ###  api/...
 //
 // Provide `api/drink`, `api/give`, `api/buy` and `api/sell`, all of which modify the current exchange rate.
 //

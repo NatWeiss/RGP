@@ -107,63 +107,66 @@
         
         
         
-          <div class='highlight'><pre>
+      
+        
+        <p>The main scene for LemonadeExchange. Provides a consistent background layer for the foreground layers <a href="LayerMenu.html">LayerMenu</a> and <a href="LayerGame.html">LayerGame</a>.</p>
 
-<span class="hljs-keyword">var</span> SceneMain = (<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-	<span class="hljs-keyword">var</span> EFFECT_ORBIT_RADIUS = <span class="hljs-number">8.0</span>;
+        
+      
+        
+        <h3 id="scenemain">SceneMain</h3>
+<p>Uses the module pattern to define some private variables. Returns a constructor.</p>
 
-	<span class="hljs-keyword">return</span> cc.Scene.extend({
+        
+          <div class='highlight'><pre><span class="hljs-keyword">var</span> SceneMain = (<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">var</span> EFFECT_ORBIT_RADIUS = <span class="hljs-number">8.0</span>;</pre></div>
+        
+      
+        
+        <h3 id="public">Public</h3>
+<p>Here begins the public <code>SceneMain</code> class.</p>
+
+        
+          <div class='highlight'><pre>	<span class="hljs-keyword">return</span> cc.Scene.extend({
 		layer: <span class="hljs-literal">null</span>,
 		bg: <span class="hljs-literal">null</span>,
-		runTime: <span class="hljs-number">0</span>,
-		
-		init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+		runTime: <span class="hljs-number">0</span>,</pre></div>
+        
+      
+        
+        <h3 id="scenemain-init">SceneMain.init</h3>
+<p>Setup the background layer and start the animation. Create the initial foreground layer.</p>
+
+        
+          <div class='highlight'><pre>		init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
 			<span class="hljs-keyword">var</span> winSize = App.getWinSize();
 			<span class="hljs-keyword">this</span>._super();
 			
-			EFFECT_ORBIT_RADIUS = App.scale(EFFECT_ORBIT_RADIUS);</pre></div>
-        
-      
-        
-        <p>background</p>
-
-        
-          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.bg = cc.Sprite.create(<span class="hljs-string">"#Bg.png"</span>);
+			EFFECT_ORBIT_RADIUS = App.scale(EFFECT_ORBIT_RADIUS);
+			
+			<span class="hljs-comment">/* Create the background layer. */</span>
+			<span class="hljs-keyword">this</span>.bg = cc.Sprite.create(<span class="hljs-string">"#Bg.png"</span>);
 			<span class="hljs-keyword">this</span>.bg.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
 			<span class="hljs-keyword">this</span>.bg.setScale(<span class="hljs-built_in">Math</span>.max(
-				winSize.width / (<span class="hljs-keyword">this</span>.bg.getContentSize().width - EFFECT_ORBIT_RADIUS * <span class="hljs-number">2</span>),
-				winSize.height / (<span class="hljs-keyword">this</span>.bg.getContentSize().height - EFFECT_ORBIT_RADIUS * <span class="hljs-number">2</span>)
+				winSize.width / (<span class="hljs-keyword">this</span>.bg.width - EFFECT_ORBIT_RADIUS * <span class="hljs-number">2</span>),
+				winSize.height / (<span class="hljs-keyword">this</span>.bg.height - EFFECT_ORBIT_RADIUS * <span class="hljs-number">2</span>)
 				));
-			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.bg, <span class="hljs-number">0</span>);</pre></div>
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.bg, <span class="hljs-number">0</span>);
+			
+			<span class="hljs-comment">/* Create the first foreground layer. */</span>
+			<span class="hljs-keyword">this</span>.createLayer(App.getInitialLayer(), <span class="hljs-literal">false</span>);
+			
+			<span class="hljs-comment">/* Schedule an update to run a custom effect on the background. */</span>
+			<span class="hljs-keyword">this</span>.scheduleUpdate();
+		},</pre></div>
         
       
         
-        <p>create first layer
-it will be swapped out for other layers</p>
+        <h3 id="scenemain-createlayer">SceneMain.createLayer</h3>
+<p>Creates a new foreground layer. Destroys any existing foreground layer.</p>
 
         
-          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.createLayer(App.getInitialLayer(), <span class="hljs-literal">false</span>);</pre></div>
-        
-      
-        
-        <p>schedule an update to run an effect on the background</p>
-
-        
-          <div class='highlight'><pre>			<span class="hljs-keyword">this</span>.scheduleUpdate();
-		},
-
-		update: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(dt)</span> {</span>
-			<span class="hljs-keyword">var</span> percent,
-				yScale = <span class="hljs-number">0.5</span>;
-			
-			<span class="hljs-keyword">this</span>.runTime += dt;
-			percent = (<span class="hljs-keyword">this</span>.runTime % <span class="hljs-number">2.0</span>) * <span class="hljs-number">.5</span>;
-			
-			<span class="hljs-keyword">this</span>.bg.setPosition(EFFECT_ORBIT_RADIUS * -<span class="hljs-number">1</span> + <span class="hljs-built_in">Math</span>.sin(percent * <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span>) * EFFECT_ORBIT_RADIUS,
-				(EFFECT_ORBIT_RADIUS * -<span class="hljs-number">1</span> + <span class="hljs-built_in">Math</span>.cos(percent * <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span>) * EFFECT_ORBIT_RADIUS) * yScale);
-		},
-
-		createLayer: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(LayerClass, canResume)</span> {</span>
+          <div class='highlight'><pre>		createLayer: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(LayerClass, canResume)</span> {</span>
 			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.layer) {
 				<span class="hljs-keyword">this</span>.layer.removeFromParent();
 				<span class="hljs-keyword">this</span>.layer = <span class="hljs-literal">null</span>;
@@ -172,8 +175,29 @@ it will be swapped out for other layers</p>
 			<span class="hljs-keyword">this</span>.layer = <span class="hljs-keyword">new</span> LayerClass();
 			<span class="hljs-keyword">this</span>.layer.init(canResume);
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.layer);
+		},</pre></div>
+        
+      
+        
+        <h3 id="scenemain-update">SceneMain.update</h3>
+<p>Makes the background look sort of like it is swirling by updating it’s position. Called continously.</p>
+
+        
+          <div class='highlight'><pre>		update: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(dt)</span> {</span>
+			<span class="hljs-keyword">var</span> percent,
+				yScale = <span class="hljs-number">0.5</span>;
+			
+			<span class="hljs-keyword">this</span>.runTime += dt;
+			percent = (<span class="hljs-keyword">this</span>.runTime % <span class="hljs-number">2.0</span>) * <span class="hljs-number">.5</span>;
+			
+			<span class="hljs-keyword">this</span>.bg.x = EFFECT_ORBIT_RADIUS * -<span class="hljs-number">1</span> +
+				<span class="hljs-built_in">Math</span>.sin(percent * <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span>) * EFFECT_ORBIT_RADIUS;
+			<span class="hljs-keyword">this</span>.bg.y = (EFFECT_ORBIT_RADIUS * -<span class="hljs-number">1</span> +
+				<span class="hljs-built_in">Math</span>.cos(percent * <span class="hljs-built_in">Math</span>.PI * <span class="hljs-number">2</span>) * EFFECT_ORBIT_RADIUS) * yScale;
+			
+			App.startMusic();
 		}
-		
+
 	}); <span class="hljs-comment">// end or scene extend</span>
 
 }()); <span class="hljs-comment">// end of module closure</span></pre></div>
