@@ -102,7 +102,20 @@ When the `prebuild` command is finished, the static libraries will reside in `Ra
 Project Creator
 ---------------
 
-The project creator tool...
+The project creator tool can be used to rapidly create a new project that uses the static libraries. Either the built-in GUI or the commandline version can be used.
+
+To use the GUI version:
+
+    cd RapidGamePro
+    tools/create-project
+
+To use the commandline version:
+
+    cd RapidGamePro
+	tools/create-project --help
+    tools/create-project -n HelloWorld -k com.mycompany.helloworld -p ~/code
+
+
 
 
 
