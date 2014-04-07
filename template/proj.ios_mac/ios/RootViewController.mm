@@ -35,9 +35,8 @@ using namespace cocos2d;
 	{
 		[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-// does this actually get a width / height?
-		CGSize s = CGSizeMake([[CCEAGLView sharedEGLView] getWidth], [[CCEAGLView sharedEGLView] getHeight]);
-NSLog(@"new window dimensions %.0f x %.0f", s.width, s.height);
+		CCEAGLView* view = (CCEAGLView*)self.view;
+		CGSize s = CGSizeMake([view getWidth], [view getHeight]);
 
 		Application::getInstance()->applicationScreenSizeChanged((int)s.width, (int)s.height);
 	}
