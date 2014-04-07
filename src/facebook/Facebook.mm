@@ -62,14 +62,29 @@ inline void split(const string& s, char delim, vector<string>& elems)
 
 static void callRunningLayer(const string& method, const string& param1)
 {
-	bool addParam1Quotes = !(param1 == "true" || param1 == "false");
+	bool addParam1Quotes = !(param1 == "true" || param1 == "false" || param1[0] == '{');
 	jsval ret;
 	stringstream ss;
 	ss << "App.callRunningLayer(\"" << method
-		<< "\", " << (addParam1Quotes ? "\"" : "") << param1 << (addParam1Quotes ? "\"" : "") << ");";
+		<< "\", " << (addParam1Quotes ? "\"" : "")
+		<< param1
+		<< (addParam1Quotes ? "\"" : "") << ");";
 
 	//debugLog("%s Executing script: %s", kTag, ss.str().c_str());
 	ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
+}
+
+static NSDictionary* parseURLParams(NSString* query)
+{
+	NSArray *pairs = [query componentsSeparatedByString:@"&"];
+	NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+	for (NSString *pair in pairs) {
+		NSArray *kv = [pair componentsSeparatedByString:@"="];
+		NSString *key = [kv[0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		NSString *val = [kv[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		params[key] = val;
+	}
+	return params;
 }
 
 static void loadPlayerImageUrl(const string& playerId)
@@ -351,6 +366,115 @@ const string& Facebook::getRandomFriendId() const
 	if (size)
 		return friendIds[rand() % size];
 	return blankString;
+}
+
+void Facebook::showUI(const map<string, string>& infoMap)
+{
+	//
+	// https://developers.facebook.com/docs/ios/ui-controls#friendpicker
+	// https://developers.facebook.com/docs/sharing/reference/feed-dialog
+	//
+	map<string,string> info = infoMap;
+
+	// requests
+	if (info["method"] == "apprequests" || info["method"] == "apprequest")
+	{
+		// setup extra parameters
+		NSMutableDictionary* params = [[NSMutableDictionary alloc] init];
+		if (info["max_recipients"].size())
+		{
+			[params setObject:[NSString stringWithUTF8String:info["max_recipients"].c_str()] forKey:@"max_recipients"];
+		}
+		
+		// present the dialog
+		[FBWebDialogs presentRequestsDialogModallyWithSession:nil
+			message:info["message"].size() ? [NSString stringWithUTF8String:info["message"].c_str()] : @"You are awesome!"
+			title:info["title"].size() ? [NSString stringWithUTF8String:info["title"].c_str()] : nil
+			parameters:params
+			handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error)
+			{
+				if (error)
+				{
+					debugLog("%s Error sending request: %s", kTag, [[error localizedDescription] UTF8String]);
+					callRunningLayer("onSocialUIResponse", "");
+				}
+				else
+				{
+					NSDictionary* urlParams = parseURLParams([resultURL query]);
+					if (result == FBWebDialogResultDialogNotCompleted || ![urlParams valueForKey:@"request"])
+					{
+						debugLog("%s User canceled request", kTag);
+						callRunningLayer("onSocialUIResponse", "");
+					}
+					else
+					{
+						// success
+						stringstream ss;
+						ss << "{request: \"" << strVal([urlParams valueForKey:@"request"]) << "\", to: [";
+						int count = 0;
+						for (NSString* key in urlParams)
+						{
+							if ([key rangeOfString:@"to"].location != NSNotFound)
+							{
+								ss << (count > 0 ? ", " : "")
+									<< "\"" << strVal([urlParams objectForKey:key]) << "\"";
+								count++;
+							}
+						}
+						ss << "]}";
+						callRunningLayer("onSocialUIResponse", ss.str());
+					}
+					[urlParams release];
+				}
+			}
+		];
+		[params release];
+	}
+	else
+	{
+		UIWindow* window = [UIApplication sharedApplication].keyWindow;
+		UIViewController* rootViewController = window.rootViewController;
+
+		// create the picker
+		FBFriendPickerViewController* controller = [[FBFriendPickerViewController alloc] init];
+		controller.title = [NSString stringWithUTF8String:info["title"].c_str()];
+		if (info["max_recipients"] == "1")
+			controller.allowsMultipleSelection = NO;
+		[controller loadData];
+
+		// show the picker modally
+		[controller presentModallyFromViewController:rootViewController
+			animated:YES
+			handler:^(FBViewController *sender, BOOL donePressed)
+			{
+				if (donePressed)
+				{
+					//NSLog(@"Selected friends: %@", controller.selection);
+
+					int count = 0;
+					stringstream ss;
+					ss << "{request: \"picker\", to: [";
+					for (NSDictionary* dict in controller.selection)
+					{
+						NSString* idStr = [dict objectForKey:@"id"];
+						if (idStr)
+						{
+							ss << (count > 0 ? ", " : "")
+								<< "\"" << [idStr UTF8String] << "\"";
+							count++;
+						}
+					}
+					ss << "]}";
+					
+					callRunningLayer("onSocialUIResponse", ss.str());
+				}
+				else
+				{
+					callRunningLayer("onSocialUIResponse", "");
+				}
+			}
+		];
+	}
 }
 
 string Facebook::getSDKVersion() const

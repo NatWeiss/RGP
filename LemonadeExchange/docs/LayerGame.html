@@ -1118,8 +1118,8 @@
 					cc.log(response.request + <span class="hljs-string">"_"</span> + response.to[i]);
 				}
 				
-				self.addCurrencies(-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
-				App.requestUrl(<span class="hljs-string">"api/give"</span>, self.onGetExchangeRate);
+				<span class="hljs-keyword">this</span>.addCurrencies(-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+				App.requestUrl(<span class="hljs-string">"api/give"</span>, <span class="hljs-keyword">this</span>.onGetExchangeRate);
 			}
 			
 			<span class="hljs-keyword">this</span>.enableActionButtons();

@@ -9,6 +9,7 @@ release:
 	cp -a include ${dest}
 	cp -a LemonadeExchange ${dest}
 	cp -a README.md ${dest}
+	cp -a CHANGELOG.txt ${dest}
 	cp -a src ${dest}
 	cp -a template ${dest}
 	cp -a tools ${dest}

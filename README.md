@@ -25,6 +25,7 @@ Folder Structure
     RapidGamePro/
         README.md - Documentation overview in markdown format.
         docs.html - Documentation overview ready for browser.
+        CHANGELOG.txt - Project change log.
         prebuild - Executable script which prebuilds the static libraries.
         docs/ - Documentation folder.
         include/ - All the header files necessary to compile a native game client.

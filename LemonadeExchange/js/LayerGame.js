@@ -974,8 +974,8 @@ var LayerGame = (function(){
 					cc.log(response.request + "_" + response.to[i]);
 				}
 				
-				self.addCurrencies(-1, 0);
-				App.requestUrl("api/give", self.onGetExchangeRate);
+				this.addCurrencies(-1, 0);
+				App.requestUrl("api/give", this.onGetExchangeRate);
 			}
 			
 			this.enableActionButtons();

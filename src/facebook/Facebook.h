@@ -28,7 +28,6 @@ class Facebook
 		const string& getPlayerFirstName(const string& id) const;
 		const string& getPlayerImageUrl(const string& id) const;
 		const string& getRandomFriendId() const;
-// https://developers.facebook.com/docs/ios/ui-controls#friendpicker
 		void showUI(const map<string,string>& info);
 		string getSDKVersion() const;
 };

@@ -22,7 +22,7 @@ template<class T> T* getNativeObj(JSContext* cx, jsval* vp)
 	return cobj;
 }
 
-void dictionaryToMap(__Dictionary* dict, map<string,string>& ret)
+static void dictionaryToMap(__Dictionary* dict, map<string,string>& ret)
 {
 	if (dict == nullptr)
 		return;
@@ -238,6 +238,26 @@ bool js_facebook_getRandomFriendId(JSContext* cx, uint32_t argc, jsval* vp)
 	return false;
 }
 
+bool js_facebook_showUI(JSContext* cx, uint32_t argc, jsval* vp)
+{
+	const int numArgs = 1;
+	if (argc == numArgs)
+	{
+		bool ok = true;
+		__Dictionary* infoDict = nullptr;
+		ok &= jsval_to_ccdictionary(cx, JS_ARGV(cx, vp)[0], &infoDict);
+		JSB_PRECONDITION2(ok && infoDict, cx, false, "Error processing arguments");
+		
+		map<string,string> info;
+		dictionaryToMap(infoDict, info);
+		getNativeObj<Facebook>(cx, vp)->showUI(info);
+		JS_SET_RVAL(cx, vp, JSVAL_VOID);
+		return true;
+	}
+	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
+	return false;
+}
+
 bool js_facebook_getSDKVersion(JSContext* cx, uint32_t argc, jsval* vp)
 {
 	const int numArgs = 0;
@@ -289,6 +309,7 @@ void js_facebook_register(JSContext* cx, JSObject* global)
 		JS_FN("getPlayerFirstName", js_facebook_getPlayerFirstName, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getPlayerImageUrl", js_facebook_getPlayerImageUrl, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getRandomFriendId", js_facebook_getRandomFriendId, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
+		JS_FN("showUI", js_facebook_showUI, 1, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FN("getSDKVersion", js_facebook_getSDKVersion, 0, JSPROP_PERMANENT | JSPROP_ENUMERATE),
 		JS_FS_END
 	};
