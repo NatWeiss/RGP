@@ -399,32 +399,7 @@ App.onWindowSizeChanged = function() {
 App.toggleFullscreenEnabled = function() {
 	this.enableFullscreen(!this.isFullscreenEnabled());
 };
-/*
-//
-// ###  App.runPrefixMethod
-//
-// Run a method name prefixed according to the browser. Example: `RequestFullScreen` becomes `webkitRequestFullScreen`.
-//
-// See http://www.sitepoint.com/use-html5-full-screen-api/.
-//
-App.runPrefixMethod = function(obj, method) {
-	var pfx = ["webkit", "moz", "ms", "o", ""];
-	var p = 0, m, t;
-	while (p < pfx.length && !obj[m]) {
-		m = method;
-		if (pfx[p] == "") {
-			m = m.substr(0,1).toLowerCase() + m.substr(1);
-		}
-		m = pfx[p] + m;
-		t = typeof obj[m];
-		if (t != "undefined") {
-			pfx = [pfx[p]];
-			return (t == "function" ? obj[m]() : obj[m]);
-		}
-		p++;
-	}
-};
-*/
+
 //
 // ###  App.loadSoundEnabled
 //

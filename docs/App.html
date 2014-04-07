@@ -457,7 +457,10 @@
 
         
           <div class='highlight'><pre>App.isFullscreenAvailable = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.isHtml5() || <span class="hljs-keyword">this</span>.isDesktop();
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
+		<span class="hljs-keyword">return</span> (screenfull &amp;&amp; screenfull.enabled);
+	}
+	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.isDesktop();
 };</pre></div>
         
       
@@ -467,6 +470,9 @@
 
         
           <div class='highlight'><pre>App.isFullscreenEnabled = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
+		<span class="hljs-keyword">return</span> (screenfull &amp;&amp; screenfull.isFullscreen);
+	}
 	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._fullscreenEnabled ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>;
 };</pre></div>
         
@@ -474,30 +480,41 @@
         
         <h3 id="app-enablefullscreen">App.enableFullscreen</h3>
 <p>Enable or disable fullscreen mode.</p>
+<p>See <a href="http://www.sitepoint.com/use-html5-full-screen-api/">http://www.sitepoint.com/use-html5-full-screen-api/</a>.</p>
 
         
           <div class='highlight'><pre>App.enableFullscreen = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(enabled)</span> {</span>
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isFullscreenAvailable()) {
 		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
-			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isFullscreenEnabled()) {
-				<span class="hljs-comment">/*cc.log("Cancelling fullscreen");*/</span>
-				<span class="hljs-keyword">this</span>.runPrefixMethod(
-					document,
-					<span class="hljs-string">"CancelFullScreen"</span>
-				);
+			<span class="hljs-keyword">if</span> (enabled) {
+				screenfull.request();
 			}
 			<span class="hljs-keyword">else</span> {
-				<span class="hljs-comment">/*cc.log("Requesting fullscreen");*/</span>
-				<span class="hljs-keyword">this</span>.runPrefixMethod(
-					document.getElementById(<span class="hljs-string">"gameBody"</span>),
-					<span class="hljs-string">"RequestFullScreen"</span>
-				);
+				screenfull.exit();
 			}
 		}
 	}
+};</pre></div>
+        
+      
+        
+        <h3 id="app-onwindowsizechanged">App.onWindowSizeChanged</h3>
+<p>Called when the window size has changed.</p>
 
-	<span class="hljs-keyword">this</span>._fullscreenEnabled = enabled ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>;
-	<span class="hljs-comment">/*cc.log("Is fullscreen? " + this.isFullscreenEnabled());*/</span>
+        
+          <div class='highlight'><pre>App.onWindowSizeChanged = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">var</span> size,
+		e = document.getElementById(<span class="hljs-string">"gameCanvas"</span>);
+	<span class="hljs-keyword">if</span> (App.isFullscreenEnabled()) {
+		size = cc.size(screen.width, screen.height);
+	} <span class="hljs-keyword">else</span> {
+		size = cc.size(document.body.scrollWidth, document.body.scrollHeight);
+	}
+	cc.log(<span class="hljs-string">"Fullscreen: "</span> + App.isFullscreenEnabled() + <span class="hljs-string">", "</span> + size.width + <span class="hljs-string">"x"</span> + size.height +
+		<span class="hljs-string">", canvas: "</span> + e.width + <span class="hljs-string">"x"</span> + e.height + <span class="hljs-string">", "</span> + e.style.width + <span class="hljs-string">" x "</span> + e.style.height);
+	
+	<span class="hljs-comment">/*cc.view.setFrameSize(winSize.width, winSize.height);*/</span>
+	<span class="hljs-comment">/*cc.view.setDesignResolutionSize(size.width, size.height, cc.ResolutionPolicy.SHOW_ALL);*/</span>
 };</pre></div>
         
       
@@ -508,31 +525,6 @@
         
           <div class='highlight'><pre>App.toggleFullscreenEnabled = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
 	<span class="hljs-keyword">this</span>.enableFullscreen(!<span class="hljs-keyword">this</span>.isFullscreenEnabled());
-};</pre></div>
-        
-      
-        
-        <h3 id="app-runprefixmethod">App.runPrefixMethod</h3>
-<p>Run a method name prefixed according to the browser. Example: <code>RequestFullScreen</code> becomes <code>webkitRequestFullScreen</code>.</p>
-<p>See <a href="http://www.sitepoint.com/html5-full-screen-api/">http://www.sitepoint.com/html5-full-screen-api/</a>.</p>
-
-        
-          <div class='highlight'><pre>App.runPrefixMethod = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(obj, method)</span> {</span>
-	<span class="hljs-keyword">var</span> pfx = [<span class="hljs-string">"webkit"</span>, <span class="hljs-string">"moz"</span>, <span class="hljs-string">"ms"</span>, <span class="hljs-string">"o"</span>, <span class="hljs-string">""</span>];
-	<span class="hljs-keyword">var</span> p = <span class="hljs-number">0</span>, m, t;
-	<span class="hljs-keyword">while</span> (p &lt; pfx.length &amp;&amp; !obj[m]) {
-		m = method;
-		<span class="hljs-keyword">if</span> (pfx[p] == <span class="hljs-string">""</span>) {
-			m = m.substr(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>).toLowerCase() + m.substr(<span class="hljs-number">1</span>);
-		}
-		m = pfx[p] + m;
-		t = <span class="hljs-keyword">typeof</span> obj[m];
-		<span class="hljs-keyword">if</span> (t != <span class="hljs-string">"undefined"</span>) {
-			pfx = [pfx[p]];
-			<span class="hljs-keyword">return</span> (t == <span class="hljs-string">"function"</span> ? obj[m]() : obj[m]);
-		}
-		p++;
-	}
 };</pre></div>
         
       
@@ -1258,6 +1250,10 @@
 	cc.defineGetterSetter(App, <span class="hljs-string">"winSize"</span>, App.getWinSize);
 
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
+		cc.loader.loadJs(<span class="hljs-string">"js/lib"</span>, [<span class="hljs-string">"screenfull.js"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			document.addEventListener(screenfull.raw.fullscreenchange, App.onWindowSizeChanged);
+		});
+		
 		cc.view.setDesignResolutionSize(
 			App.winSize.width,
 			App.winSize.height,
@@ -1273,14 +1269,6 @@
 		App.runInitialScene();
 	}
 	
-	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
-		<span class="hljs-keyword">this</span>._fullscreenEnabled = (<span class="hljs-keyword">this</span>.runPrefixMethod(document, <span class="hljs-string">"FullScreen"</span>)
-			|| <span class="hljs-keyword">this</span>.runPrefixMethod(document, <span class="hljs-string">"IsFullScreen"</span>));
-		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._fullscreenEnabled) {
-			cc.log(<span class="hljs-string">"Initially fullscreen? "</span> + <span class="hljs-keyword">this</span>.isFullscreenEnabled());
-		}
-	}
-
 	cc.director.setAnimationInterval(<span class="hljs-number">1.0</span> / <span class="hljs-keyword">this</span>.getTargetFrameRate());
 	cc.log(App.winSize.width + <span class="hljs-string">" x "</span> + App.winSize.height
 		+ <span class="hljs-string">", resource dir: "</span> + App.getResourceDir()
