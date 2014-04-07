@@ -914,7 +914,7 @@ if(console.log){
     cc.log = console.log.bind(console);
     cc.warn = console.warn.bind(console);
     cc.error = console.error.bind(console);
-    cc.assert = console.assert.bind(console);
+    cc.assert = (console.assert ? console.assert.bind(console) : function(){});
 }else{
     cc.log = cc.warn = cc.error = cc.assert = function(){};
 }

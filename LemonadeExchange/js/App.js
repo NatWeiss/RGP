@@ -333,7 +333,10 @@ App.runInitialScene = function() {
 // Return true if fullscreen mode is available on this platform.
 //
 App.isFullscreenAvailable = function() {
-	return this.isHtml5() || this.isDesktop();
+	if (this.isHtml5()) {
+		return (screenfull && screenfull.enabled);
+	}
+	return this.isDesktop();
 };
 
 //
@@ -342,6 +345,9 @@ App.isFullscreenAvailable = function() {
 // Return true if fullscreen mode is enabled.
 //
 App.isFullscreenEnabled = function() {
+	if (this.isHtml5()) {
+		return (screenfull && screenfull.isFullscreen);
+	}
 	return this._fullscreenEnabled ? true : false;
 };
 
@@ -350,28 +356,39 @@ App.isFullscreenEnabled = function() {
 //
 // Enable or disable fullscreen mode.
 //
+// See http://www.sitepoint.com/use-html5-full-screen-api/.
+//
 App.enableFullscreen = function(enabled) {
 	if (this.isFullscreenAvailable()) {
 		if (this.isHtml5()) {
-			if (this.isFullscreenEnabled()) {
-				/*cc.log("Cancelling fullscreen");*/
-				this.runPrefixMethod(
-					document,
-					"CancelFullScreen"
-				);
+			if (enabled) {
+				screenfull.request();
 			}
 			else {
-				/*cc.log("Requesting fullscreen");*/
-				this.runPrefixMethod(
-					document.getElementById("gameBody"),
-					"RequestFullScreen"
-				);
+				screenfull.exit();
 			}
 		}
 	}
+};
 
-	this._fullscreenEnabled = enabled ? true : false;
-	/*cc.log("Is fullscreen? " + this.isFullscreenEnabled());*/
+//
+// ###  App.onWindowSizeChanged
+//
+// Called when the window size has changed.
+//
+App.onWindowSizeChanged = function() {
+	var size,
+		e = document.getElementById("gameCanvas");
+	if (App.isFullscreenEnabled()) {
+		size = cc.size(screen.width, screen.height);
+	} else {
+		size = cc.size(document.body.scrollWidth, document.body.scrollHeight);
+	}
+	cc.log("Fullscreen: " + App.isFullscreenEnabled() + ", " + size.width + "x" + size.height +
+		", canvas: " + e.width + "x" + e.height + ", " + e.style.width + " x " + e.style.height);
+	
+	/*cc.view.setFrameSize(winSize.width, winSize.height);*/
+	/*cc.view.setDesignResolutionSize(size.width, size.height, cc.ResolutionPolicy.SHOW_ALL);*/
 };
 
 //
@@ -382,13 +399,13 @@ App.enableFullscreen = function(enabled) {
 App.toggleFullscreenEnabled = function() {
 	this.enableFullscreen(!this.isFullscreenEnabled());
 };
-
+/*
 //
 // ###  App.runPrefixMethod
 //
 // Run a method name prefixed according to the browser. Example: `RequestFullScreen` becomes `webkitRequestFullScreen`.
 //
-// See http://www.sitepoint.com/html5-full-screen-api/.
+// See http://www.sitepoint.com/use-html5-full-screen-api/.
 //
 App.runPrefixMethod = function(obj, method) {
 	var pfx = ["webkit", "moz", "ms", "o", ""];
@@ -407,7 +424,7 @@ App.runPrefixMethod = function(obj, method) {
 		p++;
 	}
 };
-
+*/
 //
 // ###  App.loadSoundEnabled
 //
@@ -1110,10 +1127,14 @@ App.main = function() {
 	cc.defineGetterSetter(App, "winSize", App.getWinSize);
 
 	if (this.isHtml5()) {
+		cc.loader.loadJs("js/lib", ["screenfull.js"], function() {
+			document.addEventListener(screenfull.raw.fullscreenchange, App.onWindowSizeChanged);
+		});
+		
 		cc.view.setDesignResolutionSize(
 			App.winSize.width,
 			App.winSize.height,
-			cc.ResolutionPolicy.SHOW_ALL
+			cc.ResolutionPolicy.NO_BORDER
 		);
 		cc.view.resizeWithBrowserSize(true);
 
@@ -1123,14 +1144,6 @@ App.main = function() {
 	}
 	else {
 		App.runInitialScene();
-	}
-	
-	if (this.isHtml5()) {
-		this._fullscreenEnabled = (this.runPrefixMethod(document, "FullScreen")
-			|| this.runPrefixMethod(document, "IsFullScreen"));
-		if (this._fullscreenEnabled) {
-			cc.log("Initially fullscreen? " + this.isFullscreenEnabled());
-		}
 	}
 
 	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
