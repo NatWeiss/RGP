@@ -5,29 +5,6 @@
 //
 
 #include "AppDelegate.h"
-
-/*#include "cocos2d.h"
-#include "SimpleAudioEngine.h"
-#include "ScriptingCore.h"
-#include "jsb_cocos2dx_auto.hpp"
-#include "jsb_cocos2dx_extension_auto.hpp"
-#include "jsb_cocos2dx_builder_auto.hpp"
-#include "jsb_cocos2dx_studio_auto.hpp"
-#include "jsb_cocos2dx_gui_auto.hpp"
-#include "jsb_cocos2dx_spine_auto.hpp"
-#include "extension/jsb_cocos2dx_extension_manual.h"
-#include "cocostudio/jsb_cocos2dx_studio_manual.h"
-#include "gui/jsb_cocos2dx_gui_manual.h"
-//#include "cocos2d_specifics.hpp"
-#include "cocosbuilder/cocosbuilder_specifics.hpp"
-#include "chipmunk/js_bindings_chipmunk_registration.h"
-#include "localstorage/js_bindings_system_registration.h"
-#include "jsb_opengl_registration.h"
-#include "network/XMLHTTPRequest.h"
-#include "network/jsb_websocket.h"
-#include "cocosbuilder/js_bindings_ccbreader.h"
-*/
-
 #include "cocosbuilder/js_bindings_ccbreader.h"
 #include "SimpleAudioEngine.h"
 #include "jsb_cocos2dx_auto.hpp"
@@ -41,12 +18,13 @@
 #include "localstorage/js_bindings_system_registration.h"
 #include "chipmunk/js_bindings_chipmunk_registration.h"
 #include "jsb_opengl_registration.h"
-
 #include "bindings/manual/network/XMLHTTPRequest.h"
 #include "bindings/auto/jsb_pluginx_protocols_auto.hpp"
 #include "cocos2dx-store/Soomla/jsb/jsb_soomla.h"
 #include "facebook/jsb_facebook.h"
 #include "app/jsb_app_bindings.h"
+#include "jsb_cocos2dx_spine_auto.hpp"
+#include "network/jsb_websocket.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -89,9 +67,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 	// setup jsb
 	auto sc = ScriptingCore::getInstance();
-	sc->addRegisterCallback(register_all_cocos2dx); // this defines Scheduler by calling js_register_cocos2dx_Scheduler()
+	sc->addRegisterCallback(register_all_cocos2dx);
 	sc->addRegisterCallback(register_all_cocos2dx_extension);
-	sc->addRegisterCallback(register_cocos2dx_js_extensions); // this should be registering scheduleCallbackForTarget... ??
+	sc->addRegisterCallback(register_cocos2dx_js_extensions);
 	sc->addRegisterCallback(register_all_cocos2dx_extension_manual);
 	sc->addRegisterCallback(register_all_cocos2dx_builder);
 	sc->addRegisterCallback(register_CCBuilderReader);
@@ -102,17 +80,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 	sc->addRegisterCallback(jsb_register_system);
 	sc->addRegisterCallback(JSB_register_opengl);
 	sc->addRegisterCallback(jsb_register_chipmunk);
-
 	sc->addRegisterCallback(MinXmlHttpRequest::_js_register);
-//	sc->addRegisterCallback(register_jsb_websocket);
-//	sc->addRegisterCallback(register_all_cocos2dx_spine);
+	sc->addRegisterCallback(register_jsb_websocket);
+	sc->addRegisterCallback(register_all_cocos2dx_spine);
 
-	#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS )
-		sc->addRegisterCallback(register_all_pluginx_protocols);
-		sc->addRegisterCallback(register_jsb_soomla);
-		sc->addRegisterCallback(register_jsb_facebook);
-		sc->addRegisterCallback(register_jsb_app_bindings);
-	#elif( CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID )
+	#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID )
 		sc->addRegisterCallback(register_all_pluginx_protocols);
 		sc->addRegisterCallback(register_jsb_soomla);
 		sc->addRegisterCallback(register_jsb_facebook);
@@ -125,19 +97,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 		sc->enableDebugger();
 	#endif
 
-//    ScriptEngineProtocol *engine = ScriptingCore::getInstance();
-//	ScriptEngineManager::getInstance()->setScriptEngine(engine);
-//	ScriptingCore::getInstance()->runScript("main.js");
-
 	ScriptEngineManager::getInstance()->setScriptEngine(sc);
 	sc->runScript("js/App.js");
-
-	#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS )
-		if( NSClassFromString(@"AdsMobFox") == nil )
-		{
-//			sc->runScript("js/lib/AdsMobFox.js");
-		}
-	#endif
 
 	return true;
 }

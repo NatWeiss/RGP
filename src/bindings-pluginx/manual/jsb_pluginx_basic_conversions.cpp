@@ -165,17 +165,27 @@ JSBool jsval_to_TProductInfo(JSContext *cx, jsval v, TProductInfo* ret)
         if (key == JSVAL_VOID)
             break; // end of iteration
         if (! JSVAL_IS_STRING(key))
-            continue; // ignore integer properties
+            continue; // ignore integer keys
+        JSStringWrapper strWrapper(JSVAL_TO_STRING(key), cx);
+
         JS::RootedValue value(cx);
         JS_GetPropertyById(cx, tmp, idp, &value);
-        if (! JSVAL_IS_STRING(value))
-            continue; // ignore integer properties
-
-        JSStringWrapper strWrapper(JSVAL_TO_STRING(key), cx);
-        JSStringWrapper strWrapper2(JSVAL_TO_STRING(value), cx);
-
-        (*ret)[strWrapper.get()] = strWrapper2.get();
-        LOGD("iterate object: key = %s, value = %s", strWrapper.get().c_str(), strWrapper2.get().c_str());
+        if (JSVAL_IS_STRING(value))
+		{
+            JSStringWrapper strWrapper2(JSVAL_TO_STRING(value), cx);
+			(*ret)[strWrapper.get()] = strWrapper2.get();
+		}
+		else
+		{
+			int32_t val = 0;
+			if (JS_ValueToInt32(cx, value, &val))
+			{
+				char buf[32];
+				sprintf(buf, "%d", val);
+				(*ret)[strWrapper.get()] = buf;
+			}
+		}
+        LOGD("iterate object: key = %s, value = %s", strWrapper.get().c_str(), (*ret)[strWrapper.get()].c_str());
     }
 
     return JS_TRUE;

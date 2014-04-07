@@ -1038,8 +1038,12 @@
 <p>Called when the advertisement is dismissed.</p>
 
         
-          <div class='highlight'><pre>		onAdDismissed: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-			<span class="hljs-keyword">this</span>.addCurrencies(<span class="hljs-number">0</span>, <span class="hljs-built_in">parseInt</span>(<span class="hljs-keyword">this</span>.exchangeRate * <span class="hljs-number">.5</span>));
+          <div class='highlight'><pre>		onAdDismissed: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(success)</span>{</span>
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> success === <span class="hljs-string">"undefined"</span> || success === <span class="hljs-literal">true</span>) {
+				<span class="hljs-keyword">this</span>.addCurrencies(<span class="hljs-number">0</span>, <span class="hljs-built_in">parseInt</span>(<span class="hljs-keyword">this</span>.exchangeRate * <span class="hljs-number">.5</span>));
+			} <span class="hljs-keyword">else</span> {
+				<span class="hljs-keyword">this</span>.enableActionButtons();
+			}
 		},</pre></div>
         
       

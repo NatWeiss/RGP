@@ -29,8 +29,6 @@ typedef enum
 	{
 	}
 
-	@property BOOL debug;
-
 	//
 	// InterfaceAds protocol
 	//

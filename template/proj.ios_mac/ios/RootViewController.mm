@@ -12,9 +12,21 @@ using namespace cocos2d;
 
 @implementation RootViewController
 
+	-(id) initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
+	{
+		self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+		if (self != nil)
+		{
+			forcePortrait = NO;
+		}
+		return self;
+	}
+
 	// iOS 5 and older uses this method
 	-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 	{
+		if (forcePortrait)
+			return YES;
 		return UIInterfaceOrientationIsLandscape(interfaceOrientation);
 	}
 
@@ -22,13 +34,27 @@ using namespace cocos2d;
 	-(NSUInteger) supportedInterfaceOrientations
 	{
 		#ifdef __IPHONE_6_0
+			if (forcePortrait)
+				return UIInterfaceOrientationMaskAll;
 			return UIInterfaceOrientationMaskLandscape;
 		#endif
 	}
 
 	-(BOOL) shouldAutorotate
 	{
-		return YES;
+		return !forcePortrait;
+	}
+
+	-(UIInterfaceOrientation) preferredInterfaceOrientationForPresentation
+	{
+		if(forcePortrait)
+			return UIInterfaceOrientationPortrait;
+		return self.interfaceOrientation;
+	}
+
+	-(void) forcePortrait:(BOOL)enabled
+	{
+		forcePortrait = enabled;
 	}
 
 	-(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -54,7 +80,7 @@ using namespace cocos2d;
 		// release any cached data, images, etc that aren't in use
 	}
 
-	- (void)viewDidUnload
+	-(void) viewDidUnload
 	{
 		[super viewDidUnload];
 		

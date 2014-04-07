@@ -28,7 +28,7 @@ const char* const kTag = "Facebook:";
 
 #define debugLog(...) {if(debug) cocos2d::log(__VA_ARGS__);}
 
-void clear_module()
+static void clear_module()
 {
 	//debug = false;
 	loggedIn = false;
@@ -45,7 +45,7 @@ void clear_module()
 	srand((unsigned)time(nullptr));
 }
 
-const char* strVal(id obj)
+inline const char* strVal(id obj)
 {
 	auto ret = [obj UTF8String];
 	return ret ? ret : "";
@@ -60,7 +60,7 @@ inline void split(const string& s, char delim, vector<string>& elems)
 		elems.push_back(item);
 }
 
-void callRunningLayer(const string& method, const string& param1)
+static void callRunningLayer(const string& method, const string& param1)
 {
 	bool addParam1Quotes = !(param1 == "true" || param1 == "false");
 	jsval ret;
@@ -72,7 +72,7 @@ void callRunningLayer(const string& method, const string& param1)
 	ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
 }
 
-void loadPlayerImageUrl(const string& playerId)
+static void loadPlayerImageUrl(const string& playerId)
 {
 	jsval ret;
 	ScriptingCore::getInstance()->evalString("App.scale(App.config[\"social-plugin-profile-image-width\"]);", &ret);
@@ -190,7 +190,7 @@ void (^sessionStateHandler)(FBSession*, FBSessionState, NSError*) =
 	callRunningLayer("onGetLoginStatus", loggedIn ? "true" : "false");
 };
 
-void permissionsStringToArray(const string& str, NSMutableArray* array)
+static void permissionsStringToArray(const string& str, NSMutableArray* array)
 {
 	if (!str.size())
 		return;

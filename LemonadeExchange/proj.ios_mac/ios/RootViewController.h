@@ -8,7 +8,9 @@
 
 @interface RootViewController : UIViewController
 	{
+		BOOL forcePortrait;
 	}
 
 	-(BOOL) prefersStatusBarHidden;
+	-(void) forcePortrait:(BOOL)enabled;
 @end

@@ -897,8 +897,12 @@ var LayerGame = (function(){
 //
 // Called when the advertisement is dismissed.
 //
-		onAdDismissed: function(){
-			this.addCurrencies(0, parseInt(this.exchangeRate * .5));
+		onAdDismissed: function(success){
+			if (typeof success === "undefined" || success === true) {
+				this.addCurrencies(0, parseInt(this.exchangeRate * .5));
+			} else {
+				this.enableActionButtons();
+			}
 		},
 
 //

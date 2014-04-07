@@ -2,8 +2,6 @@
 RapidGame Pro
 =============
 
-*To reveal the Table of Contents, hover over the filigree directly above this sentence.*
-
 
 Quick Start
 -----------
