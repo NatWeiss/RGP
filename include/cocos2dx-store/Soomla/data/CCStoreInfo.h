@@ -38,7 +38,7 @@ namespace soomla {
         CCVirtualItem *getItemByItemId(const char *itemId, CCSoomlaError **soomlaError);
 
 		/**
-		   Get a purchasble virtual item corresponding to a productID.
+		   Get a purchasble virtual item corresponding to a producID.
 		   \param productId The productIdId of the item.
 		   \param soomlaError A CCSoomlaError for error checking.
 		   \return The item as a CCPurchasableVirtualItem.
@@ -70,41 +70,41 @@ namespace soomla {
 		/**
 		   Get all upgrades of a good
 		   \param itemId The itemId of the good.
-		   \return The uprades in an Array.
+		   \return The uprades in a CCArray.
 		*/
-        cocos2d::__Array *getUpgradesForVirtualGood(const char *goodItemId);
+        cocos2d::CCArray *getUpgradesForVirtualGood(const char *goodItemId);
 
 		/**
 		   Get all virtual currencies.
-		   \return The virtual currencies in an Array.
+		   \return The virtual currencies in a CCArray.
 		*/
-		cocos2d::__Array *getVirtualCurrencies();
+		cocos2d::CCArray *getVirtualCurrencies();
 
 		/**
 		   Get all virtual goods.
-		   \return The virtual goods in an Array.
+		   \return The virtual goods in a CCArray.
 		*/
-        cocos2d::__Array *getVirtualGoods();
+        cocos2d::CCArray *getVirtualGoods();
 
 		/**
 		   Get all virtual currency packs.
-		   \return The virtual currency packs in an Array.
+		   \return The virtual currency packs in a CCArray.
 		*/
-        cocos2d::__Array *getVirtualCurrencyPacks();
+        cocos2d::CCArray *getVirtualCurrencyPacks();
 
 		/**
 		   Get all non consumable items.
-		   \return The non consumable items in an Array.
+		   \return The non consumable items in a CCArray.
 		*/
-        cocos2d::__Array *getNonConsumableItems();
+        cocos2d::CCArray *getNonConsumableItems();
 
 		/**
 		   Get all virtual categories.
-		   \return The virtual categories in an Array.
+		   \return The virtual categories in a CCArray.
 		*/
-		cocos2d::__Array *getVirtualCategories();
+		cocos2d::CCArray *getVirtualCategories();
     private:
-        cocos2d::Ref *createWithRetParams(cocos2d::__Dictionary *retParams);
+        cocos2d::Ref *createWithRetParams(cocos2d::CCDictionary *retParams);
     };
 };
 

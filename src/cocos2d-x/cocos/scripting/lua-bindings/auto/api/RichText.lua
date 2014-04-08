@@ -1,6 +1,8 @@
 
 --------------------------------
 -- @module RichText
+-- @extend Widget
+
 --------------------------------
 -- @function [parent=#RichText] insertElement 
 -- @param self
@@ -49,6 +51,11 @@
 -- @function [parent=#RichText] create 
 -- @param self
 -- @return RichText#RichText ret (return value: ccui.RichText)
+        
+--------------------------------
+-- @function [parent=#RichText] getDescription 
+-- @param self
+-- @return string#string ret (return value: string)
         
 --------------------------------
 -- @function [parent=#RichText] RichText 

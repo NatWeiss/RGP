@@ -27,7 +27,7 @@ namespace soomla {
 			\param price is the price in the native store.
 			\return The purchase type.
 		 */
-        static CCPurchaseWithMarket *create(cocos2d::__String *productId, cocos2d::__Double *price);
+        static CCPurchaseWithMarket *create(cocos2d::CCString *productId, cocos2d::CCDouble *price);
 
 		/** 
 			Create a CCPurchaseWithMarket

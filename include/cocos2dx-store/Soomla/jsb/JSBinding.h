@@ -17,7 +17,7 @@ namespace Soomla {
     {
     public:
         static void callNative(const char *params, std::string &result);
-        static void callCallback(cocos2d::__Dictionary *params);
+        static void callCallback(cocos2d::Dictionary *params);
     };
 }
 

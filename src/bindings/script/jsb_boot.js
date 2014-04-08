@@ -543,17 +543,17 @@ cc.loader = {
     }
     
 };
-cc.defineGetterSetter(cc.loader, "", function(){
+cc.defineGetterSetter(cc.loader, "resPath", function(){
     return this._resPath;
 }, function(resPath){
-    this._resPath = resPath || "resPath";
-    cc.FileUtils.getInstance().setSearchPath(this._resPath);
+    this._resPath = resPath || "";
+    cc.FileUtils.getInstance().addSearchPath(this._resPath);
 });
 cc.defineGetterSetter(cc.loader, "audioPath", function(){
-    return this._resPath;
+    return this._audioPath;
 }, function(audioPath){
     this._audioPath = audioPath || "";
-    cc.FileUtils.getInstance().setSearchPath(this._audioPath);
+    cc.FileUtils.getInstance().addSearchPath(this._audioPath);
 });
 
 //+++++++++++++++++++++++++something about loader end+++++++++++++++++++++++++++++
@@ -584,6 +584,14 @@ cc.audioEngine.end = function(){
 };
 cc.configuration = cc.Configuration.getInstance();
 cc.textureCache = cc.director.getTextureCache();
+cc.textureCache._addImage = cc.textureCache.addImage;
+cc.textureCache.addImage = function(url, cb, target) {
+	if (cb) {
+		target && (cb = cb.bind(target));
+		this.addImageAsync(url, cb);
+	}
+	else this._addImage(url);
+};
 cc.shaderCache = cc.ShaderCache.getInstance();
 cc.animationCache = cc.AnimationCache.getInstance();
 cc.spriteFrameCache = cc.SpriteFrameCache.getInstance();
@@ -958,27 +966,14 @@ cc.game = {
     },
     /**
      * Run game.
-     * @private
-     */
-    _runMainLoop : function(){
-        var self = this, config = self.config, CONFIG_KEY = self.CONFIG_KEY,
-        frameRate = config[CONFIG_KEY.frameRate], director = cc.director;
-        director.setDisplayStats(config[CONFIG_KEY.showFPS]);
-        director.mainLoop();
-        self._paused = false;
-    },
-    /**
-     * Run game.
      */
     run : function(){
         var self = this;
         if(!self._prepareCalled){
             self.prepare(function(){
-                self._runMainLoop();
                 self.onStart();
             });
         }else{
-            self._runMainLoop();
             self.onStart();
         }
     },

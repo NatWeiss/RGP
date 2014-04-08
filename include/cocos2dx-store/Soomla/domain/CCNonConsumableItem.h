@@ -26,7 +26,7 @@ namespace soomla {
 		   \param purchaseType Either purchase with market or purchase with virtual good.
 		   \return The item.
 		*/
-		static CCNonConsumableItem * create(cocos2d::__String* name, cocos2d::__String* description, cocos2d::__String* itemId,
+		static CCNonConsumableItem * create(cocos2d::CCString* name, cocos2d::CCString* description, cocos2d::CCString* itemId,
             CCPurchaseType *purchaseType);
 
 		/**
@@ -34,7 +34,7 @@ namespace soomla {
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The item.
 		*/
-		static CCNonConsumableItem * createWithDictionary(cocos2d::__Dictionary* dict);
+		static CCNonConsumableItem * createWithDictionary(cocos2d::CCDictionary* dict);
     };
 };
 

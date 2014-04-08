@@ -18,8 +18,8 @@ namespace soomla {
 		A category for virtual items.
 	 */
     class CCVirtualCategory : public cocos2d::Ref {
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String*, mName, Name, JSON_CATEGORY_NAME);
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__Array*, mGoodItemIds, GoodItemIds, JSON_CATEGORY_GOODSITEMIDS);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString*, mName, Name, JSON_CATEGORY_NAME);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCArray*, mGoodItemIds, GoodItemIds, JSON_CATEGORY_GOODSITEMIDS);
     public:
 	CCVirtualCategory(): mName(NULL), mGoodItemIds(NULL) {};
 
@@ -29,19 +29,19 @@ namespace soomla {
 		   \param goodItemIds An array containing the itemIds of all the items in this category.
 		   \return The category
 		 */
-        static CCVirtualCategory *create(cocos2d::__String *name, cocos2d::__Array *goodItemIds);
+        static CCVirtualCategory *create(cocos2d::CCString *name, cocos2d::CCArray *goodItemIds);
 
 		/**
 		   Create a virtual category
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The category
 		*/
-		static CCVirtualCategory *createWithDictionary(cocos2d::__Dictionary *dict);
+		static CCVirtualCategory *createWithDictionary(cocos2d::CCDictionary *dict);
 
-        bool init(cocos2d::__String *name, cocos2d::__Array *goodItemIds);
-        bool initWithDictionary(cocos2d::__Dictionary *dict);
+        bool init(cocos2d::CCString *name, cocos2d::CCArray *goodItemIds);
+        bool initWithDictionary(cocos2d::CCDictionary *dict);
 
-        cocos2d::__Dictionary *toDictionary();
+        cocos2d::CCDictionary *toDictionary();
 
         virtual ~CCVirtualCategory();
     };

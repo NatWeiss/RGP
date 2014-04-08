@@ -28,14 +28,14 @@ namespace soomla {
 		   \param itemId The currency's itemId
 		   \return The currency.
 		*/
-        static CCVirtualCurrency* create(cocos2d::__String* name, cocos2d::__String* description, cocos2d::__String* itemId);
+        static CCVirtualCurrency* create(cocos2d::CCString* name, cocos2d::CCString* description, cocos2d::CCString* itemId);
 
 		/**
 		   Create a CCVirtualCurrency.
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The currency.
 		*/
-		static CCVirtualCurrency* createWithDictionary(cocos2d::__Dictionary* dict);
+		static CCVirtualCurrency* createWithDictionary(cocos2d::CCDictionary* dict);
     };
 }
 

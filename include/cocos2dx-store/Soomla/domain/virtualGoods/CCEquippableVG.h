@@ -23,7 +23,7 @@ namespace soomla {
             kGlobal = 2
         } EquippingModel;
 
-        SL_SYNTHESIZE_RETAIN_WITH_DICT_DCL(cocos2d::__Integer *, mEquippingModel, EquippingModel);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT_DCL(cocos2d::CCInteger *, mEquippingModel, EquippingModel);
     public:
 	CCEquippableVG(): CCLifetimeVG(), mEquippingModel(NULL) {};
 
@@ -36,21 +36,21 @@ namespace soomla {
 		   \param purchaseType The purchase type for this virtual good.
 		   \return The virtual good.
 		 */
-        static CCEquippableVG *create(cocos2d::__Integer *equippingModel, cocos2d::__String* name, cocos2d::__String* description,
-									  cocos2d::__String* itemId, CCPurchaseType * purchaseType);
+        static CCEquippableVG *create(cocos2d::CCInteger *equippingModel, cocos2d::CCString* name, cocos2d::CCString* description,
+									  cocos2d::CCString* itemId, CCPurchaseType * purchaseType);
 
 		/**
 		   Create a CCEquippableVG.
 		   \param dict A dictionary containing keys to each of the parameters required by the create function.
 		   \return The virtual good.
 		*/
-        static CCEquippableVG *createWithDictionary(cocos2d::__Dictionary *dict);
+        static CCEquippableVG *createWithDictionary(cocos2d::CCDictionary *dict);
 
-        bool init(cocos2d::__Integer *equippingModel, cocos2d::__String* name, cocos2d::__String* description,
-                cocos2d::__String* itemId, CCPurchaseType * purchaseType);
-        bool initWithDictionary(cocos2d::__Dictionary *dict);
+        bool init(cocos2d::CCInteger *equippingModel, cocos2d::CCString* name, cocos2d::CCString* description,
+                cocos2d::CCString* itemId, CCPurchaseType * purchaseType);
+        bool initWithDictionary(cocos2d::CCDictionary *dict);
 
-        cocos2d::__Dictionary *toDictionary();
+        cocos2d::CCDictionary *toDictionary();
 
         virtual ~CCEquippableVG();
     };

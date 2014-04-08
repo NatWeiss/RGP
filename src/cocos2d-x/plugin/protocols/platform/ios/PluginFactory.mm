@@ -77,10 +77,7 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 
         NSString* className = [NSString stringWithUTF8String:name];
         id obj = [[NSClassFromString(className) alloc] init];
-        if (obj == nil) {
-            PluginUtilsIOS::outputLog("Plugin %s NSClass not found", name);
-			break;
-		}
+        if (obj == nil) break;
 
         if ([obj conformsToProtocol:@protocol(InterfaceAds)]) {
             pRet = new ProtocolAds();

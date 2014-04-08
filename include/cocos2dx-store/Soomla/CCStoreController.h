@@ -27,18 +27,18 @@ namespace soomla {
 		   Initialize StoreController on native side and allow using its
 		   functions.
            \param storeAssets An instance of your store's assets class.
-           \param storeParams A Dictionary containing parameters for CCStoreController (These were previously found in CCSoomla).
+           \param storeParams A CCDictionary containing parameters for CCStoreController (These were previously found in CCSoomla).
              This dictionary can contain the following:
-             "soomSec": String - The value of the primary encryption key.
-             "customSecret": String - The value of the secondary encryption key.
-             "androidPublicKey": String - Your Android public key.
-             "SSV": Bool - Whether or not to enable server side verification of purchases.
+             "soomSec": CCString - The value of the primary encryption key.
+             "customSecret": CCString - The value of the secondary encryption key.
+             "androidPublicKey": CCString - Your Android public key.
+             "SSV": CCBool - Whether or not to enable server side verification of purchases.
 		 */
-        static void createShared(CCIStoreAssets *storeAssets, cocos2d::__Dictionary *storeParams);
+        static void createShared(CCIStoreAssets *storeAssets, cocos2d::CCDictionary *storeParams);
 
         CCStoreController(void);
         virtual ~CCStoreController(void);
-        virtual bool init(CCIStoreAssets *storeAssets, cocos2d::__Dictionary *storeParams);
+        virtual bool init(CCIStoreAssets *storeAssets, cocos2d::CCDictionary *storeParams);
 
 		/**
 		   Buy an item from the App Store or Google Play.

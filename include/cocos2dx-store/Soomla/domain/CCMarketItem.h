@@ -18,9 +18,9 @@ namespace soomla {
 		An item you can purchase in the App Store or in Google Play.
 	 */
     class CCMarketItem : public cocos2d::Ref {
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__String *, mProductId, ProductId, JSON_MARKETITEM_PRODUCT_ID);
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__Integer *, mConsumable, Consumable, JSON_MARKETITEM_CONSUMABLE);
-        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::__Double *, mPrice, Price, JSON_MARKETITEM_PRICE);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCString *, mProductId, ProductId, JSON_MARKETITEM_PRODUCT_ID);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCInteger *, mConsumable, Consumable, JSON_MARKETITEM_CONSUMABLE);
+        SL_SYNTHESIZE_RETAIN_WITH_DICT(cocos2d::CCDouble *, mPrice, Price, JSON_MARKETITEM_PRICE);
     public:
         enum Consumable {
             NONCONSUMABLE,
@@ -36,21 +36,21 @@ namespace soomla {
 		   \param price The price of the item, in USD.
 		   \return The item.
 		 */
-        static CCMarketItem *create(cocos2d::__String *productId, cocos2d::__Integer *consumable, cocos2d::__Double * price);
+        static CCMarketItem *create(cocos2d::CCString *productId, cocos2d::CCInteger *consumable, cocos2d::CCDouble * price);
 
 		/**
 		   Create a CCMarketItem from a dictionary.
 		   \param dict A dictionary containing keys for the item's product ID, price and consumable status.
 		   \return The item.
 		*/
-		static CCMarketItem *createWithDictionary(cocos2d::__Dictionary* dict);
+		static CCMarketItem *createWithDictionary(cocos2d::CCDictionary* dict);
 
-        bool init(cocos2d::__String *productId, cocos2d::__Integer *consumable, cocos2d::__Double * price);
-        virtual bool initWithDictionary(cocos2d::__Dictionary* dict);
+        bool init(cocos2d::CCString *productId, cocos2d::CCInteger *consumable, cocos2d::CCDouble * price);
+        virtual bool initWithDictionary(cocos2d::CCDictionary* dict);
 
         virtual ~CCMarketItem();
 
-        virtual cocos2d::__Dictionary* toDictionary();
+        virtual cocos2d::CCDictionary* toDictionary();
     };
 };
 
