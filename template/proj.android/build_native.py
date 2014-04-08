@@ -75,9 +75,9 @@ def do_build(cocos_root, ndk_root, app_android_root,ndk_build_param,sdk_root,and
     # windows should use ";" to seperate module paths
     platform = sys.platform
     if platform == 'win32':
-        ndk_module_path = 'NDK_MODULE_PATH=%s;%s/external;%s/cocos' % (cocos_root, cocos_root, cocos_root)
+        ndk_module_path = 'NDK_MODULE_PATH=%s;%s/..;%s/external;%s/cocos' % (cocos_root, cocos_root, cocos_root, cocos_root)
     else:
-        ndk_module_path = 'NDK_MODULE_PATH=%s:%s/external:%s/cocos' % (cocos_root, cocos_root, cocos_root)
+        ndk_module_path = 'NDK_MODULE_PATH=%s:%s/..:%s/external:%s/cocos' % (cocos_root, cocos_root, cocos_root, cocos_root)
 
     num_of_cpu = get_num_of_cpu()
 	
@@ -134,7 +134,7 @@ def copy_resources(app_android_root):
     copy_asset_dir(app_android_root, "../lib/cocos2dx-prebuilt/jsb", "jsb")
 
     # copy main
-    main_file = os.path.join(app_android_root, "../proj.html5/main.js")
+    main_file = os.path.join(app_android_root, "../proj.html5/project.json")
     dest_dir = os.path.join(app_android_root, "assets")
     shutil.copy(main_file, dest_dir)
 

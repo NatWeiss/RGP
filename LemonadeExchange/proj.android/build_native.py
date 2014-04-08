@@ -134,7 +134,7 @@ def copy_resources(app_android_root):
     copy_asset_dir(app_android_root, "../lib/cocos2dx-prebuilt/jsb", "jsb")
 
     # copy main
-    main_file = os.path.join(app_android_root, "../proj.html5/main.js")
+    main_file = os.path.join(app_android_root, "../proj.html5/project.json")
     dest_dir = os.path.join(app_android_root, "assets")
     shutil.copy(main_file, dest_dir)
 
