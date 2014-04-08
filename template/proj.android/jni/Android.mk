@@ -16,7 +16,10 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src \
 				$(LOCAL_PATH)/../../lib/cocos2dx-prebuilt/include/cocos/editor-support \
 				$(LOCAL_PATH)/../../lib/cocos2dx-prebuilt/include/external/spidermonkey/include/android
 
-LOCAL_WHOLE_STATIC_LIBRARIES := cocos_jsb_static
+LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
+LOCAL_WHOLE_STATIC_LIBRARIES += cocosdenshion_static
+LOCAL_WHOLE_STATIC_LIBRARIES += box2d_static
+LOCAL_WHOLE_STATIC_LIBRARIES += cocos_jsb_static
 LOCAL_WHOLE_STATIC_LIBRARIES += jsb_extension_static
 LOCAL_WHOLE_STATIC_LIBRARIES += jsb_chipmunk_static
 LOCAL_WHOLE_STATIC_LIBRARIES += jsb_localstorage_static
@@ -31,13 +34,16 @@ LOCAL_WHOLE_STATIC_LIBRARIES += spine_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_store_static
 LOCAL_WHOLE_STATIC_LIBRARIES += PluginProtocolStatic
 LOCAL_WHOLE_STATIC_LIBRARIES += jsb_pluginx_static
-LOCAL_WHOLE_STATIC_LIBRARIES += jsb_facebook_static
+#LOCAL_WHOLE_STATIC_LIBRARIES += jsb_facebook_static
 
 LOCAL_EXPORT_CFLAGS := -DCOCOS2D_DEBUG=2 -DCOCOS2D_JAVASCRIPT
 
 include $(BUILD_SHARED_LIBRARY)
 
 
+$(call import-module,2d)
+$(call import-module,audio/android)
+#$(call import-module,Box2d)
 $(call import-module,bindings)
 $(call import-module,bindings/manual/chipmunk)
 $(call import-module,bindings/manual/cocosbuilder)

@@ -227,7 +227,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include/plugin/protocols/include/ $(SRCROOT)/../../../include/plugin/protocols/platform/ios $(SRCROOT)/../../../include/external/spidermonkey/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include/plugin/protocols/include/";
 			};
 			name = Debug;
 		};
@@ -255,7 +255,7 @@
 				HEADER_SEARCH_PATHS = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include/plugin/protocols/include/ $(SRCROOT)/../../../include/plugin/protocols/platform/ios $(SRCROOT)/../../../include/external/spidermonkey/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include/plugin/protocols/include/";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -274,7 +274,7 @@
 				PRODUCT_NAME = PluginJSBindings;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited)";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/external/spidermonkey/include/ios $(SRCROOT)/../../../include/plugin/protocols/platform/ios";
 			};
 			name = Debug;
 		};
@@ -292,7 +292,7 @@
 				PRODUCT_NAME = PluginJSBindings;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited)";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/external/spidermonkey/include/ios $(SRCROOT)/../../../include/plugin/protocols/platform/ios";
 			};
 			name = Release;
 		};
