@@ -101,44 +101,6 @@ def do_build(cocos_root, ndk_root, app_android_root,ndk_build_param,sdk_root,and
     	  command = 'ant clean %s -f %s -Dsdk.dir=%s' % (build_mode,buildfile_path,sdk_root)
     	  os.system(command)
 
-def copy_files(src, dst):
-
-    for item in os.listdir(src):
-        path = os.path.join(src, item)
-        # Android can not package the file that ends with ".gz"
-        if not item.startswith('.') and not item.endswith('.gz') and os.path.isfile(path):
-            shutil.copy(path, dst)
-        if os.path.isdir(path):
-            new_dst = os.path.join(dst, item)
-            os.mkdir(new_dst)
-            copy_files(path, new_dst)
-
-def copy_asset_dir(root, src, dst):
-    src_dir = os.path.join(root, src)
-    dest_dir = os.path.join(root, "assets")
-    dest_dir = os.path.join(dest_dir, dst)
-    os.mkdir(dest_dir)
-    if os.path.isdir(src_dir):
-        copy_files(src_dir, dest_dir)
-
-def copy_resources(app_android_root):
-
-    # remove app_android_root/assets if it exists
-    assets_dir = os.path.join(app_android_root, "assets")
-    if os.path.isdir(assets_dir):
-        shutil.rmtree(assets_dir)
-    os.mkdir(assets_dir)
-
-    # copy asset directories
-    copy_asset_dir(app_android_root, "../res", "res")
-    copy_asset_dir(app_android_root, "../js", "js")
-    copy_asset_dir(app_android_root, "../lib/cocos2dx-prebuilt/jsb", "jsb")
-
-    # copy main
-    main_file = os.path.join(app_android_root, "../proj.html5/project.json")
-    dest_dir = os.path.join(app_android_root, "assets")
-    shutil.copy(main_file, dest_dir)
-
 def build(ndk_build_param,android_platform,build_mode):
 
     ndk_root = check_environment_variables()
@@ -147,9 +109,9 @@ def build(ndk_build_param,android_platform,build_mode):
 
     current_dir = os.path.dirname(os.path.realpath(__file__))
     cocos_root = os.path.join(current_dir, "../../src/cocos2d-x")
-
     app_android_root = current_dir
-    copy_resources(app_android_root)
+
+    #copy_resources(app_android_root)
     
     if android_platform is not None:
 				sdk_root = check_environment_variables_sdk()
@@ -163,7 +125,9 @@ def build(ndk_build_param,android_platform,build_mode):
     	  build_mode = 'debug'
     elif build_mode != 'release':
         build_mode = 'debug'
-    
+
+    #print 'Android SDK Root: ' + sdk_root
+
     do_build(cocos_root, ndk_root, app_android_root,ndk_build_param,sdk_root,android_platform,build_mode)
 
 # -------------- main --------------
