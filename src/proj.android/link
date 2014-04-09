@@ -13,55 +13,53 @@ elif [ -d "${NDK_ROOT}/toolchains/arm-linux-androideabi-4.7" ]; then
 	export NDK_TOOLCHAIN_VERSION="4.7"
 fi
 
-# Get configuration
-if [ "$1" == "Release" ] || [ "$1" == "release" ]; then
-	config="Release"
-else
-	config="Debug"
-fi
-echo "CONFIG=${config}"
-
-# Get architecture
-if [ "$2" == "armeabi" ]; then
-	arch="armeabi"
-else
-	arch="armeabi"
-fi
-echo "ARCH=${arch}"
-
-# Set source
-src="./obj/local/${arch}/objs"
-if [ ! -d "${src}" ]; then
+# Check source
+if [ ! -d "./obj/local" ]; then
 	echo "Missing .o files. Please build first."
 	exit 1
 fi
-src=$(cd ${src}; pwd)
-echo "SRC=${src}"
-
-# Set destination
-dest=$(cd ../../lib/${config}-Android/${arch}; pwd)
-mkdir -p ${dest}
-echo "DEST=${dest}"
 
 # Get which ar
 ar=$(${NDK_ROOT}/ndk-which ar)
 echo "AR=${ar}"
 
 # Make the libraries
-lib="libcocos2dx-prebuilt.a"
-echo "Making ${lib}..."
-rm -f ${dest}/${lib}
-for dir in cocos2dxandroid_static cocos2dx_static cocosdenshion_static chipmunk_static box2d_static
+for objDir in ./obj/local/*
 do
-	${ar} rs ${dest}/${lib} $(find ${src}/${dir} -name *.o)
+	for config in Debug Release
+	do
+		echo
+
+		arch=$(basename ${objDir})
+		if [ "${config}" == "Debug" ]; then
+			src="${objDir}/objs-debug"
+		else
+			src="${objDir}/objs"
+		fi
+		src=$(cd ${src}; pwd)
+		echo "SRC=${src}"
+
+		dest=../../lib/${config}-Android/${arch}
+		mkdir -p ${dest}
+		dest=$(cd ${dest}; pwd)
+		echo "DEST=${dest}"
+	
+		lib="libcocos2dx-prebuilt.a"
+		rm -f ${dest}/${lib}
+		for dir in cocos2dxandroid_static cocos2dx_static cocosdenshion_static chipmunk_static box2d_static
+		do
+			${ar} rs ${dest}/${lib} $(find ${src}/${dir} -name *.o)
+		done
+	
+		lib="libcocos2dx-plugins.a"
+		rm -f ${dest}/${lib}
+		for dir in PluginProtocolStatic cocos_localstorage_static cocostudio_static jsb_extension_static jsb_studio_static cocos2dx_store_static \
+			cocos_network_static jsb_localstorage_static jsb_ui_static cocos_ui_static jansson_static jsb_network_static spine_static \
+			cocos_extension_static cocosbuilder_static jsb_builder_static jsb_pluginx_static cocos_jsb_static jsb_chipmunk_static jsb_spine_static
+		do
+			${ar} rs ${dest}/${lib} $(find ${src}/${dir} -name *.o)
+		done
+	done
 done
 
-lib="libcocos2dx-plugins.a"
-echo "Making ${lib}..."
-rm -f ${dest}/${lib}
-for dir in PluginProtocolStatic cocos_localstorage_static cocostudio_static jsb_extension_static jsb_studio_static cocos2dx_store_static \
-	cocos_network_static jsb_localstorage_static jsb_ui_static cocos_ui_static jansson_static jsb_network_static spine_static \
-	cocos_extension_static cocosbuilder_static jsb_builder_static jsb_pluginx_static cocos_jsb_static jsb_chipmunk_static jsb_spine_static
-do
-	${ar} rs ${dest}/${lib} $(find ${src}/${dir} -name *.o)
-done
+#CORES=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || sysctl -n hw.ncpu)

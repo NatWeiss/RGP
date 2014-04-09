@@ -5,13 +5,16 @@ PACKAGE_NAME=org.cocos2dx.hellojavascript
 all:
 	@echo "ANDROID_HOME=${ANDROID_HOME}"
 	@if [ ! -d ${ANDROID_HOME} ]; then echo "WARNING: The ANDROID_HOME environment variable does not point to a directory. See the Readme.txt and set ANDROID_HOME in your .profile."; exit; fi
-	./build_native.py
+	export CONFIG="debug" && ./build_native.py
 	find . -name .DS_Store -delete
 	ant -Dsdk.dir=${ANDROID_HOME} debug
 release:
-	./build_native.py
+	export CONFIG="release" && ./build_native.py
+	ant -Dsdk.dir=${ANDROID_HOME} debug
+distribution:
+	export CONFIG="release" && ./build_native.py
 	ant -Dsdk.dir=${ANDROID_HOME} release
-	zipalign -f 4 bin/${NAME}-release.apk bin/${NAME}-release-aligned.apk
+	zipalign -f 4 bin/${NAME}-release-unsigned.apk bin/${NAME}-release-aligned.apk
 start-emulator:
 	android avd
 run-emulator:
@@ -22,6 +25,10 @@ run:
 	adb -d install bin/${NAME}-debug.apk
 	adb -d logcat | grep cocos2d
 run-release:
+	adb -d uninstall ${PACKAGE_NAME}
+	adb -d install bin/${NAME}-debug.apk
+	adb -d logcat | grep cocos2d
+run-distribution:
 	adb -d uninstall ${PACKAGE_NAME}
 	adb -d install bin/${NAME}-release-aligned.apk
 	adb -d logcat | grep cocos2d

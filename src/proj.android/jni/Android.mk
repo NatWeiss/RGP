@@ -2,11 +2,14 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+$(info APP_OPTIM=$(APP_OPTIM))
+$(info APP_CPPFLAGS=$(APP_CPPFLAGS))
+
 LOCAL_MODULE := cocos2djs_shared
 
 LOCAL_MODULE_FILENAME := libcocos2djs
 
-LOCAL_SRC_FILES := main.cpp
+#LOCAL_SRC_FILES := main.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src \
 				$(LOCAL_PATH)/../../lib/cocos2dx-prebuilt/include \
@@ -35,7 +38,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES += PluginProtocolStatic
 LOCAL_WHOLE_STATIC_LIBRARIES += jsb_pluginx_static
 #LOCAL_WHOLE_STATIC_LIBRARIES += jsb_facebook_static
 
-LOCAL_EXPORT_CFLAGS := -DCOCOS2D_DEBUG=2 -DCOCOS2D_JAVASCRIPT
+#LOCAL_EXPORT_CFLAGS := -DCOCOS2D_DEBUG=2 -DCOCOS2D_JAVASCRIPT
 
 include $(BUILD_SHARED_LIBRARY)
 

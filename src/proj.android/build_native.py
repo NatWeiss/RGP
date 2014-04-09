@@ -126,8 +126,6 @@ def build(ndk_build_param,android_platform,build_mode):
     elif build_mode != 'release':
         build_mode = 'debug'
 
-    #print 'Android SDK Root: ' + sdk_root
-
     do_build(cocos_root, ndk_root, app_android_root,ndk_build_param,sdk_root,android_platform,build_mode)
 
 # -------------- main --------------
