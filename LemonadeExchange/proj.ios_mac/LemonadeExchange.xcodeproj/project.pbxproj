@@ -660,7 +660,7 @@
 				PRODUCT_NAME = LemonadeExchange;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d/platform/ios $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/scripting/javascript/bindings $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/scripting/auto-generated/js-bindings $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/spidermonkey/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d/platform/ios $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/spidermonkey/include/ios";
 			};
 			name = Debug;
 		};
@@ -684,7 +684,7 @@
 				PRODUCT_NAME = LemonadeExchange;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d/platform/ios $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/scripting/javascript/bindings $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/scripting/auto-generated/js-bindings $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/spidermonkey/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../lib/cocos2dx-prebuilt/include/cocos/2d/platform/ios $(SRCROOT)/../lib/cocos2dx-prebuilt/include/external/spidermonkey/include/ios";
 			};
 			name = Release;
 		};

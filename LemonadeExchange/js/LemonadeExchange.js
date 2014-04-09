@@ -92,6 +92,7 @@ App.createButton = function(obj, spriteFilename, tag, position, anchorPoint, mov
 		disabledSprite = cc.Sprite.create("#" + spriteFilename),
 		button;
 	selectedSprite.setColor(cc.color(128,128,128));
+	disabledSprite.setColor(cc.color(128,128,128));
 
 	button = cc.MenuItemSprite.create(normalSprite, selectedSprite, disabledSprite, obj.menuButtonCallback, obj);
 	button.setTag(tag);

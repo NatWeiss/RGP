@@ -998,13 +998,9 @@ var LayerGame = (function(){
 // Enables or disables a button by the given tag.
 //
 		enableButton: function(tag, enabled) {
-			var button = this.menu.getChildByTag(tag),
-				color = (enabled ? cc.color(255,255,255,255) : cc.color(128,128,128,255));
+			var button = this.menu.getChildByTag(tag);
 			if (button) {
-				button.getNormalImage().setColor(color);
 				button.setEnabled(enabled);
-			} else {
-				cc.log("Couldnt get button by tag " + tag);
 			}
 		},
 		

@@ -1,6 +1,5 @@
 [ALL] prebuild command
 [Android] Move jni/hellojavascript to jni/main so it renames correctly
-[ALL] Buttons not gray when 0 lemonades and "Couldnt get button by tag 1-6" see CCNode.js:setColor
 [iOS] Buy virtual items (exception)
 [HTML] Fullscreen uses all of screen. Consider cc.screen: http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
 [iOS] Some streaks clipped which shouldn't be

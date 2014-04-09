@@ -47,7 +47,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	if( !glview )
 	{
 		cocos2d::Rect r(0,0,900,640);
-		glview = GLView::createWithRect("HelloJavascript", r);
+		glview = GLView::createWithRect("LemonadeExchange", r);
 		director->setOpenGLView(glview);
 	}
 

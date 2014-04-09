@@ -1100,6 +1100,7 @@ App.main = function() {
 	this.loadSoundEnabled();
 
 	cc.defineGetterSetter(App, "winSize", App.getWinSize);
+	cc.director.setDisplayStats(cc.game.config[cc.game.CONFIG_KEY.showFPS]);
 
 	if (this.isHtml5()) {
 		cc.loader.loadJs("js/lib", ["screenfull.js"], function() {
