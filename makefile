@@ -4,28 +4,20 @@ release: dest=../releases/RapidGamePro/
 release:
 	find . -name .DS_Store -delete
 	mkdir ${dest}
-	cp -a docs ${dest}
+	cp README.md ${dest}
+	cp CHANGELOG.txt ${dest}
+	cp prebuild ${dest}
 	cp docs.html ${dest}
+	cp -a docs ${dest}
 	cp -a include ${dest}
 	cp -a LemonadeExchange ${dest}
-	cp -a README.md ${dest}
-	cp -a CHANGELOG.txt ${dest}
 	cp -a src ${dest}
 	cp -a template ${dest}
 	cp -a tools ${dest}
-	#rm -r ${dest}.git
+	cd ${dest}src/proj.android && make clean
+	cd ${dest}template/proj.android && make clean
+	cd ${dest}LemonadeExchange/proj.android && make clean
 	rm -rf ${dest}src/soomla/cocos2dx-store/.git
-	rm -rf ${dest}template/proj.android/assets
-	rm -rf ${dest}template/proj.android/bin
-	rm -rf ${dest}template/proj.android/gen
-	rm -rf ${dest}template/proj.android/libs
-	rm -rf ${dest}template/proj.android/obj
-	rm -rf ${dest}template/proj.android/*.a
-	rm -rf ${dest}LemonadeExchange/proj.android/assets
-	rm -rf ${dest}LemonadeExchange/proj.android/bin
-	rm -rf ${dest}LemonadeExchange/proj.android/gen
-	rm -rf ${dest}LemonadeExchange/proj.android/libs
-	rm -rf ${dest}LemonadeExchange/proj.android/obj
 	open ../releases
 	open -a /Applications/YemuZip.app/
 

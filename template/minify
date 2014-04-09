@@ -7,5 +7,5 @@ if hash ant 2>/dev/null; then
 	ant
 else
 	echo "Minification requires the `ant` command."
-	echo "Please install the Android SDK and NDK for your system:"
+	echo "Please install the Android SDK and NDK for your system."
 fi

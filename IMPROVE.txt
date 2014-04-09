@@ -1,10 +1,13 @@
-[Android] Move jni/hellojavascript to jni/main
-[ALL] Buttons not gray when 0 lemonades and "Couldnt get button by tag 1-6"
-[iOS] Some streaks clipped which shouldn't be
-[HTML] Fullscreen uses all of screen. Consider cc.screen: http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
-[HTML] MobFox banner live mode
+[ALL] prebuild command
+[Android] Move jni/hellojavascript to jni/main so it renames correctly
+[ALL] Buttons not gray when 0 lemonades and "Couldnt get button by tag 1-6" see CCNode.js:setColor
 [iOS] Buy virtual items (exception)
+[HTML] Fullscreen uses all of screen. Consider cc.screen: http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
+[iOS] Some streaks clipped which shouldn't be
+[HTML] Test Facebook loading minified
+[HTML] MobFox banner live mode
 [iOS] MobFox video test mode
 [iOS] MobFox banners
 [HTML] MobFox videos
 [GENERAL] Do another SWOT
+[ALL] Leaderboards https://developers.facebook.com/docs/games/scores/

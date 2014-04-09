@@ -7,6 +7,7 @@
 	                         "mac/Info.plist",
 							 "../js/Config.js"],
     "replace_project_name": ["ios/Info.plist",
+                             "../src/AppDelegate.cpp",
                              "../proj.html5/index.html",
                              "../proj.html5/project.json",
 							 "../js/App.js",
