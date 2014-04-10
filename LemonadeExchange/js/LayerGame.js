@@ -834,10 +834,10 @@ var LayerGame = (function(){
 				this.viewAdvertisement();
 			}
 			else if (tag == TAG_SMALL_BUX_PACK) {
-				Soomla.storeController.buyMarketItem("small_bux_pack");
+				Soomla.storeController.buyMarketItem("com.wizardfu.lemonadex.small_bux_pack");
 			}
 			else if (tag == TAG_MEDIUM_BUX_PACK) {
-				Soomla.storeController.buyMarketItem("medium_bux_pack");
+				Soomla.storeController.buyMarketItem("com.wizardfu.lemonadex.medium_bux_pack");
 			}
 		},
 		

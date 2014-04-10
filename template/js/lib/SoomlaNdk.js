@@ -216,18 +216,21 @@ if (typeof Soomla.CCSoomlaNdkBridge === "undefined"){
 			else if(params.method === "CCStoreController::buyMarketItem") {
 				// find productId
 				len = module.storeAssets.currencyPacks.length;
+				x = null;
 				for (i = 0; i < len; i += 1) {
 					x = module.storeAssets.currencyPacks[i];
-					if (x.itemId === params.productId) {
+					if (x.purchasableItem && x.purchasableItem.marketItem.productId === params.productId) {
 						break;
 					}
+					x = null;
 				}
 				
 				// buy item
-				if (typeof x === "undefined") {
+				if (x === null) {
 					module.log("Unable to find productId: " + params.productId);
+					module.onPaymentFailure();
 				} else {
-					module.log("Buying " + x.itemId);
+					module.log("Buying " + x.purchasableItem.marketItem.productId);
 					module.purchasingItem = JSON.parse(JSON.stringify(x));
 					
 					if (self.buy) {
