@@ -2,21 +2,14 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+$(info APP_PLATFORM=$(APP_PLATFORM))
+$(info APP_ABI=$(APP_ABI))
 $(info APP_OPTIM=$(APP_OPTIM))
 $(info APP_CPPFLAGS=$(APP_CPPFLAGS))
 
 LOCAL_MODULE := cocos2djs_shared
 
 LOCAL_MODULE_FILENAME := libcocos2djs
-
-#LOCAL_SRC_FILES := main.cpp
-
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src \
-				$(LOCAL_PATH)/../../lib/cocos2dx-prebuilt/include \
-				$(LOCAL_PATH)/../../lib/cocos2dx-prebuilt/include/cocos \
-				$(LOCAL_PATH)/../../lib/cocos2dx-prebuilt/include/cocos/2d/platform/android \
-				$(LOCAL_PATH)/../../lib/cocos2dx-prebuilt/include/cocos/editor-support \
-				$(LOCAL_PATH)/../../lib/cocos2dx-prebuilt/include/external/spidermonkey/include/android
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocosdenshion_static
@@ -36,9 +29,8 @@ LOCAL_WHOLE_STATIC_LIBRARIES += spine_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_store_static
 LOCAL_WHOLE_STATIC_LIBRARIES += PluginProtocolStatic
 LOCAL_WHOLE_STATIC_LIBRARIES += jsb_pluginx_static
-#LOCAL_WHOLE_STATIC_LIBRARIES += jsb_facebook_static
-
-#LOCAL_EXPORT_CFLAGS := -DCOCOS2D_DEBUG=2 -DCOCOS2D_JAVASCRIPT
+LOCAL_WHOLE_STATIC_LIBRARIES += jsb_facebook_static
+LOCAL_WHOLE_STATIC_LIBRARIES += jsb_appbindings_static
 
 include $(BUILD_SHARED_LIBRARY)
 
@@ -55,6 +47,7 @@ $(call import-module,bindings/manual/network)
 $(call import-module,bindings/manual/spine)
 $(call import-module,bindings/manual/ui)
 $(call import-module,plugin/protocols/proj.android/jni)
-$(call import-module,../soomla/cocos2dx-store/android/jni)
+$(call import-module,../cocos2dx-store/android/jni)
 $(call import-module,bindings-pluginx)
-$(call import-module,facebook)
+$(call import-module,facebook/proj.android/jni)
+$(call import-module,app/proj.android/jni)

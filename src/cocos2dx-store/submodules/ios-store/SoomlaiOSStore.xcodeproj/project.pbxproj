@@ -1,0 +1,562 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C018B64F16105F77000FE817 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C018B47B160F5B23000FE817 /* CoreFoundation.framework */; };
+		C024137F176F2512007BB351 /* JSONConsts.m in Sources */ = {isa = PBXBuildFile; fileRef = C024132B176F2512007BB351 /* JSONConsts.m */; };
+		C0241382176F2512007BB351 /* KeyValDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = C024132D176F2512007BB351 /* KeyValDatabase.m */; };
+		C0241385176F2512007BB351 /* KeyValueStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = C024132F176F2512007BB351 /* KeyValueStorage.m */; };
+		C0241388176F2512007BB351 /* NonConsumableStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241331176F2512007BB351 /* NonConsumableStorage.m */; };
+		C024138B176F2512007BB351 /* ObscuredNSUserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241333176F2512007BB351 /* ObscuredNSUserDefaults.m */; };
+		C024138E176F2512007BB351 /* StorageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241335176F2512007BB351 /* StorageManager.m */; };
+		C0241391176F2512007BB351 /* StoreEncryptor.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241337176F2512007BB351 /* StoreEncryptor.m */; };
+		C0241397176F2512007BB351 /* StoreInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = C024133B176F2512007BB351 /* StoreInfo.m */; };
+		C024139A176F2512007BB351 /* VirtualCurrencyStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = C024133D176F2512007BB351 /* VirtualCurrencyStorage.m */; };
+		C024139D176F2512007BB351 /* VirtualGoodStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = C024133F176F2512007BB351 /* VirtualGoodStorage.m */; };
+		C02413A0176F2512007BB351 /* VirtualItemStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241341176F2512007BB351 /* VirtualItemStorage.m */; };
+		C02413A3176F2512007BB351 /* MarketItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241344176F2512007BB351 /* MarketItem.m */; };
+		C02413A6176F2512007BB351 /* NonConsumableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241346176F2512007BB351 /* NonConsumableItem.m */; };
+		C02413A9176F2512007BB351 /* PurchasableVirtualItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241348176F2512007BB351 /* PurchasableVirtualItem.m */; };
+		C02413AC176F2512007BB351 /* VirtualCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = C024134A176F2512007BB351 /* VirtualCategory.m */; };
+		C02413AF176F2512007BB351 /* VirtualCurrency.m in Sources */ = {isa = PBXBuildFile; fileRef = C024134D176F2512007BB351 /* VirtualCurrency.m */; };
+		C02413B2176F2512007BB351 /* VirtualCurrencyPack.m in Sources */ = {isa = PBXBuildFile; fileRef = C024134F176F2512007BB351 /* VirtualCurrencyPack.m */; };
+		C02413B5176F2512007BB351 /* EquippableVG.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241352176F2512007BB351 /* EquippableVG.m */; };
+		C02413B8176F2512007BB351 /* LifetimeVG.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241354176F2512007BB351 /* LifetimeVG.m */; };
+		C02413BB176F2512007BB351 /* SingleUsePackVG.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241356176F2512007BB351 /* SingleUsePackVG.m */; };
+		C02413BE176F2512007BB351 /* SingleUseVG.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241358176F2512007BB351 /* SingleUseVG.m */; };
+		C02413C1176F2512007BB351 /* UpgradeVG.m in Sources */ = {isa = PBXBuildFile; fileRef = C024135A176F2512007BB351 /* UpgradeVG.m */; };
+		C02413C4176F2512007BB351 /* VirtualGood.m in Sources */ = {isa = PBXBuildFile; fileRef = C024135C176F2512007BB351 /* VirtualGood.m */; };
+		C02413C7176F2512007BB351 /* VirtualItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C024135E176F2512007BB351 /* VirtualItem.m */; };
+		C02413CA176F2512007BB351 /* EventHandling.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241360176F2512007BB351 /* EventHandling.m */; };
+		C02413CD176F2512007BB351 /* InsufficientFundsException.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241363176F2512007BB351 /* InsufficientFundsException.m */; };
+		C02413D0176F2512007BB351 /* NotEnoughGoodsException.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241365176F2512007BB351 /* NotEnoughGoodsException.m */; };
+		C02413D3176F2512007BB351 /* VirtualItemNotFoundException.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241367176F2512007BB351 /* VirtualItemNotFoundException.m */; };
+		C02413D6176F2512007BB351 /* FBEncryptorAES.m in Sources */ = {isa = PBXBuildFile; fileRef = C024136A176F2512007BB351 /* FBEncryptorAES.m */; };
+		C02413D9176F2512007BB351 /* NSData-Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = C024136C176F2512007BB351 /* NSData-Base64.m */; };
+		C02413DD176F2512007BB351 /* PurchaseType.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241370176F2512007BB351 /* PurchaseType.m */; };
+		C02413E0176F2512007BB351 /* PurchaseWithMarket.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241372176F2512007BB351 /* PurchaseWithMarket.m */; };
+		C02413E3176F2512007BB351 /* PurchaseWithVirtualItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241374176F2512007BB351 /* PurchaseWithVirtualItem.m */; };
+		C02413E7176F2512007BB351 /* StoreConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241377176F2512007BB351 /* StoreConfig.m */; };
+		C02413EA176F2512007BB351 /* StoreController.m in Sources */ = {isa = PBXBuildFile; fileRef = C0241379176F2512007BB351 /* StoreController.m */; };
+		C02413ED176F2512007BB351 /* StoreInventory.m in Sources */ = {isa = PBXBuildFile; fileRef = C024137B176F2512007BB351 /* StoreInventory.m */; };
+		C02413F0176F2512007BB351 /* StoreUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C024137D176F2512007BB351 /* StoreUtils.m */; };
+		C02CEC46160DC870000AA0D2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C02CEC45160DC870000AA0D2 /* Foundation.framework */; };
+		C02CEC79160DCA31000AA0D2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C02CEC78160DCA31000AA0D2 /* StoreKit.framework */; };
+		C02CEC7B160DCA3A000AA0D2 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C02CEC7A160DCA3A000AA0D2 /* Security.framework */; };
+		C02CECF6160DCB4A000AA0D2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C02CECF5160DCB4A000AA0D2 /* UIKit.framework */; };
+		C054F21417FAB22A006F5B8E /* SoomlaVerification.m in Sources */ = {isa = PBXBuildFile; fileRef = C054F21217FAB22A006F5B8E /* SoomlaVerification.m */; };
+		C07DA3C316218309005792DD /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C07DA3C216218309005792DD /* libsqlite3.0.dylib */; };
+		C0CE33CF178168090089A0DE /* OpenUDID.m in Sources */ = {isa = PBXBuildFile; fileRef = C0CE33CD178168090089A0DE /* OpenUDID.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C018B47B160F5B23000FE817 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		C024132A176F2512007BB351 /* JSONConsts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONConsts.h; sourceTree = "<group>"; };
+		C024132B176F2512007BB351 /* JSONConsts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONConsts.m; sourceTree = "<group>"; };
+		C024132C176F2512007BB351 /* KeyValDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyValDatabase.h; sourceTree = "<group>"; };
+		C024132D176F2512007BB351 /* KeyValDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyValDatabase.m; sourceTree = "<group>"; };
+		C024132E176F2512007BB351 /* KeyValueStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyValueStorage.h; sourceTree = "<group>"; };
+		C024132F176F2512007BB351 /* KeyValueStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyValueStorage.m; sourceTree = "<group>"; };
+		C0241330176F2512007BB351 /* NonConsumableStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonConsumableStorage.h; sourceTree = "<group>"; };
+		C0241331176F2512007BB351 /* NonConsumableStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NonConsumableStorage.m; sourceTree = "<group>"; };
+		C0241332176F2512007BB351 /* ObscuredNSUserDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObscuredNSUserDefaults.h; sourceTree = "<group>"; };
+		C0241333176F2512007BB351 /* ObscuredNSUserDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObscuredNSUserDefaults.m; sourceTree = "<group>"; };
+		C0241334176F2512007BB351 /* StorageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StorageManager.h; sourceTree = "<group>"; };
+		C0241335176F2512007BB351 /* StorageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StorageManager.m; sourceTree = "<group>"; };
+		C0241336176F2512007BB351 /* StoreEncryptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoreEncryptor.h; sourceTree = "<group>"; };
+		C0241337176F2512007BB351 /* StoreEncryptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoreEncryptor.m; sourceTree = "<group>"; };
+		C024133A176F2512007BB351 /* StoreInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoreInfo.h; sourceTree = "<group>"; };
+		C024133B176F2512007BB351 /* StoreInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoreInfo.m; sourceTree = "<group>"; };
+		C024133C176F2512007BB351 /* VirtualCurrencyStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualCurrencyStorage.h; sourceTree = "<group>"; };
+		C024133D176F2512007BB351 /* VirtualCurrencyStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualCurrencyStorage.m; sourceTree = "<group>"; };
+		C024133E176F2512007BB351 /* VirtualGoodStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualGoodStorage.h; sourceTree = "<group>"; };
+		C024133F176F2512007BB351 /* VirtualGoodStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualGoodStorage.m; sourceTree = "<group>"; };
+		C0241340176F2512007BB351 /* VirtualItemStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualItemStorage.h; sourceTree = "<group>"; };
+		C0241341176F2512007BB351 /* VirtualItemStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualItemStorage.m; sourceTree = "<group>"; };
+		C0241343176F2512007BB351 /* MarketItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarketItem.h; sourceTree = "<group>"; };
+		C0241344176F2512007BB351 /* MarketItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarketItem.m; sourceTree = "<group>"; };
+		C0241345176F2512007BB351 /* NonConsumableItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonConsumableItem.h; sourceTree = "<group>"; };
+		C0241346176F2512007BB351 /* NonConsumableItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NonConsumableItem.m; sourceTree = "<group>"; };
+		C0241347176F2512007BB351 /* PurchasableVirtualItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchasableVirtualItem.h; sourceTree = "<group>"; };
+		C0241348176F2512007BB351 /* PurchasableVirtualItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchasableVirtualItem.m; sourceTree = "<group>"; };
+		C0241349176F2512007BB351 /* VirtualCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualCategory.h; sourceTree = "<group>"; };
+		C024134A176F2512007BB351 /* VirtualCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualCategory.m; sourceTree = "<group>"; };
+		C024134C176F2512007BB351 /* VirtualCurrency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualCurrency.h; sourceTree = "<group>"; };
+		C024134D176F2512007BB351 /* VirtualCurrency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualCurrency.m; sourceTree = "<group>"; };
+		C024134E176F2512007BB351 /* VirtualCurrencyPack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualCurrencyPack.h; sourceTree = "<group>"; };
+		C024134F176F2512007BB351 /* VirtualCurrencyPack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualCurrencyPack.m; sourceTree = "<group>"; };
+		C0241351176F2512007BB351 /* EquippableVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EquippableVG.h; sourceTree = "<group>"; };
+		C0241352176F2512007BB351 /* EquippableVG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EquippableVG.m; sourceTree = "<group>"; };
+		C0241353176F2512007BB351 /* LifetimeVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LifetimeVG.h; sourceTree = "<group>"; };
+		C0241354176F2512007BB351 /* LifetimeVG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LifetimeVG.m; sourceTree = "<group>"; };
+		C0241355176F2512007BB351 /* SingleUsePackVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleUsePackVG.h; sourceTree = "<group>"; };
+		C0241356176F2512007BB351 /* SingleUsePackVG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleUsePackVG.m; sourceTree = "<group>"; };
+		C0241357176F2512007BB351 /* SingleUseVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleUseVG.h; sourceTree = "<group>"; };
+		C0241358176F2512007BB351 /* SingleUseVG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleUseVG.m; sourceTree = "<group>"; };
+		C0241359176F2512007BB351 /* UpgradeVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpgradeVG.h; sourceTree = "<group>"; };
+		C024135A176F2512007BB351 /* UpgradeVG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpgradeVG.m; sourceTree = "<group>"; };
+		C024135B176F2512007BB351 /* VirtualGood.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualGood.h; sourceTree = "<group>"; };
+		C024135C176F2512007BB351 /* VirtualGood.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualGood.m; sourceTree = "<group>"; };
+		C024135D176F2512007BB351 /* VirtualItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualItem.h; sourceTree = "<group>"; };
+		C024135E176F2512007BB351 /* VirtualItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualItem.m; sourceTree = "<group>"; };
+		C024135F176F2512007BB351 /* EventHandling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventHandling.h; sourceTree = "<group>"; };
+		C0241360176F2512007BB351 /* EventHandling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventHandling.m; sourceTree = "<group>"; };
+		C0241362176F2512007BB351 /* InsufficientFundsException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InsufficientFundsException.h; sourceTree = "<group>"; };
+		C0241363176F2512007BB351 /* InsufficientFundsException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InsufficientFundsException.m; sourceTree = "<group>"; };
+		C0241364176F2512007BB351 /* NotEnoughGoodsException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotEnoughGoodsException.h; sourceTree = "<group>"; };
+		C0241365176F2512007BB351 /* NotEnoughGoodsException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotEnoughGoodsException.m; sourceTree = "<group>"; };
+		C0241366176F2512007BB351 /* VirtualItemNotFoundException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VirtualItemNotFoundException.h; sourceTree = "<group>"; };
+		C0241367176F2512007BB351 /* VirtualItemNotFoundException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VirtualItemNotFoundException.m; sourceTree = "<group>"; };
+		C0241369176F2512007BB351 /* FBEncryptorAES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FBEncryptorAES.h; sourceTree = "<group>"; };
+		C024136A176F2512007BB351 /* FBEncryptorAES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBEncryptorAES.m; sourceTree = "<group>"; };
+		C024136B176F2512007BB351 /* NSData-Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData-Base64.h"; sourceTree = "<group>"; };
+		C024136C176F2512007BB351 /* NSData-Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData-Base64.m"; sourceTree = "<group>"; };
+		C024136D176F2512007BB351 /* IStoreAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IStoreAssets.h; sourceTree = "<group>"; };
+		C024136F176F2512007BB351 /* PurchaseType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseType.h; sourceTree = "<group>"; };
+		C0241370176F2512007BB351 /* PurchaseType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseType.m; sourceTree = "<group>"; };
+		C0241371176F2512007BB351 /* PurchaseWithMarket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseWithMarket.h; sourceTree = "<group>"; };
+		C0241372176F2512007BB351 /* PurchaseWithMarket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseWithMarket.m; sourceTree = "<group>"; };
+		C0241373176F2512007BB351 /* PurchaseWithVirtualItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseWithVirtualItem.h; sourceTree = "<group>"; };
+		C0241374176F2512007BB351 /* PurchaseWithVirtualItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseWithVirtualItem.m; sourceTree = "<group>"; };
+		C0241375176F2512007BB351 /* SoomlaiOSStore-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SoomlaiOSStore-Prefix.pch"; sourceTree = "<group>"; };
+		C0241376176F2512007BB351 /* StoreConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoreConfig.h; sourceTree = "<group>"; };
+		C0241377176F2512007BB351 /* StoreConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoreConfig.m; sourceTree = "<group>"; };
+		C0241378176F2512007BB351 /* StoreController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoreController.h; sourceTree = "<group>"; };
+		C0241379176F2512007BB351 /* StoreController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoreController.m; sourceTree = "<group>"; };
+		C024137A176F2512007BB351 /* StoreInventory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoreInventory.h; sourceTree = "<group>"; };
+		C024137B176F2512007BB351 /* StoreInventory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoreInventory.m; sourceTree = "<group>"; };
+		C024137C176F2512007BB351 /* StoreUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoreUtils.h; sourceTree = "<group>"; };
+		C024137D176F2512007BB351 /* StoreUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StoreUtils.m; sourceTree = "<group>"; };
+		C02CEC42160DC870000AA0D2 /* libSoomlaiOSStore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSoomlaiOSStore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C02CEC45160DC870000AA0D2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C02CEC54160DC870000AA0D2 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		C02CEC78160DCA31000AA0D2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		C02CEC7A160DCA3A000AA0D2 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		C02CECF5160DCB4A000AA0D2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C054F21117FAB22A006F5B8E /* SoomlaVerification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoomlaVerification.h; sourceTree = "<group>"; };
+		C054F21217FAB22A006F5B8E /* SoomlaVerification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SoomlaVerification.m; sourceTree = "<group>"; };
+		C07DA3C216218309005792DD /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		C0CE33CC178168090089A0DE /* OpenUDID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenUDID.h; sourceTree = "<group>"; };
+		C0CE33CD178168090089A0DE /* OpenUDID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenUDID.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C02CEC3F160DC870000AA0D2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C07DA3C316218309005792DD /* libsqlite3.0.dylib in Frameworks */,
+				C018B64F16105F77000FE817 /* CoreFoundation.framework in Frameworks */,
+				C02CECF6160DCB4A000AA0D2 /* UIKit.framework in Frameworks */,
+				C02CEC7B160DCA3A000AA0D2 /* Security.framework in Frameworks */,
+				C02CEC79160DCA31000AA0D2 /* StoreKit.framework in Frameworks */,
+				C02CEC46160DC870000AA0D2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C0241328176F2512007BB351 /* SoomlaiOSStore */ = {
+			isa = PBXGroup;
+			children = (
+				C0241329176F2512007BB351 /* data */,
+				C0241342176F2512007BB351 /* domain */,
+				C024135F176F2512007BB351 /* EventHandling.h */,
+				C0241360176F2512007BB351 /* EventHandling.m */,
+				C0241361176F2512007BB351 /* exceptions */,
+				C0CE33CB178168090089A0DE /* OpenUDID */,
+				C0241368176F2512007BB351 /* FBEncryptor */,
+				C024136D176F2512007BB351 /* IStoreAssets.h */,
+				C024136E176F2512007BB351 /* PurchaseTypes */,
+				C054F21117FAB22A006F5B8E /* SoomlaVerification.h */,
+				C054F21217FAB22A006F5B8E /* SoomlaVerification.m */,
+				C0241375176F2512007BB351 /* SoomlaiOSStore-Prefix.pch */,
+				C0241376176F2512007BB351 /* StoreConfig.h */,
+				C0241377176F2512007BB351 /* StoreConfig.m */,
+				C0241378176F2512007BB351 /* StoreController.h */,
+				C0241379176F2512007BB351 /* StoreController.m */,
+				C024137A176F2512007BB351 /* StoreInventory.h */,
+				C024137B176F2512007BB351 /* StoreInventory.m */,
+				C024137C176F2512007BB351 /* StoreUtils.h */,
+				C024137D176F2512007BB351 /* StoreUtils.m */,
+			);
+			path = SoomlaiOSStore;
+			sourceTree = "<group>";
+		};
+		C0241329176F2512007BB351 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				C024132A176F2512007BB351 /* JSONConsts.h */,
+				C024132B176F2512007BB351 /* JSONConsts.m */,
+				C024132C176F2512007BB351 /* KeyValDatabase.h */,
+				C024132D176F2512007BB351 /* KeyValDatabase.m */,
+				C024132E176F2512007BB351 /* KeyValueStorage.h */,
+				C024132F176F2512007BB351 /* KeyValueStorage.m */,
+				C0241330176F2512007BB351 /* NonConsumableStorage.h */,
+				C0241331176F2512007BB351 /* NonConsumableStorage.m */,
+				C0241332176F2512007BB351 /* ObscuredNSUserDefaults.h */,
+				C0241333176F2512007BB351 /* ObscuredNSUserDefaults.m */,
+				C0241334176F2512007BB351 /* StorageManager.h */,
+				C0241335176F2512007BB351 /* StorageManager.m */,
+				C0241336176F2512007BB351 /* StoreEncryptor.h */,
+				C0241337176F2512007BB351 /* StoreEncryptor.m */,
+				C024133A176F2512007BB351 /* StoreInfo.h */,
+				C024133B176F2512007BB351 /* StoreInfo.m */,
+				C024133C176F2512007BB351 /* VirtualCurrencyStorage.h */,
+				C024133D176F2512007BB351 /* VirtualCurrencyStorage.m */,
+				C024133E176F2512007BB351 /* VirtualGoodStorage.h */,
+				C024133F176F2512007BB351 /* VirtualGoodStorage.m */,
+				C0241340176F2512007BB351 /* VirtualItemStorage.h */,
+				C0241341176F2512007BB351 /* VirtualItemStorage.m */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		C0241342176F2512007BB351 /* domain */ = {
+			isa = PBXGroup;
+			children = (
+				C0241343176F2512007BB351 /* MarketItem.h */,
+				C0241344176F2512007BB351 /* MarketItem.m */,
+				C0241345176F2512007BB351 /* NonConsumableItem.h */,
+				C0241346176F2512007BB351 /* NonConsumableItem.m */,
+				C0241347176F2512007BB351 /* PurchasableVirtualItem.h */,
+				C0241348176F2512007BB351 /* PurchasableVirtualItem.m */,
+				C0241349176F2512007BB351 /* VirtualCategory.h */,
+				C024134A176F2512007BB351 /* VirtualCategory.m */,
+				C024134B176F2512007BB351 /* virtualCurrencies */,
+				C0241350176F2512007BB351 /* virtualGoods */,
+				C024135D176F2512007BB351 /* VirtualItem.h */,
+				C024135E176F2512007BB351 /* VirtualItem.m */,
+			);
+			path = domain;
+			sourceTree = "<group>";
+		};
+		C024134B176F2512007BB351 /* virtualCurrencies */ = {
+			isa = PBXGroup;
+			children = (
+				C024134C176F2512007BB351 /* VirtualCurrency.h */,
+				C024134D176F2512007BB351 /* VirtualCurrency.m */,
+				C024134E176F2512007BB351 /* VirtualCurrencyPack.h */,
+				C024134F176F2512007BB351 /* VirtualCurrencyPack.m */,
+			);
+			path = virtualCurrencies;
+			sourceTree = "<group>";
+		};
+		C0241350176F2512007BB351 /* virtualGoods */ = {
+			isa = PBXGroup;
+			children = (
+				C0241351176F2512007BB351 /* EquippableVG.h */,
+				C0241352176F2512007BB351 /* EquippableVG.m */,
+				C0241353176F2512007BB351 /* LifetimeVG.h */,
+				C0241354176F2512007BB351 /* LifetimeVG.m */,
+				C0241355176F2512007BB351 /* SingleUsePackVG.h */,
+				C0241356176F2512007BB351 /* SingleUsePackVG.m */,
+				C0241357176F2512007BB351 /* SingleUseVG.h */,
+				C0241358176F2512007BB351 /* SingleUseVG.m */,
+				C0241359176F2512007BB351 /* UpgradeVG.h */,
+				C024135A176F2512007BB351 /* UpgradeVG.m */,
+				C024135B176F2512007BB351 /* VirtualGood.h */,
+				C024135C176F2512007BB351 /* VirtualGood.m */,
+			);
+			path = virtualGoods;
+			sourceTree = "<group>";
+		};
+		C0241361176F2512007BB351 /* exceptions */ = {
+			isa = PBXGroup;
+			children = (
+				C0241362176F2512007BB351 /* InsufficientFundsException.h */,
+				C0241363176F2512007BB351 /* InsufficientFundsException.m */,
+				C0241364176F2512007BB351 /* NotEnoughGoodsException.h */,
+				C0241365176F2512007BB351 /* NotEnoughGoodsException.m */,
+				C0241366176F2512007BB351 /* VirtualItemNotFoundException.h */,
+				C0241367176F2512007BB351 /* VirtualItemNotFoundException.m */,
+			);
+			path = exceptions;
+			sourceTree = "<group>";
+		};
+		C0241368176F2512007BB351 /* FBEncryptor */ = {
+			isa = PBXGroup;
+			children = (
+				C0241369176F2512007BB351 /* FBEncryptorAES.h */,
+				C024136A176F2512007BB351 /* FBEncryptorAES.m */,
+				C024136B176F2512007BB351 /* NSData-Base64.h */,
+				C024136C176F2512007BB351 /* NSData-Base64.m */,
+			);
+			path = FBEncryptor;
+			sourceTree = "<group>";
+		};
+		C024136E176F2512007BB351 /* PurchaseTypes */ = {
+			isa = PBXGroup;
+			children = (
+				C024136F176F2512007BB351 /* PurchaseType.h */,
+				C0241370176F2512007BB351 /* PurchaseType.m */,
+				C0241371176F2512007BB351 /* PurchaseWithMarket.h */,
+				C0241372176F2512007BB351 /* PurchaseWithMarket.m */,
+				C0241373176F2512007BB351 /* PurchaseWithVirtualItem.h */,
+				C0241374176F2512007BB351 /* PurchaseWithVirtualItem.m */,
+			);
+			path = PurchaseTypes;
+			sourceTree = "<group>";
+		};
+		C02CEC37160DC870000AA0D2 = {
+			isa = PBXGroup;
+			children = (
+				C0241328176F2512007BB351 /* SoomlaiOSStore */,
+				C02CEC44160DC870000AA0D2 /* Frameworks */,
+				C02CEC43160DC870000AA0D2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C02CEC43160DC870000AA0D2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C02CEC42160DC870000AA0D2 /* libSoomlaiOSStore.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C02CEC44160DC870000AA0D2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C07DA3C216218309005792DD /* libsqlite3.0.dylib */,
+				C02CECF5160DCB4A000AA0D2 /* UIKit.framework */,
+				C02CEC7A160DCA3A000AA0D2 /* Security.framework */,
+				C02CEC78160DCA31000AA0D2 /* StoreKit.framework */,
+				C02CEC45160DC870000AA0D2 /* Foundation.framework */,
+				C02CEC54160DC870000AA0D2 /* SenTestingKit.framework */,
+				C018B47B160F5B23000FE817 /* CoreFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C0CE33CB178168090089A0DE /* OpenUDID */ = {
+			isa = PBXGroup;
+			children = (
+				C0CE33CC178168090089A0DE /* OpenUDID.h */,
+				C0CE33CD178168090089A0DE /* OpenUDID.m */,
+			);
+			path = OpenUDID;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C062234A162579D500101FE8 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C02CEC41160DC870000AA0D2 /* SoomlaiOSStore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C02CEC67160DC870000AA0D2 /* Build configuration list for PBXNativeTarget "SoomlaiOSStore" */;
+			buildPhases = (
+				C02CEC3E160DC870000AA0D2 /* Sources */,
+				C02CEC3F160DC870000AA0D2 /* Frameworks */,
+				C062234A162579D500101FE8 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SoomlaiOSStore;
+			productName = SoomlaiOSStore;
+			productReference = C02CEC42160DC870000AA0D2 /* libSoomlaiOSStore.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C02CEC39160DC870000AA0D2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = SOOMLA;
+			};
+			buildConfigurationList = C02CEC3C160DC870000AA0D2 /* Build configuration list for PBXProject "SoomlaiOSStore" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C02CEC37160DC870000AA0D2;
+			productRefGroup = C02CEC43160DC870000AA0D2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C02CEC41160DC870000AA0D2 /* SoomlaiOSStore */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C02CEC3E160DC870000AA0D2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C024137F176F2512007BB351 /* JSONConsts.m in Sources */,
+				C0241382176F2512007BB351 /* KeyValDatabase.m in Sources */,
+				C0241385176F2512007BB351 /* KeyValueStorage.m in Sources */,
+				C0241388176F2512007BB351 /* NonConsumableStorage.m in Sources */,
+				C024138B176F2512007BB351 /* ObscuredNSUserDefaults.m in Sources */,
+				C024138E176F2512007BB351 /* StorageManager.m in Sources */,
+				C0241391176F2512007BB351 /* StoreEncryptor.m in Sources */,
+				C0241397176F2512007BB351 /* StoreInfo.m in Sources */,
+				C024139A176F2512007BB351 /* VirtualCurrencyStorage.m in Sources */,
+				C024139D176F2512007BB351 /* VirtualGoodStorage.m in Sources */,
+				C02413A0176F2512007BB351 /* VirtualItemStorage.m in Sources */,
+				C02413A3176F2512007BB351 /* MarketItem.m in Sources */,
+				C02413A6176F2512007BB351 /* NonConsumableItem.m in Sources */,
+				C02413A9176F2512007BB351 /* PurchasableVirtualItem.m in Sources */,
+				C02413AC176F2512007BB351 /* VirtualCategory.m in Sources */,
+				C02413AF176F2512007BB351 /* VirtualCurrency.m in Sources */,
+				C02413B2176F2512007BB351 /* VirtualCurrencyPack.m in Sources */,
+				C02413B5176F2512007BB351 /* EquippableVG.m in Sources */,
+				C02413B8176F2512007BB351 /* LifetimeVG.m in Sources */,
+				C02413BB176F2512007BB351 /* SingleUsePackVG.m in Sources */,
+				C02413BE176F2512007BB351 /* SingleUseVG.m in Sources */,
+				C02413C1176F2512007BB351 /* UpgradeVG.m in Sources */,
+				C02413C4176F2512007BB351 /* VirtualGood.m in Sources */,
+				C02413C7176F2512007BB351 /* VirtualItem.m in Sources */,
+				C02413CA176F2512007BB351 /* EventHandling.m in Sources */,
+				C02413CD176F2512007BB351 /* InsufficientFundsException.m in Sources */,
+				C02413D0176F2512007BB351 /* NotEnoughGoodsException.m in Sources */,
+				C02413D3176F2512007BB351 /* VirtualItemNotFoundException.m in Sources */,
+				C054F21417FAB22A006F5B8E /* SoomlaVerification.m in Sources */,
+				C02413D6176F2512007BB351 /* FBEncryptorAES.m in Sources */,
+				C02413D9176F2512007BB351 /* NSData-Base64.m in Sources */,
+				C02413DD176F2512007BB351 /* PurchaseType.m in Sources */,
+				C02413E0176F2512007BB351 /* PurchaseWithMarket.m in Sources */,
+				C02413E3176F2512007BB351 /* PurchaseWithVirtualItem.m in Sources */,
+				C02413E7176F2512007BB351 /* StoreConfig.m in Sources */,
+				C02413EA176F2512007BB351 /* StoreController.m in Sources */,
+				C02413ED176F2512007BB351 /* StoreInventory.m in Sources */,
+				C02413F0176F2512007BB351 /* StoreUtils.m in Sources */,
+				C0CE33CF178168090089A0DE /* OpenUDID.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C02CEC65160DC870000AA0D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C02CEC66160DC870000AA0D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C02CEC68160DC870000AA0D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEAD_CODE_STRIPPING = NO;
+				DSTROOT = /tmp/SoomlaiOSStore.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SoomlaiOSStore/SoomlaiOSStore-Prefix.pch";
+				LINK_WITH_STANDARD_LIBRARIES = NO;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = /headers/private;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /headers/public;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		C02CEC69160DC870000AA0D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				DEAD_CODE_STRIPPING = NO;
+				DSTROOT = /tmp/SoomlaiOSStore.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SoomlaiOSStore/SoomlaiOSStore-Prefix.pch";
+				LINK_WITH_STANDARD_LIBRARIES = NO;
+				MACH_O_TYPE = staticlib;
+				OTHER_LDFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = /headers/private;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = /headers/public;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C02CEC3C160DC870000AA0D2 /* Build configuration list for PBXProject "SoomlaiOSStore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C02CEC65160DC870000AA0D2 /* Debug */,
+				C02CEC66160DC870000AA0D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C02CEC67160DC870000AA0D2 /* Build configuration list for PBXNativeTarget "SoomlaiOSStore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C02CEC68160DC870000AA0D2 /* Debug */,
+				C02CEC69160DC870000AA0D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C02CEC39160DC870000AA0D2 /* Project object */;
+}

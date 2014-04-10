@@ -1,0 +1,1 @@
+### v3.3.0 [view commit logs](https://github.com/soomla/android-store/compare/v3.2.1...v3.3.0)* Billing Services  * We've split out Google Play so we can add more billing services.  * Google Play is the default billing services and it's in a different project: https://github.com/soomla/android-store-google-play

@@ -206,6 +206,7 @@
 		disabledSprite = cc.Sprite.create(<span class="hljs-string">"#"</span> + spriteFilename),
 		button;
 	selectedSprite.setColor(cc.color(<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>));
+	disabledSprite.setColor(cc.color(<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>));
 
 	button = cc.MenuItemSprite.create(normalSprite, selectedSprite, disabledSprite, obj.menuButtonCallback, obj);
 	button.setTag(tag);

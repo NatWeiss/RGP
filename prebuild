@@ -1,8 +1,95 @@
 #!/bin/bash
 
 cd "$(dirname "$0")"
-cd src
-xcodebuild -project cocos2dx-prebuilt.xcodeproj -scheme "Just Headers"
-xcodebuild -project cocos2dx-plugins.xcodeproj -scheme "Just Headers"
-xcodebuild -project cocos2dx-plugins.xcodeproj -scheme "Just Mac"
-xcodebuild -project cocos2dx-plugins.xcodeproj -scheme "Just iOS"
+
+cmd="$1"
+if [ -z "$cmd" ]; then
+	cmd="all"
+fi
+echo "Prebuilding '$cmd'..."
+
+if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
+	libDir="template/lib/cocos2dx-prebuilt"
+
+	# Clean the include directory
+	dir="include"
+	if [ -d "${dir}" ]; then
+		rm -r ${dir}
+	fi
+	mkdir -p ${dir}
+	mkdir -p ${dir}/bindings
+	mkdir -p ${dir}/external
+	mkdir -p ${dir}/facebook
+	mkdir -p ${dir}/app
+	mkdir -p ${dir}/soomla
+
+	(cd src/cocos2d-x && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir && tar xvfp -)
+	(cd src/cocos2d-x && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir && tar xvfp -)
+	(cd src/cocos2d-x && find . -name '*.msg' -print | tar --create --files-from -) | (cd $dir && tar xvfp -)
+	(cd src/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp -)
+	(cd src/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp -)
+	(cd src/cocos2dx-store && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/soomla && tar xvfp -)
+	(cd src/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp -)
+	(cd src/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp -)
+	(cd src/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp -)
+	(cd src/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp -)
+	cp src/facebook/jsb*.h $dir/facebook
+	cp src/app/jsb*.h $dir/app
+
+	if [ -d ${dir}/docs ]; then
+		rm -r ${dir}/docs
+	fi
+	if [ -d ${dir}/samples ]; then
+		rm -r ${dir}/samples
+	fi
+	if [ -d ${dir}/templates ]; then
+		rm -r ${dir}/templates
+	fi
+	if [ -d ${dir}/tools ]; then
+		rm -r ${dir}/tools
+	fi
+	if [ -d ${dir}/plugin/samples ]; then
+		rm -r ${dir}/plugin/samples
+	fi
+	if [ -d ${dir}/plugin/plugins ]; then
+		rm -r ${dir}/plugin/plugins
+	fi
+	find ${dir} | xargs xattr -c
+
+	# Copy javascript bindings
+	dir="${libDir}/jsb"
+	if [ -d $dir ]; then
+		rm -r ${dir}
+	fi
+	mkdir -p "${dir}"
+	cp src/bindings/script/*.js $dir
+	cp -r src/bindings/script/debugger $dir
+	cp src/bindings/auto/api/*.js $dir
+	#find src/cocos2dx-store -name *.js -exec cp {} $dir \;
+	find src/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $dir \;
+	find src/bindings-pluginx -name *.js -exec cp {} $dir \;
+	find ${dir} | xargs xattr -c
+
+	# Create absolute symlinks
+	if [ ! -L ${libDir}/lib ]; then
+		mkdir -p ${libDir}
+		cd ${libDir} && ln -s src/../lib .
+	fi
+	if [ ! -L ${libDir}/include ]; then
+		mkdir -p ${libDir}
+		cd ${libDir} && ln -s src/../include .
+	fi
+fi
+
+#platform="iOS"
+#scheme="$platform"
+
+#for proj in cocos2dx-prebuilt.xcodeproj cocos2dx-plugins.xcodeproj
+#for config in Debug Release
+#do
+#	xcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme "$scheme" -configuration ${config} -sdk iphoneos BUILD_DIR="${BUILD_DIR}" BUILD_ROOT="${BUILD_ROOT}"
+#	xcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme "$scheme" -configuration ${config} -sdk iphonesimulator -arch i386 BUILD_DIR="${BUILD_DIR}" BUILD_ROOT="${BUILD_ROOT}"
+#done
+
+#xcodebuild -project cocos2dx-plugins.xcodeproj -scheme "Just Mac"
+#xcodebuild -project cocos2dx-plugins.xcodeproj -scheme "Just iOS"

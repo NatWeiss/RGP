@@ -1255,6 +1255,7 @@
 	<span class="hljs-keyword">this</span>.loadSoundEnabled();
 
 	cc.defineGetterSetter(App, <span class="hljs-string">"winSize"</span>, App.getWinSize);
+	cc.director.setDisplayStats(cc.game.config[cc.game.CONFIG_KEY.showFPS]);
 
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
 		cc.loader.loadJs(<span class="hljs-string">"js/lib"</span>, [<span class="hljs-string">"screenfull.js"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>

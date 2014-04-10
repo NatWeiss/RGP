@@ -1,6 +1,9 @@
 [ALL] prebuild command
 [Android] Move jni/hellojavascript to jni/main so it renames correctly
 [iOS] Buy virtual items (exception)
+[LE] Update icons
+[ALL] Update ad close button
+[HTML] Update Facebook App settings
 [HTML] Fullscreen uses all of screen. Consider cc.screen: http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
 [iOS] Some streaks clipped which shouldn't be
 [HTML] Test Facebook loading minified

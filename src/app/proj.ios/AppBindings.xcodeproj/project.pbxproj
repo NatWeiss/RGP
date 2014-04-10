@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		41F0F65A18E3465700F5FC64 /* jsb_app_bindings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F65818E3465700F5FC64 /* jsb_app_bindings.cpp */; };
-		41F0F65E18E3489B00F5FC64 /* AppBindings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F65D18E3489B00F5FC64 /* AppBindings.mm */; };
+		41F0F65E18E3489B00F5FC64 /* AppBindings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F65D18E3489B00F5FC64 /* AppBindings.cpp */; };
 		FA09A376168AFD41008C1C7B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA09A375168AFD41008C1C7B /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +28,7 @@
 		419E922C18AB25D400232A34 /* AppBindings-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppBindings-Prefix.pch"; sourceTree = "<group>"; };
 		41F0F65818E3465700F5FC64 /* jsb_app_bindings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsb_app_bindings.cpp; path = ../jsb_app_bindings.cpp; sourceTree = "<group>"; };
 		41F0F65918E3465700F5FC64 /* jsb_app_bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsb_app_bindings.h; path = ../jsb_app_bindings.h; sourceTree = "<group>"; };
-		41F0F65D18E3489B00F5FC64 /* AppBindings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppBindings.mm; path = ../AppBindings.mm; sourceTree = "<group>"; };
+		41F0F65D18E3489B00F5FC64 /* AppBindings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppBindings.cpp; path = ../AppBindings.cpp; sourceTree = "<group>"; };
 		41F0F65F18E348A800F5FC64 /* AppBindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppBindings.h; path = ../AppBindings.h; sourceTree = "<group>"; };
 		FA09A372168AFD41008C1C7B /* libAppBindings.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAppBindings.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA09A375168AFD41008C1C7B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -51,7 +51,7 @@
 			isa = PBXGroup;
 			children = (
 				41F0F65F18E348A800F5FC64 /* AppBindings.h */,
-				41F0F65D18E3489B00F5FC64 /* AppBindings.mm */,
+				41F0F65D18E3489B00F5FC64 /* AppBindings.cpp */,
 				41F0F65918E3465700F5FC64 /* jsb_app_bindings.h */,
 				41F0F65818E3465700F5FC64 /* jsb_app_bindings.cpp */,
 				419E922C18AB25D400232A34 /* AppBindings-Prefix.pch */,
@@ -129,7 +129,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				41F0F65A18E3465700F5FC64 /* jsb_app_bindings.cpp in Sources */,
-				41F0F65E18E3489B00F5FC64 /* AppBindings.mm in Sources */,
+				41F0F65E18E3489B00F5FC64 /* AppBindings.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

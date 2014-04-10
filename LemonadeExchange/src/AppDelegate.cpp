@@ -20,7 +20,7 @@
 #include "jsb_opengl_registration.h"
 #include "bindings/manual/network/XMLHTTPRequest.h"
 #include "bindings/auto/jsb_pluginx_protocols_auto.hpp"
-#include "cocos2dx-store/Soomla/jsb/jsb_soomla.h"
+#include "soomla/Soomla/jsb/jsb_soomla.h"
 #include "facebook/jsb_facebook.h"
 #include "app/jsb_app_bindings.h"
 #include "jsb_cocos2dx_spine_auto.hpp"

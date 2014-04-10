@@ -224,6 +224,27 @@ tools/create-project --help
 tools/create-project -n HelloWorld -k com.mycompany.helloworld -p ~/code</pre></div>
         
       
+        
+        <h2 id="ios-in-app-purchases">iOS In-App Purchases</h2>
+
+        
+      
+        
+        <p>If your game uses In-App Purchases, they will need to be configured with iTunes Connect. If they are not, a console error message similar to <strong>SOOMLA StoreController: Expecting 2 products but only fetched 0 from iTunes Store</strong> may be displayed.</p>
+<ol>
+<li>Login to iTunes Connect.</li>
+<li>Setup your app including metadata.</li>
+<li>Manage In-App Purchases.</li>
+<li>Create new purchases.</li>
+<li>Ensure the product IDs are the same as those listed in Config.js.</li>
+<li>Ensure the purchases are cleared for sale, have a description in at least one language and have a screenshot uploaded.</li>
+<li>The status for the purchases will now say <strong>Ready to Submit</strong>.</li>
+<li>View the app details and click the <strong>Edit</strong> button next to In-App Purchases. Select the purchases and click <strong>Save.</strong></li>
+</ol>
+<p>These steps ought to be enough to get the purchases working with your app. There should be no need to click <strong>Ready to Upload Binary</strong>.</p>
+
+        
+      
 
         
           <div>

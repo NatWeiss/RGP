@@ -21,7 +21,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := cocos2djs_shared
 LOCAL_MODULE_FILENAME := libcocos2djs
 
-LOCAL_SRC_FILES := hellojavascript/main.cpp \
+LOCAL_SRC_FILES := main.cpp \
                    ../../src/AppDelegate.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src \
@@ -80,6 +80,6 @@ $(call import-module,bindings/manual/network)
 $(call import-module,bindings/manual/spine)
 $(call import-module,bindings/manual/ui)
 $(call import-module,plugin/protocols/proj.android/jni)
-$(call import-module,../soomla/cocos2dx-store/android/jni)
+$(call import-module,../cocos2dx-store/android/jni)
 $(call import-module,bindings-pluginx)
-$(call import-module,facebook)
+$(call import-module,facebook/proj.android/jni)
