@@ -1,6 +1,0 @@
-[submodule "submodules/android-store"]
-	path = submodules/android-store
-	url = git@github.com:soomla/android-store.git
-[submodule "submodules/ios-store"]
-	path = submodules/ios-store
-	url = git@github.com:soomla/ios-store.git
