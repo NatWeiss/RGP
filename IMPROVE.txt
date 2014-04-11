@@ -5,6 +5,7 @@
 [ALL] Update ad close button
 [HTML] Update Facebook App settings
 [HTML] Fullscreen uses all of screen. Consider cc.screen: http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
+[iOS] Fix native warnings
 [Android] Add .project, etc. and get working in Eclipse
 [Android] Emulator test
 [iOS] Some streaks clipped which shouldn't be
