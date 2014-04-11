@@ -57,17 +57,14 @@ void Soomla::JSBinding::callCallback(__Dictionary *params) {
     char *dump = json_dumps(root, JSON_COMPACT | JSON_ENSURE_ASCII);
     //cocos2d::log("callCallback: in >> %s", dump);
 
-    std::string jsonParams = dump;
+	std::stringstream ss;
+	ss << "easyNDKCallBack('" << dump << "');";
     free(dump);
+	//json_delete(root);
 
-    JSContext* cx = ScriptingCore::getInstance()->getGlobalContext();
-
-    jsval retval;
-    jsval v[] = {
-            v[0] = STRING_TO_JSVAL(JS_NewStringCopyZ(cx, jsonParams.c_str()))
-    };
-    ScriptingCore::getInstance()->executeFunctionWithOwner(OBJECT_TO_JSVAL(ScriptingCore::getInstance()->getGlobalObject()),
-            "easyNDKCallBack", 1, v, &retval);
+	//cocos2d::log("Executing: %s", ss.str().c_str());
+	jsval retval;
+	ScriptingCore::getInstance()->evalString(ss.str().c_str(), &retval);
 }
 
 #endif // COCOS2D_JAVASCRIPT
