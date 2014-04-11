@@ -917,6 +917,28 @@
         
       
         
+        <h3 id="app-logcurrencybalances">App.logCurrencyBalances</h3>
+<p>Logs the balances of all currencies.</p>
+
+        
+          <div class='highlight'><pre>App.logCurrencyBalances = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+	<span class="hljs-keyword">var</span> currencies, len, i, itemId, balance;
+
+	<span class="hljs-keyword">if</span> (Soomla &amp;&amp; Soomla.storeInfo) {
+		currencies = Soomla.storeInfo.getVirtualCurrencies();
+		len = currencies.length || <span class="hljs-number">0</span>;
+		cc.log(<span class="hljs-string">"Checking "</span> + len + <span class="hljs-string">" currency balances"</span>);
+
+		<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; len; i += <span class="hljs-number">1</span>) {
+			itemId = currencies[i].itemId;
+			balance = Soomla.storeInventory.getItemBalance(itemId);
+			cc.log(<span class="hljs-string">"User has "</span> + balance + <span class="hljs-string">" of "</span> + itemId);
+		}
+	}
+};</pre></div>
+        
+      
+        
         <h3 id="app-isinitiallaunch">App.isInitialLaunch</h3>
 <p>Returns true if this is the first time the app is being launched. It determines this based on whether the <code>uuid</code> key exists within local storage. Deleting this key will essentially reset the app into thinking it’s the first run.</p>
 <p>Must be called before <code>App.getUUID()</code>, which creates the <code>uuid</code> key.</p>
@@ -1288,6 +1310,9 @@
 	<span class="hljs-keyword">if</span> (initialLaunch) {
 		<span class="hljs-keyword">this</span>.onInitialLaunch();
 	}
+
+	<span class="hljs-comment">/* Show currency balances. */</span>
+	<span class="hljs-keyword">this</span>.logCurrencyBalances();
 };</pre></div>
         
       

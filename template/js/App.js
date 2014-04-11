@@ -777,6 +777,27 @@ App.giveItem = function(itemId, amount) {
 };
 
 //
+// ###  App.logCurrencyBalances
+//
+// Logs the balances of all currencies.
+//
+App.logCurrencyBalances = function() {
+	var currencies, len, i, itemId, balance;
+
+	if (Soomla && Soomla.storeInfo) {
+		currencies = Soomla.storeInfo.getVirtualCurrencies();
+		len = currencies.length || 0;
+		cc.log("Checking " + len + " currency balances");
+
+		for (i = 0; i < len; i += 1) {
+			itemId = currencies[i].itemId;
+			balance = Soomla.storeInventory.getItemBalance(itemId);
+			cc.log("User has " + balance + " of " + itemId);
+		}
+	}
+};
+
+//
 // ###   App.isInitialLaunch
 //
 // Returns true if this is the first time the app is being launched. It determines this based on whether the `uuid` key exists within local storage. Deleting this key will essentially reset the app into thinking it's the first run.
@@ -1140,6 +1161,9 @@ App.main = function() {
 	if (initialLaunch) {
 		this.onInitialLaunch();
 	}
+
+	/* Show currency balances. */
+	this.logCurrencyBalances();
 };
 
 //
