@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>418616FC-E629-4647-8DDF-97EE29D96CA4</string>
+	<key>IDESourceControlProjectName</key>
+	<string>PluginSoomla</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>39B09385-2CF2-4DB1-9BBD-42BD1BF588B4</key>
+		<string>ssh://github.com/NatWeiss/cocos2dx-store.git</string>
+		<key>E777B1FC-A663-4A07-A599-44034AB86514</key>
+		<string>http://natweiss.com/git/rapidgamepro.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>src/soomla/cocos2dx-store/proj.ios/PluginSoomla.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>39B09385-2CF2-4DB1-9BBD-42BD1BF588B4</key>
+		<string>../../..</string>
+		<key>E777B1FC-A663-4A07-A599-44034AB86514</key>
+		<string>../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://natweiss.com/git/rapidgamepro.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>E777B1FC-A663-4A07-A599-44034AB86514</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>39B09385-2CF2-4DB1-9BBD-42BD1BF588B4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>cocos2dx-store</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E777B1FC-A663-4A07-A599-44034AB86514</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RapidGamePro</string>
+		</dict>
+	</array>
+</dict>
+</plist>
