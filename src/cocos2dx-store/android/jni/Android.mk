@@ -39,14 +39,13 @@ LOCAL_SRC_FILES := ../../Soomla/CCSoomla.cpp \
 
 ifneq '$(COCOS2D_JAVASCRIPT)' ''
 LOCAL_SRC_FILES +=  \
-        ../../Soomla/jsb/jsb_soomla-3-0.cpp \
+        ../../Soomla/jsb/jsb_soomla.cpp \
         ../../Soomla/jsb/JSBinding.cpp
 endif
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Soomla
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../lib \
-				$(LOCAL_PATH)/../../../../cocos2d-x/cocos/scripting/javascript/bindings \
-				$(LOCAL_PATH)/../../../../cocos2d-x/cocos/audio/include
+	$(LOCAL_PATH)/../../../bindings/manual
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += jansson_static
@@ -71,6 +70,6 @@ include $(BUILD_STATIC_LIBRARY)
 $(call import-module,external/jansson)
 
 ifneq '$(COCOS2D_JAVASCRIPT)' ''
-$(call import-module,spidermonkey/prebuilt/android)
-$(call import-module,scripting/javascript/bindings)
+$(call import-module,external/spidermonkey/prebuilt/android)
+$(call import-module,bindings)
 endif
