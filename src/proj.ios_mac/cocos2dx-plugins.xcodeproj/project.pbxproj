@@ -7,40 +7,6 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		419E8E4A18A9845800232A34 /* All iOS */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 419E8E4B18A9845800232A34 /* Build configuration list for PBXAggregateTarget "All iOS" */;
-			buildPhases = (
-				419E8E4E18A9847700232A34 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = "All iOS";
-			productName = "cocos2d-x-static-ios";
-		};
-		419E8E9818A9BAEC00232A34 /* All Mac */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 419E8E9918A9BAEC00232A34 /* Build configuration list for PBXAggregateTarget "All Mac" */;
-			buildPhases = (
-				419E8E9E18A9BB3400232A34 /* ShellScript */,
-			);
-			dependencies = (
-			);
-			name = "All Mac";
-			productName = "cocos2d-x-static-mac";
-		};
-		419E8EA518A9CC3B00232A34 /* All */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 419E8EA618A9CC3B00232A34 /* Build configuration list for PBXAggregateTarget "All" */;
-			buildPhases = (
-			);
-			dependencies = (
-				419E8EAA18A9CC5C00232A34 /* PBXTargetDependency */,
-				41F0F63D18E1550A00F5FC64 /* PBXTargetDependency */,
-			);
-			name = All;
-			productName = "cocos2d-x-static";
-		};
 		419E91E718AB0AD800232A34 /* iOS */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 419E91E818AB0AD800232A34 /* Build configuration list for PBXAggregateTarget "iOS" */;
@@ -48,6 +14,12 @@
 				41ADF16D18F62FDB000DE7A7 /* ShellScript */,
 			);
 			dependencies = (
+				41F32F8018FA5EAA006AF300 /* PBXTargetDependency */,
+				41F32F8218FA5EAA006AF300 /* PBXTargetDependency */,
+				41F32F8418FA5EAA006AF300 /* PBXTargetDependency */,
+				41F32F8618FA5EAA006AF300 /* PBXTargetDependency */,
+				41F32F8818FA5EAA006AF300 /* PBXTargetDependency */,
+				41F32F8A18FA5EAA006AF300 /* PBXTargetDependency */,
 				41ADF1D218F64598000DE7A7 /* PBXTargetDependency */,
 				41ADF1D418F64598000DE7A7 /* PBXTargetDependency */,
 				41ADF1D618F64598000DE7A7 /* PBXTargetDependency */,
@@ -62,8 +34,10 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 41F0F62A18E1503100F5FC64 /* Build configuration list for PBXAggregateTarget "Mac" */;
 			buildPhases = (
+				41F32FAF18FA78F9006AF300 /* ShellScript */,
 			);
 			dependencies = (
+				41F32FAE18FA78F3006AF300 /* PBXTargetDependency */,
 			);
 			name = Mac;
 			productName = "build-all-libs Mac";
@@ -71,13 +45,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXContainerItemProxy section */
-		419E8EA918A9CC5C00232A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 419E8DAC18A9724F00232A34 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 419E8E4A18A9845800232A34;
-			remoteInfo = "cocos2d-x-static-ios";
-		};
 		41ADF18B18F644B4000DE7A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 41ADF18618F644B4000DE7A7 /* cocos2d_js_bindings.xcodeproj */;
@@ -211,12 +178,54 @@
 			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
 			remoteInfo = PluginFacebook;
 		};
-		41F0F63C18E1550A00F5FC64 /* PBXContainerItemProxy */ = {
+		41F32F7F18FA5EAA006AF300 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 419E8DAC18A9724F00232A34 /* Project object */;
+			containerPortal = 41ADF1C518F64540000DE7A7 /* PluginMobFox.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 419E8E9818A9BAEC00232A34;
-			remoteInfo = Mac;
+			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
+			remoteInfo = PluginMobFox;
+		};
+		41F32F8118FA5EAA006AF300 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF1A718F6450F000DE7A7 /* PluginAdmob.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FADC44A6176EA82000B2D5ED;
+			remoteInfo = PluginAdmob;
+		};
+		41F32F8318FA5EAA006AF300 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF1AD18F6451C000DE7A7 /* PluginFlurry.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
+			remoteInfo = PluginFlurry;
+		};
+		41F32F8518FA5EAA006AF300 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF1B318F64523000DE7A7 /* PluginTwitter.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FACAD8871762C1B500D75ADE;
+			remoteInfo = PluginTwitter;
+		};
+		41F32F8718FA5EAA006AF300 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF1B918F6452A000DE7A7 /* PluginUmeng.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA09A300168ADAEC008C1C7B;
+			remoteInfo = PluginUmeng;
+		};
+		41F32F8918FA5EAA006AF300 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF1BF18F64530000DE7A7 /* PluginWeibo.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FAE2752F175D9D2900F5DA8E;
+			remoteInfo = PluginWeibo;
+		};
+		41F32FAD18FA78F3006AF300 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF18618F644B4000DE7A7 /* cocos2d_js_bindings.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A03F31E81781479B006731B9;
+			remoteInfo = "jsbindings Mac";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -436,10 +445,7 @@
 			projectRoot = "";
 			targets = (
 				419E91E718AB0AD800232A34 /* iOS */,
-				419E8E4A18A9845800232A34 /* All iOS */,
 				41F0F62918E1503100F5FC64 /* Mac */,
-				419E8E9818A9BAEC00232A34 /* All Mac */,
-				419E8EA518A9CC3B00232A34 /* All */,
 			);
 		};
 /* End PBXProject section */
@@ -539,32 +545,6 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		419E8E4E18A9847700232A34 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "platform=\"iOS\"\nscheme=\"$platform\"\n\nfor config in Debug Release\ndo\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\ndone\n";
-		};
-		419E8E9E18A9BB3400232A34 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/bash;
-			shellScript = "libName=\"lib${PROJECT_NAME}\"\nplatform=\"Mac\"\nscheme=\"build-all-libs $platform\"\n\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" ONLY_ACTIVE_ARCH=NO -configuration ${config} BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA\n\trm $outputFileA\ndone\n";
-		};
 		41ADF16D18F62FDB000DE7A7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -576,16 +556,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "libName=\"lib${PROJECT_NAME}.a\"\ntag=\"${CONFIGURATION}-${PLATFORM_NAME}\"\nlibtool -static -o ${BUILD_DIR}/${tag}-${libName} ${BUILD_DIR}/${tag}/*.a\n\nplatform=\"iOS\"\noutputDir=\"${SRCROOT}/../../lib/${CONFIGURATION}-${platform}\"\nmkdir -p \"${outputDir}\"\n\na=\"${BUILD_DIR}/${CONFIGURATION}-iphoneos-lib${PROJECT_NAME}.a\"\nb=\"${BUILD_DIR}/${CONFIGURATION}-iphonesimulator-lib${PROJECT_NAME}.a\"\necho \"a=$a\"\necho \"b=$b\"\necho \"dest=$outputDir/$libName\"\nif [ -f \"$a\" ] && [ -f \"$b\" ]; then\n\tlipo -create -output ${outputDir}/${libName} $a $b\nelif [ -f \"$a\" ]; then\n\tlipo -create -output ${outputDir}/${libName} $a\nelif [ -f \"$b\" ]; then\n\tlipo -create -output ${outputDir}/${libName} $b\nfi\n";
+			shellScript = "outputDir=\"${SRCROOT}/../../lib/${CONFIGURATION}-iOS/${PLATFORM_NAME}\"\necho \"outputDir=$outputDir\"\nmkdir -p \"${outputDir}\"\n\nlibName=\"lib${PROJECT_NAME}.a\"\ntag=\"${CONFIGURATION}-${PLATFORM_NAME}\"\nlibtool -static -o ${outputDir}/${libName} ${BUILD_DIR}/${tag}/*.a\n";
+		};
+		41F32FAF18FA78F9006AF300 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "outputDir=\"${SRCROOT}/../../lib/${CONFIGURATION}-Mac/${PLATFORM_NAME}\"\necho \"outputDir=$outputDir\"\nmkdir -p \"${outputDir}\"\n\nlibName=\"lib${PROJECT_NAME}.a\"\ntag=\"${CONFIGURATION}\"\nlibtool -static -o ${outputDir}/${libName} ${BUILD_DIR}/${tag}/*.a\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		419E8EAA18A9CC5C00232A34 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 419E8E4A18A9845800232A34 /* All iOS */;
-			targetProxy = 419E8EA918A9CC5C00232A34 /* PBXContainerItemProxy */;
-		};
 		41ADF1D218F64598000DE7A7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "jsbindings iOS";
@@ -616,10 +604,40 @@
 			name = PluginFacebook;
 			targetProxy = 41ADF1DB18F64598000DE7A7 /* PBXContainerItemProxy */;
 		};
-		41F0F63D18E1550A00F5FC64 /* PBXTargetDependency */ = {
+		41F32F8018FA5EAA006AF300 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 419E8E9818A9BAEC00232A34 /* All Mac */;
-			targetProxy = 41F0F63C18E1550A00F5FC64 /* PBXContainerItemProxy */;
+			name = PluginMobFox;
+			targetProxy = 41F32F7F18FA5EAA006AF300 /* PBXContainerItemProxy */;
+		};
+		41F32F8218FA5EAA006AF300 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginAdmob;
+			targetProxy = 41F32F8118FA5EAA006AF300 /* PBXContainerItemProxy */;
+		};
+		41F32F8418FA5EAA006AF300 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginFlurry;
+			targetProxy = 41F32F8318FA5EAA006AF300 /* PBXContainerItemProxy */;
+		};
+		41F32F8618FA5EAA006AF300 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginTwitter;
+			targetProxy = 41F32F8518FA5EAA006AF300 /* PBXContainerItemProxy */;
+		};
+		41F32F8818FA5EAA006AF300 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginUmeng;
+			targetProxy = 41F32F8718FA5EAA006AF300 /* PBXContainerItemProxy */;
+		};
+		41F32F8A18FA5EAA006AF300 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PluginWeibo;
+			targetProxy = 41F32F8918FA5EAA006AF300 /* PBXContainerItemProxy */;
+		};
+		41F32FAE18FA78F3006AF300 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "jsbindings Mac";
+			targetProxy = 41F32FAD18FA78F3006AF300 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -692,56 +710,6 @@
 			};
 			name = Release;
 		};
-		419E8E4C18A9845800232A34 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		419E8E4D18A9845800232A34 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		419E8E9A18A9BAEC00232A34 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-			};
-			name = Debug;
-		};
-		419E8E9B18A9BAEC00232A34 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-			};
-			name = Release;
-		};
-		419E8EA718A9CC3B00232A34 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		419E8EA818A9CC3B00232A34 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		419E91E918AB0AD800232A34 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -761,6 +729,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -769,6 +738,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -780,33 +750,6 @@
 			buildConfigurations = (
 				419E8DD518A9724F00232A34 /* Debug */,
 				419E8DD618A9724F00232A34 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		419E8E4B18A9845800232A34 /* Build configuration list for PBXAggregateTarget "All iOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				419E8E4C18A9845800232A34 /* Debug */,
-				419E8E4D18A9845800232A34 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		419E8E9918A9BAEC00232A34 /* Build configuration list for PBXAggregateTarget "All Mac" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				419E8E9A18A9BAEC00232A34 /* Debug */,
-				419E8E9B18A9BAEC00232A34 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		419E8EA618A9CC3B00232A34 /* Build configuration list for PBXAggregateTarget "All" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				419E8EA718A9CC3B00232A34 /* Debug */,
-				419E8EA818A9CC3B00232A34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

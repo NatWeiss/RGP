@@ -5,6 +5,7 @@
 [ALL] Update ad close button
 [HTML] Update Facebook App settings
 [HTML] Fullscreen uses all of screen. Consider cc.screen: http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
+[iOS] Identify which plugin triggers the advertising identifier validation error.
 [iOS] Fix native warnings
 [Android] Add .project, etc. and get working in Eclipse
 [Android] Emulator test

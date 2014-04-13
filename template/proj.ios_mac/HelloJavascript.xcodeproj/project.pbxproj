@@ -531,7 +531,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = mac/Info.plist;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-Mac/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-Mac/$(PLATFORM_NAME)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = HelloJavascript;
 				SDKROOT = macosx;
@@ -549,7 +549,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = mac/Info.plist;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-Mac/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-Mac/$(PLATFORM_NAME)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = HelloJavascript;
 				SDKROOT = macosx;
@@ -656,7 +656,7 @@
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/$(PLATFORM_NAME)";
 				PRODUCT_NAME = HelloJavascript;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -680,7 +680,7 @@
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/$(PLATFORM_NAME)";
 				PRODUCT_NAME = HelloJavascript;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

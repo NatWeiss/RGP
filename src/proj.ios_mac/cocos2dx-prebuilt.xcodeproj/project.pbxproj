@@ -14,6 +14,7 @@
 				419E8E4E18A9847700232A34 /* ShellScript */,
 			);
 			dependencies = (
+				41F32F9F18FA5EF4006AF300 /* PBXTargetDependency */,
 			);
 			name = iOS;
 			productName = "cocos2d-x-static-ios";
@@ -25,39 +26,14 @@
 				419E8E9E18A9BB3400232A34 /* ShellScript */,
 			);
 			dependencies = (
+				41F32FB118FA7A44006AF300 /* PBXTargetDependency */,
 			);
 			name = Mac;
 			productName = "cocos2d-x-static-mac";
 		};
-		419E8EA518A9CC3B00232A34 /* All */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 419E8EA618A9CC3B00232A34 /* Build configuration list for PBXAggregateTarget "All" */;
-			buildPhases = (
-			);
-			dependencies = (
-				419E8EAA18A9CC5C00232A34 /* PBXTargetDependency */,
-				419E8EAC18A9CC5C00232A34 /* PBXTargetDependency */,
-			);
-			name = All;
-			productName = "cocos2d-x-static";
-		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXContainerItemProxy section */
-		419E8EA918A9CC5C00232A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 419E8DAC18A9724F00232A34 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 419E8E4A18A9845800232A34;
-			remoteInfo = "cocos2d-x-static-ios";
-		};
-		419E8EAB18A9CC5C00232A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 419E8DAC18A9724F00232A34 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 419E8E9818A9BAEC00232A34;
-			remoteInfo = "cocos2d-x-static-mac";
-		};
 		41ADF1F918F6491A000DE7A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 41ADF1EA18F6491A000DE7A7 /* cocos2d_libs.xcodeproj */;
@@ -127,6 +103,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = A07A4FB4178387730073F6A7;
 			remoteInfo = "CocosDenshion iOS";
+		};
+		41F32F9E18FA5EF4006AF300 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF1EA18F6491A000DE7A7 /* cocos2d_libs.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A07A4E0B178386390073F6A7;
+			remoteInfo = "build all libs iOS";
+		};
+		41F32FB018FA7A44006AF300 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF1EA18F6491A000DE7A7 /* cocos2d_libs.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A03F2E8E178141C1006731B9;
+			remoteInfo = "build all libs Mac";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -201,7 +191,6 @@
 			targets = (
 				419E8E4A18A9845800232A34 /* iOS */,
 				419E8E9818A9BAEC00232A34 /* Mac */,
-				419E8EA518A9CC3B00232A34 /* All */,
 			);
 		};
 /* End PBXProject section */
@@ -291,7 +280,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"iOS\"\nscheme=\"build all libs $platform\"\n\n# build for device and simulator\n#for config in ${CONFIGURATION}\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}-iphoneos/${libName}.a\n\toutputFileB=${BUILD_DIR}/${config}-iphonesimulator/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphoneos BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} -sdk iphonesimulator -arch i386 BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\t\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}-iphoneos/*.a\n\tlibtool -static -o $outputFileB ${BUILD_DIR}/${config}-iphonesimulator/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA $outputFileB\n\trm $outputFileA\n\trm $outputFileB\ndone\n";
+			shellScript = "outputDir=\"${SRCROOT}/../../lib/${CONFIGURATION}-iOS/${PLATFORM_NAME}\"\necho \"outputDir=$outputDir\"\nmkdir -p \"${outputDir}\"\n\nlibName=\"lib${PROJECT_NAME}.a\"\ntag=\"${CONFIGURATION}-${PLATFORM_NAME}\"\nlibtool -static -o ${outputDir}/${libName} ${BUILD_DIR}/${tag}/*.a\n";
 		};
 		419E8E9E18A9BB3400232A34 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -304,20 +293,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "libName=\"libcocos2dx-prebuilt\"\nplatform=\"Mac\"\nscheme=\"build all libs $platform\"\n\nfor config in Debug Release\ndo\n\toutputDir=${SRCROOT}/../lib/${config}-$platform\n\toutputFileA=${BUILD_DIR}/${config}/${libName}.a\n\n\tmkdir -p \"${outputDir}\"\n\n\txcodebuild -project ${PROJECT_NAME}.xcodeproj -scheme \"$scheme\" -configuration ${config} BUILD_DIR=\"${BUILD_DIR}\" BUILD_ROOT=\"${BUILD_ROOT}\"\n\n\tlibtool -static -o $outputFileA ${BUILD_DIR}/${config}/*.a\n\n\tlipo -create -output ${outputDir}/${libName}.a $outputFileA\n\trm $outputFileA\ndone\n";
+			shellScript = "outputDir=\"${SRCROOT}/../../lib/${CONFIGURATION}-Mac/${PLATFORM_NAME}\"\necho \"outputDir=$outputDir\"\nmkdir -p \"${outputDir}\"\n\nlibName=\"lib${PROJECT_NAME}.a\"\ntag=\"${CONFIGURATION}\"\nlibtool -static -o ${outputDir}/${libName} ${BUILD_DIR}/${tag}/*.a\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		419E8EAA18A9CC5C00232A34 /* PBXTargetDependency */ = {
+		41F32F9F18FA5EF4006AF300 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 419E8E4A18A9845800232A34 /* iOS */;
-			targetProxy = 419E8EA918A9CC5C00232A34 /* PBXContainerItemProxy */;
+			name = "build all libs iOS";
+			targetProxy = 41F32F9E18FA5EF4006AF300 /* PBXContainerItemProxy */;
 		};
-		419E8EAC18A9CC5C00232A34 /* PBXTargetDependency */ = {
+		41F32FB118FA7A44006AF300 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 419E8E9818A9BAEC00232A34 /* Mac */;
-			targetProxy = 419E8EAB18A9CC5C00232A34 /* PBXContainerItemProxy */;
+			name = "build all libs Mac";
+			targetProxy = 41F32FB018FA7A44006AF300 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -426,20 +415,6 @@
 			};
 			name = Release;
 		};
-		419E8EA718A9CC3B00232A34 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		419E8EA818A9CC3B00232A34 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -466,15 +441,6 @@
 			buildConfigurations = (
 				419E8E9A18A9BAEC00232A34 /* Debug */,
 				419E8E9B18A9BAEC00232A34 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		419E8EA618A9CC3B00232A34 /* Build configuration list for PBXAggregateTarget "All" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				419E8EA718A9CC3B00232A34 /* Debug */,
-				419E8EA818A9CC3B00232A34 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
