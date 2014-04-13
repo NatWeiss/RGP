@@ -5,7 +5,7 @@ PWD=$(dirname "$0")
 cd $PWD
 
 # Build settings
-APP_PLATFORM="android-10"
+APP_PLATFORM="android-9"
 if [ "$1" == "armeabi" ] || [ "$1" == "armeabi-v7a" ] || [ "$1" == "x86" ]; then
 	arch="$1"
 else
@@ -73,13 +73,11 @@ fi
 echo "AR=${ar}"
 
 # Create build command
-CMD="${NDK_ROOT}/ndk-build -j${CORES} -C ${PWD} NDK_MODULE_PATH=${NDK_MODULE_PATH}"
+CMD="${NDK_ROOT}/ndk-build -j${CORES} -C ${PWD} NDK_MODULE_PATH=${NDK_MODULE_PATH} APP_PLATFORM=${APP_PLATFORM} APP_ABI=${arch}"
 echo "CMD=${CMD}"
 echo
 
 # NDK build
-export PLATFORM="${APP_PLATFORM}"
-export ARCH="${arch}"
 export CONFIG="${config}"
 echo "Building ${APP_PLATFORM} ${arch} ${config}..."
 $CMD

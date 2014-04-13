@@ -283,8 +283,10 @@
 
 			<span class="hljs-keyword">if</span> (url) {
 				<span class="hljs-keyword">this</span>.playerImage = cc.Sprite.create(url);
-				cc.log(<span class="hljs-string">"Player image: "</span> + <span class="hljs-keyword">this</span>.playerImage.width +
-					<span class="hljs-string">"x"</span> + <span class="hljs-keyword">this</span>.playerImage.height);
+				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.playerImage !== <span class="hljs-literal">null</span>) {
+					cc.log(<span class="hljs-string">"Player image: "</span> + <span class="hljs-keyword">this</span>.playerImage.width +
+						<span class="hljs-string">"x"</span> + <span class="hljs-keyword">this</span>.playerImage.height);
+				}
 			}
 			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.playerImage === <span class="hljs-literal">null</span>) {
 				<span class="hljs-keyword">this</span>.playerImage = cc.Sprite.create(<span class="hljs-string">"#BlankAvatar.png"</span>);
@@ -294,6 +296,26 @@
 			<span class="hljs-keyword">this</span>.playerImage.setPosition(App.centralize(-<span class="hljs-number">420</span>, <span class="hljs-number">260</span>));
 			<span class="hljs-keyword">this</span>.playerImage.setScale(App.scale(<span class="hljs-number">60</span>) / <span class="hljs-keyword">this</span>.playerImage.width);
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.playerImage, <span class="hljs-number">1</span>);
+		},</pre></div>
+        
+      
+        
+        <h3 id="layergame-createfriendimage">LayerGame.createFriendImage</h3>
+<p>Create a friend image.</p>
+
+        
+          <div class='highlight'><pre>		createFriendImage: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url)</span> {</span>
+			<span class="hljs-keyword">if</span> (!url || !<span class="hljs-keyword">this</span>.exchangeLayer) {
+				<span class="hljs-keyword">return</span>;
+			}
+			sprite = cc.Sprite.create(url);
+			<span class="hljs-keyword">if</span> (sprite) {
+				sprite.setPosition(<span class="hljs-keyword">this</span>.finishExchangeSprite1.getPosition());
+				sprite.setScale(App.scale(<span class="hljs-number">60</span>) / sprite.width);
+				sprite.setVisible(<span class="hljs-literal">false</span>);
+				<span class="hljs-keyword">this</span>.exchangeLayer.addChild(sprite, <span class="hljs-number">1</span>);
+				<span class="hljs-keyword">this</span>.finishExchangeSprite3 = sprite;
+			}
 		},</pre></div>
         
       
@@ -431,13 +453,15 @@
 				label,
 				sprite,
 				str,
-				friendName = <span class="hljs-keyword">this</span>.getFriendName(),
+				friendId = App.getSocialPlugin().getRandomFriendId(),
+				friendName = <span class="hljs-keyword">this</span>.getFriendName(friendId),
+				friendUrl = App.getSocialPlugin().getPlayerImageUrl(friendId),
 				font = App.config[<span class="hljs-string">"font"</span>],
 				winSize = App.getWinSize(),
 				fontSize = App.scale(<span class="hljs-number">50</span>),
 				ySpacing = App.scale(<span class="hljs-number">70</span>),
 				pos = App.centralize(<span class="hljs-number">120</span>, <span class="hljs-number">120</span>);
-			
+
 			<span class="hljs-keyword">this</span>.exchangeVerb = verb;
 			<span class="hljs-keyword">this</span>.exchangeLayer = cc.Layer.create();
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.exchangeLayer, <span class="hljs-number">1</span>);
@@ -471,6 +495,8 @@
 			));
 			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(<span class="hljs-keyword">this</span>.finishExchangeSprite1, <span class="hljs-number">1</span>);
 			
+			<span class="hljs-keyword">this</span>.createFriendImage(friendUrl);
+			
 			pos.y -= ySpacing;
 			str = (<span class="hljs-keyword">this</span>.exchangeVerb === <span class="hljs-string">"buy"</span> ? <span class="hljs-string">"Bought by"</span> : <span class="hljs-string">"Sold to"</span>);
 			<span class="hljs-keyword">this</span>.finishExchangeLabel1 = cc.LabelTTF.create(str, font, fontSize);
@@ -500,6 +526,8 @@
 			<span class="hljs-keyword">this</span>.finishExchangeLabel2.setVisible(<span class="hljs-literal">false</span>);
 			<span class="hljs-keyword">this</span>.finishExchangeLabel3.setVisible(<span class="hljs-literal">false</span>);
 			<span class="hljs-keyword">this</span>.finishExchangeSprite2.setVisible(<span class="hljs-literal">false</span>);
+			
+			<span class="hljs-keyword">this</span>.finishExchangeSprite3 = <span class="hljs-literal">null</span>;
 			
 			<span class="hljs-keyword">this</span>.schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>self.finishExchange();}, <span class="hljs-number">5.0</span>, <span class="hljs-number">0</span>);
 		},</pre></div>
@@ -533,6 +561,9 @@
 			<span class="hljs-keyword">this</span>.finishExchangeLabel3.setVisible(<span class="hljs-literal">true</span>);
 			<span class="hljs-keyword">this</span>.finishExchangeSprite2.setVisible(<span class="hljs-literal">true</span>);
 			<span class="hljs-keyword">this</span>.finishExchangeSprite1.setVisible(<span class="hljs-literal">false</span>);
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.finishExchangeSprite3) {
+				<span class="hljs-keyword">this</span>.finishExchangeSprite3.setVisible(<span class="hljs-literal">true</span>);
+			}
 			
 			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.exchangeVerb === <span class="hljs-string">"buy"</span>) {
 				<span class="hljs-keyword">this</span>.addCurrencies(<span class="hljs-number">1</span>, -<span class="hljs-keyword">this</span>.exchangeRate);
@@ -544,6 +575,7 @@
 
 			<span class="hljs-keyword">this</span>.schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
 				self.exchangeLayer.removeFromParent();
+				self.exchangeLayer = <span class="hljs-literal">null</span>;
 				self.createActionButtons();
 			}, <span class="hljs-number">4.0</span>, <span class="hljs-number">0</span>);
 		},</pre></div>
@@ -896,12 +928,10 @@
 <p>Return a random friend’s name.</p>
 
         
-          <div class='highlight'><pre>		getFriendName: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-			<span class="hljs-keyword">var</span> plugin = App.getSocialPlugin(),
-				id = plugin.getRandomFriendId(),
-				friends;
+          <div class='highlight'><pre>		getFriendName: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> {</span>
+			<span class="hljs-keyword">var</span> friends;
 			<span class="hljs-keyword">if</span> (id &amp;&amp; id &gt; <span class="hljs-number">0</span>) {
-				<span class="hljs-keyword">return</span> plugin.getPlayerName(id);
+				<span class="hljs-keyword">return</span> App.getSocialPlugin().getPlayerName(id);
 			}
 			friends = App.config[<span class="hljs-string">"anonymous-friends"</span>];
 			<span class="hljs-keyword">if</span> (friends) {
@@ -1132,8 +1162,11 @@
 
         
           <div class='highlight'><pre>		onPlayerImageLoaded: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, url)</span> {</span>
+			<span class="hljs-keyword">var</span> sprite;
 			<span class="hljs-keyword">if</span> (id === <span class="hljs-string">"me"</span>) {
 				<span class="hljs-keyword">this</span>.createPlayerImage(url);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.exchangeLayer) {
+				<span class="hljs-keyword">this</span>.createFriendImage(url);
 			}
 		},</pre></div>
         

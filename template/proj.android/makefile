@@ -20,19 +20,24 @@ start-emulator:
 	android avd
 run-emulator:
 	adb -e install bin/${NAME}-debug.apk
-	adb -e logcat | grep cocos2d
+	adb -e logcat -s
+	adb -e logcat -v raw
 run:
-	adb -d uninstall ${PACKAGE_NAME}
-	adb -d install bin/${NAME}-debug.apk
-	adb -d logcat | grep cocos2d
+	#adb -d uninstall ${PACKAGE_NAME}
+	adb -d install -r bin/${NAME}-debug.apk
+	#adb -d logcat -s
+	echo
+	adb -d logcat -v raw *:d
 run-release:
-	adb -d uninstall ${PACKAGE_NAME}
+	#adb -d uninstall ${PACKAGE_NAME}
 	adb -d install bin/${NAME}-debug.apk
-	adb -d logcat | grep cocos2d
+	#adb -d logcat -s
+	adb -d logcat -v raw *:d
 run-distribution:
-	adb -d uninstall ${PACKAGE_NAME}
+	#adb -d uninstall ${PACKAGE_NAME}
 	adb -d install bin/${NAME}-release-aligned.apk
-	adb -d logcat | grep cocos2d
+	#adb -d logcat -s
+	adb -d logcat -v raw *:d
 clean:
 	rm -rf libs/
 	rm -rf obj/

@@ -168,8 +168,10 @@ var LayerGame = (function(){
 
 			if (url) {
 				this.playerImage = cc.Sprite.create(url);
-				cc.log("Player image: " + this.playerImage.width +
-					"x" + this.playerImage.height);
+				if (this.playerImage !== null) {
+					cc.log("Player image: " + this.playerImage.width +
+						"x" + this.playerImage.height);
+				}
 			}
 			if (this.playerImage === null) {
 				this.playerImage = cc.Sprite.create("#BlankAvatar.png");
@@ -180,6 +182,26 @@ var LayerGame = (function(){
 			this.playerImage.setScale(App.scale(60) / this.playerImage.width);
 			this.addChild(this.playerImage, 1);
 		},
+		
+//
+// ###  LayerGame.createFriendImage
+//
+// Create a friend image.
+//
+		createFriendImage: function(url) {
+			if (!url || !this.exchangeLayer) {
+				return;
+			}
+			sprite = cc.Sprite.create(url);
+			if (sprite) {
+				sprite.setPosition(this.finishExchangeSprite1.getPosition());
+				sprite.setScale(App.scale(60) / sprite.width);
+				sprite.setVisible(false);
+				this.exchangeLayer.addChild(sprite, 1);
+				this.finishExchangeSprite3 = sprite;
+			}
+		},
+
 //
 // ###  LayerGame.createPlayerDetails
 //
@@ -311,13 +333,15 @@ var LayerGame = (function(){
 				label,
 				sprite,
 				str,
-				friendName = this.getFriendName(),
+				friendId = App.getSocialPlugin().getRandomFriendId(),
+				friendName = this.getFriendName(friendId),
+				friendUrl = App.getSocialPlugin().getPlayerImageUrl(friendId),
 				font = App.config["font"],
 				winSize = App.getWinSize(),
 				fontSize = App.scale(50),
 				ySpacing = App.scale(70),
 				pos = App.centralize(120, 120);
-			
+
 			this.exchangeVerb = verb;
 			this.exchangeLayer = cc.Layer.create();
 			this.addChild(this.exchangeLayer, 1);
@@ -351,6 +375,8 @@ var LayerGame = (function(){
 			));
 			this.exchangeLayer.addChild(this.finishExchangeSprite1, 1);
 			
+			this.createFriendImage(friendUrl);
+			
 			pos.y -= ySpacing;
 			str = (this.exchangeVerb === "buy" ? "Bought by" : "Sold to");
 			this.finishExchangeLabel1 = cc.LabelTTF.create(str, font, fontSize);
@@ -380,6 +406,8 @@ var LayerGame = (function(){
 			this.finishExchangeLabel2.setVisible(false);
 			this.finishExchangeLabel3.setVisible(false);
 			this.finishExchangeSprite2.setVisible(false);
+			
+			this.finishExchangeSprite3 = null;
 			
 			this.schedule(function(){self.finishExchange();}, 5.0, 0);
 		},
@@ -411,6 +439,9 @@ var LayerGame = (function(){
 			this.finishExchangeLabel3.setVisible(true);
 			this.finishExchangeSprite2.setVisible(true);
 			this.finishExchangeSprite1.setVisible(false);
+			if (this.finishExchangeSprite3) {
+				this.finishExchangeSprite3.setVisible(true);
+			}
 			
 			if (this.exchangeVerb === "buy") {
 				this.addCurrencies(1, -this.exchangeRate);
@@ -422,6 +453,7 @@ var LayerGame = (function(){
 
 			this.schedule(function(){
 				self.exchangeLayer.removeFromParent();
+				self.exchangeLayer = null;
 				self.createActionButtons();
 			}, 4.0, 0);
 		},
@@ -761,12 +793,10 @@ var LayerGame = (function(){
 //
 // Return a random friend's name.
 //
-		getFriendName: function() {
-			var plugin = App.getSocialPlugin(),
-				id = plugin.getRandomFriendId(),
-				friends;
+		getFriendName: function(id) {
+			var friends;
 			if (id && id > 0) {
-				return plugin.getPlayerName(id);
+				return App.getSocialPlugin().getPlayerName(id);
 			}
 			friends = App.config["anonymous-friends"];
 			if (friends) {
@@ -987,8 +1017,11 @@ var LayerGame = (function(){
 // Called when the player image has finished loading.
 //
 		onPlayerImageLoaded: function(id, url) {
+			var sprite;
 			if (id === "me") {
 				this.createPlayerImage(url);
+			} else if (this.exchangeLayer) {
+				this.createFriendImage(url);
 			}
 		},
 		

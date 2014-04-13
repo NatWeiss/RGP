@@ -4,12 +4,14 @@
 	android:versionCode="1"
 	android:versionName="1.0">
 
-	<uses-sdk android:minSdkVersion="9"/>
+	<uses-sdk android:minSdkVersion="9"/> <!-- android:targetSdkVersion="18"/> -->
 	<uses-feature android:glEsVersion="0x00020000" />
 
 	<application android:label="@string/app_name"
 		android:icon="@drawable/icon"
 		android:name="com.soomla.store.SoomlaApp">
+
+		<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
 
 		<activity android:name="org.cocos2dx.javascript.AppActivity"
 			android:label="@string/app_name"
@@ -18,8 +20,7 @@
 			android:configChanges="orientation">
 
 			<!-- Tell NativeActivity the name of our .so -->
-			<meta-data android:name="android.app.lib_name"
-				android:value="cocos2djs" />
+			<meta-data android:name="android.app.lib_name" android:value="cocos2djs" />
 
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -30,12 +31,14 @@
 		<activity android:name="com.soomla.store.StoreController$IabActivity"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
 
-	</application>
+		<activity android:name="com.facebook.LoginActivity"/>
 
-	<!--<activity android:name="com.flurry.android.FlurryFullscreenTakeoverActivity"
-		android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode"
-		android:hardwareAccelerated="false" >
-	</activity>-->
+		<!--<activity android:name="com.flurry.android.FlurryFullscreenTakeoverActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode"
+			android:hardwareAccelerated="false" >
+		</activity>-->
+
+	</application>
 
 	<supports-screens android:anyDensity="true"
 		android:smallScreens="true"
@@ -45,4 +48,5 @@
 
 	<uses-permission android:name="android.permission.INTERNET"/>
 	<uses-permission android:name="com.android.vending.BILLING" />
+
 </manifest>

@@ -55,9 +55,11 @@ lemonadex:
 	tools/create-project -n ${name} -k ${key} -p ${dest}
 	cp -r ${dest}/${name}.old/res ${dest}/${name}/
 	cp -r ${dest}/${name}.old/docs ${dest}/${name}/
+	cp -r ${dest}/${name}.old/proj.android/res ${dest}/${name}/proj.android/
 	cp ${dest}/${name}.old/docs.html ${dest}/${name}/
 	cp ${dest}/${name}.old/js/*.js ${dest}/${name}/js/
 	cp ${dest}/${name}.old/server/Server.js ${dest}/${name}/server/
+	#cp ${dest}/${name}.old/proj.android/AndroidManifest.xml ${dest}/${name}/proj.android/
 	rm -rf ${dest}/${name}/art
 	rm -f ${dest}/${name}/proj.html5/*-min.js
 	rm ${dest}/${name}/js/SceneHello.js

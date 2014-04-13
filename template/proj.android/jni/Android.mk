@@ -1,5 +1,6 @@
 LOCAL_PATH := $(call my-dir)
 
+$(info APP_PLATFORM=$(APP_PLATFORM))
 $(info APP_OPTIM=$(APP_OPTIM))
 $(info CONFIG=$(CONFIG))
 $(info APP_CPPFLAGS=$(APP_CPPFLAGS))

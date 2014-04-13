@@ -245,6 +245,8 @@ App.config = {</pre></div>
         
         <h3 id="social-plugin">social-plugin</h3>
 <p>Settings for the social plugin. Insert your app ID. Add <a href="https://developers.facebook.com/docs/facebook-login/permissions">login permissions</a> as needed or leave empty to use only <code>basic_info</code>.</p>
+<p>iOS apps require the app ID to be in the <code>Info.plist</code> under the <code>FacebookAppID</code> key and a part of the URL scheme. See LemonadeExchange’s <code>Info.plist</code> for an example. Reference Facebook’s <a href="https://developers.facebook.com/docs/ios/getting-started/#configure">iOS Documentation</a>.</p>
+<p>Android apps require the app ID to be a string in <code>strings.xml</code> and referenced from <code>AndroidManifest.xml</code> as metadata. See LemonadeExchange’s Android project for an example. Reference Facebook’s <a href="https://developers.facebook.com/docs/android/getting-started/#login">Android Documentation</a>.</p>
 
         
           <div class='highlight'><pre>	<span class="hljs-string">"social-plugin"</span>: {

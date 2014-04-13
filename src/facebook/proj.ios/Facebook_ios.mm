@@ -60,17 +60,26 @@ inline void split(const string& s, char delim, vector<string>& elems)
 		elems.push_back(item);
 }
 
-static void callRunningLayer(const string& method, const string& param1)
+inline string quote(const string& s)
 {
-	bool addParam1Quotes = !(param1 == "true" || param1 == "false" || param1[0] == '{');
+	if (s == "true" || s == "false" || s[0] == '{' || s[0] == '"')
+		return s;
+	
+	stringstream ss;
+	ss << '"' << s << '"';
+	return ss.str();
+}
+
+static void callRunningLayer(const string& method, const string& param1, const string& param2 = "")
+{
 	jsval ret;
 	stringstream ss;
-	ss << "App.callRunningLayer(\"" << method
-		<< "\", " << (addParam1Quotes ? "\"" : "")
-		<< param1
-		<< (addParam1Quotes ? "\"" : "") << ");";
+	ss << "App.callRunningLayer(\"" << method << "\", " << quote(param1);
+	if (param2.size())
+		ss << ", " << quote(param2);
+	ss << ");";
 
-	//debugLog("%s Executing script: %s", kTag, ss.str().c_str());
+	debugLog("%s Executing script: %s", kTag, ss.str().c_str());
 	ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
 }
 

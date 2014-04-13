@@ -1019,7 +1019,9 @@ App.loadImage = function(url, callback) {
 	/* Load image HTML5. */
 	if (typeof Image !== "undefined") {
 		var image = new Image();
-		/*image.crossOrigin = "Anonymous";*/
+		/* If anonymous doesn't work, try: */
+		/* url = App.insert(url, "://", "www.corsproxy.com/"); */
+		image.crossOrigin = "Anonymous";
 		image.src = url;
 
 		/*cc.log("Loading image: " + url);*/
@@ -1135,19 +1137,8 @@ App.main = function() {
 		);
 		cc.view.resizeWithBrowserSize(true);
 
-		cc.LoaderScene.preload(App.getResourcesToPreload(), App.runInitialScene, this);
-
 		App.addImageData = function() {};
 	}
-	else {
-		App.runInitialScene();
-	}
-
-	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
-	cc.log(App.winSize.width + " x " + App.winSize.height
-		+ ", resource dir: " + App.getResourceDir()
-		+ ", language: " + App.getLanguageCode()
-		+ ", " + parseInt(1.0 / cc.director.getAnimationInterval()) + " fps");
 
 	/* Load plugins. */
 	this.getAnalyticsPlugin();
@@ -1162,8 +1153,22 @@ App.main = function() {
 		this.onInitialLaunch();
 	}
 
+	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
+	cc.log(App.winSize.width + " x " + App.winSize.height
+		+ ", resource dir: " + App.getResourceDir()
+		+ ", language: " + App.getLanguageCode()
+		+ ", " + parseInt(1.0 / cc.director.getAnimationInterval()) + " fps");
+
 	/* Show currency balances. */
 	this.logCurrencyBalances();
+
+	/* Preload. */
+	if (this.isHtml5()) {
+		cc.LoaderScene.preload(App.getResourcesToPreload(), App.runInitialScene, this);
+	}
+	else {
+		App.runInitialScene();
+	}
 };
 
 //

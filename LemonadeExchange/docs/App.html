@@ -1173,7 +1173,9 @@
 	<span class="hljs-comment">/* Load image HTML5. */</span>
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> Image !== <span class="hljs-string">"undefined"</span>) {
 		<span class="hljs-keyword">var</span> image = <span class="hljs-keyword">new</span> Image();
-		<span class="hljs-comment">/*image.crossOrigin = "Anonymous";*/</span>
+		<span class="hljs-comment">/* If anonymous doesn't work, try: */</span>
+		<span class="hljs-comment">/* url = App.insert(url, "://", "www.corsproxy.com/"); */</span>
+		image.crossOrigin = <span class="hljs-string">"Anonymous"</span>;
 		image.src = url;
 
 		<span class="hljs-comment">/*cc.log("Loading image: " + url);*/</span>
@@ -1291,19 +1293,8 @@
 		);
 		cc.view.resizeWithBrowserSize(<span class="hljs-literal">true</span>);
 
-		cc.LoaderScene.preload(App.getResourcesToPreload(), App.runInitialScene, <span class="hljs-keyword">this</span>);
-
 		App.addImageData = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>};
 	}
-	<span class="hljs-keyword">else</span> {
-		App.runInitialScene();
-	}
-
-	cc.director.setAnimationInterval(<span class="hljs-number">1.0</span> / <span class="hljs-keyword">this</span>.getTargetFrameRate());
-	cc.log(App.winSize.width + <span class="hljs-string">" x "</span> + App.winSize.height
-		+ <span class="hljs-string">", resource dir: "</span> + App.getResourceDir()
-		+ <span class="hljs-string">", language: "</span> + App.getLanguageCode()
-		+ <span class="hljs-string">", "</span> + <span class="hljs-built_in">parseInt</span>(<span class="hljs-number">1.0</span> / cc.director.getAnimationInterval()) + <span class="hljs-string">" fps"</span>);
 
 	<span class="hljs-comment">/* Load plugins. */</span>
 	<span class="hljs-keyword">this</span>.getAnalyticsPlugin();
@@ -1318,8 +1309,22 @@
 		<span class="hljs-keyword">this</span>.onInitialLaunch();
 	}
 
+	cc.director.setAnimationInterval(<span class="hljs-number">1.0</span> / <span class="hljs-keyword">this</span>.getTargetFrameRate());
+	cc.log(App.winSize.width + <span class="hljs-string">" x "</span> + App.winSize.height
+		+ <span class="hljs-string">", resource dir: "</span> + App.getResourceDir()
+		+ <span class="hljs-string">", language: "</span> + App.getLanguageCode()
+		+ <span class="hljs-string">", "</span> + <span class="hljs-built_in">parseInt</span>(<span class="hljs-number">1.0</span> / cc.director.getAnimationInterval()) + <span class="hljs-string">" fps"</span>);
+
 	<span class="hljs-comment">/* Show currency balances. */</span>
 	<span class="hljs-keyword">this</span>.logCurrencyBalances();
+
+	<span class="hljs-comment">/* Preload. */</span>
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
+		cc.LoaderScene.preload(App.getResourcesToPreload(), App.runInitialScene, <span class="hljs-keyword">this</span>);
+	}
+	<span class="hljs-keyword">else</span> {
+		App.runInitialScene();
+	}
 };</pre></div>
         
       
