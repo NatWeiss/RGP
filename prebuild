@@ -59,6 +59,7 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	mkdir -p ${dir}/facebook
 	mkdir -p ${dir}/app
 	mkdir -p ${dir}/soomla
+	mkdir -p ${dir}/mk
 
 	(cd src/cocos2d-x && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
 	(cd src/cocos2d-x && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
@@ -66,12 +67,15 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	(cd src/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
 	(cd src/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp - >> ${logFile} 2>&1)
 	(cd src/cocos2dx-store && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/soomla && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
+ 	(cd src/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
 	(cd src/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp - >> ${logFile} 2>&1)
 	(cd src/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
 	(cd src/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
 	cp src/facebook/jsb*.h $dir/facebook
 	cp src/app/jsb*.h $dir/app
+	(cd src && find . -name '*.mk' -print | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	(cd src && find . -name '*.a' -print | grep android | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	rm -r ${dir}/mk/proj.android
 
 	if [ -d ${dir}/docs ]; then
 		rm -r ${dir}/docs

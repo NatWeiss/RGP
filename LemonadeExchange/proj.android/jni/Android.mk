@@ -8,13 +8,13 @@ $(info APP_CPPFLAGS=$(APP_CPPFLAGS))
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := libcocos2dx-prebuilt
-LOCAL_SRC_FILES := ../../../lib/$(CONFIG)-Android/$(TARGET_ARCH_ABI)/libcocos2dx-prebuilt.a
+LOCAL_SRC_FILES := ../../lib/cocos2dx-prebuilt/lib/$(CONFIG)-Android/$(TARGET_ARCH_ABI)/libcocos2dx-prebuilt.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := libcocos2dx-plugins
-LOCAL_SRC_FILES := ../../../lib/$(CONFIG)-Android/$(TARGET_ARCH_ABI)/libcocos2dx-plugins.a
+LOCAL_SRC_FILES := ../../lib/cocos2dx-prebuilt/lib/$(CONFIG)-Android/$(TARGET_ARCH_ABI)/libcocos2dx-plugins.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 

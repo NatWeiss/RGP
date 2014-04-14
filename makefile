@@ -78,6 +78,7 @@ lemonadex:
 	cp ${dest}/${name}.old/docs.html ${dest}/${name}/
 	cp ${dest}/${name}.old/js/*.js ${dest}/${name}/js/
 	cp ${dest}/${name}.old/server/Server.js ${dest}/${name}/server/
+	cp -r ${dest}/${name}.old/lib/cocos2dx-prebuilt/* ${dest}/${name}/lib/cocos2dx-prebuilt/
 	#cp ${dest}/${name}.old/proj.android/AndroidManifest.xml ${dest}/${name}/proj.android/
 	rm -rf ${dest}/${name}/art
 	rm -f ${dest}/${name}/proj.html5/*-min.js

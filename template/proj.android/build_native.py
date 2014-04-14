@@ -146,7 +146,7 @@ def build(ndk_build_param,android_platform,build_mode):
     select_toolchain_version()
 
     current_dir = os.path.dirname(os.path.realpath(__file__))
-    cocos_root = os.path.join(current_dir, "../../src/cocos2d-x")
+    cocos_root = os.path.join(current_dir, "../lib/cocos2dx-prebuilt/include/mk/cocos2d-x")
 
     app_android_root = current_dir
     copy_resources(app_android_root)
