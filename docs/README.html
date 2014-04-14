@@ -134,6 +134,7 @@
     prebuild - Executable script which prebuilds the static libraries.
     docs/ - Documentation folder.
     include/ - All the header files necessary to compile a <span class="hljs-reserved">native</span> game client.
+    java/ - The java source files necessary to compile Android <span class="hljs-reserved">native</span> game clients.
     LemonadeExchange/ - A complete example game.
     lib/ - Contains the static libraries after they have been prebuilt.
     src/ - Contains source files <span class="hljs-keyword">for</span> the static libraries.
@@ -144,6 +145,7 @@
             cocos2d-html5/ - Cocos2d-HTML5.
             cocos2dx-prebuilt/ - Cocos2d-X prebuilt (light-weight <span class="hljs-keyword">and</span> copyable).
                 include/ - Absolute symlink to RapidGamePro/include.
+                java/ - Absolute symlink to RapidGamePro/java.
                 jsb/ - Javascript bindings.
                 lib/ - Absolute symlink to RapidGamePro/lib.
         proj.android/ - Android project files.
@@ -225,7 +227,7 @@ tools/create-project -n HelloWorld -k com.mycompany.helloworld -p ~/code</pre></
         
       
         
-        <h2 id="ios-in-app-purchases">iOS In-App Purchases</h2>
+        <h2 id="ios-notes">iOS Notes</h2>
 
         
       
@@ -242,6 +244,43 @@ tools/create-project -n HelloWorld -k com.mycompany.helloworld -p ~/code</pre></
 <li>View the app details and click the <strong>Edit</strong> button next to In-App Purchases. Select the purchases and click <strong>Save.</strong></li>
 </ol>
 <p>These steps ought to be enough to get the purchases working with your game. There should be no need to click <strong>Ready to Upload Binary</strong>.</p>
+<h2 id="android-notes">Android Notes</h2>
+
+        
+      
+        
+        <ol>
+<li><p>Make sure the Android <a href="http://developer.android.com/sdk/index.html">SDK</a> and <a href="http://developer.android.com/tools/sdk/ndk/index.html">NDK</a> have been installed.</p>
+</li>
+<li><p>Open Eclipse, go Window &gt; Android SDK Manager and install the following:</p>
+<ul>
+<li>Android SDK Tools</li>
+<li>Android SDK Platform-tools</li>
+<li>Android SDK Build-tools</li>
+<li>Android 4.3 (<a href="http://simonvt.net/2012/02/07/what-api-level-should-i-target/">API 18</a>)</li>
+</ul>
+</li>
+<li><p>Edit your .profile (or .bash_profile) in your home directory. Make sure it has defined ANDROID_HOME, NDK_ROOT and setup your path:</p>
+<pre><code> <span class="hljs-reserved">export</span> ANDROID_HOME=~<span class="hljs-regexp">/path/to/your/android/sdk/</span>
+ <span class="hljs-reserved">export</span> NDK_ROOT=~<span class="hljs-regexp">/path/to/your/android/ndk/</span>
+ PATH=~/path/to/your/android/sdk/<span class="hljs-attribute">tools</span>:~/path/to/your/android/sdk/platform-<span class="hljs-attribute">tools</span>:~/path/to/your/android/<span class="hljs-attribute">ndk</span>:<span class="hljs-string">"${PATH}"</span>
+</code></pre></li>
+<li><p>On Linux, make sure you’ve installed ANT:</p>
+<pre><code> sudo apt-get install ant
+</code></pre></li>
+</ol>
+<p>To build via the commandline:</p>
+<ol>
+<li><p>Open up a Terminal or Command prompt and switch to your project’s <code>proj.android</code> directory.</p>
+</li>
+<li><p>Connect your Android device via USB and execute this command:</p>
+<pre><code> make &amp;&amp; make run
+</code></pre></li>
+<li><p>After the build finishes, the <code>make run</code> command will install the app on your device.</p>
+</li>
+<li><p>Tap to start the app on your device and watch your Terminal window for logcat output.</p>
+</li>
+</ol>
 
         
       

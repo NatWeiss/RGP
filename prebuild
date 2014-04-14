@@ -1,7 +1,12 @@
 #!/bin/bash
 
 root=$(dirname "$0")
+root=$(cd ${root}; pwd)
 cd ${root}
+
+# Extra Xcode build settings.
+# GCC_SYMBOLS_PRIVATE_EXTERN=NO prevents a linker warning about visibility.
+xcodeSettings="GCC_SYMBOLS_PRIVATE_EXTERN=NO"
 
 # Get which command.
 cmd="$1"
@@ -41,6 +46,7 @@ echo "" > $logFile
 if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	echo "Building headers..."
 	libDir="template/lib/cocos2dx-prebuilt"
+	mkdir -p ${libDir}
 
 	# Clean the include directory
 	dir="include"
@@ -101,16 +107,47 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	find src/bindings-pluginx -name *.js -exec cp {} $dir \;
 	find ${dir} | xargs xattr -c
 
+	# Copy Android java files
+	dir="java"
+	if [ -d $dir ]; then
+		rm -r ${dir}
+	fi
+	mkdir -p "${dir}"
+
+	mkdir -p "${dir}/cocos2d-x"
+	cp -r src/cocos2d-x/cocos/2d/platform/android/java/* ${dir}/cocos2d-x/
+	mkdir -p "${dir}/cocos2dx-store"
+	cp -r src/cocos2dx-store/android/* ${dir}/cocos2dx-store/
+	mkdir -p "${dir}/android-store"
+	cp -r src/cocos2dx-store/submodules/android-store/SoomlaAndroidStore/* ${dir}/android-store/
+	d=src/cocos2dx-store/submodules/android-store/submodules/android-store-google-play
+	if [ -d ${d} ]; then
+		cp -r ${d}/src/* ${dir}/android-store/src/
+	fi
+	mkdir -p "${dir}/facebook-sdk"
+	cp -r src/facebook/proj.android/facebook-android-sdk/* ${dir}/facebook-sdk/
+	mkdir -p "${dir}/plugin-protocols"
+	cp -r src/cocos2d-x/plugin/protocols/proj.android/* ${dir}/plugin-protocols/
+	mkdir -p "${dir}/flurry"
+	cp -r src/cocos2d-x/plugin/plugins/flurry/proj.android/* ${dir}/flurry/
+
+	sed -i "" 's/..\/..\/..\/protocols\/proj.android/..\/plugin-protocols/g' java/flurry/project.properties
+	sed -i "" 's/..\/..\/cocos2d-x\/cocos\/2d\/platform\/android\/java/..\/cocos2d-x/g' java/cocos2dx-store/project.properties
+	sed -i "" 's/..\/submodules\/android-store\/SoomlaAndroidStore/..\/android-store/g' java/cocos2dx-store/project.properties
+
+	rm -r ${dir}/*/bin
+     rm -r ${dir}/*/gen
+     
 	# Create absolute symlinks
-	if [ ! -L ${libDir}/lib ]; then
-		mkdir -p ${libDir}
-		cd ${libDir} && ln -s src/../lib .
-	fi
-	if [ ! -L ${libDir}/include ]; then
-		mkdir -p ${libDir}
-		cd ${libDir} && ln -s src/../include .
-	fi
-	
+	rm -f ${libDir}/lib
+	ln -s ${root}/lib ${libDir}/
+
+	rm -f ${libDir}/include
+	ln -s ${root}/include ${libDir}/
+
+	rm -f ${libDir}/java
+	ln -s ${root}/java ${libDir}/
+
 	echo "Done."
 fi
 
@@ -120,7 +157,7 @@ if [ "$cmd" == "ios" ] || [ "$cmd" == "all" ]; then
 		for config in Debug Release; do
 			for sdk in iphoneos iphonesimulator; do
 				echo "Building ${proj} iOS ${config} ${sdk}..."
-				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "iOS" -configuration ${config} -sdk ${sdk} >> ${logFile} 2>&1
+				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "iOS" -configuration ${config} -sdk ${sdk} ${xcodeSettings} >> ${logFile} 2>&1
 				res="$?"
 				if [ "$res" == "0" ]; then
 					echo "Succeeded."
@@ -139,7 +176,7 @@ if [ "$cmd" == "mac" ] || [ "$cmd" == "all" ]; then
 		for config in Debug Release; do
 			for sdk in macosx; do
 				echo "Building ${proj} Mac ${config} ${sdk}..."
-				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "Mac" -configuration ${config} -sdk ${sdk} >> ${logFile} 2>&1
+				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "Mac" -configuration ${config} -sdk ${sdk} ${xcodeSettings} >> ${logFile} 2>&1
 				res="$?"
 				if [ "$res" == "0" ]; then
 					echo "Succeeded."

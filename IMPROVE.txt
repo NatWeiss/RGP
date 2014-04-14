@@ -1,3 +1,4 @@
+[] Sanitize */upload
 [ALL] prebuild command
 [Android] Move jni/hellojavascript to jni/main so it renames correctly
 [iOS] Buy virtual items (exception)

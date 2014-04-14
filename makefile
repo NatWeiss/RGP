@@ -3,6 +3,7 @@
 release: dest=../releases/RapidGamePro/
 release:
 	find . -name .DS_Store -delete
+	if [ -d ${dest} ]; then rm -r ${dest}; fi
 	mkdir ${dest}
 	cp README.md ${dest}
 	cp CHANGELOG.txt ${dest}
@@ -10,6 +11,7 @@ release:
 	cp docs.html ${dest}
 	cp -a docs ${dest}
 	cp -a include ${dest}
+	cp -a java ${dest}
 	cp -a LemonadeExchange ${dest}
 	cp -a src ${dest}
 	cp -a template ${dest}
@@ -18,6 +20,23 @@ release:
 	cd ${dest}template/proj.android && make clean
 	cd ${dest}LemonadeExchange/proj.android && make clean
 	rm -rf ${dest}src/soomla/cocos2dx-store/.git
+	rm ${dest}/*/lib/cocos2dx-prebuilt/include
+	rm ${dest}/*/lib/cocos2dx-prebuilt/java
+	rm -r ${dest}/*/lib/cocos2dx-prebuilt/jsb
+	rm ${dest}/*/lib/cocos2dx-prebuilt/lib
+	#rm -r ${dest}/src/cocos2d-x/cocos/2d/platform/android/java/bin
+	#rm -r ${dest}/src/cocos2d-x/cocos/2d/platform/android/java/gen
+	#rm -r ${dest}/src/cocos2dx-store/submodules/android-store/SoomlaAndroidStore/bin
+	#rm -r ${dest}/src/cocos2dx-store/submodules/android-store/SoomlaAndroidStore/gen
+	#rm -r ${dest}/src/cocos2dx-store/android/bin
+	#rm -r ${dest}/src/cocos2dx-store/android/gen
+	#rm -r ${dest}/src/cocos2d-x/plugin/plugins/flurry/proj.android/bin
+	#rm -r ${dest}/src/cocos2d-x/plugin/plugins/flurry/proj.android/gen
+	#rm -r ${dest}/src/facebook/proj.android/facebook-android-sdk/bin
+	#rm -r ${dest}/src/facebook/proj.android/facebook-android-sdk/gen
+	echo This will be a git pull
+	echo Cocos2d-html5 only once
+	echo Facebook SDK framework, Flurry SDK, MobFox FlurryAgent.jar only once
 	open ../releases
 	open -a /Applications/YemuZip.app/
 
@@ -84,3 +103,7 @@ save-lemonadex:
 minify:
 	if [ -f template/proj.html5/*-min.js ]; then rm template/proj.html5/*-min.js; fi
 	template/minify
+
+upload:
+	rsync ../releases/RapidGamePro "natweiss.com:." --stats -avzPe ssh
+

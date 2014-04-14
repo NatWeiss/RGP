@@ -1,6 +1,6 @@
 APP_STL := gnustl_static
 APP_CPPFLAGS := -frtti -DCC_ENABLE_CHIPMUNK_INTEGRATION=1 -std=c++11 -fsigned-char -DCOCOS2D_JAVASCRIPT
-#APP_PLATFORM := android-11
+APP_PLATFORM := android-18
 
 ifeq ($(CONFIG),debug)
 	APP_OPTIM := debug

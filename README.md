@@ -29,6 +29,7 @@ Folder Structure
         prebuild - Executable script which prebuilds the static libraries.
         docs/ - Documentation folder.
         include/ - All the header files necessary to compile a native game client.
+        java/ - The java source files necessary to compile Android native game clients.
         LemonadeExchange/ - A complete example game.
         lib/ - Contains the static libraries after they have been prebuilt.
         src/ - Contains source files for the static libraries.
@@ -39,6 +40,7 @@ Folder Structure
                 cocos2d-html5/ - Cocos2d-HTML5.
                 cocos2dx-prebuilt/ - Cocos2d-X prebuilt (light-weight and copyable).
                     include/ - Absolute symlink to RapidGamePro/include.
+                    java/ - Absolute symlink to RapidGamePro/java.
                     jsb/ - Javascript bindings.
                     lib/ - Absolute symlink to RapidGamePro/lib.
             proj.android/ - Android project files.
@@ -115,8 +117,8 @@ To use the commandline version:
     tools/create-project -n HelloWorld -k com.mycompany.helloworld -p ~/code
 
 
-iOS In-App Purchases
---------------------
+iOS Notes
+---------
 
 If your game uses In-App Purchases, they will need to be configured with iTunes Connect. If they are not, a console error message similar to **SOOMLA StoreController: Expecting 2 products but only fetched 0 from iTunes Store** may be displayed.
 
@@ -130,3 +132,36 @@ If your game uses In-App Purchases, they will need to be configured with iTunes 
 8. View the app details and click the **Edit** button next to In-App Purchases. Select the purchases and click **Save.**
 
 These steps ought to be enough to get the purchases working with your game. There should be no need to click **Ready to Upload Binary**.
+
+
+Android Notes
+-------------
+
+1. Make sure the Android [SDK](http://developer.android.com/sdk/index.html) and [NDK](http://developer.android.com/tools/sdk/ndk/index.html
+) have been installed.
+
+2. Open Eclipse, go Window > Android SDK Manager and install the following:
+	* Android SDK Tools
+	* Android SDK Platform-tools
+	* Android SDK Build-tools
+	* Android 4.3 ([API 18](http://simonvt.net/2012/02/07/what-api-level-should-i-target/))
+
+3. Edit your .profile (or .bash_profile) in your home directory. Make sure it has defined ANDROID_HOME, NDK_ROOT and setup your path:
+		export ANDROID_HOME=~/path/to/your/android/sdk/
+		export NDK_ROOT=~/path/to/your/android/ndk/
+		PATH=~/path/to/your/android/sdk/tools:~/path/to/your/android/sdk/platform-tools:~/path/to/your/android/ndk:"${PATH}"
+
+4. On Linux, make sure you've installed ANT:
+		sudo apt-get install ant
+
+To build via the commandline:
+
+1. Open up a Terminal or Command prompt and switch to your project's `proj.android` directory.
+
+2. Connect your Android device via USB and execute this command:
+		make && make run
+
+3. After the build finishes, the `make run` command will install the app on your device.
+
+4. Tap to start the app on your device and watch your Terminal window for logcat output.
+
