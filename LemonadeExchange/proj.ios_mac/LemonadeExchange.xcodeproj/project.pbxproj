@@ -656,7 +656,7 @@
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/$(PLATFORM_NAME)";
 				PRODUCT_NAME = LemonadeExchange;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -680,7 +680,7 @@
 				);
 				INFOPLIST_FILE = ios/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-iOS/$(PLATFORM_NAME)";
 				PRODUCT_NAME = LemonadeExchange;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
