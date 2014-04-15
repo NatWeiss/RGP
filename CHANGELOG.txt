@@ -1,3 +1,8 @@
-Version 1.0.0 - April 12, 2014
+Version 0.9.7b - April 14, 2014
 
-	[DOWNLOAD] Complete
+	Fixed Android crash bug due to a JNI error / stale reference.
+	Fixed reference to build_common.xml so Android projects can be built independent of RapidGamePro folder.
+
+Version 0.9.7 - April 12, 2014
+
+	Initial release. Some feature are still beta.
