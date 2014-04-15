@@ -142,7 +142,7 @@ var LayerGame = (function(){
 			this.addChild(sprite, 1);
 
 			pos.x += App.scale(80);
-			this.rateLabel = cc.LabelTTF.create(" = ", font, App.scale(80));
+			this.rateLabel = cc.LabelTTF.create(" = 10", font, App.scale(80));
 			this.rateLabel.setAnchorPoint(0, .5);
 			this.rateLabel.setPosition(pos);
 			this.addChild(this.rateLabel, 1);
@@ -898,14 +898,18 @@ var LayerGame = (function(){
 					multiplier = 10;
 				}
 
-				value = parseInt(parseFloat(response) * multiplier) / multiplier;
+				if (typeof response === "undefined" || isNaN(response)) {
+					response = 9.5 + (App.rand(100) / 100);
+					cc.log("NaN exchange rate, setting to " + response);
+				}
+				value = parseFloat(response);
 				if (multiplier == 100) {
 					value = value.toFixed(2);
 				}
 				if (value < 0.01) {
 					value = 0.01;
 				}
-				scene.layer.exchangeRate = parseInt(value);
+				scene.layer.exchangeRate = value;
 				scene.layer.rateLabel.setString(" = " + value);
 				scene.layer.setRateIconPos();
 				scene.layer.enableActionButtons();

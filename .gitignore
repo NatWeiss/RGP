@@ -9,4 +9,6 @@ lib/
 */proj.android/gen/
 */proj.android/libs/
 */proj.android/obj/
+java/*/bin
+java/*/gen
 build.log

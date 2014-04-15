@@ -1,10 +1,11 @@
 SHELL=/bin/bash
 NAME=LemonadeExchange
 PACKAGE_NAME=com.wizardfu.lemonadex
-PLUGIN_DIR=$$(cd ../../src/cocos2d-x/plugin && pwd)
+PLUGIN_DIR=$$(cd ../lib/cocos2dx-prebuilt/java && pwd)
 
 all:
 	@echo "ANDROID_HOME=${ANDROID_HOME}"
+	@echo "PLUGIN_DIR=${PLUGIN_DIR}"
 	@if [ ! -d ${ANDROID_HOME} ]; then echo "WARNING: The ANDROID_HOME environment variable does not point to a directory. See the Readme.txt and set ANDROID_HOME in your .profile."; exit; fi
 	export CONFIG="debug" && ./build_native.py
 	find . -name .DS_Store -delete

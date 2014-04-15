@@ -172,7 +172,7 @@ App.startMusic = function() {
 		
 		this._songNumber = (this._songNumber + 1) % App.config["songs"].length;
 		this._didPlaySong = true;
-		setTimeout(function(){self._didPlaySong = false;}, 1000);
+		setTimeout(function(){self._didPlaySong = false;}, 3 * 60 * 1000);
 	}
 };
 

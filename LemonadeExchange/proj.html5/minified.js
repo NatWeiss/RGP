@@ -15,7 +15,9 @@
 			"js/Config.js",
 			"js/LemonadeExchange.js",
 			"js/SceneMain.js",
-			"js/Loader.js"
+			"js/Loader.js",
+			"js/LayerGame.js",
+			"js/LayerMenu.js"
 		];
 		var cache = cc.loader._jsCache;
 		for (var i = 0; i < files.length; i += 1) {

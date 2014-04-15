@@ -78,6 +78,8 @@ lemonadex:
 	cp ${dest}/${name}.old/docs.html ${dest}/${name}/
 	cp ${dest}/${name}.old/js/*.js ${dest}/${name}/js/
 	cp ${dest}/${name}.old/server/Server.js ${dest}/${name}/server/
+	cp ${dest}/${name}.old/proj.html5/build.xml ${dest}/${name}/proj.html5/
+	cp ${dest}/${name}.old/proj.html5/minified.js ${dest}/${name}/proj.html5/
 	cp -r ${dest}/${name}.old/lib/cocos2dx-prebuilt/* ${dest}/${name}/lib/cocos2dx-prebuilt/
 	#cp ${dest}/${name}.old/proj.android/AndroidManifest.xml ${dest}/${name}/proj.android/
 	rm -rf ${dest}/${name}/art
@@ -103,7 +105,10 @@ save-lemonadex:
 
 minify:
 	if [ -f template/proj.html5/*-min.js ]; then rm template/proj.html5/*-min.js; fi
-	template/minify
+	#template/minify
+	if [ -f LemonadeExchange/proj.html5/*-min.js ]; then rm LemonadeExchange/proj.html5/*-min.js; fi
+	LemonadeExchange/minify
+	LemonadeExchange/upload natweiss.com:le
 
 upload:
 	rsync ../releases/RapidGamePro "natweiss.com:." --stats -avzPe ssh

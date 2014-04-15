@@ -228,6 +228,8 @@
 				<file name="LemonadeExchange.js"/>
 				<file name="Loader.js"/>
 				<file name="SceneMain.js"/>
+				<file name="LayerGame.js"/>
+				<file name="LayerMenu.js"/>
 				<file name="App.js"/>
 			</sources>
 		</jscomp>

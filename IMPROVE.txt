@@ -1,4 +1,6 @@
+[HTML] Endless music plays in Chrome?
 [] Sanitize */upload
+[] Rename minified.js
 [ALL] prebuild command
 [Android] Move jni/hellojavascript to jni/main so it renames correctly
 [iOS] Buy virtual items (exception)

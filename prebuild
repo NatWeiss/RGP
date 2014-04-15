@@ -134,6 +134,8 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	cp -r src/cocos2d-x/plugin/protocols/proj.android/* ${dir}/plugin-protocols/
 	mkdir -p "${dir}/flurry"
 	cp -r src/cocos2d-x/plugin/plugins/flurry/proj.android/* ${dir}/flurry/
+	mkdir -p "${dir}/tools/android/"
+	cp -r src/cocos2d-x/plugin/tools/android/* ${dir}/tools/android/
 
 	sed -i "" 's/..\/..\/..\/protocols\/proj.android/..\/plugin-protocols/g' java/flurry/project.properties
 	sed -i "" 's/..\/..\/cocos2d-x\/cocos\/2d\/platform\/android\/java/..\/cocos2d-x/g' java/cocos2dx-store/project.properties
