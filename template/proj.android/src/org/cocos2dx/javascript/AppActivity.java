@@ -20,10 +20,13 @@ public class AppActivity extends Cocos2dxActivity {
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		// Setup Facebook
 		facebook = new Facebook(this, getApplicationContext());
 		facebook.onCreate(savedInstanceState);
+
+		// Setup plugins
+		PluginWrapper.init(this);
 	}
 
 	@Override

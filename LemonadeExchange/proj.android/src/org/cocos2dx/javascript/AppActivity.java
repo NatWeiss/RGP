@@ -14,16 +14,20 @@ import com.facebook.model.*;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
+import org.cocos2dx.plugin.PluginWrapper;
 
 public class AppActivity extends Cocos2dxActivity {
 	protected Facebook facebook = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		// Setup Facebook
 		facebook = new Facebook(this, getApplicationContext());
 		facebook.onCreate(savedInstanceState);
+
+		// Setup plugins
+		PluginWrapper.init(this);
 	}
 
 	@Override

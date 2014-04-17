@@ -3,6 +3,7 @@ LOCAL_PATH := $(call my-dir)
 $(info APP_PLATFORM=$(APP_PLATFORM))
 $(info APP_OPTIM=$(APP_OPTIM))
 $(info CONFIG=$(CONFIG))
+$(info ARCH=$(TARGET_ARCH_ABI))
 $(info APP_CPPFLAGS=$(APP_CPPFLAGS))
 
 

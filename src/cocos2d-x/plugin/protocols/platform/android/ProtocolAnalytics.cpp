@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "ProtocolAnalytics.h"
-#include "PluginJniHelper.h"
+#include "JniHelper.h"
 #include <android/log.h>
 #include "PluginUtils.h"
 #include "PluginJavaData.h"
@@ -36,10 +36,10 @@ static void callJavaFunctionWithName_string_map(ProtocolAnalytics* thiz, const c
 
     PluginJavaData* pData = PluginUtils::getPluginJavaData(thiz);
 
-	PluginJniMethodInfo t;
+	JniMethodInfo t;
     if (NULL == paramMap)
     {
-    	if (PluginJniHelper::getMethodInfo(t
+    	if (JniHelper::getMethodInfo(t
     		, pData->jclassName.c_str()
     		, funcName
     		, "(Ljava/lang/String;)V"))
@@ -52,7 +52,7 @@ static void callJavaFunctionWithName_string_map(ProtocolAnalytics* thiz, const c
     }
     else
     {
-    	if (PluginJniHelper::getMethodInfo(t
+    	if (JniHelper::getMethodInfo(t
     		, pData->jclassName.c_str()
     		, funcName
     		, "(Ljava/lang/String;Ljava/util/Hashtable;)V"))
@@ -83,8 +83,8 @@ void ProtocolAnalytics::startSession(const char* appKey)
 void ProtocolAnalytics::stopSession()
 {
     PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-    PluginJniMethodInfo t;
-    if (PluginJniHelper::getMethodInfo(t
+    JniMethodInfo t;
+    if (JniHelper::getMethodInfo(t
         , pData->jclassName.c_str()
         , "stopSession"
         , "()V"))
@@ -110,8 +110,8 @@ void ProtocolAnalytics::logError(const char* errorId, const char* message)
 	return_if_fails(message != NULL && strlen(message) > 0);
 
     PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-    PluginJniMethodInfo t;
-	if (PluginJniHelper::getMethodInfo(t
+    JniMethodInfo t;
+	if (JniHelper::getMethodInfo(t
 		, pData->jclassName.c_str()
 		, "logError"
 		, "(Ljava/lang/String;Ljava/lang/String;)V"))

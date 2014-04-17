@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "ProtocolUser.h"
-#include "PluginJniHelper.h"
+#include "JniHelper.h"
 #include <android/log.h>
 #include "PluginUtils.h"
 #include "PluginJavaData.h"
@@ -32,8 +32,8 @@ namespace cocos2d { namespace plugin {
 extern "C" {
 	JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_UserWrapper_nativeOnActionResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg)
 	{
-		std::string strMsg = PluginJniHelper::jstring2string(msg);
-		std::string strClassName = PluginJniHelper::jstring2string(className);
+		std::string strMsg = JniHelper::jstring2string(msg);
+		std::string strClassName = JniHelper::jstring2string(className);
 		PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
 		PluginUtils::outputLog("ProtocolUser", "nativeOnActionResult(), Get plugin ptr : %p", pPlugin);
 		if (pPlugin != NULL)
@@ -75,8 +75,8 @@ void ProtocolUser::configDeveloperInfo(TUserDeveloperInfo devInfo)
     else
     {
         PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-    	PluginJniMethodInfo t;
-        if (PluginJniHelper::getMethodInfo(t
+    	JniMethodInfo t;
+        if (JniHelper::getMethodInfo(t
     		, pData->jclassName.c_str()
     		, "configDeveloperInfo"
     		, "(Ljava/util/Hashtable;)V"))

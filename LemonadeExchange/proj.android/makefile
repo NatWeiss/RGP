@@ -40,8 +40,11 @@ run-distribution:
 	#adb -d logcat -s
 	adb -d logcat -v raw *:d
 clean:
-	rm -rf libs/
 	rm -rf obj/
 	rm -rf bin/*
 	rm -rf gen/
 	rm -rf assets/*
+	rm -rf libs/armeabi
+	rm -rf libs/armeabi-v7a
+	rm -rf libs/x86
+	rm -rf libs/mips

@@ -44,6 +44,7 @@ docco:
 	if [ -d docs ]; then rm -r docs; fi
 	cp README.md README.litcoffee
 	docco -l linear README.litcoffee template/server/Server.js template/js/*.js template/js/lib/AdsMobFox.js template/js/lib/Facebook.js
+	#docco -l linear README.litcoffee template/server/Server.js template/js/*.js
 	sed -i "" 's/README.litcoffee/README.md/g' docs/*.html
 	rm README.litcoffee
 	#

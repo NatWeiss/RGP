@@ -7,8 +7,11 @@ lib/
 */proj.android/assets/
 */proj.android/bin/
 */proj.android/gen/
-*/proj.android/libs/
 */proj.android/obj/
 java/*/bin
 java/*/gen
 build.log
+*/proj.android/libs/armeabi
+*/proj.android/libs/armeabi-v7a
+*/proj.android/libs/x86
+*/proj.android/libs/mips

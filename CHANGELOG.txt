@@ -1,4 +1,8 @@
-Version 0.9.7b - April 14, 2014
+Version 0.9.7d - April , 2014
+
+	Fixed Android Flurry plugin
+
+Version 0.9.7c - April 14, 2014
 
 	Fixed Android crash bug due to a JNI error / stale reference.
 	Fixed reference to build_common.xml so Android projects can be built independent of RapidGamePro folder.

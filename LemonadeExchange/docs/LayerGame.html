@@ -256,7 +256,7 @@
 			<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">1</span>);
 
 			pos.x += App.scale(<span class="hljs-number">80</span>);
-			<span class="hljs-keyword">this</span>.rateLabel = cc.LabelTTF.create(<span class="hljs-string">" = "</span>, font, App.scale(<span class="hljs-number">80</span>));
+			<span class="hljs-keyword">this</span>.rateLabel = cc.LabelTTF.create(<span class="hljs-string">" = 10"</span>, font, App.scale(<span class="hljs-number">80</span>));
 			<span class="hljs-keyword">this</span>.rateLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
 			<span class="hljs-keyword">this</span>.rateLabel.setPosition(pos);
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.rateLabel, <span class="hljs-number">1</span>);
@@ -1037,14 +1037,18 @@
 					multiplier = <span class="hljs-number">10</span>;
 				}
 
-				value = <span class="hljs-built_in">parseInt</span>(<span class="hljs-built_in">parseFloat</span>(response) * multiplier) / multiplier;
+				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> response === <span class="hljs-string">"undefined"</span> || <span class="hljs-built_in">isNaN</span>(response)) {
+					response = <span class="hljs-number">9.5</span> + (App.rand(<span class="hljs-number">100</span>) / <span class="hljs-number">100</span>);
+					cc.log(<span class="hljs-string">"NaN exchange rate, setting to "</span> + response);
+				}
+				value = <span class="hljs-built_in">parseFloat</span>(response);
 				<span class="hljs-keyword">if</span> (multiplier == <span class="hljs-number">100</span>) {
 					value = value.toFixed(<span class="hljs-number">2</span>);
 				}
 				<span class="hljs-keyword">if</span> (value &lt; <span class="hljs-number">0.01</span>) {
 					value = <span class="hljs-number">0.01</span>;
 				}
-				scene.layer.exchangeRate = <span class="hljs-built_in">parseInt</span>(value);
+				scene.layer.exchangeRate = value;
 				scene.layer.rateLabel.setString(<span class="hljs-string">" = "</span> + value);
 				scene.layer.setRateIconPos();
 				scene.layer.enableActionButtons();
