@@ -617,46 +617,50 @@
 
         
           <div class='highlight'><pre>App.getAnalyticsPlugin = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-	<span class="hljs-keyword">var</span> name,
-		apiKey,
-		p;
+	<span class="hljs-keyword">var</span> config, name;
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>._analyticsPlugin === <span class="hljs-string">"undefined"</span> &amp;&amp; <span class="hljs-keyword">typeof</span> plugin !== <span class="hljs-string">"undefined"</span>) {
 
-	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>._analyticsPlugin === <span class="hljs-string">"undefined"</span>) {
-		<span class="hljs-keyword">this</span>._loadAnalyticsTries = (<span class="hljs-keyword">this</span>._loadAnalyticsTries || <span class="hljs-number">0</span>);
-		
-		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> FlurryAgent !== <span class="hljs-string">"undefined"</span> &amp;&amp;
-			<span class="hljs-keyword">typeof</span> App.config !== <span class="hljs-string">"undefined"</span> &amp;&amp;
-			!<span class="hljs-keyword">this</span>._initializedAnalytics
-		) {
-			<span class="hljs-keyword">this</span>._initializedAnalytics = <span class="hljs-literal">true</span>;
-			<span class="hljs-comment">/*cc.log("Loading analytics plugin after "
-				+ this._loadAnalyticsTries + " tries");*/</span>
-
-			name = App.config[<span class="hljs-string">"analytics-plugin"</span>][<span class="hljs-string">"name"</span>];
-			apiKey = App.config[<span class="hljs-string">"analytics-plugin"</span>][<span class="hljs-string">"api-key"</span>];
-			<span class="hljs-keyword">if</span> (name &amp;&amp; apiKey) {
-				p = plugin.PluginManager.getInstance().loadPlugin(name);
-				<span class="hljs-keyword">if</span> (p) {
-					p.setDebugMode(App.config[<span class="hljs-string">"analytics-plugin"</span>][<span class="hljs-string">"debug"</span>]);
-					p.startSession(apiKey);
-					<span class="hljs-keyword">this</span>._analyticsPlugin = p;
-					cc.log(<span class="hljs-string">"Analytics plugin session started with API key: "</span> +
-						apiKey.substr(<span class="hljs-number">0</span>,<span class="hljs-number">4</span>) + <span class="hljs-string">"..."</span>);
+		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5() &amp;&amp; !<span class="hljs-keyword">this</span>._initializedAnalytics) {
+			<span class="hljs-keyword">this</span>._loadAnalyticsTries = (<span class="hljs-keyword">this</span>._loadAnalyticsTries || <span class="hljs-number">0</span>);
+			
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> FlurryAgent !== <span class="hljs-string">"undefined"</span> &amp;&amp;
+				<span class="hljs-keyword">typeof</span> App.config !== <span class="hljs-string">"undefined"</span>
+			) {
+				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._loadAnalyticsTries &gt; <span class="hljs-number">0</span>) {
+					cc.log(<span class="hljs-string">"Loaded analytics after "</span> +
+						<span class="hljs-keyword">this</span>._loadAnalyticsTries + <span class="hljs-string">" tries"</span>);
 				}
+				<span class="hljs-keyword">this</span>._initializedAnalytics = <span class="hljs-literal">true</span>;
 			} <span class="hljs-keyword">else</span> {
-				cc.log(<span class="hljs-string">"Analytics plugin: API key has not been set"</span>);
+				<span class="hljs-comment">/* Try to load plugin up to 10 times with a 250ms delay between tries. */</span>
+				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._loadAnalyticsTries &lt; <span class="hljs-number">10</span>) {
+					setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+						App.getAnalyticsPlugin();
+					}, <span class="hljs-number">250</span>);
+				}
+				<span class="hljs-keyword">return</span>;
 			}
-		} <span class="hljs-keyword">else</span> {
-			<span class="hljs-comment">/* Try to load plugin up to 10 times with a 250ms delay between tries. */</span>
-			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._loadAnalyticsTries &lt; <span class="hljs-number">10</span>) {
-				setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-					App.getAnalyticsPlugin();
-				}, <span class="hljs-number">250</span>);
-			}
+
+			<span class="hljs-keyword">this</span>._loadAnalyticsTries = <span class="hljs-keyword">this</span>._loadAnalyticsTries + <span class="hljs-number">1</span>;
 		}
 
-		<span class="hljs-keyword">this</span>._loadAnalyticsTries = <span class="hljs-keyword">this</span>._loadAnalyticsTries + <span class="hljs-number">1</span>;
+		config = App.config[<span class="hljs-string">"analytics-plugin"</span>];
+		name = config[<span class="hljs-string">"name"</span>];
+		<span class="hljs-keyword">this</span>._analyticsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
+
+		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._analyticsPlugin === <span class="hljs-literal">null</span>) {
+			<span class="hljs-keyword">this</span>._analyticsPlugin = <span class="hljs-keyword">new</span> plugin[name]();
+			<span class="hljs-keyword">this</span>._analyticsPlugin.init();
+		}
+
+		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._analyticsPlugin) {
+			<span class="hljs-keyword">this</span>._analyticsPlugin.setDebugMode(config[<span class="hljs-string">"debug"</span>]);
+			<span class="hljs-keyword">this</span>._analyticsPlugin.startSession(config[<span class="hljs-string">"api-key"</span>]);
+			cc.log(<span class="hljs-string">"Analytics plugin session started with API key: "</span> +
+				config[<span class="hljs-string">"api-key"</span>].substr(<span class="hljs-number">0</span>,<span class="hljs-number">4</span>) + <span class="hljs-string">"..."</span>);
+		}
 	}
+
 	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._analyticsPlugin;
 };</pre></div>
         

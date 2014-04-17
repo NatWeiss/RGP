@@ -476,46 +476,50 @@ App.playMusic = function(filename) {
 // Get the analytics plugin. The first time this is called, the plugin is loaded and configured.
 //
 App.getAnalyticsPlugin = function() {
-	var name,
-		apiKey,
-		p;
+	var config, name;
+	if (typeof this._analyticsPlugin === "undefined" && typeof plugin !== "undefined") {
 
-	if (typeof this._analyticsPlugin === "undefined") {
-		this._loadAnalyticsTries = (this._loadAnalyticsTries || 0);
-		
-		if (typeof FlurryAgent !== "undefined" &&
-			typeof App.config !== "undefined" &&
-			!this._initializedAnalytics
-		) {
-			this._initializedAnalytics = true;
-			/*cc.log("Loading analytics plugin after "
-				+ this._loadAnalyticsTries + " tries");*/
-
-			name = App.config["analytics-plugin"]["name"];
-			apiKey = App.config["analytics-plugin"]["api-key"];
-			if (name && apiKey) {
-				p = plugin.PluginManager.getInstance().loadPlugin(name);
-				if (p) {
-					p.setDebugMode(App.config["analytics-plugin"]["debug"]);
-					p.startSession(apiKey);
-					this._analyticsPlugin = p;
-					cc.log("Analytics plugin session started with API key: " +
-						apiKey.substr(0,4) + "...");
+		if (this.isHtml5() && !this._initializedAnalytics) {
+			this._loadAnalyticsTries = (this._loadAnalyticsTries || 0);
+			
+			if (typeof FlurryAgent !== "undefined" &&
+				typeof App.config !== "undefined"
+			) {
+				if (this._loadAnalyticsTries > 0) {
+					cc.log("Loaded analytics after " +
+						this._loadAnalyticsTries + " tries");
 				}
+				this._initializedAnalytics = true;
 			} else {
-				cc.log("Analytics plugin: API key has not been set");
+				/* Try to load plugin up to 10 times with a 250ms delay between tries. */
+				if (this._loadAnalyticsTries < 10) {
+					setTimeout(function(){
+						App.getAnalyticsPlugin();
+					}, 250);
+				}
+				return;
 			}
-		} else {
-			/* Try to load plugin up to 10 times with a 250ms delay between tries. */
-			if (this._loadAnalyticsTries < 10) {
-				setTimeout(function(){
-					App.getAnalyticsPlugin();
-				}, 250);
-			}
+
+			this._loadAnalyticsTries = this._loadAnalyticsTries + 1;
 		}
 
-		this._loadAnalyticsTries = this._loadAnalyticsTries + 1;
+		config = App.config["analytics-plugin"];
+		name = config["name"];
+		this._analyticsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
+
+		if (this._analyticsPlugin === null) {
+			this._analyticsPlugin = new plugin[name]();
+			this._analyticsPlugin.init();
+		}
+
+		if (this._analyticsPlugin) {
+			this._analyticsPlugin.setDebugMode(config["debug"]);
+			this._analyticsPlugin.startSession(config["api-key"]);
+			cc.log("Analytics plugin session started with API key: " +
+				config["api-key"].substr(0,4) + "...");
+		}
 	}
+
 	return this._analyticsPlugin;
 };
 

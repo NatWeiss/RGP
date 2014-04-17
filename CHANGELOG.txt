@@ -1,6 +1,6 @@
-Version 0.9.7d - April , 2014
+Version 0.9.7d - April 17, 2014
 
-	Fixed Android Flurry plugin
+	Fixed loading of Android Flurry and AdsMobFox plugins.
 
 Version 0.9.7c - April 14, 2014
 

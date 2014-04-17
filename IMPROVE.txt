@@ -1,3 +1,4 @@
+[] AdsMobFox.java and Facebook.java in their own projects.
 [HTML] Endless music plays in Chrome?
 [] Sanitize */upload
 [] Rename minified.js
