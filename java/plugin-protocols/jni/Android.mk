@@ -9,7 +9,6 @@ LOCAL_MODULE_FILENAME := libPluginProtocolStatic
 LOCAL_SRC_FILES :=\
 $(addprefix ../../platform/android/, \
 	PluginFactory.cpp \
-    PluginJniHelper.cpp \
     PluginUtils.cpp \
     PluginProtocol.cpp \
     ProtocolAnalytics.cpp \
@@ -25,7 +24,12 @@ $(addprefix ../../platform/android/, \
 LOCAL_CFLAGS := -Wno-psabi
 LOCAL_EXPORT_CFLAGS := -Wno-psabi
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include $(LOCAL_PATH)/../../platform/android
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include $(LOCAL_PATH)/../../platform/android \
+	$(LOCAL_PATH)/../../../../cocos \
+	$(LOCAL_PATH)/../../../../cocos/2d \
+	$(LOCAL_PATH)/../../../../cocos/base \
+	$(LOCAL_PATH)/../../../../cocos/2d/platform/android/jni \
+	$(LOCAL_PATH)/../../../../cocos/2d/platform/android
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../include $(LOCAL_PATH)/../../platform/android
 
 LOCAL_LDLIBS := -landroid
