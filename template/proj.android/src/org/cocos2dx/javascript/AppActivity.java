@@ -6,6 +6,7 @@
 package org.cocos2dx.javascript;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
+// begin pro
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import com.soomla.store.SoomlaApp;
 import com.soomla.cocos2dx.store.StoreControllerBridge;
@@ -15,8 +16,10 @@ import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
 import org.cocos2dx.plugin.PluginWrapper;
+// end pro
 
 public class AppActivity extends Cocos2dxActivity {
+// begin pro
 	protected Facebook facebook = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,5 +76,5 @@ public class AppActivity extends Cocos2dxActivity {
 		super.onSaveInstanceState(outState);
 		facebook.onSaveInstanceState(outState);
 	}
-
+// end pro
 }

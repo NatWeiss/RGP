@@ -15,6 +15,7 @@
 			);
 			dependencies = (
 				41F32F9F18FA5EF4006AF300 /* PBXTargetDependency */,
+				41BB07BB1900B28A0012BCF5 /* PBXTargetDependency */,
 			);
 			name = iOS;
 			productName = "cocos2d-x-static-ios";
@@ -27,6 +28,7 @@
 			);
 			dependencies = (
 				41F32FB118FA7A44006AF300 /* PBXTargetDependency */,
+				41BB07BD1900B2940012BCF5 /* PBXTargetDependency */,
 			);
 			name = Mac;
 			productName = "cocos2d-x-static-mac";
@@ -104,6 +106,34 @@
 			remoteGlobalIDString = A07A4FB4178387730073F6A7;
 			remoteInfo = "CocosDenshion iOS";
 		};
+		41BB07671900A6470012BCF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41BB07621900A6470012BCF5 /* cocos2d_js_bindings.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1A5410A418B785A10016A3AF;
+			remoteInfo = "jsbindings Mac";
+		};
+		41BB07691900A6470012BCF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41BB07621900A6470012BCF5 /* cocos2d_js_bindings.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1A5410A518B785A10016A3AF;
+			remoteInfo = "jsbindings iOS";
+		};
+		41BB07BA1900B28A0012BCF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41BB07621900A6470012BCF5 /* cocos2d_js_bindings.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A07A4FB5178387750073F6A7;
+			remoteInfo = "jsbindings iOS";
+		};
+		41BB07BC1900B2940012BCF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41BB07621900A6470012BCF5 /* cocos2d_js_bindings.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A03F31E81781479B006731B9;
+			remoteInfo = "jsbindings Mac";
+		};
 		41F32F9E18FA5EF4006AF300 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 41ADF1EA18F6491A000DE7A7 /* cocos2d_libs.xcodeproj */;
@@ -125,6 +155,7 @@
 		419E8DC518A9724F00232A34 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		419E8DC818A9724F00232A34 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		41ADF1EA18F6491A000DE7A7 /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = "../cocos2d-x/build/cocos2d_libs.xcodeproj"; sourceTree = "<group>"; };
+		41BB07621900A6470012BCF5 /* cocos2d_js_bindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_js_bindings.xcodeproj; path = ../bindings/proj.ios_mac/cocos2d_js_bindings.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -132,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				41ADF1EA18F6491A000DE7A7 /* cocos2d_libs.xcodeproj */,
+				41BB07621900A6470012BCF5 /* cocos2d_js_bindings.xcodeproj */,
 				419E8DB618A9724F00232A34 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -163,6 +195,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		41BB07631900A6470012BCF5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				41BB07681900A6470012BCF5 /* libjsbindings Mac.a */,
+				41BB076A1900A6470012BCF5 /* libjsbindings iOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXProject section */
@@ -182,6 +223,10 @@
 			productRefGroup = 419E8DAB18A9724F00232A34;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 41BB07631900A6470012BCF5 /* Products */;
+					ProjectRef = 41BB07621900A6470012BCF5 /* cocos2d_js_bindings.xcodeproj */;
+				},
 				{
 					ProductGroup = 41ADF1EB18F6491A000DE7A7 /* Products */;
 					ProjectRef = 41ADF1EA18F6491A000DE7A7 /* cocos2d_libs.xcodeproj */;
@@ -266,6 +311,20 @@
 			remoteRef = 41ADF20B18F6491A000DE7A7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		41BB07681900A6470012BCF5 /* libjsbindings Mac.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libjsbindings Mac.a";
+			remoteRef = 41BB07671900A6470012BCF5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		41BB076A1900A6470012BCF5 /* libjsbindings iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libjsbindings iOS.a";
+			remoteRef = 41BB07691900A6470012BCF5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -298,6 +357,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		41BB07BB1900B28A0012BCF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "jsbindings iOS";
+			targetProxy = 41BB07BA1900B28A0012BCF5 /* PBXContainerItemProxy */;
+		};
+		41BB07BD1900B2940012BCF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "jsbindings Mac";
+			targetProxy = 41BB07BC1900B2940012BCF5 /* PBXContainerItemProxy */;
+		};
 		41F32F9F18FA5EF4006AF300 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "build all libs iOS";

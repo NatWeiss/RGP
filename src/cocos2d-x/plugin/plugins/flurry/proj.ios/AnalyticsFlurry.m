@@ -54,8 +54,8 @@ THE SOFTWARE.
 
 - (void) setDebugMode: (BOOL) isDebugMode
 {
-    OUTPUT_LOG(@"Flurry setDebugMode invoked(%d)", isDebugMode);
     self.debug = isDebugMode;
+    OUTPUT_LOG(@"Flurry setDebugMode invoked(%d)", isDebugMode);
     [Flurry setDebugLogEnabled:isDebugMode];
 }
 

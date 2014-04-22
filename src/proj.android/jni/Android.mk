@@ -26,11 +26,13 @@ LOCAL_WHOLE_STATIC_LIBRARIES += jsb_spine_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocosbuilder_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocostudio_static
 LOCAL_WHOLE_STATIC_LIBRARIES += spine_static
+# begin pro
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_store_static
 LOCAL_WHOLE_STATIC_LIBRARIES += PluginProtocolStatic
 LOCAL_WHOLE_STATIC_LIBRARIES += jsb_pluginx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += jsb_facebook_static
 LOCAL_WHOLE_STATIC_LIBRARIES += jsb_appbindings_static
+# end pro
 
 include $(BUILD_SHARED_LIBRARY)
 
@@ -46,8 +48,10 @@ $(call import-module,bindings/manual/localstorage)
 $(call import-module,bindings/manual/network)
 $(call import-module,bindings/manual/spine)
 $(call import-module,bindings/manual/ui)
+# begin pro
 $(call import-module,plugin/protocols/proj.android/jni)
 $(call import-module,../cocos2dx-store/android/jni)
 $(call import-module,bindings-pluginx)
 $(call import-module,facebook/proj.android/jni)
 $(call import-module,app/proj.android/jni)
+# end pro

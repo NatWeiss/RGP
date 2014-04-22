@@ -648,9 +648,13 @@
 
 		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._analyticsPlugin) {
 			<span class="hljs-keyword">this</span>._analyticsPlugin.setDebugMode(config[<span class="hljs-string">"debug"</span>]);
-			<span class="hljs-keyword">this</span>._analyticsPlugin.startSession(config[<span class="hljs-string">"api-key"</span>]);
-			cc.log(<span class="hljs-string">"Analytics plugin session started with API key: "</span> +
-				config[<span class="hljs-string">"api-key"</span>].substr(<span class="hljs-number">0</span>,<span class="hljs-number">4</span>) + <span class="hljs-string">"..."</span>);
+			<span class="hljs-keyword">if</span> (config[<span class="hljs-string">"api-key"</span>] &amp;&amp; config[<span class="hljs-string">"api-key"</span>].length) {
+				<span class="hljs-keyword">this</span>._analyticsPlugin.startSession(config[<span class="hljs-string">"api-key"</span>]);
+				cc.log(<span class="hljs-string">"Analytics plugin session started with API key: "</span> +
+					config[<span class="hljs-string">"api-key"</span>].substr(<span class="hljs-number">0</span>,<span class="hljs-number">4</span>) + <span class="hljs-string">"..."</span>);
+			} <span class="hljs-keyword">else</span> {
+				cc.log(<span class="hljs-string">"Analytics plugin missing API key"</span>);
+			}
 		}
 	}
 

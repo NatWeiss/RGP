@@ -11,7 +11,9 @@
 		android:icon="@drawable/icon"
 		android:name="com.soomla.store.SoomlaApp">
 
+<!-- begin pro -->
 		<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
+<!-- end pro -->
 
 		<activity android:name="org.cocos2dx.javascript.AppActivity"
 			android:label="@string/app_name"
@@ -28,6 +30,7 @@
 			</intent-filter>
 		</activity>
 
+<!-- begin pro -->
 		<activity android:name="com.soomla.store.StoreController$IabActivity"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
 
@@ -37,6 +40,7 @@
 			android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode"
 			android:hardwareAccelerated="false" >
 		</activity>
+<!-- end pro -->
 
 	</application>
 
@@ -47,5 +51,8 @@
 		android:xlargeScreens="true"/>
 
 	<uses-permission android:name="android.permission.INTERNET"/>
+<!-- begin pro -->
 	<uses-permission android:name="com.android.vending.BILLING" />
+<!-- end pro -->
+
 </manifest>

@@ -1,4 +1,8 @@
-
+//
+//  See the file 'LICENSE_RapidGame.txt' for the license governing this code.
+//      The license can also be obtained online at:
+//          http://WizardFu.com/licenses
+//
 package org.cocos2dx.plugin;
 
 import java.util.HashSet;

@@ -514,9 +514,13 @@ App.getAnalyticsPlugin = function() {
 
 		if (this._analyticsPlugin) {
 			this._analyticsPlugin.setDebugMode(config["debug"]);
-			this._analyticsPlugin.startSession(config["api-key"]);
-			cc.log("Analytics plugin session started with API key: " +
-				config["api-key"].substr(0,4) + "...");
+			if (config["api-key"] && config["api-key"].length) {
+				this._analyticsPlugin.startSession(config["api-key"]);
+				cc.log("Analytics plugin session started with API key: " +
+					config["api-key"].substr(0,4) + "...");
+			} else {
+				cc.log("Analytics plugin missing API key");
+			}
 		}
 	}
 

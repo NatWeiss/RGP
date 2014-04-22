@@ -20,7 +20,6 @@
 				41F32F8618FA5EAA006AF300 /* PBXTargetDependency */,
 				41F32F8818FA5EAA006AF300 /* PBXTargetDependency */,
 				41F32F8A18FA5EAA006AF300 /* PBXTargetDependency */,
-				41ADF1D218F64598000DE7A7 /* PBXTargetDependency */,
 				41ADF1D418F64598000DE7A7 /* PBXTargetDependency */,
 				41ADF1D618F64598000DE7A7 /* PBXTargetDependency */,
 				41ADF1D818F64598000DE7A7 /* PBXTargetDependency */,
@@ -37,7 +36,7 @@
 				41F32FAF18FA78F9006AF300 /* ShellScript */,
 			);
 			dependencies = (
-				41F32FAE18FA78F3006AF300 /* PBXTargetDependency */,
+				41BB079B1900AEBF0012BCF5 /* PBXTargetDependency */,
 			);
 			name = Mac;
 			productName = "build-all-libs Mac";
@@ -45,20 +44,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXContainerItemProxy section */
-		41ADF18B18F644B4000DE7A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 41ADF18618F644B4000DE7A7 /* cocos2d_js_bindings.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1A5410A418B785A10016A3AF;
-			remoteInfo = "jsbindings Mac";
-		};
-		41ADF18D18F644B4000DE7A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 41ADF18618F644B4000DE7A7 /* cocos2d_js_bindings.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1A5410A518B785A10016A3AF;
-			remoteInfo = "jsbindings iOS";
-		};
 		41ADF19318F644C0000DE7A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 41ADF18F18F644C0000DE7A7 /* AppBindings.xcodeproj */;
@@ -136,13 +121,6 @@
 			remoteGlobalIDString = FA09A372168AFD41008C1C7B;
 			remoteInfo = PluginFacebook;
 		};
-		41ADF1D118F64598000DE7A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 41ADF18618F644B4000DE7A7 /* cocos2d_js_bindings.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A07A4FB5178387750073F6A7;
-			remoteInfo = "jsbindings iOS";
-		};
 		41ADF1D318F64598000DE7A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 41ADF18F18F644C0000DE7A7 /* AppBindings.xcodeproj */;
@@ -177,6 +155,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = FA09A371168AFD41008C1C7B;
 			remoteInfo = PluginFacebook;
+		};
+		41BB079A1900AEBF0012BCF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF18F18F644C0000DE7A7 /* AppBindings.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 41BB078F1900AEA70012BCF5;
+			remoteInfo = "AppBindings Mac";
+		};
+		41BB079D1900AEBF0012BCF5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 41ADF18F18F644C0000DE7A7 /* AppBindings.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 41BB07991900AEA70012BCF5;
+			remoteInfo = "AppBindings Mac";
 		};
 		41F32F7F18FA5EAA006AF300 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -220,20 +212,12 @@
 			remoteGlobalIDString = FAE2752F175D9D2900F5DA8E;
 			remoteInfo = PluginWeibo;
 		};
-		41F32FAD18FA78F3006AF300 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 41ADF18618F644B4000DE7A7 /* cocos2d_js_bindings.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A03F31E81781479B006731B9;
-			remoteInfo = "jsbindings Mac";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		419E8DB718A9724F00232A34 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		419E8DC518A9724F00232A34 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		419E8DC818A9724F00232A34 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		41ADF18618F644B4000DE7A7 /* cocos2d_js_bindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_js_bindings.xcodeproj; path = ../bindings/proj.ios_mac/cocos2d_js_bindings.xcodeproj; sourceTree = "<group>"; };
 		41ADF18F18F644C0000DE7A7 /* AppBindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppBindings.xcodeproj; path = ../app/proj.ios/AppBindings.xcodeproj; sourceTree = "<group>"; };
 		41ADF19518F644D1000DE7A7 /* cocos2dx-store.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "cocos2dx-store.xcodeproj"; path = "../cocos2dx-store/proj.ios/cocos2dx-store.xcodeproj"; sourceTree = "<group>"; };
 		41ADF19B18F644E1000DE7A7 /* PluginJSBindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginJSBindings.xcodeproj; path = "../bindings-pluginx/proj.ios/PluginJSBindings.xcodeproj"; sourceTree = "<group>"; };
@@ -251,7 +235,6 @@
 		419E8DAB18A9724F00232A34 = {
 			isa = PBXGroup;
 			children = (
-				41ADF18618F644B4000DE7A7 /* cocos2d_js_bindings.xcodeproj */,
 				41ADF18F18F644C0000DE7A7 /* AppBindings.xcodeproj */,
 				41ADF19518F644D1000DE7A7 /* cocos2dx-store.xcodeproj */,
 				41ADF19B18F644E1000DE7A7 /* PluginJSBindings.xcodeproj */,
@@ -277,19 +260,11 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		41ADF18718F644B4000DE7A7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				41ADF18C18F644B4000DE7A7 /* libjsbindings Mac.a */,
-				41ADF18E18F644B4000DE7A7 /* libjsbindings iOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		41ADF19018F644C0000DE7A7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				41ADF19418F644C0000DE7A7 /* libAppBindings.a */,
+				41BB079E1900AEBF0012BCF5 /* libAppBindings iOS copy.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -398,10 +373,6 @@
 					ProjectRef = 41ADF18F18F644C0000DE7A7 /* AppBindings.xcodeproj */;
 				},
 				{
-					ProductGroup = 41ADF18718F644B4000DE7A7 /* Products */;
-					ProjectRef = 41ADF18618F644B4000DE7A7 /* cocos2d_js_bindings.xcodeproj */;
-				},
-				{
 					ProductGroup = 41ADF19618F644D1000DE7A7 /* Products */;
 					ProjectRef = 41ADF19518F644D1000DE7A7 /* cocos2dx-store.xcodeproj */;
 				},
@@ -451,20 +422,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		41ADF18C18F644B4000DE7A7 /* libjsbindings Mac.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libjsbindings Mac.a";
-			remoteRef = 41ADF18B18F644B4000DE7A7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		41ADF18E18F644B4000DE7A7 /* libjsbindings iOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libjsbindings iOS.a";
-			remoteRef = 41ADF18D18F644B4000DE7A7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		41ADF19418F644C0000DE7A7 /* libAppBindings.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -542,6 +499,13 @@
 			remoteRef = 41ADF1CF18F6454B000DE7A7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		41BB079E1900AEBF0012BCF5 /* libAppBindings iOS copy.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libAppBindings iOS copy.a";
+			remoteRef = 41BB079D1900AEBF0012BCF5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -574,11 +538,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		41ADF1D218F64598000DE7A7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "jsbindings iOS";
-			targetProxy = 41ADF1D118F64598000DE7A7 /* PBXContainerItemProxy */;
-		};
 		41ADF1D418F64598000DE7A7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "AppBindings iOS";
@@ -603,6 +562,11 @@
 			isa = PBXTargetDependency;
 			name = PluginFacebook;
 			targetProxy = 41ADF1DB18F64598000DE7A7 /* PBXContainerItemProxy */;
+		};
+		41BB079B1900AEBF0012BCF5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "AppBindings Mac";
+			targetProxy = 41BB079A1900AEBF0012BCF5 /* PBXContainerItemProxy */;
 		};
 		41F32F8018FA5EAA006AF300 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -633,11 +597,6 @@
 			isa = PBXTargetDependency;
 			name = PluginWeibo;
 			targetProxy = 41F32F8918FA5EAA006AF300 /* PBXContainerItemProxy */;
-		};
-		41F32FAE18FA78F3006AF300 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "jsbindings Mac";
-			targetProxy = 41F32FAD18FA78F3006AF300 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

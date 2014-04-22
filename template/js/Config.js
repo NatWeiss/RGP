@@ -69,6 +69,7 @@ App.config = {
 		"image-win-size-percent": 0.5
 	},
 
+// begin pro
 //
 // ###  analytics-plugin
 //
@@ -186,7 +187,10 @@ App.config = {
 			"name": "Upgrades",
 			"goods_itemIds": ["good_upgrade2"]
 		}]
-	}
+	},
+// end pro
+
+	unused: null
 };
 
 //

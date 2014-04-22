@@ -1,3 +1,6 @@
+[Android] Register IAPs
+[] Cocos2d-html5 only once
+[] Facebook SDK framework, Flurry SDK, MobFox FlurryAgent.jar only once
 [] AdsMobFox.java and Facebook.java in their own projects.
 [HTML] Endless music plays in Chrome?
 [] Sanitize */upload
@@ -11,6 +14,7 @@
 [HTML] Fullscreen uses all of screen. Consider cc.screen: http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
 [iOS] Identify which plugin triggers the advertising identifier validation error.
 [iOS] Fix native warnings
+[HTML] How do you protect your JS code? A: you could use passworded zip, obfuscate your code, or simply use the bytecode tool. Bytecode is irreversible btw
 [Android] Add .project, etc. and get working in Eclipse
 [Android] Emulator test
 [iOS] Some streaks clipped which shouldn't be
@@ -19,5 +23,7 @@
 [iOS] MobFox video test mode
 [iOS] MobFox banners
 [HTML] MobFox videos
+[HTML] proj.html5 -> proj.html
 [GENERAL] Do another SWOT
 [ALL] Leaderboards https://developers.facebook.com/docs/games/scores/
+[] Updating is just a git push

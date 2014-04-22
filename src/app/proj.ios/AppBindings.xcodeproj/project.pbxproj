@@ -7,12 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		41BB07911900AEA70012BCF5 /* jsb_app_bindings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F65818E3465700F5FC64 /* jsb_app_bindings.cpp */; };
+		41BB07921900AEA70012BCF5 /* AppBindings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F65D18E3489B00F5FC64 /* AppBindings.cpp */; };
+		41BB07941900AEA70012BCF5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA09A375168AFD41008C1C7B /* Foundation.framework */; };
 		41F0F65A18E3465700F5FC64 /* jsb_app_bindings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F65818E3465700F5FC64 /* jsb_app_bindings.cpp */; };
 		41F0F65E18E3489B00F5FC64 /* AppBindings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41F0F65D18E3489B00F5FC64 /* AppBindings.cpp */; };
 		FA09A376168AFD41008C1C7B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA09A375168AFD41008C1C7B /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		41BB07951900AEA70012BCF5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FA09A370168AFD41008C1C7B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -26,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		419E922C18AB25D400232A34 /* AppBindings-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AppBindings-Prefix.pch"; sourceTree = "<group>"; };
+		41BB07991900AEA70012BCF5 /* libAppBindings iOS copy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libAppBindings iOS copy.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		41F0F65818E3465700F5FC64 /* jsb_app_bindings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsb_app_bindings.cpp; path = ../jsb_app_bindings.cpp; sourceTree = "<group>"; };
 		41F0F65918E3465700F5FC64 /* jsb_app_bindings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsb_app_bindings.h; path = ../jsb_app_bindings.h; sourceTree = "<group>"; };
 		41F0F65D18E3489B00F5FC64 /* AppBindings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppBindings.cpp; path = ../AppBindings.cpp; sourceTree = "<group>"; };
@@ -36,6 +49,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		41BB07931900AEA70012BCF5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				41BB07941900AEA70012BCF5 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FA09A36F168AFD41008C1C7B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -64,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				FA09A372168AFD41008C1C7B /* libAppBindings.a */,
+				41BB07991900AEA70012BCF5 /* libAppBindings iOS copy.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -80,6 +102,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		41BB078F1900AEA70012BCF5 /* AppBindings Mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 41BB07961900AEA70012BCF5 /* Build configuration list for PBXNativeTarget "AppBindings Mac" */;
+			buildPhases = (
+				41BB07901900AEA70012BCF5 /* Sources */,
+				41BB07931900AEA70012BCF5 /* Frameworks */,
+				41BB07951900AEA70012BCF5 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AppBindings Mac";
+			productName = libPluginFlurry;
+			productReference = 41BB07991900AEA70012BCF5 /* libAppBindings iOS copy.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		FA09A371168AFD41008C1C7B /* AppBindings iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FA09A380168AFD41008C1C7B /* Build configuration list for PBXNativeTarget "AppBindings iOS" */;
@@ -119,11 +158,21 @@
 			projectRoot = "";
 			targets = (
 				FA09A371168AFD41008C1C7B /* AppBindings iOS */,
+				41BB078F1900AEA70012BCF5 /* AppBindings Mac */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		41BB07901900AEA70012BCF5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				41BB07911900AEA70012BCF5 /* jsb_app_bindings.cpp in Sources */,
+				41BB07921900AEA70012BCF5 /* AppBindings.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FA09A36E168AFD41008C1C7B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -136,6 +185,56 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		41BB07971900AEA70012BCF5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/libPluginFlurry.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+					"$(PROJECT_DIR)",
+					"$(SRCROOT)/../../../template/proj.ios_mac/ios",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AppBindings-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					COCOS2D_JAVASCRIPT,
+					CC_TARGET_OS_MAC,
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "AppBindings iOS copy";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../external/spidermonkey/include/mac $(SRCROOT)/../../cocos2d-x/cocos/2d/platform/mac $(SRCROOT)/../../cocos2d-x/external/glfw3/include/mac";
+			};
+			name = Debug;
+		};
+		41BB07981900AEA70012BCF5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/libPluginFlurry.dst;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)",
+					"$(PROJECT_DIR)",
+					"$(SRCROOT)/../../../template/proj.ios_mac/ios",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AppBindings-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					COCOS2D_JAVASCRIPT,
+					CC_TARGET_OS_MAC,
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "AppBindings iOS copy";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../external/spidermonkey/include/mac $(SRCROOT)/../../cocos2d-x/cocos/2d/platform/mac $(SRCROOT)/../../cocos2d-x/external/glfw3/include/mac";
+			};
+			name = Release;
+		};
 		FA09A37E168AFD41008C1C7B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -260,6 +359,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		41BB07961900AEA70012BCF5 /* Build configuration list for PBXNativeTarget "AppBindings Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				41BB07971900AEA70012BCF5 /* Debug */,
+				41BB07981900AEA70012BCF5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		FA09A36C168AFD41008C1C7B /* Build configuration list for PBXProject "AppBindings" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

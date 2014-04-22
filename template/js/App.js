@@ -470,6 +470,7 @@ App.playMusic = function(filename) {
 	}
 };
 
+// begin pro
 //
 // ###  App.getAnalyticsPlugin
 //
@@ -514,9 +515,13 @@ App.getAnalyticsPlugin = function() {
 
 		if (this._analyticsPlugin) {
 			this._analyticsPlugin.setDebugMode(config["debug"]);
-			this._analyticsPlugin.startSession(config["api-key"]);
-			cc.log("Analytics plugin session started with API key: " +
-				config["api-key"].substr(0,4) + "...");
+			if (config["api-key"] && config["api-key"].length) {
+				this._analyticsPlugin.startSession(config["api-key"]);
+				cc.log("Analytics plugin session started with API key: " +
+					config["api-key"].substr(0,4) + "...");
+			} else {
+				cc.log("Analytics plugin missing API key");
+			}
 		}
 	}
 
@@ -800,6 +805,7 @@ App.logCurrencyBalances = function() {
 		}
 	}
 };
+// end pro
 
 //
 // ###   App.isInitialLaunch
@@ -813,6 +819,7 @@ App.isInitialLaunch = function() {
 	return (typeof v === "undefined" || v === null || v === "");
 };
 
+// begin pro
 //
 // ###  App.onInitialLaunch
 //
@@ -854,6 +861,7 @@ App.onInitialLaunch = function() {
 		}
 	}
 };
+// end pro
 
 //
 // ###  App.getUUID
@@ -1144,16 +1152,18 @@ App.main = function() {
 		App.addImageData = function() {};
 	}
 
+// begin pro
 	/* Load plugins. */
 	this.getAnalyticsPlugin();
 	this.getAdsPlugin();
 	this.getSocialPlugin();
 	this.getEconomyPlugin();
-	
+// end pro
+
 	/* Handle initial launch. */
 	/* Call after loading plugins so initial currency balances can be set. */
 	/*cc.log("Initial launch: " + initialLaunch);*/
-	if (initialLaunch) {
+	if (initialLaunch && typeof this.onInitialLaunch === "function") {
 		this.onInitialLaunch();
 	}
 
@@ -1163,8 +1173,10 @@ App.main = function() {
 		+ ", language: " + App.getLanguageCode()
 		+ ", " + parseInt(1.0 / cc.director.getAnimationInterval()) + " fps");
 
+// begin pro
 	/* Show currency balances. */
 	this.logCurrencyBalances();
+// end pro
 
 	/* Preload. */
 	if (this.isHtml5()) {

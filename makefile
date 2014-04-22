@@ -7,6 +7,7 @@ release:
 	mkdir ${dest}
 	cp README.md ${dest}
 	cp CHANGELOG.txt ${dest}
+	cp LICENSE_RapidGame.txt ${dest}
 	cp prebuild ${dest}
 	cp docs.html ${dest}
 	cp -a docs ${dest}
@@ -24,25 +25,126 @@ release:
 	rm ${dest}/*/lib/cocos2dx-prebuilt/java
 	rm -r ${dest}/*/lib/cocos2dx-prebuilt/jsb
 	rm ${dest}/*/lib/cocos2dx-prebuilt/lib
-	#rm -r ${dest}/src/cocos2d-x/cocos/2d/platform/android/java/bin
-	#rm -r ${dest}/src/cocos2d-x/cocos/2d/platform/android/java/gen
-	#rm -r ${dest}/src/cocos2dx-store/submodules/android-store/SoomlaAndroidStore/bin
-	#rm -r ${dest}/src/cocos2dx-store/submodules/android-store/SoomlaAndroidStore/gen
-	#rm -r ${dest}/src/cocos2dx-store/android/bin
-	#rm -r ${dest}/src/cocos2dx-store/android/gen
-	#rm -r ${dest}/src/cocos2d-x/plugin/plugins/flurry/proj.android/bin
-	#rm -r ${dest}/src/cocos2d-x/plugin/plugins/flurry/proj.android/gen
-	#rm -r ${dest}/src/facebook/proj.android/facebook-android-sdk/bin
-	#rm -r ${dest}/src/facebook/proj.android/facebook-android-sdk/gen
-	echo This will be a git pull
-	echo Cocos2d-html5 only once
-	echo Facebook SDK framework, Flurry SDK, MobFox FlurryAgent.jar only once
+	rm -rf ${dest}/java/*/bin
+	rm -rf ${dest}/java/*/gen
+	@rez/delete-text "# begin pro" ${dest}/prebuild --newlines
+	@rez/delete-text "# end pro" ${dest}/prebuild --newlines
+	@rez/delete-text "# begin pro" ${dest}/README.md --newlines
+	@rez/delete-text "# end pro" ${dest}/README.md --newlines
+	@rez/delete-text "/* begin pro */" ${dest}/README.md
+	@rez/delete-text "/* end pro */" ${dest}/README.md
+	@rez/delete-text "# begin pro" ${dest}/CHANGELOG.txt --newlines
+	@rez/delete-text "# end pro" ${dest}/CHANGELOG.txt --newlines
+	@rez/delete-text "# begin pro" ${dest}/src/proj.android/build --newlines
+	@rez/delete-text "# end pro" ${dest}/src/proj.android/build --newlines
+	@rez/delete-text "# begin pro" ${dest}/src/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# end pro" ${dest}/src/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "// begin pro" ${dest}/template/js/Config.js --newlines
+	@rez/delete-text "// end pro" ${dest}/template/js/Config.js --newlines
+	@rez/delete-text "// begin pro" ${dest}/template/js/App.js --newlines
+	@rez/delete-text "// end pro" ${dest}/template/js/App.js --newlines
+	@rez/delete-text "// begin pro" ${dest}/template/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// end pro" ${dest}/template/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// begin pro" ${dest}/LemonadeExchange/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// end pro" ${dest}/LemonadeExchange/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// begin pro" ${dest}/template/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "// end pro" ${dest}/template/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "// begin pro" ${dest}/LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "// end pro" ${dest}/LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}/template/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}/template/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}/LemonadeExchange/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}/LemonadeExchange/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text "# begin pro" ${dest}/template/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# end pro" ${dest}/template/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# begin pro" ${dest}/LemonadeExchange/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# end pro" ${dest}/LemonadeExchange/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# begin pro" ${dest}/template/proj.android/project.properties --newlines
+	@rez/delete-text "# end pro" ${dest}/template/proj.android/project.properties --newlines
+	@rez/delete-text "# begin pro" ${dest}/LemonadeExchange/proj.android/project.properties --newlines
+	@rez/delete-text "# end pro" ${dest}/LemonadeExchange/proj.android/project.properties --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}/template/proj.html5/index.html --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}/template/proj.html5/index.html --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}/LemonadeExchange/proj.html5/index.html --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}/LemonadeExchange/proj.html5/index.html --newlines
 	open ../releases
 	open -a /Applications/YemuZip.app/
+
+rapidgame: pro=../releases/RapidGamePro/
+rapidgame: dest=../releases/RapidGame/
+rapidgame:
+	if [ ! -d "${pro}" ]; then echo "Missing ${pro}"; exit 1; fi
+	if [ -d ${dest} ]; then rm -r ${dest}; fi
+	cp -r ${pro} ${dest}
+	rm -r ${dest}LemonadeExchange
+	rm -r ${dest}src/app
+	rm -r ${dest}src/bindings-pluginx
+	rm -r ${dest}src/cocos2d-x/plugin/*
+	rm -r ${dest}src/cocos2dx-store
+	rm -r ${dest}src/external/jansson
+	rm -r ${dest}src/facebook
+	rm -r ${dest}src/mobfox
+	rm -r ${dest}src/proj.ios_mac/cocos2dx-plugins.xcodeproj
+	rm ${dest}template/js/lib/AdsMobFox.js
+	rm ${dest}template/js/lib/Facebook.js
+	rm ${dest}template/js/lib/aes.js
+	rm ${dest}template/js/lib/soomla.js
+	rm ${dest}template/js/lib/SoomlaNdk.js
+	rm ${dest}template/js/lib/underscore.js
+	rm ${dest}template/proj.android/src/org/cocos2dx/javascript/AdsMobFox.java
+	rm ${dest}template/proj.android/src/org/cocos2dx/javascript/Facebook.java
+	cp prebuild ${dest}/prebuild
+	@rez/delete-between "# begin pro" "# end pro" ${dest}prebuild --newlines
+	cp README.md ${dest}/
+	@rez/delete-between "# begin pro" "# end pro" ${dest}README.md --newlines
+	@rez/delete-between "/* begin pro */" "/* end pro */" ${dest}README.md
+	sed -i "" 's/RapidGamePro/RapidGame/g' ${dest}README.md
+	sed -i "" 's/RapidGame Pro/RapidGame/g' ${dest}README.md
+	sed -i "" 's/=============/=========/g' ${dest}README.md
+	sed -i "" 's/LemonadeExchange/template/g' ${dest}README.md
+	cp CHANGELOG.txt ${dest}/
+	@rez/delete-between "# begin pro" "# end pro" ${dest}CHANGELOG.txt --newlines
+	cp src/proj.android/build ${dest}src/proj.android
+	@rez/delete-between "# begin pro" "# end pro" ${dest}src/proj.android/build --newlines
+	cp src/proj.android/jni/Android.mk ${dest}src/proj.android/jni
+	@rez/delete-between "# begin pro" "# end pro" ${dest}src/proj.android/jni/Android.mk --newlines
+	cp template/js/Config.js ${dest}template/js/Config.js
+	@rez/delete-between "// begin pro" "// end pro" ${dest}template/js/Config.js --newlines
+	cp template/js/App.js ${dest}template/js/App.js
+	@rez/delete-between "// begin pro" "// end pro" ${dest}template/js/App.js --newlines
+	cp template/src/AppDelegate.cpp ${dest}template/src/
+	@rez/delete-between "// begin pro" "// end pro" ${dest}template/src/AppDelegate.cpp --newlines
+	cp template/proj.android/src/org/cocos2dx/javascript/AppActivity.java ${dest}template/proj.android/src/org/cocos2dx/javascript/
+	@rez/delete-between "// begin pro" "// end pro" ${dest}template/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	cp template/proj.android/AndroidManifest.xml ${dest}template/proj.android/
+	@rez/delete-between "<!-- begin pro -->" "<!-- end pro -->" ${dest}template/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text 'android:name="com.soomla.store.SoomlaApp"' ${dest}/template/proj.android/AndroidManifest.xml
+	cp template/proj.android/jni/Android.mk ${dest}template/proj.android/jni/
+	@rez/delete-between "# begin pro" "# end pro" ${dest}template/proj.android/jni/Android.mk --newlines
+	cp template/proj.android/project.properties ${dest}template/proj.android/
+	@rez/delete-between "# begin pro" "# end pro" ${dest}template/proj.android/project.properties --newlines
+	cp template/proj.html5/index.html ${dest}template/proj.html5/
+	@rez/delete-between "<!-- begin pro -->" "<!-- end pro -->" ${dest}template/proj.html5/index.html --newlines
+	@rez/delete-text '		"pluginx",' ${dest}/template/proj.html5/project.json --newlines
+	@rez/delete-text '		"js/lib/aes.js",' ${dest}/template/proj.html5/project.json --newlines
+	@rez/delete-text '		"js/lib/underscore.js",' ${dest}/template/proj.html5/project.json --newlines
+	@rez/delete-text '		"js/lib/soomla.js",' ${dest}/template/proj.html5/project.json --newlines
+	@rez/delete-text '		"js/lib/SoomlaNdk.js",' ${dest}/template/proj.html5/project.json --newlines
+	@rez/delete-text '		"js/lib/AdsMobFox.js",' ${dest}/template/proj.html5/project.json --newlines
+	@rez/delete-text '		"js/lib/Facebook.js",' ${dest}/template/proj.html5/project.json --newlines
+	@rez/delete-text '					"-lcocos2dx-plugins",' ${dest}/template/proj.ios_mac/HelloJavascript.xcodeproj/project.pbxproj --newlines
+	${dest}/prebuild headers
+	rm ${dest}/build.log
+	rm -r ${dest}/docs
+	cp ${dest}/README.md ${dest}/README.litcoffee
+	docco -o ${dest}/docs -l linear ${dest}/README.litcoffee ${dest}/template/server/Server.js ${dest}/template/js/*.js
+	sed -i "" 's/README.litcoffee/README.md/g' ${dest}/docs/*.html
+	rm ${dest}/README.litcoffee
 
 docco:
 	if [ -d docs ]; then rm -r docs; fi
 	cp README.md README.litcoffee
+	# strip begin/end from App.js, Config.js, README.md...
 	docco -l linear README.litcoffee template/server/Server.js template/js/*.js template/js/lib/AdsMobFox.js template/js/lib/Facebook.js
 	#docco -l linear README.litcoffee template/server/Server.js template/js/*.js
 	sed -i "" 's/README.litcoffee/README.md/g' docs/*.html

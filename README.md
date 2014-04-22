@@ -30,7 +30,9 @@ Folder Structure
         docs/ - Documentation folder.
         include/ - All the header files necessary to compile a native game client.
         java/ - The java source files necessary to compile Android native game clients.
+# begin pro
         LemonadeExchange/ - A complete example game.
+# end pro
         lib/ - Contains the static libraries after they have been prebuilt.
         src/ - Contains source files for the static libraries.
         template/ - Game template (do not modify, just use tools/create-project).
@@ -71,7 +73,7 @@ The client uses the Cocos2d JS game engine which is a combination of Cocos2d-X a
 
 On HTML5, the engine starts by loading `proj.html5/index.html` which boots Cocos2d-HTML5 by loading `lib/cocos2d-html5/CCBoot.js` and then runs `js/App.js` which does the rest. The client's javascript files run in the browser.
 
-On native platforms, the engine starts with `main.m` or `main.cpp`, depending on the platform. This loads `src/AppDelegate.cpp` which finishes booting Cocos2d-X and then runs `js/App.js`. The game's javascript files are pre-compiled to byte codes and executed using the SpiderMonkey JS Engine. Some of the files (for example, `js/lib/Facebook.js`) are superceded by custom bindings which expose exactly the same Javascript API but run C++ or other native code (see `RapidGamePro/src/facebook`).
+On native platforms, the engine starts with `main.m` or `main.cpp`, depending on the platform. This loads `src/AppDelegate.cpp` which finishes booting Cocos2d-X and then runs `js/App.js`. The game's javascript files are pre-compiled to byte codes and executed using the SpiderMonkey JS Engine. Some of the files /* begin pro */(for example, `js/lib/Facebook.js`) /* end pro */are superceded by custom bindings which expose exactly the same Javascript API but run C++ or other native code/* begin pro */ (see `RapidGamePro/src/facebook`)/* end pro */.
 
 
 Pre-building for Rapid Development
@@ -113,10 +115,11 @@ To use the GUI version:
 To use the commandline version:
 
     cd RapidGamePro
-	tools/create-project --help
+    tools/create-project --help
     tools/create-project -n HelloWorld -k com.mycompany.helloworld -p ~/code
 
 
+# begin pro
 iOS Notes
 ---------
 
@@ -132,6 +135,7 @@ If your game uses In-App Purchases, they will need to be configured with iTunes 
 8. View the app details and click the **Edit** button next to In-App Purchases. Select the purchases and click **Save.**
 
 These steps ought to be enough to get the purchases working with your game. There should be no need to click **Ready to Upload Binary**.
+# end pro
 
 
 Android Notes

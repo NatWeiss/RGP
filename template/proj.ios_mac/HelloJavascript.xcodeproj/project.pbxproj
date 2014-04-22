@@ -285,6 +285,16 @@
 			path = ios;
 			sourceTree = "<group>";
 		};
+		416E8E461905CE0400F9B283 /* cocos2d */ = {
+			isa = PBXGroup;
+			children = (
+				41DFB47518EA1B9B003F8CD3 /* CCBoot.js */,
+				419E8EB818A9F3C100232A34 /* cocos2d */,
+				419E8EB918A9F3D200232A34 /* extensions */,
+			);
+			name = cocos2d;
+			sourceTree = "<group>";
+		};
 		41F1A4D81894BBA8006E818E /* mac */ = {
 			isa = PBXGroup;
 			children = (
@@ -320,9 +330,7 @@
 				4152B77D1894795000BEF730 /* js */,
 				419E8EA218A9CA7600232A34 /* jsb */,
 				41E177A8188794A700F6AD3C /* res */,
-				41DFB47518EA1B9B003F8CD3 /* CCBoot.js */,
-				419E8EB818A9F3C100232A34 /* cocos2d */,
-				419E8EB918A9F3D200232A34 /* extensions */,
+				416E8E461905CE0400F9B283 /* cocos2d */,
 				4152B88118949C3E00BEF730 /* ios */,
 				41F1A4D81894BBA8006E818E /* mac */,
 				4152B64E1894756E00BEF730 /* frameworks */,
