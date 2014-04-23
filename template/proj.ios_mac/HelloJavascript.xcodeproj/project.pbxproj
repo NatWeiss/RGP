@@ -481,7 +481,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "touch ../js";
+			shellScript = "touch ../js\ntouch ../res";
 		};
 /* End PBXShellScriptBuildPhase section */
 

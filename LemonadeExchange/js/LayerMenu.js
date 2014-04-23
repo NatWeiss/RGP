@@ -57,7 +57,7 @@ var LayerMenu = (function(){
 
 			/* Create the logo. */
 			this.logo = cc.Sprite.create("#Logo.png");
-			this.logo.setPosition(App.centralize(0, 114));
+			this.logo.setPosition(App.centralize(20, 114));
 			this.addChild(this.logo, 1);
 			this.logo.setPositionY(this.logo.getPositionY() + winSize.height);
 			this.logo.runAction(cc.Sequence.create(
@@ -75,10 +75,10 @@ var LayerMenu = (function(){
 			layer = cc.LayerColor.create(
 				cc.color(0,0,0,202),
 				winSize.width * 1.2,
-				App.scale(215)
+				App.scale(185)
 			);
 			layer.x = App.scale(-20);
-			layer.y = winSize.height * .5 - App.scale(290) - winSize.height;
+			layer.y = winSize.height * .5 - App.scale(275) - winSize.height;
 			layer.setRotation(-2);
 			this.addChild(layer, 1);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(

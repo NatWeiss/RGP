@@ -3,17 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<title>LemonadeExchange</title>
-	<!--<link rel="icon" type="image/GIF" href="favicon.ico"/>-->
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="full-screen" content="yes"/>
 	<meta name="screen-orientation" content="landscape"/>
 	<meta name="x5-fullscreen" content="true"/>
 	<meta name="360-fullscreen" content="true"/>
-
-<!--
-How do you protect your JS code?
-A: you could use passworded zip, obfuscate your code, or simply use the bytecode tool. Bytecode is irreversible btw
--->
 
 	<script>
 		// ensure that we have JSON parsing
@@ -28,6 +22,16 @@ A: you could use passworded zip, obfuscate your code, or simply use the bytecode
 		#ads { position: absolute; margin: 0 auto; z-index: 2; }
 		#fb-root { position: absolute; margin: 0 auto; z-index: 3; }
 		.center { text-align: center; }
+		@font-face {
+			font-family: "Molle";
+			font-style: italic;
+			font-weight: 400;
+			src: url("res/Molle.eot");
+			src: local("Molle"), local("Molle-Regular"),
+				url("res/Molle.eot?#iefix") format("embedded-opentype"),
+				url("res/Molle.woff") format("woff"),
+				url("res/Molle.ttf") format("truetype");
+		}
 	</style>
 </head>
 <body id="gameBody">
@@ -49,7 +53,7 @@ A: you could use passworded zip, obfuscate your code, or simply use the bytecode
 			canvas.style.width = w + "px";
 			canvas.style.height = h + "px";
 		}
-		App.setCanvasSize(window.innerWidth, window.innerHeight);
+		App.setCanvasSize(document.body.clientWidth, document.body.clientHeight);
 	</script>
 
 	<!-- Either use CCBoot.js + App.js or LemonadeExchange-min.js -->

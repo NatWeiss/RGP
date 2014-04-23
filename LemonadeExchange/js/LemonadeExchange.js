@@ -172,7 +172,26 @@ App.startMusic = function() {
 		
 		this._songNumber = (this._songNumber + 1) % App.config["songs"].length;
 		this._didPlaySong = true;
-		setTimeout(function(){self._didPlaySong = false;}, 3 * 60 * 1000);
+		cc.director.getRunningScene().schedule(App.checkMusic, 1, 30);
+	}
+};
+
+//
+// ###  App.checkMusic
+//
+// Checks that music started playing. Workaround for an issue where Chrome takes a few seconds to play music.
+//
+App.checkMusic = function() {
+	var enabled = App.isSoundEnabled(),
+		playing = cc.audioEngine.isMusicPlaying();
+	if (enabled && playing) {
+		App._didPlaySong = false;
+		/*cc.log("Started song");*/
+		cc.director.getRunningScene().unschedule(App.checkMusic);
+	} else if (!enabled) {
+		App._didPlaySong = false;
+		/*cc.log("checkMusic stopping");*/
+		cc.director.getRunningScene().unschedule(App.checkMusic);
 	}
 };
 

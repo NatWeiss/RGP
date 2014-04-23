@@ -460,7 +460,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "touch ../js";
+			shellScript = "touch ../js\ntouch ../res";
 		};
 		41F1A3E51894BB33006E818E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

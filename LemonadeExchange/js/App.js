@@ -264,7 +264,7 @@ App.callRunningLayer = function(methodName, param1, param2, param3) {
 	if (layer && layer[methodName]) {
 		layer[methodName](param1, param2, param3);
 	} else {
-		cc.log("Couldn't find method '" + methodName + "' in running scene or layer.");
+		/*cc.log("Couldn't find method '" + methodName + "' in running scene or layer.");*/
 	}
 };
 
@@ -425,8 +425,16 @@ App.loadSoundEnabled = function() {
 App.enableSound = function(enabled) {
 	this._soundEnabled = enabled ? true : false;
 	cc.sys.localStorage.setItem("soundEnabled", this._soundEnabled);
+
 	if (!this.isSoundEnabled()) {
 		cc.audioEngine.stopMusic();
+
+		/* Check that the music stopped (Chrome bug). */
+		cc.director.getRunningScene().schedule(function(){
+			if (!App.isSoundEnabled()) {
+				cc.audioEngine.stopMusic();
+			}
+		}, 1, 15);
 	}
 };
 
@@ -455,8 +463,18 @@ App.isSoundEnabled = function() {
 //
 App.playEffect = function(filename) {
 	if (this.isSoundEnabled()) {
-		cc.audioEngine.playEffect(filename);
+		return cc.audioEngine.playEffect(filename);
 	}
+	return -1;
+};
+
+//
+// ###  App.stopEffect
+//
+// Stops the sound effect with the given id.
+//
+App.stopEffect = function(audioId) {
+	cc.audioEngine.stopEffect(audioId);
 };
 
 //
@@ -466,6 +484,7 @@ App.playEffect = function(filename) {
 //
 App.playMusic = function(filename) {
 	if (this.isSoundEnabled()) {
+		cc.audioEngine.stopMusic();
 		cc.audioEngine.playMusic(filename);
 	}
 };
@@ -516,8 +535,10 @@ App.getAnalyticsPlugin = function() {
 			this._analyticsPlugin.setDebugMode(config["debug"]);
 			if (config["api-key"] && config["api-key"].length) {
 				this._analyticsPlugin.startSession(config["api-key"]);
-				cc.log("Analytics plugin session started with API key: " +
-					config["api-key"].substr(0,4) + "...");
+				if (config["debug"]) {
+					cc.log("Analytics plugin session started with API key: " +
+						config["api-key"].substr(0,4) + "...");
+				}
 			} else {
 				cc.log("Analytics plugin missing API key");
 			}
@@ -1074,7 +1095,6 @@ App.boot = function(global) {
 		require("js/lib/timers.js");
 		this.timerLoop = makeWindowTimer(global, function(ms){});
 		cc.director.getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
-		/*setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);*/
 
 		/* Location. */
 		require("js/ConfigServer.js");
@@ -1099,6 +1119,8 @@ App.boot = function(global) {
 			cc.RADIANS_TO_DEGREES = function(angle) {return angle * cc.DEG;};
 		}
 	}
+
+	/*setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);*/
 
 	/* Embed the equivalent of main.js for faster loading. */
 	cc.game.onStart = function(){
@@ -1146,6 +1168,8 @@ App.main = function() {
 		cc.view.resizeWithBrowserSize(true);
 
 		App.addImageData = function() {};
+	} else {
+		App.config["font"] = "res/" + App.config["font"] + ".ttf";
 	}
 
 	/* Load plugins. */

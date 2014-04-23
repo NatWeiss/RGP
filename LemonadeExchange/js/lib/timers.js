@@ -1,3 +1,6 @@
+
+// from: https://gist.github.com/kevinoid/3146420
+
 /* Implementation of HTML Timers (setInterval/setTimeout) based on sleep.
  *
  * This file is provided under the following terms (MIT License):

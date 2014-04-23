@@ -41,7 +41,7 @@ App.config = {
 //
 // The font to be used.
 //
-	"font": "Arial",
+	"font": "Molle",
 	"font-shadow-color": cc.color(35, 168, 20),
 
 //
@@ -134,10 +134,10 @@ App.config = {
 //
 	"social-plugin": {
 		"name": "Facebook",
-		"debug": true,
+		"debug": false,
 		"app-id": "641151319281152",
 		"login-permissions": "",
-		"profile-image-width": 100
+		"profile-image-width": 150
 	},
 
 //
@@ -147,7 +147,7 @@ App.config = {
 //
 	"ads-plugin": {
 		"name": "AdsMobFox",
-		"debug": true,
+		"debug": false,
 		"api-key": "7e9fe879ef86ffa86071cddbd7ec6203", // test only
 		//"api-key": "0d8b09ec8ea83fb02a83f1bc261dfc2c", // lemonade exchange web
 		//"api-key": "928212dab22e3c4cc7774cc26532100c", // lemonade exchange ios
@@ -161,7 +161,7 @@ App.config = {
 //
 	"economy-plugin": {
 		"name": "Soomla",
-		"debug": true,
+		"debug": false,
 		"secret1": "77yMfv8l1yyYq4WoKJ0cVTEa3FU2zuSp",
 		"secret2": "0irOF7InTS2OzA3hc7Ejj8Mhm3l3dI9s",
 		"android-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlYZHeBm9l52JwNB9s6j9z3lbZN6O4ydWctIin1gJFUrEILtJpIGb5z6ER+F9DsOYphmin0QXu1TF1S78BfAKUNzJbJzcKIi85B/IQPgRpSIKx+Y2k5m9dECXwbSVcJgwndUQnBGbxz7EJIJtrY+hPVhN5DCRM4FZSE0rRLA6niWzKwbZOlGrHYr9q/H/a6zKho9/JJtimVTtE8KhoVIjKBhFBUQYhCIkkKRZfzUc4pXgmtv+7G9o77XhE5sPvcZZfZN2EFPjXXl4BdeRtpytZ6b72OhRpzlkciNb8e8cnobe2zviPggM8HzNv3YwTEPbyS9Vez4UcslW/wmrekuQuwIDAQAB",

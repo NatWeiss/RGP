@@ -64,6 +64,7 @@ var LayerGame = (function(){
 			this.addChild(this.menu, 1);
 
 			/* Create everything else. */
+			this.playerImageWidth = App.scale(110);
 			this.createBg();
 			this.createExchangeRate();
 			this.createPlayerDetails();
@@ -71,7 +72,7 @@ var LayerGame = (function(){
 
 			/* Create the back button. */
 			App.createButton(this, "ButtonBack.png", TAG_PAUSE,
-				App.centralize(-430, -290), cc.p(0, 0),
+				App.centralize(-390, -250), cc.p(.5, .5),
 				cc.p(winSize.width * .5, winSize.height), 0.5, 0.25, 1.5);
 
 			/* Handle touch events. */
@@ -94,7 +95,8 @@ var LayerGame = (function(){
 // Create the background layer.
 //
 		createBg: function() {
-			var layer,
+			var sprite,
+				layer,
 				winSize = App.getWinSize();
 			
 			layer = cc.LayerColor.create(
@@ -115,6 +117,12 @@ var LayerGame = (function(){
 				cc.MoveBy.create(0.5, cc.p(-winSize.width, 0)),
 				1.5
 			));
+			
+			if (App.isHtml5()) {
+				sprite = cc.Sprite.create("#LogoMini.png");
+				sprite.setPosition(App.centralize(-650, 360));
+				this.addChild(sprite, 1);
+			}
 		},
 		
 //
@@ -123,13 +131,13 @@ var LayerGame = (function(){
 // Create the exchange rate labels and sprites.
 //
 		createExchangeRate: function() {
-			var pos = App.centralize(-120, 220),
+			var pos = App.centralize(-70, 220),
 				font = App.config["font"],
 				label,
 				sprite,
 				winSize = App.getWinSize();
 			
-			label = cc.LabelTTF.create("1", font, App.scale(80));
+			label = cc.LabelTTF.create("1", font, App.scale(60));
 			label.setAnchorPoint(0, .5);
 			label.setPosition(pos);
 			this.addChild(label, 1);
@@ -141,8 +149,8 @@ var LayerGame = (function(){
 			sprite.setScale(0.5);
 			this.addChild(sprite, 1);
 
-			pos.x += App.scale(80);
-			this.rateLabel = cc.LabelTTF.create(" = 10", font, App.scale(80));
+			pos.x += App.scale(30);
+			this.rateLabel = cc.LabelTTF.create(" = 10", font, App.scale(60));
 			this.rateLabel.setAnchorPoint(0, .5);
 			this.rateLabel.setPosition(pos);
 			this.addChild(this.rateLabel, 1);
@@ -161,26 +169,33 @@ var LayerGame = (function(){
 // Create the player image.
 //
 		createPlayerImage: function(url) {
+			var image = null,
+				stencil = cc.Sprite.create("#MaskCircle.png");
+
 			if (this.playerImage) {
 				this.playerImage.removeFromParent(true);
 			}
 			this.playerImage = null;
 
 			if (url) {
-				this.playerImage = cc.Sprite.create(url);
-				if (this.playerImage !== null) {
-					cc.log("Player image: " + this.playerImage.width +
-						"x" + this.playerImage.height);
+				image = cc.Sprite.create(url);
+				if (image !== null) {
+					cc.log("Player image: " + image.width +
+						"x" + image.height);
 				}
 			}
-			if (this.playerImage === null) {
-				this.playerImage = cc.Sprite.create("#BlankAvatar.png");
+			if (image === null) {
+				image = cc.Sprite.create("#BlankAvatar.png");
 			}
-
-			this.playerImage.setAnchorPoint(0, .5);
-			this.playerImage.setPosition(App.centralize(-420, 260));
-			this.playerImage.setScale(App.scale(60) / this.playerImage.width);
-			this.addChild(this.playerImage, 1);
+			
+			stencil.setScale(this.playerImageWidth / stencil.width);
+			this.playerImage = cc.ClippingNode.create(stencil);
+			this.playerImage.setAlphaThreshold(0.05);
+			image.setPosition(this.playerImage.width * .5, this.playerImage.height * .5);
+			image.setScale(this.playerImageWidth / image.width);
+			this.playerImage.addChild(image, 1);
+			this.playerImage.setPosition(App.centralize(-390, 240));
+			this.addChild(this.playerImage, 2);
 		},
 		
 //
@@ -213,7 +228,8 @@ var LayerGame = (function(){
 				font = App.config["font"],
 				winSize = App.getWinSize(),
 				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
-				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
+				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades"),
+				sprite;
 			
 			this.newLemonadesAmount = numLemonades;
 			this.newBuxAmount = numBux;
@@ -221,32 +237,42 @@ var LayerGame = (function(){
 			
 			/* Create the player's profile image. */
 			this.createPlayerImage(playerImageUrl);
+			sprite = cc.Sprite.create("#ShadowOval.png");
+			sprite.x = this.playerImage.x;
+			sprite.y = this.playerImage.y - (this.playerImageWidth * .5);
+			this.addChild(sprite, 1);
 			
 			/* Create the player's name label. */
 			this.playerNameLabel = cc.LabelTTF.create(name, font, App.scale(48));
 			this.playerNameLabel.setAnchorPoint(0, .5);
-			this.playerNameLabel.setPosition(App.centralize(-330, 260));
+			this.playerNameLabel.x = this.playerImage.x + (this.playerImageWidth * 0.7);
+			this.playerNameLabel.y = this.playerImage.y;
 			this.addChild(this.playerNameLabel, 1);
 			
+			/* Currencies frame. */
+			sprite = cc.Sprite.create("#Frame.png");
+			sprite.setPosition(App.centralize(-325, 0));
+			this.addChild(sprite, 1);
+			
 			/* Create the lemonades currency label. */
-			this.lemonadesIcon = cc.Sprite.create("#Lemonade.png");
-			this.lemonadesIcon.setPosition(App.centralize(-395, 130));
-			this.addChild(this.lemonadesIcon, 1);
+			this.lemonadesIcon = cc.Sprite.create("#LemonadeDark.png");
+			this.lemonadesIcon.setPosition(App.centralize(-395, 60));
+			this.addChild(this.lemonadesIcon, 2);
 			this.lemonadesIcon.setRotation(-2);
 			this.lemonadesIcon.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 4), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -4), 3.0)
 			)));
-			this.lemonadesLabel = cc.LabelTTF.create(numLemonades, font, App.scale(80));
+			this.lemonadesLabel = cc.LabelTTF.create(numLemonades, font, App.scale(60));
 			this.lemonadesLabel.setAnchorPoint(0, .5);
-			this.lemonadesLabel.setPosition(App.centralize(-330, 130));
-			this.addChild(this.lemonadesLabel, 1);
+			this.lemonadesLabel.setPosition(App.centralize(-330, 60));
+			this.addChild(this.lemonadesLabel, 2);
 
 			/* Create the bux currency label. */
 			this.buxIcon = cc.Sprite.create("#Bux.png");
-			this.buxIcon.setPosition(App.centralize(-395, -20));
+			this.buxIcon.setPosition(App.centralize(-395, -70));
 			this.buxIcon.setScale(0.65);
-			this.addChild(this.buxIcon, 1);
+			this.addChild(this.buxIcon, 2);
 			this.buxIcon.setRotation(-4);
 			this.buxIcon.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 8), 3.0),
@@ -254,8 +280,8 @@ var LayerGame = (function(){
 			)));
 			this.buxLabel = cc.LabelTTF.create("" + numBux, font, App.scale(60));
 			this.buxLabel.setAnchorPoint(0, .5);
-			this.buxLabel.setPosition(App.centralize(-310, -20));
-			this.addChild(this.buxLabel, 1);
+			this.buxLabel.setPosition(App.centralize(-330, -70));
+			this.addChild(this.buxLabel, 2);
 		},
 		
 //
@@ -362,14 +388,14 @@ var LayerGame = (function(){
 			sprite = cc.Sprite.create("#Lemonade.png");
 			sprite.setAnchorPoint(0, .5);
 			sprite.setPosition(label.x + label.width * .5, label.y);
-			sprite.setScale(0.55);
+			sprite.setScale(0.75);
 			this.exchangeLayer.addChild(sprite, 1);
 
 			pos.y -= ySpacing;
 			this.finishExchangeSprite1 = cc.Sprite.create("#Bux.png");
 			this.finishExchangeSprite1.setAnchorPoint(.5, .5);
 			this.finishExchangeSprite1.setPosition(pos);
-			this.finishExchangeSprite1.setScale(0.25);
+			this.finishExchangeSprite1.setScale(0.75);
 			this.finishExchangeSprite1.runAction(cc.RepeatForever.create(
 				cc.RotateBy.create(1.0, 360)
 			));
@@ -399,7 +425,7 @@ var LayerGame = (function(){
 			this.finishExchangeSprite2.x = this.finishExchangeLabel3.x +
 				this.finishExchangeLabel3.width * .5;
 			this.finishExchangeSprite2.y = this.finishExchangeLabel3.y;
-			this.finishExchangeSprite2.setScale(0.55);
+			this.finishExchangeSprite2.setScale(0.75);
 			this.exchangeLayer.addChild(this.finishExchangeSprite2, 1);
 			
 			this.finishExchangeLabel1.setVisible(false);
@@ -573,7 +599,7 @@ var LayerGame = (function(){
 			/* Create the streaks. */
 			for (i = 0; i < len; i += 1) {
 				streak = cc.Sprite.create("#Streak.png");
-				streak.setAnchorPoint(.5, -.5);
+				streak.setAnchorPoint(.5, 0);
 				streak.setPosition(winSize.width * .5, winSize.height * .5);
 				streak.setRotation((i / len) * 360);
 				streak.setOpacity(0);
@@ -812,7 +838,8 @@ var LayerGame = (function(){
 // Set the position of the exchange rate icon.
 //
 		setRateIconPos: function() {
-			this.rateIcon.x = this.rateLabel.x + this.rateLabel.width;
+			this.rateIcon.x = this.rateLabel.x + this.rateLabel.width +
+				App.scale(15);
 		},
 		
 //
