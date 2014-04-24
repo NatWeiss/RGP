@@ -119,10 +119,10 @@ To use the commandline version:
     tools/create-project -n HelloWorld -k com.mycompany.helloworld -p ~/code
 
 
-# begin pro
 iOS Notes
 ---------
 
+# begin pro
 If your game uses In-App Purchases, they will need to be configured with iTunes Connect. If they are not, a console error message similar to **SOOMLA StoreController: Expecting 2 products but only fetched 0 from iTunes Store** may be displayed.
 
 1. Login to iTunes Connect.
@@ -136,6 +136,8 @@ If your game uses In-App Purchases, they will need to be configured with iTunes 
 
 These steps ought to be enough to get the purchases working with your game. There should be no need to click **Ready to Upload Binary**.
 # end pro
+
+If prebuilding fails with the error `The following build commands failed: Write auxiliary files`, then please [upgrade Xcode](http://stackoverflow.com/questions/23016840/xcodebuild-fails-on-the-write-auxiliary-files-step).
 
 
 Android Notes

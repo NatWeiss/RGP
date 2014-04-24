@@ -42,7 +42,7 @@ cc.LoaderScene.prototype.init = function(){
 	this._label = cc.LabelTTF.create(
 		App.config["loader"]["text"] || "Loading...",
 		App.config["loader"]["text-font"] || "Arial",
-		App.config["loader"]["text-size"] || 20
+		App.scale(App.config["loader"]["text-size"] || 20)
 	);
 	this._label.setColor(
 		App.config["loader"]["text-color"] || cc.color(180,180,180,255)

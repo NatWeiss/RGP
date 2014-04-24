@@ -867,7 +867,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
      * @param {cc.Event} event
      */
     dispatchEvent: function (event) {
-        if (!this._isEnabled)
+        if (!this._isEnabled || !event)
             return;
 
         this._updateDirtyFlagForSceneGraph();

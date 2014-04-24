@@ -108,7 +108,9 @@ App.getResourceDir = function() {
 			};
 		
 		if (this.isHtml5()) {
-			if (minDimension >= 600) {
+			if (minDimension >= 1200) {
+				setResourceDir("res/hdr", 1, 2);
+			} else if (minDimension >= 600) {
 				setResourceDir("res/hd", 1, 1);
 			} else {
 				setResourceDir("res/sd", 1, .5);
@@ -333,10 +335,10 @@ App.runInitialScene = function() {
 // Return true if fullscreen mode is available on this platform.
 //
 App.isFullscreenAvailable = function() {
-	if (this.isHtml5()) {
-		return (screenfull && screenfull.enabled);
-	}
-	return this.isDesktop();
+	return (this.isHtml5() ?
+		typeof screenfull !== "undefined" && screenfull.enabled :
+		this.isDesktop()
+	);
 };
 
 //
@@ -345,10 +347,10 @@ App.isFullscreenAvailable = function() {
 // Return true if fullscreen mode is enabled.
 //
 App.isFullscreenEnabled = function() {
-	if (this.isHtml5()) {
-		return (screenfull && screenfull.isFullscreen);
-	}
-	return this._fullscreenEnabled ? true : false;
+	return (this.isHtml5() ?
+		typeof screenfull !== "undefined" && screenfull.isFullscreen :
+		this._fullscreenEnabled ? true : false
+	);
 };
 
 //
@@ -362,12 +364,43 @@ App.enableFullscreen = function(enabled) {
 	if (this.isFullscreenAvailable()) {
 		if (this.isHtml5()) {
 			if (enabled) {
+				App.setCanvasSize(document.getElementById("gameDiv"),
+					screen.width, screen.height);
 				screenfull.request();
 			}
 			else {
+				App.setCanvasSize(document.getElementById("gameDiv"),
+					this._origCanvasSize.width, this._origCanvasSize.height);
 				screenfull.exit();
 			}
 		}
+	}
+};
+
+//
+// ###  App.setCanvasSize
+//
+// Sets the size of the game canvas.
+//
+App.setCanvasSize = function(e, w, h) {
+	var pixelRatio = window.devicePixelRatio || 1;
+	e = e || document.getElementById(cc.game.config[cc.game.CONFIG_KEY.id]);
+	w = w || document.body.clientWidth; // or scrollWidth
+	h = h || document.body.clientHeight;
+
+	e.width = w * pixelRatio;
+	e.height = h * pixelRatio;
+	e.style.width = w + "px";
+	e.style.height = h + "px";
+
+	cc.log("Set #" + e.getAttribute("id") + " pixel ratio " + pixelRatio +
+		", size " + e.width + "x" + e.height +
+		", style " + e.style.width + " x " + e.style.height +
+		", fullscreen " + App.isFullscreenEnabled() +
+		", parent " + e.parentNode.getAttribute("id"));
+	
+	if (typeof this._origCanvasSize === "undefined") {
+		this._origCanvasSize = {width: w, height: h};
 	}
 };
 
@@ -377,18 +410,15 @@ App.enableFullscreen = function(enabled) {
 // Called when the window size has changed.
 //
 App.onWindowSizeChanged = function() {
-	var size,
-		e = document.getElementById("gameCanvas");
-	if (App.isFullscreenEnabled()) {
-		size = cc.size(screen.width, screen.height);
-	} else {
-		size = cc.size(document.body.scrollWidth, document.body.scrollHeight);
-	}
-	cc.log("Fullscreen: " + App.isFullscreenEnabled() + ", " + size.width + "x" + size.height +
-		", canvas: " + e.width + "x" + e.height + ", " + e.style.width + " x " + e.style.height);
-	
-	/*cc.view.setFrameSize(winSize.width, winSize.height);*/
-	/*cc.view.setDesignResolutionSize(size.width, size.height, cc.ResolutionPolicy.SHOW_ALL);*/
+	/*var size = (App.isFullscreenEnabled() ?
+		cc.size(screen.width, screen.height) :
+		cc.size(this._origCanvasSize));
+	App.setCanvasSize(document.getElementById("gameDiv"), size.width, size.height);*/
+
+	/*App.setCanvasSize(document.getElementById("Cocos2dGameContainer"));
+	App.setCanvasSize(document.getElementById("gameDiv"));*/
+
+	App.callRunningLayer("onWindowSizeChanged");
 };
 
 //
@@ -1082,6 +1112,9 @@ App.loadImage = function(url, callback) {
 //
 App.boot = function(global) {
 	if (this.isHtml5()) {
+		App.setCanvasSize();
+		App.setCanvasSize(document.getElementById("gameDiv"),
+			this._origCanvasSize.width, this._origCanvasSize.height);
 	} else {
 		/* Ensure plugin is defined. */
 		global.plugin = global.plugin || {};
@@ -1166,6 +1199,7 @@ App.main = function() {
 			cc.ResolutionPolicy.NO_BORDER
 		);
 		cc.view.resizeWithBrowserSize(true);
+		/*window.addEventListener("resize", App.onWindowSizeChanged, false);*/
 
 		App.addImageData = function() {};
 	} else {

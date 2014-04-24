@@ -207,6 +207,16 @@ var LayerMenu = (function(){
 			this.buttonLogout.setVisible(loggedIn);
 			this.buttonLogin.setEnabled(true);
 			this.buttonLogout.setEnabled(true);
+		},
+
+//
+// ###  LayerMenu.onWindowSizeChanged
+//
+// Called when the window size changes or fullscreen mode is enabled / disabled.
+//
+		onWindowSizeChanged: function() {
+			this.buttonFullscreen.setVisible(!App.isFullscreenEnabled());
+			this.buttonMinimize.setVisible(App.isFullscreenEnabled());
 		}
 		
 	}); // end of layer extend
