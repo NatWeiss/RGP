@@ -169,7 +169,7 @@
 
 			<span class="hljs-comment">/* Create the logo. */</span>
 			<span class="hljs-keyword">this</span>.logo = cc.Sprite.create(<span class="hljs-string">"#Logo.png"</span>);
-			<span class="hljs-keyword">this</span>.logo.setPosition(App.centralize(<span class="hljs-number">0</span>, <span class="hljs-number">114</span>));
+			<span class="hljs-keyword">this</span>.logo.setPosition(App.centralize(<span class="hljs-number">20</span>, <span class="hljs-number">114</span>));
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.logo, <span class="hljs-number">1</span>);
 			<span class="hljs-keyword">this</span>.logo.setPositionY(<span class="hljs-keyword">this</span>.logo.getPositionY() + winSize.height);
 			<span class="hljs-keyword">this</span>.logo.runAction(cc.Sequence.create(
@@ -187,10 +187,10 @@
 			layer = cc.LayerColor.create(
 				cc.color(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">202</span>),
 				winSize.width * <span class="hljs-number">1.2</span>,
-				App.scale(<span class="hljs-number">215</span>)
+				App.scale(<span class="hljs-number">185</span>)
 			);
 			layer.x = App.scale(-<span class="hljs-number">20</span>);
-			layer.y = winSize.height * <span class="hljs-number">.5</span> - App.scale(<span class="hljs-number">290</span>) - winSize.height;
+			layer.y = winSize.height * <span class="hljs-number">.5</span> - App.scale(<span class="hljs-number">275</span>) - winSize.height;
 			layer.setRotation(-<span class="hljs-number">2</span>);
 			<span class="hljs-keyword">this</span>.addChild(layer, <span class="hljs-number">1</span>);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
@@ -321,6 +321,17 @@
 			<span class="hljs-keyword">this</span>.buttonLogout.setVisible(loggedIn);
 			<span class="hljs-keyword">this</span>.buttonLogin.setEnabled(<span class="hljs-literal">true</span>);
 			<span class="hljs-keyword">this</span>.buttonLogout.setEnabled(<span class="hljs-literal">true</span>);
+		},</pre></div>
+        
+      
+        
+        <h3 id="layermenu-onwindowsizechanged">LayerMenu.onWindowSizeChanged</h3>
+<p>Called when the window size changes or fullscreen mode is enabled / disabled.</p>
+
+        
+          <div class='highlight'><pre>		onWindowSizeChanged: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">this</span>.buttonFullscreen.setVisible(!App.isFullscreenEnabled());
+			<span class="hljs-keyword">this</span>.buttonMinimize.setVisible(App.isFullscreenEnabled());
 		}
 		
 	}); <span class="hljs-comment">// end of layer extend</span>

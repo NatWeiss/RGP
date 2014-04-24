@@ -176,6 +176,7 @@
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.menu, <span class="hljs-number">1</span>);
 
 			<span class="hljs-comment">/* Create everything else. */</span>
+			<span class="hljs-keyword">this</span>.playerImageWidth = App.scale(<span class="hljs-number">110</span>);
 			<span class="hljs-keyword">this</span>.createBg();
 			<span class="hljs-keyword">this</span>.createExchangeRate();
 			<span class="hljs-keyword">this</span>.createPlayerDetails();
@@ -183,7 +184,7 @@
 
 			<span class="hljs-comment">/* Create the back button. */</span>
 			App.createButton(<span class="hljs-keyword">this</span>, <span class="hljs-string">"ButtonBack.png"</span>, TAG_PAUSE,
-				App.centralize(-<span class="hljs-number">430</span>, -<span class="hljs-number">290</span>), cc.p(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>),
+				App.centralize(-<span class="hljs-number">390</span>, -<span class="hljs-number">250</span>), cc.p(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>),
 				cc.p(winSize.width * <span class="hljs-number">.5</span>, winSize.height), <span class="hljs-number">0.5</span>, <span class="hljs-number">0.25</span>, <span class="hljs-number">1.5</span>);
 
 			<span class="hljs-comment">/* Handle touch events. */</span>
@@ -207,7 +208,8 @@
 
         
           <div class='highlight'><pre>		createBg: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-			<span class="hljs-keyword">var</span> layer,
+			<span class="hljs-keyword">var</span> sprite,
+				layer,
 				winSize = App.getWinSize();
 			
 			layer = cc.LayerColor.create(
@@ -228,6 +230,12 @@
 				cc.MoveBy.create(<span class="hljs-number">0.5</span>, cc.p(-winSize.width, <span class="hljs-number">0</span>)),
 				<span class="hljs-number">1.5</span>
 			));
+			
+			<span class="hljs-keyword">if</span> (App.isHtml5()) {
+				sprite = cc.Sprite.create(<span class="hljs-string">"#LogoMini.png"</span>);
+				sprite.setPosition(App.centralize(-<span class="hljs-number">650</span>, <span class="hljs-number">360</span>));
+				<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">1</span>);
+			}
 		},</pre></div>
         
       
@@ -237,13 +245,13 @@
 
         
           <div class='highlight'><pre>		createExchangeRate: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-			<span class="hljs-keyword">var</span> pos = App.centralize(-<span class="hljs-number">120</span>, <span class="hljs-number">220</span>),
+			<span class="hljs-keyword">var</span> pos = App.centralize(-<span class="hljs-number">70</span>, <span class="hljs-number">220</span>),
 				font = App.config[<span class="hljs-string">"font"</span>],
 				label,
 				sprite,
 				winSize = App.getWinSize();
 			
-			label = cc.LabelTTF.create(<span class="hljs-string">"1"</span>, font, App.scale(<span class="hljs-number">80</span>));
+			label = cc.LabelTTF.create(<span class="hljs-string">"1"</span>, font, App.scale(<span class="hljs-number">60</span>));
 			label.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
 			label.setPosition(pos);
 			<span class="hljs-keyword">this</span>.addChild(label, <span class="hljs-number">1</span>);
@@ -255,8 +263,8 @@
 			sprite.setScale(<span class="hljs-number">0.5</span>);
 			<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">1</span>);
 
-			pos.x += App.scale(<span class="hljs-number">80</span>);
-			<span class="hljs-keyword">this</span>.rateLabel = cc.LabelTTF.create(<span class="hljs-string">" = 10"</span>, font, App.scale(<span class="hljs-number">80</span>));
+			pos.x += App.scale(<span class="hljs-number">30</span>);
+			<span class="hljs-keyword">this</span>.rateLabel = cc.LabelTTF.create(<span class="hljs-string">" = 10"</span>, font, App.scale(<span class="hljs-number">60</span>));
 			<span class="hljs-keyword">this</span>.rateLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
 			<span class="hljs-keyword">this</span>.rateLabel.setPosition(pos);
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.rateLabel, <span class="hljs-number">1</span>);
@@ -276,26 +284,33 @@
 
         
           <div class='highlight'><pre>		createPlayerImage: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url)</span> {</span>
+			<span class="hljs-keyword">var</span> image = <span class="hljs-literal">null</span>,
+				stencil = cc.Sprite.create(<span class="hljs-string">"#MaskCircle.png"</span>);
+
 			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.playerImage) {
 				<span class="hljs-keyword">this</span>.playerImage.removeFromParent(<span class="hljs-literal">true</span>);
 			}
 			<span class="hljs-keyword">this</span>.playerImage = <span class="hljs-literal">null</span>;
 
 			<span class="hljs-keyword">if</span> (url) {
-				<span class="hljs-keyword">this</span>.playerImage = cc.Sprite.create(url);
-				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.playerImage !== <span class="hljs-literal">null</span>) {
-					cc.log(<span class="hljs-string">"Player image: "</span> + <span class="hljs-keyword">this</span>.playerImage.width +
-						<span class="hljs-string">"x"</span> + <span class="hljs-keyword">this</span>.playerImage.height);
+				image = cc.Sprite.create(url);
+				<span class="hljs-keyword">if</span> (image !== <span class="hljs-literal">null</span>) {
+					cc.log(<span class="hljs-string">"Player image: "</span> + image.width +
+						<span class="hljs-string">"x"</span> + image.height);
 				}
 			}
-			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.playerImage === <span class="hljs-literal">null</span>) {
-				<span class="hljs-keyword">this</span>.playerImage = cc.Sprite.create(<span class="hljs-string">"#BlankAvatar.png"</span>);
+			<span class="hljs-keyword">if</span> (image === <span class="hljs-literal">null</span>) {
+				image = cc.Sprite.create(<span class="hljs-string">"#BlankAvatar.png"</span>);
 			}
-
-			<span class="hljs-keyword">this</span>.playerImage.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
-			<span class="hljs-keyword">this</span>.playerImage.setPosition(App.centralize(-<span class="hljs-number">420</span>, <span class="hljs-number">260</span>));
-			<span class="hljs-keyword">this</span>.playerImage.setScale(App.scale(<span class="hljs-number">60</span>) / <span class="hljs-keyword">this</span>.playerImage.width);
-			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.playerImage, <span class="hljs-number">1</span>);
+			
+			stencil.setScale(<span class="hljs-keyword">this</span>.playerImageWidth / stencil.width);
+			<span class="hljs-keyword">this</span>.playerImage = cc.ClippingNode.create(stencil);
+			<span class="hljs-keyword">this</span>.playerImage.setAlphaThreshold(<span class="hljs-number">0.05</span>);
+			image.setPosition(<span class="hljs-keyword">this</span>.playerImage.width * <span class="hljs-number">.5</span>, <span class="hljs-keyword">this</span>.playerImage.height * <span class="hljs-number">.5</span>);
+			image.setScale(<span class="hljs-keyword">this</span>.playerImageWidth / image.width);
+			<span class="hljs-keyword">this</span>.playerImage.addChild(image, <span class="hljs-number">1</span>);
+			<span class="hljs-keyword">this</span>.playerImage.setPosition(App.centralize(-<span class="hljs-number">390</span>, <span class="hljs-number">240</span>));
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.playerImage, <span class="hljs-number">2</span>);
 		},</pre></div>
         
       
@@ -330,7 +345,8 @@
 				font = App.config[<span class="hljs-string">"font"</span>],
 				winSize = App.getWinSize(),
 				numBux = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_bux"</span>),
-				numLemonades = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_lemonades"</span>);
+				numLemonades = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_lemonades"</span>),
+				sprite;
 			
 			<span class="hljs-keyword">this</span>.newLemonadesAmount = numLemonades;
 			<span class="hljs-keyword">this</span>.newBuxAmount = numBux;
@@ -338,32 +354,42 @@
 			
 			<span class="hljs-comment">/* Create the player's profile image. */</span>
 			<span class="hljs-keyword">this</span>.createPlayerImage(playerImageUrl);
+			sprite = cc.Sprite.create(<span class="hljs-string">"#ShadowOval.png"</span>);
+			sprite.x = <span class="hljs-keyword">this</span>.playerImage.x;
+			sprite.y = <span class="hljs-keyword">this</span>.playerImage.y - (<span class="hljs-keyword">this</span>.playerImageWidth * <span class="hljs-number">.5</span>);
+			<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">1</span>);
 			
 			<span class="hljs-comment">/* Create the player's name label. */</span>
 			<span class="hljs-keyword">this</span>.playerNameLabel = cc.LabelTTF.create(name, font, App.scale(<span class="hljs-number">48</span>));
 			<span class="hljs-keyword">this</span>.playerNameLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
-			<span class="hljs-keyword">this</span>.playerNameLabel.setPosition(App.centralize(-<span class="hljs-number">330</span>, <span class="hljs-number">260</span>));
+			<span class="hljs-keyword">this</span>.playerNameLabel.x = <span class="hljs-keyword">this</span>.playerImage.x + (<span class="hljs-keyword">this</span>.playerImageWidth * <span class="hljs-number">0.7</span>);
+			<span class="hljs-keyword">this</span>.playerNameLabel.y = <span class="hljs-keyword">this</span>.playerImage.y;
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.playerNameLabel, <span class="hljs-number">1</span>);
 			
+			<span class="hljs-comment">/* Currencies frame. */</span>
+			sprite = cc.Sprite.create(<span class="hljs-string">"#Frame.png"</span>);
+			sprite.setPosition(App.centralize(-<span class="hljs-number">325</span>, <span class="hljs-number">0</span>));
+			<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">1</span>);
+			
 			<span class="hljs-comment">/* Create the lemonades currency label. */</span>
-			<span class="hljs-keyword">this</span>.lemonadesIcon = cc.Sprite.create(<span class="hljs-string">"#Lemonade.png"</span>);
-			<span class="hljs-keyword">this</span>.lemonadesIcon.setPosition(App.centralize(-<span class="hljs-number">395</span>, <span class="hljs-number">130</span>));
-			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.lemonadesIcon, <span class="hljs-number">1</span>);
+			<span class="hljs-keyword">this</span>.lemonadesIcon = cc.Sprite.create(<span class="hljs-string">"#LemonadeDark.png"</span>);
+			<span class="hljs-keyword">this</span>.lemonadesIcon.setPosition(App.centralize(-<span class="hljs-number">395</span>, <span class="hljs-number">60</span>));
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.lemonadesIcon, <span class="hljs-number">2</span>);
 			<span class="hljs-keyword">this</span>.lemonadesIcon.setRotation(-<span class="hljs-number">2</span>);
 			<span class="hljs-keyword">this</span>.lemonadesIcon.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.2</span>, <span class="hljs-number">4</span>), <span class="hljs-number">3.0</span>),
 				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.5</span>, -<span class="hljs-number">4</span>), <span class="hljs-number">3.0</span>)
 			)));
-			<span class="hljs-keyword">this</span>.lemonadesLabel = cc.LabelTTF.create(numLemonades, font, App.scale(<span class="hljs-number">80</span>));
+			<span class="hljs-keyword">this</span>.lemonadesLabel = cc.LabelTTF.create(numLemonades, font, App.scale(<span class="hljs-number">60</span>));
 			<span class="hljs-keyword">this</span>.lemonadesLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
-			<span class="hljs-keyword">this</span>.lemonadesLabel.setPosition(App.centralize(-<span class="hljs-number">330</span>, <span class="hljs-number">130</span>));
-			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.lemonadesLabel, <span class="hljs-number">1</span>);
+			<span class="hljs-keyword">this</span>.lemonadesLabel.setPosition(App.centralize(-<span class="hljs-number">330</span>, <span class="hljs-number">60</span>));
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.lemonadesLabel, <span class="hljs-number">2</span>);
 
 			<span class="hljs-comment">/* Create the bux currency label. */</span>
 			<span class="hljs-keyword">this</span>.buxIcon = cc.Sprite.create(<span class="hljs-string">"#Bux.png"</span>);
-			<span class="hljs-keyword">this</span>.buxIcon.setPosition(App.centralize(-<span class="hljs-number">395</span>, -<span class="hljs-number">20</span>));
+			<span class="hljs-keyword">this</span>.buxIcon.setPosition(App.centralize(-<span class="hljs-number">395</span>, -<span class="hljs-number">70</span>));
 			<span class="hljs-keyword">this</span>.buxIcon.setScale(<span class="hljs-number">0.65</span>);
-			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.buxIcon, <span class="hljs-number">1</span>);
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.buxIcon, <span class="hljs-number">2</span>);
 			<span class="hljs-keyword">this</span>.buxIcon.setRotation(-<span class="hljs-number">4</span>);
 			<span class="hljs-keyword">this</span>.buxIcon.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.2</span>, <span class="hljs-number">8</span>), <span class="hljs-number">3.0</span>),
@@ -371,8 +397,8 @@
 			)));
 			<span class="hljs-keyword">this</span>.buxLabel = cc.LabelTTF.create(<span class="hljs-string">""</span> + numBux, font, App.scale(<span class="hljs-number">60</span>));
 			<span class="hljs-keyword">this</span>.buxLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
-			<span class="hljs-keyword">this</span>.buxLabel.setPosition(App.centralize(-<span class="hljs-number">310</span>, -<span class="hljs-number">20</span>));
-			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.buxLabel, <span class="hljs-number">1</span>);
+			<span class="hljs-keyword">this</span>.buxLabel.setPosition(App.centralize(-<span class="hljs-number">330</span>, -<span class="hljs-number">70</span>));
+			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.buxLabel, <span class="hljs-number">2</span>);
 		},</pre></div>
         
       
@@ -482,14 +508,14 @@
 			sprite = cc.Sprite.create(<span class="hljs-string">"#Lemonade.png"</span>);
 			sprite.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
 			sprite.setPosition(label.x + label.width * <span class="hljs-number">.5</span>, label.y);
-			sprite.setScale(<span class="hljs-number">0.55</span>);
+			sprite.setScale(<span class="hljs-number">0.75</span>);
 			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(sprite, <span class="hljs-number">1</span>);
 
 			pos.y -= ySpacing;
 			<span class="hljs-keyword">this</span>.finishExchangeSprite1 = cc.Sprite.create(<span class="hljs-string">"#Bux.png"</span>);
 			<span class="hljs-keyword">this</span>.finishExchangeSprite1.setAnchorPoint(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>);
 			<span class="hljs-keyword">this</span>.finishExchangeSprite1.setPosition(pos);
-			<span class="hljs-keyword">this</span>.finishExchangeSprite1.setScale(<span class="hljs-number">0.25</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite1.setScale(<span class="hljs-number">0.75</span>);
 			<span class="hljs-keyword">this</span>.finishExchangeSprite1.runAction(cc.RepeatForever.create(
 				cc.RotateBy.create(<span class="hljs-number">1.0</span>, <span class="hljs-number">360</span>)
 			));
@@ -519,7 +545,7 @@
 			<span class="hljs-keyword">this</span>.finishExchangeSprite2.x = <span class="hljs-keyword">this</span>.finishExchangeLabel3.x +
 				<span class="hljs-keyword">this</span>.finishExchangeLabel3.width * <span class="hljs-number">.5</span>;
 			<span class="hljs-keyword">this</span>.finishExchangeSprite2.y = <span class="hljs-keyword">this</span>.finishExchangeLabel3.y;
-			<span class="hljs-keyword">this</span>.finishExchangeSprite2.setScale(<span class="hljs-number">0.55</span>);
+			<span class="hljs-keyword">this</span>.finishExchangeSprite2.setScale(<span class="hljs-number">0.75</span>);
 			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(<span class="hljs-keyword">this</span>.finishExchangeSprite2, <span class="hljs-number">1</span>);
 			
 			<span class="hljs-keyword">this</span>.finishExchangeLabel1.setVisible(<span class="hljs-literal">false</span>);
@@ -700,7 +726,7 @@
 			<span class="hljs-comment">/* Create the streaks. */</span>
 			<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; len; i += <span class="hljs-number">1</span>) {
 				streak = cc.Sprite.create(<span class="hljs-string">"#Streak.png"</span>);
-				streak.setAnchorPoint(<span class="hljs-number">.5</span>, -<span class="hljs-number">.5</span>);
+				streak.setAnchorPoint(<span class="hljs-number">.5</span>, <span class="hljs-number">0</span>);
 				streak.setPosition(winSize.width * <span class="hljs-number">.5</span>, winSize.height * <span class="hljs-number">.5</span>);
 				streak.setRotation((i / len) * <span class="hljs-number">360</span>);
 				streak.setOpacity(<span class="hljs-number">0</span>);
@@ -948,7 +974,8 @@
 
         
           <div class='highlight'><pre>		setRateIconPos: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-			<span class="hljs-keyword">this</span>.rateIcon.x = <span class="hljs-keyword">this</span>.rateLabel.x + <span class="hljs-keyword">this</span>.rateLabel.width;
+			<span class="hljs-keyword">this</span>.rateIcon.x = <span class="hljs-keyword">this</span>.rateLabel.x + <span class="hljs-keyword">this</span>.rateLabel.width +
+				App.scale(<span class="hljs-number">15</span>);
 		},</pre></div>
         
       

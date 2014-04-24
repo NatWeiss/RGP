@@ -226,7 +226,9 @@
 			};
 		
 		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
-			<span class="hljs-keyword">if</span> (minDimension &gt;= <span class="hljs-number">600</span>) {
+			<span class="hljs-keyword">if</span> (minDimension &gt;= <span class="hljs-number">1200</span>) {
+				setResourceDir(<span class="hljs-string">"res/hdr"</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>);
+			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (minDimension &gt;= <span class="hljs-number">600</span>) {
 				setResourceDir(<span class="hljs-string">"res/hd"</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
 			} <span class="hljs-keyword">else</span> {
 				setResourceDir(<span class="hljs-string">"res/sd"</span>, <span class="hljs-number">1</span>, <span class="hljs-number">.5</span>);
@@ -391,7 +393,7 @@
 	<span class="hljs-keyword">if</span> (layer &amp;&amp; layer[methodName]) {
 		layer[methodName](param1, param2, param3);
 	} <span class="hljs-keyword">else</span> {
-		cc.log(<span class="hljs-string">"Couldn't find method '"</span> + methodName + <span class="hljs-string">"' in running scene or layer."</span>);
+		<span class="hljs-comment">/*cc.log("Couldn't find method '" + methodName + "' in running scene or layer.");*/</span>
 	}
 };</pre></div>
         
@@ -464,10 +466,10 @@
 
         
           <div class='highlight'><pre>App.isFullscreenAvailable = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
-		<span class="hljs-keyword">return</span> (screenfull &amp;&amp; screenfull.enabled);
-	}
-	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.isDesktop();
+	<span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.isHtml5() ?
+		<span class="hljs-keyword">typeof</span> screenfull !== <span class="hljs-string">"undefined"</span> &amp;&amp; screenfull.enabled :
+		<span class="hljs-keyword">this</span>.isDesktop()
+	);
 };</pre></div>
         
       
@@ -477,10 +479,10 @@
 
         
           <div class='highlight'><pre>App.isFullscreenEnabled = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
-		<span class="hljs-keyword">return</span> (screenfull &amp;&amp; screenfull.isFullscreen);
-	}
-	<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._fullscreenEnabled ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>;
+	<span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.isHtml5() ?
+		<span class="hljs-keyword">typeof</span> screenfull !== <span class="hljs-string">"undefined"</span> &amp;&amp; screenfull.isFullscreen :
+		<span class="hljs-keyword">this</span>._fullscreenEnabled ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>
+	);
 };</pre></div>
         
       
@@ -494,12 +496,44 @@
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isFullscreenAvailable()) {
 		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
 			<span class="hljs-keyword">if</span> (enabled) {
+				App.setCanvasSize(document.getElementById(<span class="hljs-string">"gameDiv"</span>),
+					screen.width, screen.height);
 				screenfull.request();
 			}
 			<span class="hljs-keyword">else</span> {
+				App.setCanvasSize(document.getElementById(<span class="hljs-string">"gameDiv"</span>),
+					<span class="hljs-keyword">this</span>._origCanvasSize.width, <span class="hljs-keyword">this</span>._origCanvasSize.height);
 				screenfull.exit();
 			}
 		}
+	}
+};</pre></div>
+        
+      
+        
+        <h3 id="app-setcanvassize">App.setCanvasSize</h3>
+<p>Sets the size of the game canvas.</p>
+
+        
+          <div class='highlight'><pre>App.setCanvasSize = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e, w, h)</span> {</span>
+	<span class="hljs-keyword">var</span> pixelRatio = window.devicePixelRatio || <span class="hljs-number">1</span>;
+	e = e || document.getElementById(cc.game.config[cc.game.CONFIG_KEY.id]);
+	w = w || document.body.clientWidth; <span class="hljs-comment">// or scrollWidth</span>
+	h = h || document.body.clientHeight;
+
+	e.width = w * pixelRatio;
+	e.height = h * pixelRatio;
+	e.style.width = w + <span class="hljs-string">"px"</span>;
+	e.style.height = h + <span class="hljs-string">"px"</span>;
+
+	cc.log(<span class="hljs-string">"Set #"</span> + e.getAttribute(<span class="hljs-string">"id"</span>) + <span class="hljs-string">" pixel ratio "</span> + pixelRatio +
+		<span class="hljs-string">", size "</span> + e.width + <span class="hljs-string">"x"</span> + e.height +
+		<span class="hljs-string">", style "</span> + e.style.width + <span class="hljs-string">" x "</span> + e.style.height +
+		<span class="hljs-string">", fullscreen "</span> + App.isFullscreenEnabled() +
+		<span class="hljs-string">", parent "</span> + e.parentNode.getAttribute(<span class="hljs-string">"id"</span>));
+	
+	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>._origCanvasSize === <span class="hljs-string">"undefined"</span>) {
+		<span class="hljs-keyword">this</span>._origCanvasSize = {width: w, height: h};
 	}
 };</pre></div>
         
@@ -510,18 +544,15 @@
 
         
           <div class='highlight'><pre>App.onWindowSizeChanged = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-	<span class="hljs-keyword">var</span> size,
-		e = document.getElementById(<span class="hljs-string">"gameCanvas"</span>);
-	<span class="hljs-keyword">if</span> (App.isFullscreenEnabled()) {
-		size = cc.size(screen.width, screen.height);
-	} <span class="hljs-keyword">else</span> {
-		size = cc.size(document.body.scrollWidth, document.body.scrollHeight);
-	}
-	cc.log(<span class="hljs-string">"Fullscreen: "</span> + App.isFullscreenEnabled() + <span class="hljs-string">", "</span> + size.width + <span class="hljs-string">"x"</span> + size.height +
-		<span class="hljs-string">", canvas: "</span> + e.width + <span class="hljs-string">"x"</span> + e.height + <span class="hljs-string">", "</span> + e.style.width + <span class="hljs-string">" x "</span> + e.style.height);
-	
-	<span class="hljs-comment">/*cc.view.setFrameSize(winSize.width, winSize.height);*/</span>
-	<span class="hljs-comment">/*cc.view.setDesignResolutionSize(size.width, size.height, cc.ResolutionPolicy.SHOW_ALL);*/</span>
+	<span class="hljs-comment">/*var size = (App.isFullscreenEnabled() ?
+		cc.size(screen.width, screen.height) :
+		cc.size(this._origCanvasSize));
+	App.setCanvasSize(document.getElementById("gameDiv"), size.width, size.height);*/</span>
+
+	<span class="hljs-comment">/*App.setCanvasSize(document.getElementById("Cocos2dGameContainer"));
+	App.setCanvasSize(document.getElementById("gameDiv"));*/</span>
+
+	App.callRunningLayer(<span class="hljs-string">"onWindowSizeChanged"</span>);
 };</pre></div>
         
       
@@ -561,8 +592,16 @@
           <div class='highlight'><pre>App.enableSound = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(enabled)</span> {</span>
 	<span class="hljs-keyword">this</span>._soundEnabled = enabled ? <span class="hljs-literal">true</span> : <span class="hljs-literal">false</span>;
 	cc.sys.localStorage.setItem(<span class="hljs-string">"soundEnabled"</span>, <span class="hljs-keyword">this</span>._soundEnabled);
+
 	<span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.isSoundEnabled()) {
 		cc.audioEngine.stopMusic();
+
+		<span class="hljs-comment">/* Check that the music stopped (Chrome bug). */</span>
+		cc.director.getRunningScene().schedule(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+			<span class="hljs-keyword">if</span> (!App.isSoundEnabled()) {
+				cc.audioEngine.stopMusic();
+			}
+		}, <span class="hljs-number">1</span>, <span class="hljs-number">15</span>);
 	}
 };</pre></div>
         
@@ -594,8 +633,19 @@
         
           <div class='highlight'><pre>App.playEffect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(filename)</span> {</span>
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isSoundEnabled()) {
-		cc.audioEngine.playEffect(filename);
+		<span class="hljs-keyword">return</span> cc.audioEngine.playEffect(filename);
 	}
+	<span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+};</pre></div>
+        
+      
+        
+        <h3 id="app-stopeffect">App.stopEffect</h3>
+<p>Stops the sound effect with the given id.</p>
+
+        
+          <div class='highlight'><pre>App.stopEffect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(audioId)</span> {</span>
+	cc.audioEngine.stopEffect(audioId);
 };</pre></div>
         
       
@@ -606,6 +656,7 @@
         
           <div class='highlight'><pre>App.playMusic = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(filename)</span> {</span>
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isSoundEnabled()) {
+		cc.audioEngine.stopMusic();
 		cc.audioEngine.playMusic(filename);
 	}
 };</pre></div>
@@ -657,8 +708,10 @@
 			<span class="hljs-keyword">this</span>._analyticsPlugin.setDebugMode(config[<span class="hljs-string">"debug"</span>]);
 			<span class="hljs-keyword">if</span> (config[<span class="hljs-string">"api-key"</span>] &amp;&amp; config[<span class="hljs-string">"api-key"</span>].length) {
 				<span class="hljs-keyword">this</span>._analyticsPlugin.startSession(config[<span class="hljs-string">"api-key"</span>]);
-				cc.log(<span class="hljs-string">"Analytics plugin session started with API key: "</span> +
-					config[<span class="hljs-string">"api-key"</span>].substr(<span class="hljs-number">0</span>,<span class="hljs-number">4</span>) + <span class="hljs-string">"..."</span>);
+				<span class="hljs-keyword">if</span> (config[<span class="hljs-string">"debug"</span>]) {
+					cc.log(<span class="hljs-string">"Analytics plugin session started with API key: "</span> +
+						config[<span class="hljs-string">"api-key"</span>].substr(<span class="hljs-number">0</span>,<span class="hljs-number">4</span>) + <span class="hljs-string">"..."</span>);
+				}
 			} <span class="hljs-keyword">else</span> {
 				cc.log(<span class="hljs-string">"Analytics plugin missing API key"</span>);
 			}
@@ -1216,6 +1269,9 @@
         
           <div class='highlight'><pre>App.boot = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(global)</span> {</span>
 	<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
+		App.setCanvasSize();
+		App.setCanvasSize(document.getElementById(<span class="hljs-string">"gameDiv"</span>),
+			<span class="hljs-keyword">this</span>._origCanvasSize.width, <span class="hljs-keyword">this</span>._origCanvasSize.height);
 	} <span class="hljs-keyword">else</span> {
 		<span class="hljs-comment">/* Ensure plugin is defined. */</span>
 		global.plugin = global.plugin || {};
@@ -1229,7 +1285,6 @@
 		<span class="hljs-built_in">require</span>(<span class="hljs-string">"js/lib/timers.js"</span>);
 		<span class="hljs-keyword">this</span>.timerLoop = makeWindowTimer(global, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(ms)</span>{</span>});
 		cc.director.getScheduler().scheduleCallbackForTarget(<span class="hljs-keyword">this</span>, <span class="hljs-keyword">this</span>.timerLoop);
-		<span class="hljs-comment">/*setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);*/</span>
 
 		<span class="hljs-comment">/* Location. */</span>
 		<span class="hljs-built_in">require</span>(<span class="hljs-string">"js/ConfigServer.js"</span>);
@@ -1254,6 +1309,8 @@
 			cc.RADIANS_TO_DEGREES = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(angle)</span> {</span><span class="hljs-keyword">return</span> angle * cc.DEG;};
 		}
 	}
+
+	<span class="hljs-comment">/*setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);*/</span>
 
 	<span class="hljs-comment">/* Embed the equivalent of main.js for faster loading. */</span>
 	cc.game.onStart = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
@@ -1300,8 +1357,11 @@
 			cc.ResolutionPolicy.NO_BORDER
 		);
 		cc.view.resizeWithBrowserSize(<span class="hljs-literal">true</span>);
+		<span class="hljs-comment">/*window.addEventListener("resize", App.onWindowSizeChanged, false);*/</span>
 
 		App.addImageData = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>};
+	} <span class="hljs-keyword">else</span> {
+		App.config[<span class="hljs-string">"font"</span>] = <span class="hljs-string">"res/"</span> + App.config[<span class="hljs-string">"font"</span>] + <span class="hljs-string">".ttf"</span>;
 	}
 
 	<span class="hljs-comment">/* Load plugins. */</span>

@@ -144,13 +144,23 @@ rapidgame:
 docco:
 	if [ -d docs ]; then rm -r docs; fi
 	cp README.md README.litcoffee
-	# strip begin/end from App.js, Config.js, README.md...
+	cp template/js/App.js template/js/App.js.bak
+	cp template/js/Config.js template/js/Config.js.bak
+	@rez/delete-text "# begin pro" README.litcoffee --newlines
+	@rez/delete-text "# end pro" README.litcoffee --newlines
+	@rez/delete-text "/* begin pro */" README.litcoffee
+	@rez/delete-text "/* end pro */" README.litcoffee
+	@rez/delete-text "// begin pro" template/js/Config.js --newlines
+	@rez/delete-text "// end pro" template/js/Config.js --newlines
+	@rez/delete-text "// begin pro" template/js/App.js --newlines
+	@rez/delete-text "// end pro" template/js/App.js --newlines
 	docco -l linear README.litcoffee template/server/Server.js template/js/*.js template/js/lib/AdsMobFox.js template/js/lib/Facebook.js
-	#docco -l linear README.litcoffee template/server/Server.js template/js/*.js
 	sed -i "" 's/README.litcoffee/README.md/g' docs/*.html
 	rm README.litcoffee
-	#
+	mv template/js/App.js.bak template/js/App.js
+	mv template/js/Config.js.bak template/js/Config.js
 	if [ -d LemonadeExchange/docs ]; then rm -r LemonadeExchange/docs; fi
+	# todo: remove begin/end pro from App.js
 	docco -o LemonadeExchange/docs -l linear LemonadeExchange/server/Server.js LemonadeExchange/js/*.js LemonadeExchange/js/lib/AdsMobFox.js LemonadeExchange/js/lib/Facebook.js
 
 docker:

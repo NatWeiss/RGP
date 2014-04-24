@@ -137,7 +137,7 @@ If your game uses In-App Purchases, they will need to be configured with iTunes 
 These steps ought to be enough to get the purchases working with your game. There should be no need to click **Ready to Upload Binary**.
 # end pro
 
-If prebuilding fails with the error `The following build commands failed: Write auxiliary files`, then please [upgrade Xcode](http://stackoverflow.com/questions/23016840/xcodebuild-fails-on-the-write-auxiliary-files-step).
+If prebuilding fails with the error *The following build commands failed: Write auxiliary files*, then please [upgrade Xcode](http://stackoverflow.com/questions/23016840/xcodebuild-fails-on-the-write-auxiliary-files-step).
 
 
 Android Notes

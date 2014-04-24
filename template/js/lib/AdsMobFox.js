@@ -156,7 +156,7 @@ if (typeof plugin.AdsMobFox === "undefined") {
 						App.callRunningLayer("onAdDismissed", false);
 						return;
 					}
-					//imageUrl = App.insert(imageUrl, "://", "www.corsproxy.com/");
+					/*imageUrl = App.insert(imageUrl, "://", "www.corsproxy.com/");*/
 					module.adUrl = App.between(html, "href=\"", "\"");
 					
 					module.log("Image: " + imageUrl + ", click URL:" + module.adUrl);

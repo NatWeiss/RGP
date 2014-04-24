@@ -262,14 +262,9 @@
 						module.log(<span class="hljs-string">"No ad url found"</span>);
 						App.callRunningLayer(<span class="hljs-string">"onAdDismissed"</span>, <span class="hljs-literal">false</span>);
 						<span class="hljs-keyword">return</span>;
-					}</pre></div>
-        
-      
-        
-        <p>imageUrl = App.insert(imageUrl, “://“, “www.corsproxy.com/“);</p>
-
-        
-          <div class='highlight'><pre>					module.adUrl = App.between(html, <span class="hljs-string">"href=\""</span>, <span class="hljs-string">"\""</span>);
+					}
+					<span class="hljs-comment">/*imageUrl = App.insert(imageUrl, "://", "www.corsproxy.com/");*/</span>
+					module.adUrl = App.between(html, <span class="hljs-string">"href=\""</span>, <span class="hljs-string">"\""</span>);
 					
 					module.log(<span class="hljs-string">"Image: "</span> + imageUrl + <span class="hljs-string">", click URL:"</span> + module.adUrl);
 					
