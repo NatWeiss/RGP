@@ -226,7 +226,7 @@
 			};
 		
 		<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isHtml5()) {
-			<span class="hljs-keyword">if</span> (minDimension &gt;= <span class="hljs-number">1200</span>) {
+			<span class="hljs-keyword">if</span> (minDimension &gt;= <span class="hljs-number">1200</span> &amp;&amp; <span class="hljs-keyword">this</span>._pixelRatio &gt; <span class="hljs-number">1</span>) {
 				setResourceDir(<span class="hljs-string">"res/hdr"</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>);
 			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (minDimension &gt;= <span class="hljs-number">600</span>) {
 				setResourceDir(<span class="hljs-string">"res/hd"</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>);
@@ -516,17 +516,17 @@
 
         
           <div class='highlight'><pre>App.setCanvasSize = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e, w, h)</span> {</span>
-	<span class="hljs-keyword">var</span> pixelRatio = window.devicePixelRatio || <span class="hljs-number">1</span>;
+	<span class="hljs-keyword">this</span>._pixelRatio = window.devicePixelRatio || <span class="hljs-number">1</span>;
 	e = e || document.getElementById(cc.game.config[cc.game.CONFIG_KEY.id]);
 	w = w || document.body.clientWidth; <span class="hljs-comment">// or scrollWidth</span>
 	h = h || document.body.clientHeight;
 
-	e.width = w * pixelRatio;
-	e.height = h * pixelRatio;
+	e.width = w * <span class="hljs-keyword">this</span>._pixelRatio;
+	e.height = h * <span class="hljs-keyword">this</span>._pixelRatio;
 	e.style.width = w + <span class="hljs-string">"px"</span>;
 	e.style.height = h + <span class="hljs-string">"px"</span>;
 
-	cc.log(<span class="hljs-string">"Set #"</span> + e.getAttribute(<span class="hljs-string">"id"</span>) + <span class="hljs-string">" pixel ratio "</span> + pixelRatio +
+	cc.log(<span class="hljs-string">"Set #"</span> + e.getAttribute(<span class="hljs-string">"id"</span>) + <span class="hljs-string">" pixel ratio "</span> + <span class="hljs-keyword">this</span>._pixelRatio +
 		<span class="hljs-string">", size "</span> + e.width + <span class="hljs-string">"x"</span> + e.height +
 		<span class="hljs-string">", style "</span> + e.style.width + <span class="hljs-string">" x "</span> + e.style.height +
 		<span class="hljs-string">", fullscreen "</span> + App.isFullscreenEnabled() +

@@ -108,7 +108,7 @@ App.getResourceDir = function() {
 			};
 		
 		if (this.isHtml5()) {
-			if (minDimension >= 1200) {
+			if (minDimension >= 1200 && this._pixelRatio > 1) {
 				setResourceDir("res/hdr", 1, 2);
 			} else if (minDimension >= 600) {
 				setResourceDir("res/hd", 1, 1);
@@ -383,17 +383,17 @@ App.enableFullscreen = function(enabled) {
 // Sets the size of the game canvas.
 //
 App.setCanvasSize = function(e, w, h) {
-	var pixelRatio = window.devicePixelRatio || 1;
+	this._pixelRatio = window.devicePixelRatio || 1;
 	e = e || document.getElementById(cc.game.config[cc.game.CONFIG_KEY.id]);
 	w = w || document.body.clientWidth; // or scrollWidth
 	h = h || document.body.clientHeight;
 
-	e.width = w * pixelRatio;
-	e.height = h * pixelRatio;
+	e.width = w * this._pixelRatio;
+	e.height = h * this._pixelRatio;
 	e.style.width = w + "px";
 	e.style.height = h + "px";
 
-	cc.log("Set #" + e.getAttribute("id") + " pixel ratio " + pixelRatio +
+	cc.log("Set #" + e.getAttribute("id") + " pixel ratio " + this._pixelRatio +
 		", size " + e.width + "x" + e.height +
 		", style " + e.style.width + " x " + e.style.height +
 		", fullscreen " + App.isFullscreenEnabled() +

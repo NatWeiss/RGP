@@ -177,6 +177,15 @@ icons:
 	cp rez/KandleIcon-misc/KandleIcon-round.ico template/proj.win32/res/game.ico
 	cp rez/KandleIcon-misc/favicon_32x32.ico template/proj.html5/favicon.ico
 	cp rez/KandleIcon-misc/KandleIcon-round_512x512x32.png template/proj.linux/Icon-512.png
+	cp rez/LE-Icon-iOS/Icon*.png LemonadeExchange/proj.ios_mac/ios
+	cp rez/LE-Icon-Android/36.png LemonadeExchange/proj.android/res/drawable-ldpi/icon.png
+	cp rez/LE-Icon-Android/48.png LemonadeExchange/proj.android/res/drawable-mdpi/icon.png
+	cp rez/LE-Icon-Android/72.png LemonadeExchange/proj.android/res/drawable-hdpi/icon.png
+	cp rez/LE-Icon-Android/96.png LemonadeExchange/proj.android/res/drawable-xhdpi/icon.png
+	cp rez/LE-Icon-misc/LE-Icon-Rounded.icns LemonadeExchange/proj.ios_mac/mac/Icon.icns
+	cp rez/LE-Icon-misc/LE-Icon-Rounded.ico LemonadeExchange/proj.win32/res/game.ico
+	cp rez/LE-Icon-misc/favicon-32.ico LemonadeExchange/proj.html5/favicon.ico
+	cp rez/LE-Icon-misc/LE-Icon-Rounded_512x512x32.png LemonadeExchange/proj.linux/Icon-512.png
 
 lemonadex: dest=.
 lemonadex: name=LemonadeExchange
