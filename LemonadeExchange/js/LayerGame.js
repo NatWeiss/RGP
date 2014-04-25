@@ -102,10 +102,10 @@ var LayerGame = (function(){
 			layer = cc.LayerColor.create(
 				cc.color(0,0,0,202),
 				App.scale(590),
-				winSize.height * 1.2
+				winSize.height * 1.1
 			);
 			layer.x = winSize.width * .5 + App.scale(-144);
-			layer.y = winSize.height * -.1;
+			layer.y = winSize.height * -.05;
 			layer.setRotation(-2);
 			this.addChild(layer);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
@@ -137,7 +137,7 @@ var LayerGame = (function(){
 				sprite,
 				winSize = App.getWinSize();
 			
-			label = cc.LabelTTF.create("1", font, App.scale(60));
+			label = cc.LabelTTF.create("1 ", font, App.scale(60));
 			label.setAnchorPoint(0, .5);
 			label.setPosition(pos);
 			this.addChild(label, 1);
@@ -150,7 +150,7 @@ var LayerGame = (function(){
 			this.addChild(sprite, 1);
 
 			pos.x += App.scale(30);
-			this.rateLabel = cc.LabelTTF.create(" = 10", font, App.scale(60));
+			this.rateLabel = cc.LabelTTF.create(" = 10 ", font, App.scale(60));
 			this.rateLabel.setAnchorPoint(0, .5);
 			this.rateLabel.setPosition(pos);
 			this.addChild(this.rateLabel, 1);
@@ -243,7 +243,7 @@ var LayerGame = (function(){
 			this.addChild(sprite, 1);
 			
 			/* Create the player's name label. */
-			this.playerNameLabel = cc.LabelTTF.create(name, font, App.scale(48));
+			this.playerNameLabel = cc.LabelTTF.create(name + " ", font, App.scale(48));
 			this.playerNameLabel.setAnchorPoint(0, .5);
 			this.playerNameLabel.x = this.playerImage.x + (this.playerImageWidth * 0.7);
 			this.playerNameLabel.y = this.playerImage.y;
@@ -263,7 +263,7 @@ var LayerGame = (function(){
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 4), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -4), 3.0)
 			)));
-			this.lemonadesLabel = cc.LabelTTF.create(numLemonades, font, App.scale(60));
+			this.lemonadesLabel = cc.LabelTTF.create(numLemonades + " ", font, App.scale(60));
 			this.lemonadesLabel.setAnchorPoint(0, .5);
 			this.lemonadesLabel.setPosition(App.centralize(-330, 60));
 			this.addChild(this.lemonadesLabel, 2);
@@ -278,7 +278,7 @@ var LayerGame = (function(){
 				cc.EaseInOut.create(cc.RotateBy.create(2.2, 8), 3.0),
 				cc.EaseInOut.create(cc.RotateBy.create(2.5, -8), 3.0)
 			)));
-			this.buxLabel = cc.LabelTTF.create("" + numBux, font, App.scale(60));
+			this.buxLabel = cc.LabelTTF.create("" + numBux + " ", font, App.scale(60));
 			this.buxLabel.setAnchorPoint(0, .5);
 			this.buxLabel.setPosition(App.centralize(-330, -70));
 			this.addChild(this.buxLabel, 2);
@@ -373,7 +373,7 @@ var LayerGame = (function(){
 			this.addChild(this.exchangeLayer, 1);
 			
 			str = App.getSocialPlugin().getPlayerName();
-			label = cc.LabelTTF.create(str, font, fontSize);
+			label = cc.LabelTTF.create(str + " ", font, fontSize);
 			label.setAnchorPoint(.5, .5);
 			label.setPosition(pos);
 			this.exchangeLayer.addChild(label, 1);
@@ -404,13 +404,13 @@ var LayerGame = (function(){
 			this.createFriendImage(friendUrl);
 			
 			pos.y -= ySpacing;
-			str = (this.exchangeVerb === "buy" ? "Bought by" : "Sold to");
+			str = (this.exchangeVerb === "buy" ? "Bought by " : "Sold to ");
 			this.finishExchangeLabel1 = cc.LabelTTF.create(str, font, fontSize);
 			this.finishExchangeLabel1.setPosition(pos);
 			this.exchangeLayer.addChild(this.finishExchangeLabel1, 1);
 
 			pos.y -= ySpacing;
-			this.finishExchangeLabel2 = cc.LabelTTF.create(friendName, font, fontSize);
+			this.finishExchangeLabel2 = cc.LabelTTF.create(friendName + " ", font, fontSize);
 			this.finishExchangeLabel2.setPosition(pos);
 			this.exchangeLayer.addChild(this.finishExchangeLabel2, 1);
 
@@ -718,7 +718,7 @@ var LayerGame = (function(){
 				bux += this.animateBuxIncrement;
 				funcName = this.animateBuxIncrement > 0 ? "min" : "max";
 				bux = Math[funcName](bux, this.newBuxAmount);
-				this.buxLabel.setString(bux);
+				this.buxLabel.setString(bux + " ");
 			}
 			if (lemonades !== this.newLemonadesAmount) {
 				if (lemonades < this.newLemonadesAmount) {
@@ -730,7 +730,7 @@ var LayerGame = (function(){
 				lemonades += this.animateLemonadesIncrement;
 				funcName = this.animateLemonadesIncrement > 0 ? "min" : "max";
 				lemonades = Math[funcName](lemonades, this.newLemonadesAmount);
-				this.lemonadesLabel.setString(lemonades);
+				this.lemonadesLabel.setString(lemonades + " ");
 			}
 		},
 		
@@ -839,7 +839,7 @@ var LayerGame = (function(){
 //
 		setRateIconPos: function() {
 			this.rateIcon.x = this.rateLabel.x + this.rateLabel.width +
-				App.scale(15);
+				App.scale(-5);
 		},
 		
 //
@@ -945,7 +945,7 @@ var LayerGame = (function(){
 					value = 0.01;
 				}
 				scene.layer.exchangeRate = value;
-				scene.layer.rateLabel.setString(" = " + value);
+				scene.layer.rateLabel.setString(" = " + value + " ");
 				scene.layer.setRateIconPos();
 				scene.layer.enableActionButtons();
 			}
@@ -980,7 +980,7 @@ var LayerGame = (function(){
 // Called when the player's name is retrieved.
 //
 		onGetMyPlayerName: function(name) {
-			this.playerNameLabel.setString(name);
+			this.playerNameLabel.setString(name + " ");
 		},
 		
 //
@@ -996,8 +996,8 @@ var LayerGame = (function(){
 			
 			if (this.newBuxAmount || this.newLemonadesAmount) {
 				this.unscheduleAllCallbacks();
-				this.buxLabel.setString(this.newBuxAmount);
-				this.lemonadesLabel.setString(this.newLemonadesAmount);
+				this.buxLabel.setString(this.newBuxAmount + " ");
+				this.lemonadesLabel.setString(this.newLemonadesAmount + " ");
 			}
 			
 			this.newBuxAmount = Soomla.storeInventory.getItemBalance("currency_bux"),

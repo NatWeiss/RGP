@@ -181,10 +181,12 @@ if (typeof plugin.Facebook === "undefined") {
 				request = "/" + id + "/picture?redirect=0" +
 					"&width=" + dim + "&height=" + dim;
 				FB.api(request, function(response) {
+					var url;
 					if (response && response.data && response.data.url) {
-						module.log("Got image url " + response.data.url + " for " + id);
-						App.loadImage(response.data.url, function(){
-							module.playerImageUrls[id] = response.data.url;
+						url = response.data.url;
+						module.log("Got image url " + url + " for " + id);
+						App.loadImage(url, function(){
+							module.playerImageUrls[id] = url;
 							App.callRunningLayer(
 								"onPlayerImageLoaded",
 								id,

@@ -284,7 +284,11 @@ App.getResourcesToPreload = function() {
 	if (files) {
 		for (i = 0; i < files.length; i += 1) {
 			if (files[i] && files[i].length) {
-				ret[i] = dir + "/" + files[i];
+				if (files[i].indexOf("/") < 0) {
+					ret[i] = dir + "/" + files[i];
+				} else {
+					ret[i] = files[i];
+				}
 			}
 		}
 	} else {
@@ -383,7 +387,8 @@ App.enableFullscreen = function(enabled) {
 // Sets the size of the game canvas.
 //
 App.setCanvasSize = function(e, w, h) {
-	this._pixelRatio = window.devicePixelRatio || 1;
+	var allowHtmlRetina = false;
+	this._pixelRatio = (allowHtmlRetina ? window.devicePixelRatio || 1 : 1);
 	e = e || document.getElementById(cc.game.config[cc.game.CONFIG_KEY.id]);
 	w = w || document.body.clientWidth; // or scrollWidth
 	h = h || document.body.clientHeight;
@@ -1080,7 +1085,7 @@ App.loadImage = function(url, callback) {
 		var image = new Image();
 		/* If anonymous doesn't work, try: */
 		/* url = App.insert(url, "://", "www.corsproxy.com/"); */
-		/*image.crossOrigin = "Anonymous";*/
+		image.crossOrigin = "Anonymous";
 		image.src = url;
 
 		/*cc.log("Loading image: " + url);*/

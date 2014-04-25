@@ -54,6 +54,11 @@ var LayerMenu = (function(){
 			this.menu = cc.Menu.create();
 			this.menu.setPosition(0,0);
 			this.addChild(this.menu, 2);
+			
+			/* Preload font. */
+			label = cc.LabelTTF.create(" ", App.config["font"], 1);
+			label.x = -4000;
+			this.addChild(label, -1);
 
 			/* Create the logo. */
 			this.logo = cc.Sprite.create("#Logo.png");
