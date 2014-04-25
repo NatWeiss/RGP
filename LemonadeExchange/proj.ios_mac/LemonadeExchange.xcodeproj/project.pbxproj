@@ -531,7 +531,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = mac/Info.plist;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-Mac/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-Mac/$(PLATFORM_NAME)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = LemonadeExchange;
 				SDKROOT = macosx;
@@ -549,7 +549,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = mac/Info.plist;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-Mac/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../lib/cocos2dx-prebuilt/lib/$(CONFIGURATION)-Mac/$(PLATFORM_NAME)";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = LemonadeExchange;
 				SDKROOT = macosx;
