@@ -207,10 +207,14 @@
 
         
           <div class='highlight'><pre>		module.showAds = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(infoObj)</span> {</span>
-			<span class="hljs-keyword">var</span> typeEnum = infoObj[<span class="hljs-string">"type"</span>] || <span class="hljs-number">0</span>,
+			<span class="hljs-keyword">var</span> i,
+				tries = <span class="hljs-number">0</span>,
+				typeEnum = infoObj[<span class="hljs-string">"type"</span>] || <span class="hljs-number">0</span>,
 				sizeEnum = infoObj[<span class="hljs-string">"size"</span>] || <span class="hljs-number">0</span>,
 				posEnum = infoObj[<span class="hljs-string">"position"</span>] || <span class="hljs-number">0</span>,
-				uuid = App.getUUID();
+				uuid = App.getUUID(),
+				requestUrl,
+				responseHandler;
 		
 			<span class="hljs-comment">/* Wait until client geo data is full. */</span>
 			<span class="hljs-keyword">if</span> (module.geoData === <span class="hljs-literal">null</span>) {
@@ -224,9 +228,32 @@
 			module.hideAds();
 			
 			<span class="hljs-comment">/* Proceed with showing ad. */</span>
-			<span class="hljs-keyword">var</span> doVideo = <span class="hljs-literal">false</span>,
+			<span class="hljs-keyword">var</span> params,
+				url,
 				isFullscreen = (typeEnum === plugin.AdsType.FullScreenAd),
-				url = <span class="hljs-string">"http://my.mobfox.com/"</span> + (doVideo ? <span class="hljs-string">"v"</span> :<span class="hljs-string">""</span>) + <span class="hljs-string">"request.php"</span>,
+				urlBase = <span class="hljs-string">"http://my.mobfox.com/"</span> + (isFullscreen ? <span class="hljs-string">"v"</span> : <span class="hljs-string">""</span>) +
+					<span class="hljs-string">"request.php"</span>;
+			
+			<span class="hljs-keyword">if</span> (isFullscreen) {
+				params = {
+					<span class="hljs-string">"sdk"</span>: <span class="hljs-string">"vad"</span>,
+					<span class="hljs-string">"c.mraid"</span>: <span class="hljs-number">0</span>,
+					<span class="hljs-string">"o_iosadvidlimit"</span>: <span class="hljs-number">0</span>,
+					<span class="hljs-string">"u"</span>: <span class="hljs-string">"Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_3 like Mac OS X) "</span> +
+						<span class="hljs-string">"AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B508"</span>,
+					<span class="hljs-string">"u_wv"</span>: <span class="hljs-string">"Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_3 like Mac OS X) "</span> +
+						<span class="hljs-string">"AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B508"</span>,
+					<span class="hljs-string">"u_br"</span>: <span class="hljs-string">"Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_3 like Mac OS X) "</span> +
+						<span class="hljs-string">"AppleWebKit/537.51.1 (KHTML, like Gecko) Version/unknown "</span> +
+						<span class="hljs-string">"Mobile/11B508 Safari/unknown"</span>,
+					<span class="hljs-string">"v"</span>: <span class="hljs-string">"5.0.0"</span>,
+					<span class="hljs-string">"s"</span>: module.devInfo.apiKey,
+					<span class="hljs-string">"iphone_osversion"</span>: <span class="hljs-string">"7.0.3"</span>,
+					<span class="hljs-string">"o_iosadvid"</span>: <span class="hljs-string">"ABCDEF01-2345-6789-ABCD-EF0123456789"</span>,
+					<span class="hljs-string">"rt"</span>: <span class="hljs-string">"iphone_app"</span>,
+					<span class="hljs-string">"i"</span>: module.geoData.ip
+				};
+			} <span class="hljs-keyword">else</span> {
 				params = {
 					rt: <span class="hljs-string">"api"</span>,
 					s: module.devInfo.apiKey,
@@ -240,48 +267,99 @@
 					no_markup: <span class="hljs-number">1</span>,
 					allow_mr: <span class="hljs-number">1</span>,
 					longitude: module.geoData.lng,
-					latitude: module.geoData.lat
+					latitude: module.geoData.lat,
+					<span class="hljs-string">"adspace.width"</span>: <span class="hljs-built_in">parseInt</span>(App.winSize.width),
+					<span class="hljs-string">"adspace.height"</span>: (App.winSize.width &gt;= <span class="hljs-number">1024</span> ? <span class="hljs-number">90</span> : <span class="hljs-number">50</span>)
 				};
-			<span class="hljs-keyword">if</span> (isFullscreen) {
-				params[<span class="hljs-string">"adspace.width"</span>] = <span class="hljs-built_in">parseInt</span>(App.winSize.width);
-				params[<span class="hljs-string">"adspace.height"</span>] = <span class="hljs-built_in">parseInt</span>(App.winSize.height);
-				posEnum = plugin.AdsPos.Center;
-			} <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (typeEnum === plugin.AdsType.BannerAd) {
-				<span class="hljs-keyword">if</span> (sizeEnum &gt; <span class="hljs-number">0</span>) {
-					params[<span class="hljs-string">"adspace.width"</span>] = <span class="hljs-built_in">parseInt</span>(App.winSize.width);
-					params[<span class="hljs-string">"adspace.height"</span>] = (App.winSize.width &gt;= <span class="hljs-number">1024</span> ? <span class="hljs-number">90</span> : <span class="hljs-number">50</span>);
-				}
 			}
-
-			<span class="hljs-comment">/* Encode url. */</span>
-			url = App.insert(url, <span class="hljs-string">"://"</span>, <span class="hljs-string">"www.corsproxy.com/"</span>),
-			url += App.encodeURIComponents(params);
-			module.log(<span class="hljs-string">"Requesting: "</span> + url);
 			
-			<span class="hljs-comment">/* Get the ad data. */</span>
-			App.requestUrl(url, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(adResponse, adStatus)</span> {</span>
-				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> adResponse !== <span class="hljs-string">"undefined"</span>) {
-					<span class="hljs-keyword">var</span> html = adResponse,
-						imageUrl = App.between(html, <span class="hljs-string">"src=\""</span>, <span class="hljs-string">"\""</span>);
+			<span class="hljs-comment">/* Ad requester. */</span>
+			requestUrl = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+				url = App.insert(urlBase, <span class="hljs-string">"://"</span>, <span class="hljs-string">"www.corsproxy.com/"</span>);
+				<span class="hljs-keyword">if</span> (isFullscreen) {
+					params[<span class="hljs-string">"t"</span>] = <span class="hljs-built_in">parseFloat</span>(<span class="hljs-built_in">Date</span>.now() / <span class="hljs-number">1000</span>).toFixed(<span class="hljs-number">6</span>);
+				}
+				url += App.encodeURIComponents(params);
+				App.requestUrl(url, responseHandler);
+			};
 
-					module.log(<span class="hljs-string">"Ad response: "</span> + html);
-					<span class="hljs-keyword">if</span> (!imageUrl.length) {
-						module.log(<span class="hljs-string">"No ad url found"</span>);
-						App.callRunningLayer(<span class="hljs-string">"onAdDismissed"</span>, <span class="hljs-literal">false</span>);
+			<span class="hljs-comment">/* Ad response handler. */</span>
+			responseHandler = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(adResponse, adStatus)</span> {</span>
+				<span class="hljs-keyword">var</span> html = adResponse,
+					start = <span class="hljs-number">0</span>,
+					newStart,
+					imageHtml,
+					imageCount = <span class="hljs-number">0</span>,
+					imageUrl;
+
+				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> adResponse === <span class="hljs-string">"undefined"</span>) {
+					module.log(<span class="hljs-string">"Error retrieving ad data, status: "</span> + adStatus);
+					<span class="hljs-keyword">return</span>;
+				}
+				module.adUrl = App.between(html, <span class="hljs-string">"href=\""</span>, <span class="hljs-string">"\""</span>);
+				<span class="hljs-keyword">if</span> (!module.adUrl.length) {
+					module.adUrl = App.between(html, <span class="hljs-string">"href='"</span>, <span class="hljs-string">"'"</span>);
+				}
+				start = module.adUrl.indexOf(<span class="hljs-string">"http"</span>);
+				<span class="hljs-keyword">if</span> (start &gt; <span class="hljs-number">0</span>) {
+					module.adUrl = module.adUrl.substr(start);
+				}
+				start = <span class="hljs-number">0</span>;
+				module.log(<span class="hljs-string">"Ad response: "</span> + html);
+				<span class="hljs-keyword">if</span> (!module.adUrl.length) {
+					tries += <span class="hljs-number">1</span>;
+					<span class="hljs-keyword">if</span> (tries &lt; <span class="hljs-number">3</span>) {
+						i = App.rand(<span class="hljs-number">150</span>) + <span class="hljs-number">150</span>;
+						cc.log(<span class="hljs-string">"No response "</span> + tries +
+							<span class="hljs-string">", waiting "</span> + i + <span class="hljs-string">" and trying again"</span>);
+						setTimeout(requestUrl, i);
 						<span class="hljs-keyword">return</span>;
 					}
-					<span class="hljs-comment">/*imageUrl = App.insert(imageUrl, "://", "www.corsproxy.com/");*/</span>
-					module.adUrl = App.between(html, <span class="hljs-string">"href=\""</span>, <span class="hljs-string">"\""</span>);
-					
-					module.log(<span class="hljs-string">"Image: "</span> + imageUrl + <span class="hljs-string">", click URL:"</span> + module.adUrl);
-					
-					App.loadImage(imageUrl, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-						module.showImage(imageUrl, typeEnum, sizeEnum, posEnum);
-					});
-				} <span class="hljs-keyword">else</span> {
-					module.log(<span class="hljs-string">"Error retrieving ad data, status: "</span> + adStatus);
 				}
-			});
+				module.log(<span class="hljs-string">"Ad URL:"</span> + module.adUrl);
+
+				<span class="hljs-keyword">do</span> {
+					newStart = html.indexOf(<span class="hljs-string">"&lt;img "</span>, start);
+					<span class="hljs-comment">/*module.log("Start " + start + " new start " + newStart);*/</span>
+					<span class="hljs-keyword">if</span> (newStart &lt;= start) {
+						<span class="hljs-keyword">break</span>;
+					}
+					start = newStart;
+
+					imageHtml = App.between(html, <span class="hljs-string">"&lt;img"</span>, <span class="hljs-string">"&gt;"</span>, start);
+					<span class="hljs-comment">/*module.log("Image html " + imageHtml);*/</span>
+					start += <span class="hljs-number">1</span>;
+					
+					imageUrl = App.between(imageHtml, <span class="hljs-string">"src=\""</span>, <span class="hljs-string">"\""</span>);
+					<span class="hljs-keyword">if</span> (!imageUrl.length) {
+						imageUrl = App.between(imageHtml, <span class="hljs-string">"src='"</span>, <span class="hljs-string">"'"</span>);
+						<span class="hljs-keyword">if</span> (!imageUrl.length) {
+							<span class="hljs-keyword">break</span>;
+						}
+					}
+					imageCount++;
+					imageUrl = App.insert(imageUrl, <span class="hljs-string">"://"</span>, <span class="hljs-string">"www.corsproxy.com/"</span>);
+					module.log(<span class="hljs-string">"Image "</span> + imageCount + <span class="hljs-string">": "</span> +
+						(imageUrl.length &gt; <span class="hljs-number">128</span> ?
+							imageUrl.substr(<span class="hljs-number">0</span>,<span class="hljs-number">128</span>) + <span class="hljs-string">"..."</span> :
+							imageUrl
+						)
+					);
+					<span class="hljs-keyword">if</span> (imageCount &gt; <span class="hljs-number">10</span>) {
+						<span class="hljs-keyword">break</span>;
+					}
+					
+					App.loadImage(imageUrl, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url)</span> {</span>
+						module.showImage(url, typeEnum, sizeEnum, posEnum);
+					});
+				} <span class="hljs-keyword">while</span>(imageUrl.length);
+				
+				<span class="hljs-keyword">if</span> (imageCount == <span class="hljs-number">0</span>) {
+					module.log(<span class="hljs-string">"No images found"</span>);
+					App.callRunningLayer(<span class="hljs-string">"onAdDismissed"</span>, <span class="hljs-literal">false</span>);
+				}
+			};
+			requestUrl();
 		};</pre></div>
         
       
@@ -291,13 +369,25 @@
 
         
           <div class='highlight'><pre>		module.showImage = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(imageUrl, typeEnum, sizeEnum, posEnum)</span> {</span>
-			<span class="hljs-keyword">var</span> sprite,
+			<span class="hljs-keyword">var</span> texture,
+				sprite,
 				scene,
 				menu,
 				closeButton = <span class="hljs-literal">null</span>,
 				normalSprite,
 				selectedSprite,
-				disabledSprite;
+				disabledSprite,
+				lower = imageUrl.toLowerCase(),
+				isImage = (lower.indexOf(<span class="hljs-string">".gif"</span>) &gt; <span class="hljs-number">0</span>
+					|| lower.indexOf(<span class="hljs-string">".jpg"</span>) &gt; <span class="hljs-number">0</span>
+					|| lower.indexOf(<span class="hljs-string">".png"</span>) &gt; <span class="hljs-number">0</span>);
+			
+			<span class="hljs-comment">/* Check the texture. */</span>
+			texture = cc.textureCache.textureForKey(imageUrl);
+			<span class="hljs-keyword">if</span> (!isImage || !texture || texture.getContentSize().width &lt; <span class="hljs-number">10</span>) {
+				<span class="hljs-comment">/*module.log("Not showing image: " + imageUrl.substr(0,128));*/</span>
+				<span class="hljs-keyword">return</span>;
+			}
 			
 			<span class="hljs-comment">/* Create layer and sprite. */</span>
 			module.layer = cc.Layer.create();
@@ -308,6 +398,9 @@
 				module.clickAdCallback,
 				module
 			);
+			<span class="hljs-keyword">if</span> (texture.getContentSize().height &gt; <span class="hljs-number">0</span>) {
+				sprite.scale = App.winSize.height / texture.getContentSize().height;
+			}
 			
 			<span class="hljs-comment">/* Set sprite position. */</span>
 			<span class="hljs-keyword">if</span> (posEnum === plugin.AdsPos.Center) {
@@ -334,9 +427,9 @@
 			
 			<span class="hljs-comment">/* Close button for fullscreen ad. */</span>
 			<span class="hljs-keyword">if</span> (typeEnum == plugin.AdsType.FullScreenAd) {
-				normalSprite = cc.Sprite.create(<span class="hljs-string">"#close-button.png"</span>);
-				selectedSprite = cc.Sprite.create(<span class="hljs-string">"#close-button.png"</span>);
-				disabledSprite = cc.Sprite.create(<span class="hljs-string">"#close-button.png"</span>);
+				normalSprite = cc.Sprite.create(<span class="hljs-string">"#CloseButton.png"</span>);
+				selectedSprite = cc.Sprite.create(<span class="hljs-string">"#CloseButton.png"</span>);
+				disabledSprite = cc.Sprite.create(<span class="hljs-string">"#CloseButton.png"</span>);
 				<span class="hljs-keyword">if</span> (normalSprite &amp;&amp; selectedSprite) {
 					selectedSprite.setColor(cc.color(<span class="hljs-number">128</span>,<span class="hljs-number">128</span>,<span class="hljs-number">128</span>));
 					closeButton = cc.MenuItemSprite.create(
@@ -346,26 +439,32 @@
 						module.closeAdCallback,
 						module
 					);
+				} <span class="hljs-keyword">else</span> {
+					<span class="hljs-comment">/*var label = ...;
+					closeButton = cc.MenuItemLabel.create(
+						label,
+						module.closeAdCallback,
+						module
+					);*/</span>
+				}
+				<span class="hljs-keyword">if</span> (closeButton) {
 					closeButton.setAnchorPoint(cc.p(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>));
-					closeButton.x = sprite.x + sprite.width * <span class="hljs-number">.5</span>;
-					closeButton.y = sprite.y + sprite.height * <span class="hljs-number">.5</span>;
+					closeButton.x = sprite.x + (sprite.width * <span class="hljs-number">.5</span> * sprite.scale);
+					closeButton.y = sprite.y + (sprite.height * <span class="hljs-number">.5</span> * sprite.scale);
 					closeButton.y -= App.winSize.height;
 					closeButton.runAction(cc.EaseOut.create(
 						cc.MoveBy.create(<span class="hljs-number">0.5</span>, cc.p(<span class="hljs-number">0</span>, App.winSize.height)),
 						<span class="hljs-number">3.0</span>)
 					);
-					<span class="hljs-keyword">if</span> (App.winSize.width &lt; <span class="hljs-number">1024</span>) {
-						closeButton.setScale(<span class="hljs-number">.5</span>);
-					}
 
 					<span class="hljs-comment">/* Make the content size of the clickable image smaller than
 					the close button so they don't conflict. (Because of a bug in
-					cocos2d-html5 2.2.2 that prevents the top-most menu item from
+					cocos2d-html5 that prevents the top-most menu item from
 					being clicked.) */</span>
-					<span class="hljs-keyword">var</span> w = closeButton.width;
+					<span class="hljs-keyword">var</span> w = closeButton.width / sprite.scale;
 					<span class="hljs-keyword">var</span> size = sprite.getContentSize();
 					sprite.setContentSize(size.width - w, size.height);
-					sprite.setPositionX(sprite.x - w * <span class="hljs-number">.5</span>);
+					sprite.x -= w * <span class="hljs-number">.5</span>;
 				}
 			}
 
@@ -421,9 +520,13 @@
         
           <div class='highlight'><pre>		module.clickAdCallback = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(menuItem)</span> {</span>
 			module.log(<span class="hljs-string">"Clicked ad, visiting: "</span> + module.adUrl);
+			<span class="hljs-keyword">if</span> (App.isFullscreenEnabled()) {
+				App.enableFullscreen(<span class="hljs-literal">false</span>);
+			}
 			<span class="hljs-keyword">if</span> (module.adUrl.length) {
 				cc.openURL(module.adUrl);
 			}
+			module.closeAdCallback();
 		};</pre></div>
         
       

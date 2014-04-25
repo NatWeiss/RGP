@@ -35,7 +35,7 @@ var SceneMain = (function() {
 			/* Create the background layer. */
 			this.bg = cc.Sprite.create("#Bg.png");
 			this.bg.setAnchorPoint(0, 0);
-			this.bg.setScale(Math.max(
+			this.bg.setScale(1.05 * Math.max(
 				winSize.width / (this.bg.width - EFFECT_ORBIT_RADIUS * 2),
 				winSize.height / (this.bg.height - EFFECT_ORBIT_RADIUS * 2)
 				));

@@ -848,7 +848,8 @@ var LayerGame = (function(){
 // Callback for when a button is clicked. Determines which button was clicked by tag.
 //
 		menuButtonCallback: function(sender) {
-			var self = this,
+			var button,
+				self = this,
 				tag = sender.getTag(),
 				numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
 				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
@@ -858,7 +859,14 @@ var LayerGame = (function(){
 			this.enableButton(tag, false);
 			
 			if (tag == TAG_PAUSE) {
-				this.getParent().createLayer(LayerMenu, true);
+				button = this.menu.getChildByTag(TAG_SMALL_BUX_PACK);
+				if (button) {
+					this.removePurchaseButtons();
+					this.createActionButtons();
+					this.enableButton(tag, true);
+				} else {
+					this.getParent().createLayer(LayerMenu, true);
+				}
 			}
 			else if (tag == TAG_DRINK_LEMONADE) {
 				if (numLemonades > 0) {

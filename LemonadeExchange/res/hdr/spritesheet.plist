@@ -251,6 +251,19 @@
                 <key>sourceSize</key>
                 <string>{207,142}</string>
             </dict>
+            <key>CloseButton.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{3495,2187},{128,128}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{128,128}}</string>
+                <key>sourceSize</key>
+                <string>{128,128}</string>
+            </dict>
             <key>Frame.png</key>
             <dict>
                 <key>frame</key>
@@ -394,19 +407,6 @@
                 <key>sourceSize</key>
                 <string>{288,288}</string>
             </dict>
-            <key>close-button.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{3361,2054},{64,64}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{4,4},{64,64}}</string>
-                <key>sourceSize</key>
-                <string>{72,72}</string>
-            </dict>
             <key>medium_bux_pack.png</key>
             <dict>
                 <key>frame</key>
@@ -443,7 +443,7 @@
             <key>size</key>
             <string>{3993,2324}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:2a7718be1658511bbbc097762ff21b21:978302d42d7dacd31d7ccd3e47f1910a:94563296262a30b4f0b9cd48ec7e5860$</string>
+            <string>$TexturePacker:SmartUpdate:a4be1c9415a81b537ef01dc820ce4f5f:641bc62a3419497f9663800a0ee04c30:94563296262a30b4f0b9cd48ec7e5860$</string>
             <key>textureFileName</key>
             <string>spritesheet.png</string>
         </dict>

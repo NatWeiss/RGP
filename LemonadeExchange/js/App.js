@@ -1023,8 +1023,8 @@ App.requestUrl = function(url, callback, binary) {
 //
 // Return the substring of `string` between `prefix` and `suffix`.
 //
-App.between = function(string, prefix, suffix) {
-	var startPos = string.indexOf(prefix),
+App.between = function(string, prefix, suffix, start) {
+	var startPos = string.indexOf(prefix, start || 0),
 		endPos = string.indexOf(suffix, startPos + prefix.length);
 	if (startPos > 0 && endPos > 0) {
 		startPos += prefix.length;
@@ -1080,15 +1080,17 @@ App.loadImage = function(url, callback) {
 		var image = new Image();
 		/* If anonymous doesn't work, try: */
 		/* url = App.insert(url, "://", "www.corsproxy.com/"); */
-		image.crossOrigin = "Anonymous";
+		/*image.crossOrigin = "Anonymous";*/
 		image.src = url;
 
 		/*cc.log("Loading image: " + url);*/
 		image.addEventListener("load", function(){
-			cc.textureCache.cacheImage(url, image);
 			this.removeEventListener("load", arguments.callee, false);
-			if (typeof callback === "function") {
-				callback();
+			if (image.width && image.height) {
+				cc.textureCache.cacheImage(url, image);
+				if (typeof callback === "function") {
+					callback(url);
+				}
 			}
 		}, false);
 
@@ -1099,7 +1101,7 @@ App.loadImage = function(url, callback) {
 			var bytes = new Uint8Array(response);
 			App.addImageData(url, bytes);
 			if (typeof callback === "function") {
-				callback();
+				callback(url);
 			}
 		}, true);
 	}

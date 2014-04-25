@@ -1176,8 +1176,8 @@
 <p>Return the substring of <code>string</code> between <code>prefix</code> and <code>suffix</code>.</p>
 
         
-          <div class='highlight'><pre>App.between = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(string, prefix, suffix)</span> {</span>
-	<span class="hljs-keyword">var</span> startPos = string.indexOf(prefix),
+          <div class='highlight'><pre>App.between = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(string, prefix, suffix, start)</span> {</span>
+	<span class="hljs-keyword">var</span> startPos = string.indexOf(prefix, start || <span class="hljs-number">0</span>),
 		endPos = string.indexOf(suffix, startPos + prefix.length);
 	<span class="hljs-keyword">if</span> (startPos &gt; <span class="hljs-number">0</span> &amp;&amp; endPos &gt; <span class="hljs-number">0</span>) {
 		startPos += prefix.length;
@@ -1236,15 +1236,17 @@
 		<span class="hljs-keyword">var</span> image = <span class="hljs-keyword">new</span> Image();
 		<span class="hljs-comment">/* If anonymous doesn't work, try: */</span>
 		<span class="hljs-comment">/* url = App.insert(url, "://", "www.corsproxy.com/"); */</span>
-		image.crossOrigin = <span class="hljs-string">"Anonymous"</span>;
+		<span class="hljs-comment">/*image.crossOrigin = "Anonymous";*/</span>
 		image.src = url;
 
 		<span class="hljs-comment">/*cc.log("Loading image: " + url);*/</span>
 		image.addEventListener(<span class="hljs-string">"load"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-			cc.textureCache.cacheImage(url, image);
 			<span class="hljs-keyword">this</span>.removeEventListener(<span class="hljs-string">"load"</span>, <span class="hljs-built_in">arguments</span>.callee, <span class="hljs-literal">false</span>);
-			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span>) {
-				callback();
+			<span class="hljs-keyword">if</span> (image.width &amp;&amp; image.height) {
+				cc.textureCache.cacheImage(url, image);
+				<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span>) {
+					callback(url);
+				}
 			}
 		}, <span class="hljs-literal">false</span>);
 
@@ -1255,7 +1257,7 @@
 			<span class="hljs-keyword">var</span> bytes = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(response);
 			App.addImageData(url, bytes);
 			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> callback === <span class="hljs-string">"function"</span>) {
-				callback();
+				callback(url);
 			}
 		}, <span class="hljs-literal">true</span>);
 	}

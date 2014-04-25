@@ -93,10 +93,14 @@ if (typeof plugin.AdsMobFox === "undefined") {
 // Shows an advertisement given the info object. Uses [corsproxy.com](http://www.cocos2d-x.org/forums/19/topics/38739) to prevent browser warnings.
 //
 		module.showAds = function(infoObj) {
-			var typeEnum = infoObj["type"] || 0,
+			var i,
+				tries = 0,
+				typeEnum = infoObj["type"] || 0,
 				sizeEnum = infoObj["size"] || 0,
 				posEnum = infoObj["position"] || 0,
-				uuid = App.getUUID();
+				uuid = App.getUUID(),
+				requestUrl,
+				responseHandler;
 		
 			/* Wait until client geo data is full. */
 			if (module.geoData === null) {
@@ -110,9 +114,32 @@ if (typeof plugin.AdsMobFox === "undefined") {
 			module.hideAds();
 			
 			/* Proceed with showing ad. */
-			var doVideo = false,
+			var params,
+				url,
 				isFullscreen = (typeEnum === plugin.AdsType.FullScreenAd),
-				url = "http://my.mobfox.com/" + (doVideo ? "v" :"") + "request.php",
+				urlBase = "http://my.mobfox.com/" + (isFullscreen ? "v" : "") +
+					"request.php";
+			
+			if (isFullscreen) {
+				params = {
+					"sdk": "vad",
+					"c.mraid": 0,
+					"o_iosadvidlimit": 0,
+					"u": "Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_3 like Mac OS X) " +
+						"AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B508",
+					"u_wv": "Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_3 like Mac OS X) " +
+						"AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11B508",
+					"u_br": "Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_3 like Mac OS X) " +
+						"AppleWebKit/537.51.1 (KHTML, like Gecko) Version/unknown " +
+						"Mobile/11B508 Safari/unknown",
+					"v": "5.0.0",
+					"s": module.devInfo.apiKey,
+					"iphone_osversion": "7.0.3",
+					"o_iosadvid": "ABCDEF01-2345-6789-ABCD-EF0123456789",
+					"rt": "iphone_app",
+					"i": module.geoData.ip
+				};
+			} else {
 				params = {
 					rt: "api",
 					s: module.devInfo.apiKey,
@@ -126,48 +153,99 @@ if (typeof plugin.AdsMobFox === "undefined") {
 					no_markup: 1,
 					allow_mr: 1,
 					longitude: module.geoData.lng,
-					latitude: module.geoData.lat
+					latitude: module.geoData.lat,
+					"adspace.width": parseInt(App.winSize.width),
+					"adspace.height": (App.winSize.width >= 1024 ? 90 : 50)
 				};
-			if (isFullscreen) {
-				params["adspace.width"] = parseInt(App.winSize.width);
-				params["adspace.height"] = parseInt(App.winSize.height);
-				posEnum = plugin.AdsPos.Center;
-			} else if (typeEnum === plugin.AdsType.BannerAd) {
-				if (sizeEnum > 0) {
-					params["adspace.width"] = parseInt(App.winSize.width);
-					params["adspace.height"] = (App.winSize.width >= 1024 ? 90 : 50);
-				}
 			}
-
-			/* Encode url. */
-			url = App.insert(url, "://", "www.corsproxy.com/"),
-			url += App.encodeURIComponents(params);
-			module.log("Requesting: " + url);
 			
-			/* Get the ad data. */
-			App.requestUrl(url, function(adResponse, adStatus) {
-				if (typeof adResponse !== "undefined") {
-					var html = adResponse,
-						imageUrl = App.between(html, "src=\"", "\"");
+			/* Ad requester. */
+			requestUrl = function() {
+				url = App.insert(urlBase, "://", "www.corsproxy.com/");
+				if (isFullscreen) {
+					params["t"] = parseFloat(Date.now() / 1000).toFixed(6);
+				}
+				url += App.encodeURIComponents(params);
+				App.requestUrl(url, responseHandler);
+			};
 
-					module.log("Ad response: " + html);
-					if (!imageUrl.length) {
-						module.log("No ad url found");
-						App.callRunningLayer("onAdDismissed", false);
+			/* Ad response handler. */
+			responseHandler = function(adResponse, adStatus) {
+				var html = adResponse,
+					start = 0,
+					newStart,
+					imageHtml,
+					imageCount = 0,
+					imageUrl;
+
+				if (typeof adResponse === "undefined") {
+					module.log("Error retrieving ad data, status: " + adStatus);
+					return;
+				}
+				module.adUrl = App.between(html, "href=\"", "\"");
+				if (!module.adUrl.length) {
+					module.adUrl = App.between(html, "href='", "'");
+				}
+				start = module.adUrl.indexOf("http");
+				if (start > 0) {
+					module.adUrl = module.adUrl.substr(start);
+				}
+				start = 0;
+				module.log("Ad response: " + html);
+				if (!module.adUrl.length) {
+					tries += 1;
+					if (tries < 3) {
+						i = App.rand(150) + 150;
+						cc.log("No response " + tries +
+							", waiting " + i + " and trying again");
+						setTimeout(requestUrl, i);
 						return;
 					}
-					/*imageUrl = App.insert(imageUrl, "://", "www.corsproxy.com/");*/
-					module.adUrl = App.between(html, "href=\"", "\"");
-					
-					module.log("Image: " + imageUrl + ", click URL:" + module.adUrl);
-					
-					App.loadImage(imageUrl, function() {
-						module.showImage(imageUrl, typeEnum, sizeEnum, posEnum);
-					});
-				} else {
-					module.log("Error retrieving ad data, status: " + adStatus);
 				}
-			});
+				module.log("Ad URL:" + module.adUrl);
+
+				do {
+					newStart = html.indexOf("<img ", start);
+					/*module.log("Start " + start + " new start " + newStart);*/
+					if (newStart <= start) {
+						break;
+					}
+					start = newStart;
+
+					imageHtml = App.between(html, "<img", ">", start);
+					/*module.log("Image html " + imageHtml);*/
+					start += 1;
+					
+					imageUrl = App.between(imageHtml, "src=\"", "\"");
+					if (!imageUrl.length) {
+						imageUrl = App.between(imageHtml, "src='", "'");
+						if (!imageUrl.length) {
+							break;
+						}
+					}
+					imageCount++;
+					imageUrl = App.insert(imageUrl, "://", "www.corsproxy.com/");
+					module.log("Image " + imageCount + ": " +
+						(imageUrl.length > 128 ?
+							imageUrl.substr(0,128) + "..." :
+							imageUrl
+						)
+					);
+					if (imageCount > 10) {
+						break;
+					}
+					
+					App.loadImage(imageUrl, function(url) {
+						module.showImage(url, typeEnum, sizeEnum, posEnum);
+					});
+				} while(imageUrl.length);
+				
+				if (imageCount == 0) {
+					module.log("No images found");
+					App.callRunningLayer("onAdDismissed", false);
+				}
+			};
+			requestUrl();
 		};
 
 //
@@ -176,13 +254,25 @@ if (typeof plugin.AdsMobFox === "undefined") {
 // Displays the given advertisement image URL with given parameters.
 //
 		module.showImage = function(imageUrl, typeEnum, sizeEnum, posEnum) {
-			var sprite,
+			var texture,
+				sprite,
 				scene,
 				menu,
 				closeButton = null,
 				normalSprite,
 				selectedSprite,
-				disabledSprite;
+				disabledSprite,
+				lower = imageUrl.toLowerCase(),
+				isImage = (lower.indexOf(".gif") > 0
+					|| lower.indexOf(".jpg") > 0
+					|| lower.indexOf(".png") > 0);
+			
+			/* Check the texture. */
+			texture = cc.textureCache.textureForKey(imageUrl);
+			if (!isImage || !texture || texture.getContentSize().width < 10) {
+				/*module.log("Not showing image: " + imageUrl.substr(0,128));*/
+				return;
+			}
 			
 			/* Create layer and sprite. */
 			module.layer = cc.Layer.create();
@@ -193,6 +283,9 @@ if (typeof plugin.AdsMobFox === "undefined") {
 				module.clickAdCallback,
 				module
 			);
+			if (texture.getContentSize().height > 0) {
+				sprite.scale = App.winSize.height / texture.getContentSize().height;
+			}
 			
 			/* Set sprite position. */
 			if (posEnum === plugin.AdsPos.Center) {
@@ -219,9 +312,9 @@ if (typeof plugin.AdsMobFox === "undefined") {
 			
 			/* Close button for fullscreen ad. */
 			if (typeEnum == plugin.AdsType.FullScreenAd) {
-				normalSprite = cc.Sprite.create("#close-button.png");
-				selectedSprite = cc.Sprite.create("#close-button.png");
-				disabledSprite = cc.Sprite.create("#close-button.png");
+				normalSprite = cc.Sprite.create("#CloseButton.png");
+				selectedSprite = cc.Sprite.create("#CloseButton.png");
+				disabledSprite = cc.Sprite.create("#CloseButton.png");
 				if (normalSprite && selectedSprite) {
 					selectedSprite.setColor(cc.color(128,128,128));
 					closeButton = cc.MenuItemSprite.create(
@@ -231,26 +324,32 @@ if (typeof plugin.AdsMobFox === "undefined") {
 						module.closeAdCallback,
 						module
 					);
+				} else {
+					/*var label = ...;
+					closeButton = cc.MenuItemLabel.create(
+						label,
+						module.closeAdCallback,
+						module
+					);*/
+				}
+				if (closeButton) {
 					closeButton.setAnchorPoint(cc.p(1,1));
-					closeButton.x = sprite.x + sprite.width * .5;
-					closeButton.y = sprite.y + sprite.height * .5;
+					closeButton.x = sprite.x + (sprite.width * .5 * sprite.scale);
+					closeButton.y = sprite.y + (sprite.height * .5 * sprite.scale);
 					closeButton.y -= App.winSize.height;
 					closeButton.runAction(cc.EaseOut.create(
 						cc.MoveBy.create(0.5, cc.p(0, App.winSize.height)),
 						3.0)
 					);
-					if (App.winSize.width < 1024) {
-						closeButton.setScale(.5);
-					}
 
 					/* Make the content size of the clickable image smaller than
 					the close button so they don't conflict. (Because of a bug in
-					cocos2d-html5 2.2.2 that prevents the top-most menu item from
+					cocos2d-html5 that prevents the top-most menu item from
 					being clicked.) */
-					var w = closeButton.width;
+					var w = closeButton.width / sprite.scale;
 					var size = sprite.getContentSize();
 					sprite.setContentSize(size.width - w, size.height);
-					sprite.setPositionX(sprite.x - w * .5);
+					sprite.x -= w * .5;
 				}
 			}
 
@@ -304,9 +403,13 @@ if (typeof plugin.AdsMobFox === "undefined") {
 //
 		module.clickAdCallback = function(menuItem) {
 			module.log("Clicked ad, visiting: " + module.adUrl);
+			if (App.isFullscreenEnabled()) {
+				App.enableFullscreen(false);
+			}
 			if (module.adUrl.length) {
 				cc.openURL(module.adUrl);
 			}
+			module.closeAdCallback();
 		};
 		
 //

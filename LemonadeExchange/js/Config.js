@@ -148,10 +148,8 @@ App.config = {
 	"ads-plugin": {
 		"name": "AdsMobFox",
 		"debug": false,
-		"api-key": "7e9fe879ef86ffa86071cddbd7ec6203", // test only
-		//"api-key": "0d8b09ec8ea83fb02a83f1bc261dfc2c", // lemonade exchange web
-		//"api-key": "928212dab22e3c4cc7774cc26532100c", // lemonade exchange ios
-		"mode": "test"
+		"api-key": "928212dab22e3c4cc7774cc26532100c",
+		"mode": "live"
 	},
 
 //
