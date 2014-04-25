@@ -102,16 +102,17 @@ var LayerGame = (function(){
 			layer = cc.LayerColor.create(
 				cc.color(0,0,0,202),
 				App.scale(590),
-				winSize.height * 1.1
+				winSize.height
 			);
 			layer.x = winSize.width * .5 + App.scale(-144);
-			layer.y = winSize.height * -.05;
-			layer.setRotation(-2);
 			this.addChild(layer);
+			/* Firefox windows doesn't display the layer if it's scaled. */
+			/*layer.scale = 1.1;
+			layer.setRotation(-2);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.EaseOut.create(cc.RotateBy.create(1.5, 1), 1.2),
 				cc.EaseOut.create(cc.RotateBy.create(1.7, -1), 1.2)
-			)));
+			)));*/
 			layer.x = layer.x + winSize.width;
 			layer.runAction(cc.EaseOut.create(
 				cc.MoveBy.create(0.5, cc.p(-winSize.width, 0)),

@@ -215,16 +215,17 @@
 			layer = cc.LayerColor.create(
 				cc.color(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">202</span>),
 				App.scale(<span class="hljs-number">590</span>),
-				winSize.height * <span class="hljs-number">1.2</span>
+				winSize.height
 			);
 			layer.x = winSize.width * <span class="hljs-number">.5</span> + App.scale(-<span class="hljs-number">144</span>);
-			layer.y = winSize.height * -<span class="hljs-number">.1</span>;
-			layer.setRotation(-<span class="hljs-number">2</span>);
 			<span class="hljs-keyword">this</span>.addChild(layer);
+			<span class="hljs-comment">/* Firefox windows doesn't display the layer if it's scaled. */</span>
+			<span class="hljs-comment">/*layer.scale = 1.1;
+			layer.setRotation(-2);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
-				cc.EaseOut.create(cc.RotateBy.create(<span class="hljs-number">1.5</span>, <span class="hljs-number">1</span>), <span class="hljs-number">1.2</span>),
-				cc.EaseOut.create(cc.RotateBy.create(<span class="hljs-number">1.7</span>, -<span class="hljs-number">1</span>), <span class="hljs-number">1.2</span>)
-			)));
+				cc.EaseOut.create(cc.RotateBy.create(1.5, 1), 1.2),
+				cc.EaseOut.create(cc.RotateBy.create(1.7, -1), 1.2)
+			)));*/</span>
 			layer.x = layer.x + winSize.width;
 			layer.runAction(cc.EaseOut.create(
 				cc.MoveBy.create(<span class="hljs-number">0.5</span>, cc.p(-winSize.width, <span class="hljs-number">0</span>)),
@@ -251,7 +252,7 @@
 				sprite,
 				winSize = App.getWinSize();
 			
-			label = cc.LabelTTF.create(<span class="hljs-string">"1"</span>, font, App.scale(<span class="hljs-number">60</span>));
+			label = cc.LabelTTF.create(<span class="hljs-string">"1 "</span>, font, App.scale(<span class="hljs-number">60</span>));
 			label.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
 			label.setPosition(pos);
 			<span class="hljs-keyword">this</span>.addChild(label, <span class="hljs-number">1</span>);
@@ -264,7 +265,7 @@
 			<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">1</span>);
 
 			pos.x += App.scale(<span class="hljs-number">30</span>);
-			<span class="hljs-keyword">this</span>.rateLabel = cc.LabelTTF.create(<span class="hljs-string">" = 10"</span>, font, App.scale(<span class="hljs-number">60</span>));
+			<span class="hljs-keyword">this</span>.rateLabel = cc.LabelTTF.create(<span class="hljs-string">" = 10 "</span>, font, App.scale(<span class="hljs-number">60</span>));
 			<span class="hljs-keyword">this</span>.rateLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
 			<span class="hljs-keyword">this</span>.rateLabel.setPosition(pos);
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.rateLabel, <span class="hljs-number">1</span>);
@@ -360,7 +361,7 @@
 			<span class="hljs-keyword">this</span>.addChild(sprite, <span class="hljs-number">1</span>);
 			
 			<span class="hljs-comment">/* Create the player's name label. */</span>
-			<span class="hljs-keyword">this</span>.playerNameLabel = cc.LabelTTF.create(name, font, App.scale(<span class="hljs-number">48</span>));
+			<span class="hljs-keyword">this</span>.playerNameLabel = cc.LabelTTF.create(name + <span class="hljs-string">" "</span>, font, App.scale(<span class="hljs-number">48</span>));
 			<span class="hljs-keyword">this</span>.playerNameLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
 			<span class="hljs-keyword">this</span>.playerNameLabel.x = <span class="hljs-keyword">this</span>.playerImage.x + (<span class="hljs-keyword">this</span>.playerImageWidth * <span class="hljs-number">0.7</span>);
 			<span class="hljs-keyword">this</span>.playerNameLabel.y = <span class="hljs-keyword">this</span>.playerImage.y;
@@ -380,7 +381,7 @@
 				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.2</span>, <span class="hljs-number">4</span>), <span class="hljs-number">3.0</span>),
 				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.5</span>, -<span class="hljs-number">4</span>), <span class="hljs-number">3.0</span>)
 			)));
-			<span class="hljs-keyword">this</span>.lemonadesLabel = cc.LabelTTF.create(numLemonades, font, App.scale(<span class="hljs-number">60</span>));
+			<span class="hljs-keyword">this</span>.lemonadesLabel = cc.LabelTTF.create(numLemonades + <span class="hljs-string">" "</span>, font, App.scale(<span class="hljs-number">60</span>));
 			<span class="hljs-keyword">this</span>.lemonadesLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
 			<span class="hljs-keyword">this</span>.lemonadesLabel.setPosition(App.centralize(-<span class="hljs-number">330</span>, <span class="hljs-number">60</span>));
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.lemonadesLabel, <span class="hljs-number">2</span>);
@@ -395,7 +396,7 @@
 				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.2</span>, <span class="hljs-number">8</span>), <span class="hljs-number">3.0</span>),
 				cc.EaseInOut.create(cc.RotateBy.create(<span class="hljs-number">2.5</span>, -<span class="hljs-number">8</span>), <span class="hljs-number">3.0</span>)
 			)));
-			<span class="hljs-keyword">this</span>.buxLabel = cc.LabelTTF.create(<span class="hljs-string">""</span> + numBux, font, App.scale(<span class="hljs-number">60</span>));
+			<span class="hljs-keyword">this</span>.buxLabel = cc.LabelTTF.create(<span class="hljs-string">""</span> + numBux + <span class="hljs-string">" "</span>, font, App.scale(<span class="hljs-number">60</span>));
 			<span class="hljs-keyword">this</span>.buxLabel.setAnchorPoint(<span class="hljs-number">0</span>, <span class="hljs-number">.5</span>);
 			<span class="hljs-keyword">this</span>.buxLabel.setPosition(App.centralize(-<span class="hljs-number">330</span>, -<span class="hljs-number">70</span>));
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.buxLabel, <span class="hljs-number">2</span>);
@@ -493,7 +494,7 @@
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.exchangeLayer, <span class="hljs-number">1</span>);
 			
 			str = App.getSocialPlugin().getPlayerName();
-			label = cc.LabelTTF.create(str, font, fontSize);
+			label = cc.LabelTTF.create(str + <span class="hljs-string">" "</span>, font, fontSize);
 			label.setAnchorPoint(<span class="hljs-number">.5</span>, <span class="hljs-number">.5</span>);
 			label.setPosition(pos);
 			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(label, <span class="hljs-number">1</span>);
@@ -524,13 +525,13 @@
 			<span class="hljs-keyword">this</span>.createFriendImage(friendUrl);
 			
 			pos.y -= ySpacing;
-			str = (<span class="hljs-keyword">this</span>.exchangeVerb === <span class="hljs-string">"buy"</span> ? <span class="hljs-string">"Bought by"</span> : <span class="hljs-string">"Sold to"</span>);
+			str = (<span class="hljs-keyword">this</span>.exchangeVerb === <span class="hljs-string">"buy"</span> ? <span class="hljs-string">"Bought by "</span> : <span class="hljs-string">"Sold to "</span>);
 			<span class="hljs-keyword">this</span>.finishExchangeLabel1 = cc.LabelTTF.create(str, font, fontSize);
 			<span class="hljs-keyword">this</span>.finishExchangeLabel1.setPosition(pos);
 			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(<span class="hljs-keyword">this</span>.finishExchangeLabel1, <span class="hljs-number">1</span>);
 
 			pos.y -= ySpacing;
-			<span class="hljs-keyword">this</span>.finishExchangeLabel2 = cc.LabelTTF.create(friendName, font, fontSize);
+			<span class="hljs-keyword">this</span>.finishExchangeLabel2 = cc.LabelTTF.create(friendName + <span class="hljs-string">" "</span>, font, fontSize);
 			<span class="hljs-keyword">this</span>.finishExchangeLabel2.setPosition(pos);
 			<span class="hljs-keyword">this</span>.exchangeLayer.addChild(<span class="hljs-keyword">this</span>.finishExchangeLabel2, <span class="hljs-number">1</span>);
 
@@ -849,7 +850,7 @@
 				bux += <span class="hljs-keyword">this</span>.animateBuxIncrement;
 				funcName = <span class="hljs-keyword">this</span>.animateBuxIncrement &gt; <span class="hljs-number">0</span> ? <span class="hljs-string">"min"</span> : <span class="hljs-string">"max"</span>;
 				bux = <span class="hljs-built_in">Math</span>[funcName](bux, <span class="hljs-keyword">this</span>.newBuxAmount);
-				<span class="hljs-keyword">this</span>.buxLabel.setString(bux);
+				<span class="hljs-keyword">this</span>.buxLabel.setString(bux + <span class="hljs-string">" "</span>);
 			}
 			<span class="hljs-keyword">if</span> (lemonades !== <span class="hljs-keyword">this</span>.newLemonadesAmount) {
 				<span class="hljs-keyword">if</span> (lemonades &lt; <span class="hljs-keyword">this</span>.newLemonadesAmount) {
@@ -861,7 +862,7 @@
 				lemonades += <span class="hljs-keyword">this</span>.animateLemonadesIncrement;
 				funcName = <span class="hljs-keyword">this</span>.animateLemonadesIncrement &gt; <span class="hljs-number">0</span> ? <span class="hljs-string">"min"</span> : <span class="hljs-string">"max"</span>;
 				lemonades = <span class="hljs-built_in">Math</span>[funcName](lemonades, <span class="hljs-keyword">this</span>.newLemonadesAmount);
-				<span class="hljs-keyword">this</span>.lemonadesLabel.setString(lemonades);
+				<span class="hljs-keyword">this</span>.lemonadesLabel.setString(lemonades + <span class="hljs-string">" "</span>);
 			}
 		},</pre></div>
         
@@ -975,7 +976,7 @@
         
           <div class='highlight'><pre>		setRateIconPos: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
 			<span class="hljs-keyword">this</span>.rateIcon.x = <span class="hljs-keyword">this</span>.rateLabel.x + <span class="hljs-keyword">this</span>.rateLabel.width +
-				App.scale(<span class="hljs-number">15</span>);
+				App.scale(-<span class="hljs-number">5</span>);
 		},</pre></div>
         
       
@@ -1084,7 +1085,7 @@
 					value = <span class="hljs-number">0.01</span>;
 				}
 				scene.layer.exchangeRate = value;
-				scene.layer.rateLabel.setString(<span class="hljs-string">" = "</span> + value);
+				scene.layer.rateLabel.setString(<span class="hljs-string">" = "</span> + value + <span class="hljs-string">" "</span>);
 				scene.layer.setRateIconPos();
 				scene.layer.enableActionButtons();
 			}
@@ -1122,7 +1123,7 @@
 
         
           <div class='highlight'><pre>		onGetMyPlayerName: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
-			<span class="hljs-keyword">this</span>.playerNameLabel.setString(name);
+			<span class="hljs-keyword">this</span>.playerNameLabel.setString(name + <span class="hljs-string">" "</span>);
 		},</pre></div>
         
       
@@ -1139,8 +1140,8 @@
 			
 			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.newBuxAmount || <span class="hljs-keyword">this</span>.newLemonadesAmount) {
 				<span class="hljs-keyword">this</span>.unscheduleAllCallbacks();
-				<span class="hljs-keyword">this</span>.buxLabel.setString(<span class="hljs-keyword">this</span>.newBuxAmount);
-				<span class="hljs-keyword">this</span>.lemonadesLabel.setString(<span class="hljs-keyword">this</span>.newLemonadesAmount);
+				<span class="hljs-keyword">this</span>.buxLabel.setString(<span class="hljs-keyword">this</span>.newBuxAmount + <span class="hljs-string">" "</span>);
+				<span class="hljs-keyword">this</span>.lemonadesLabel.setString(<span class="hljs-keyword">this</span>.newLemonadesAmount + <span class="hljs-string">" "</span>);
 			}
 			
 			<span class="hljs-keyword">this</span>.newBuxAmount = Soomla.storeInventory.getItemBalance(<span class="hljs-string">"currency_bux"</span>),

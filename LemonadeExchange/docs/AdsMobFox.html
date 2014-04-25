@@ -181,7 +181,7 @@
 
         
           <div class='highlight'><pre>		module.getIPAddress = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-			App.requestUrl(<span class="hljs-string">"http://api.hostip.info/get_json.php?position=true"</span>,
+			App.requestUrl(<span class="hljs-string">"//api.hostip.info/get_json.php?position=true"</span>,
 				<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response, status)</span>{</span>
 					<span class="hljs-keyword">if</span> (!response || !response.length) {
 						module.log(<span class="hljs-string">"Couldn't get client's IP address, status: "</span>	+ status);
@@ -231,7 +231,7 @@
 			<span class="hljs-keyword">var</span> params,
 				url,
 				isFullscreen = (typeEnum === plugin.AdsType.FullScreenAd),
-				urlBase = <span class="hljs-string">"http://my.mobfox.com/"</span> + (isFullscreen ? <span class="hljs-string">"v"</span> : <span class="hljs-string">""</span>) +
+				urlBase = <span class="hljs-string">"//my.mobfox.com/"</span> + (isFullscreen ? <span class="hljs-string">"v"</span> : <span class="hljs-string">""</span>) +
 					<span class="hljs-string">"request.php"</span>;
 			
 			<span class="hljs-keyword">if</span> (isFullscreen) {

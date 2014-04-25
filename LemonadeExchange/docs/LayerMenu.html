@@ -166,6 +166,11 @@
 			<span class="hljs-keyword">this</span>.menu = cc.Menu.create();
 			<span class="hljs-keyword">this</span>.menu.setPosition(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>);
 			<span class="hljs-keyword">this</span>.addChild(<span class="hljs-keyword">this</span>.menu, <span class="hljs-number">2</span>);
+			
+			<span class="hljs-comment">/* Preload font. */</span>
+			label = cc.LabelTTF.create(<span class="hljs-string">" "</span>, App.config[<span class="hljs-string">"font"</span>], <span class="hljs-number">1</span>);
+			label.x = -<span class="hljs-number">4000</span>;
+			<span class="hljs-keyword">this</span>.addChild(label, -<span class="hljs-number">1</span>);
 
 			<span class="hljs-comment">/* Create the logo. */</span>
 			<span class="hljs-keyword">this</span>.logo = cc.Sprite.create(<span class="hljs-string">"#Logo.png"</span>);

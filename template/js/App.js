@@ -871,7 +871,24 @@ App.logCurrencyBalances = function() {
 // Must be called before `App.getUUID()`, which creates the `uuid` key.
 //
 App.isInitialLaunch = function() {
-	var v = cc.sys.localStorage.getItem("uuid");
+	var v, key;
+	
+	/* Test local storage. */
+	key = "testItem";
+	v = "xyz";
+	cc.sys.localStorage.setItem(key, v);
+	if (cc.sys.localStorage.getItem(key) !== v) {
+		cc.log("ERROR: Local storage test failed");
+		this._localStorage = false;
+		return true;
+	} else {
+		cc.log("Local storage test succeeded");
+		cc.sys.localStorage.removeItem(key);
+		this._localStorage = true;
+	}
+	
+	/* Determine if initial launch. */
+	v = cc.sys.localStorage.getItem("uuid");
 	return (typeof v === "undefined" || v === null || v === "");
 };
 
@@ -989,7 +1006,7 @@ App.requestUrl = function(url, callback, binary) {
 		x = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
-	if (url.indexOf("://") <= 0) {
+	if (url.indexOf("//") < 0) {
 		cc.log("window.location = " + window.location);
 		loc = window.location.toString() || "";
 		pos = loc.indexOf("?");

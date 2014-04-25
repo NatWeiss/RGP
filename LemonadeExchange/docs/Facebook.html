@@ -295,10 +295,12 @@
 				request = <span class="hljs-string">"/"</span> + id + <span class="hljs-string">"/picture?redirect=0"</span> +
 					<span class="hljs-string">"&amp;width="</span> + dim + <span class="hljs-string">"&amp;height="</span> + dim;
 				FB.api(request, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(response)</span> {</span>
+					<span class="hljs-keyword">var</span> url;
 					<span class="hljs-keyword">if</span> (response &amp;&amp; response.data &amp;&amp; response.data.url) {
-						module.log(<span class="hljs-string">"Got image url "</span> + response.data.url + <span class="hljs-string">" for "</span> + id);
-						App.loadImage(response.data.url, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-							module.playerImageUrls[id] = response.data.url;
+						url = response.data.url;
+						module.log(<span class="hljs-string">"Got image url "</span> + url + <span class="hljs-string">" for "</span> + id);
+						App.loadImage(url, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+							module.playerImageUrls[id] = url;
 							App.callRunningLayer(
 								<span class="hljs-string">"onPlayerImageLoaded"</span>,
 								id,

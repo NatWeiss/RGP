@@ -68,7 +68,7 @@ if (typeof plugin.AdsMobFox === "undefined") {
 // Requests and stores the client's IP address and geo data.
 //
 		module.getIPAddress = function() {
-			App.requestUrl("http://api.hostip.info/get_json.php?position=true",
+			App.requestUrl("//api.hostip.info/get_json.php?position=true",
 				function(response, status){
 					if (!response || !response.length) {
 						module.log("Couldn't get client's IP address, status: "	+ status);
@@ -117,7 +117,7 @@ if (typeof plugin.AdsMobFox === "undefined") {
 			var params,
 				url,
 				isFullscreen = (typeEnum === plugin.AdsType.FullScreenAd),
-				urlBase = "http://my.mobfox.com/" + (isFullscreen ? "v" : "") +
+				urlBase = "//my.mobfox.com/" + (isFullscreen ? "v" : "") +
 					"request.php";
 			
 			if (isFullscreen) {
