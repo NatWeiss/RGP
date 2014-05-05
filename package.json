@@ -1,0 +1,42 @@
+{
+  "name": "rapidgame",
+  "version": "0.2.0",
+  "description": "The platform-agnostic game project creator.",
+  "author": {
+    "name": "Nat Weiss",
+    "url": "http://wizardfu.com/"
+  },
+  "homepage": "https://github.com/NatWeiss/RapidGame",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/NatWeiss/RapidGame"
+  },
+  "bugs": {
+    "url": "https://github.com/NatWeiss/RapidGame/issues"
+  },
+  "license": "MIT",
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "preferGlobal": true,
+  "keywords": [
+    "unity",
+    "corona",
+    "cocos2d",
+    "game",
+    "development",
+    "project",
+    "creator"
+  ],
+  "dependencies": {
+    "cpr": "~0.1.1",
+    "replace": "~0.2.9",
+    "path-extra": "~0.2.0",
+    "commander": "~2.2.0"
+  },
+  "main": "./rapidgame",
+  "bin": {
+    "rapidgame": "./bin/rapidgame"
+  }
+}

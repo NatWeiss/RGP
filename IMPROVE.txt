@@ -28,3 +28,4 @@
 [] Updating is just a git push
 [] Separate rapdigame readme
 [] Leaderboards https://developers.facebook.com/docs/games/scores/
+[] Fix CRLF https://www.google.com/search?q=warning%3A+CRLF+will+be+replaced+by+LF&oq=warning%3A+CRLF+will+be+replaced+by+LF&aqs=chrome..69i57j69i58.301j0j7&sourceid=chrome&es_sm=91&ie=UTF-8
