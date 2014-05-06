@@ -33,7 +33,9 @@
     "cpr": "~0.1.1",
     "replace": "~0.2.9",
     "path-extra": "~0.2.0",
-    "commander": "~2.2.0"
+    "commander": "~2.2.0",
+    "download": "~0.1.16",
+    "glob": "~3.2.9"
   },
   "main": "./rapidgame",
   "bin": {

@@ -108,7 +108,7 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	find ${dir} | xargs xattr -c
 
 	# Copy javascript bindings
-	dir="${libDir}/jsb"
+	dir="jsb"
 	if [ -d $dir ]; then
 		rm -r ${dir}
 	fi
@@ -156,7 +156,7 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 # end pro
 
 	rm -r ${dir}/*/bin
-     rm -r ${dir}/*/gen
+	rm -r ${dir}/*/gen
      
 	# Create absolute symlinks
 	rm -f ${libDir}/lib

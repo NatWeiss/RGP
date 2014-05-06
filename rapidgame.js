@@ -1,9 +1,12 @@
 
 var path = require('path-extra');
 var fs = require('fs');
+var util = require('util');
 var commander = require('commander');
 var cpr = require('cpr');
 var replace = require('replace');
+var download = require('download');
+var glob = require('glob');
 var version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version;
 var engines = ['cocos2d-js', 'unity', 'corona'];
 var defaults = {
@@ -11,6 +14,7 @@ var defaults = {
 	package: 'org.mycompany.mygame',
 	dest: path.join(path.homedir(), 'Desktop/')
 };
+var cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip";
 
 var run = function(args) {
 	var cmd = commander;
@@ -26,7 +30,11 @@ var run = function(args) {
 		.name = 'rapidgame';
 
 	if (cmd.args.length) {
-		return createProject(cmd);
+		if(cmd.args[0] === "prebuild") {
+			return prebuild(cmd);
+		} else {
+			return createProject(cmd);
+		}
 	} else {
 		return console.log(cmd.helpInformation());
 	}
@@ -72,7 +80,7 @@ var createProject = function(cmd) {
 		}
 	}, function(errs, files) {
 		// Show results
-		var i;
+		var i, dir, dirs, files, from, to;
 		if (errs) {
 			console.log("Errors:");
 			console.log(errs);
@@ -106,8 +114,55 @@ var createProject = function(cmd) {
 			recursive: true,
 			silent: false
 		});
+		
+		// Rename files & dirs
+		from = dest + "/**/HelloJavascript.*";
+		console.log("Globbing " + from);
+		files = glob.sync(from);
+		for (i = 0; i < files.length; i++) {
+			from = files[i];
+			to = files[i].replace("HelloJavascript", name);
+			console.log("Moving " + from + " to " + to);
+			try {
+				fs.renameSync(from, to);
+			} catch(e) {
+				console.log("Error moving file");
+			}
+		}
+		
+		// Symlinks
+		try {
+			dir = path.join(dest, "lib/cocos2dx-prebuilt");
+			console.log("Making directory " + dir);
+			fs.mkdirSync(dir);
+		} catch(e) {
+			console.log("Error creating directory: " + e);
+		}
+		dirs = ["lib", "include", "java", "jsb"];
+		for (i = 0; i < dirs.length; i += 1) {
+			try {
+				from = fs.realpathSync("./" + dirs[i]);
+				to = path.join(dir, "/" + dirs[i]);
+				console.log("Symlinking from " + from + " to " + to);
+				fs.symlinkSync(from, to);
+			} catch(e) {
+				console.log("Error creating symlink: " + e);
+			}
+		}
+		
+		// Chmod
+		files = ["run-server", "minify", "upload", "proj.android/build_native.py"];
+		for (i = 0; i < files.length; i += 1) {
+			try {
+				to = path.join(dest, files[i]);
+				console.log("Making " + to + " executable");
+				fs.chmodSync(to, "755");
+			} catch(e) {
+				console.log("Error creating symlink: " + e);
+			}
+		}
+		
 	});
-	
 	
 };
 
@@ -203,3 +258,76 @@ linux:
 
 */
 
+var downloadUrl = function(url, dest, cb) {
+	var done = false,
+		total = 1,
+		cur = 0,
+		emitter = download(url, dest, {extract: true});
+
+	// Get total length
+	emitter.on("response", function(response) {
+		total = parseInt(response.headers["content-length"], 10)
+	});
+	
+	// Update percentage
+	emitter.on("data", function(chunk) {
+		if (!done) {
+			cur += chunk.length;
+			done = (cur >= total);
+			util.print("Downloading " + url + " "
+				+ (100.0 * cur / total).toFixed(2) + "%..."
+				+ (done ? "\n" : "\r"));
+		}
+	});
+	
+	// Error
+	emitter.on("error", function(status) {
+		console.log("Download error " + status);
+		cb();
+	});
+	
+	// Done
+	emitter.on("close", function() {
+		console.log("Download finished");
+		cb(true);
+	});
+};
+
+var prebuild = function(cmd) {
+	var dir = "cocos2d-js",
+		cd = dir + "/cocos2d-js-v3.0-alpha2",
+		dest = path.join(__dirname, dir),
+		stat,
+		onDownloadFinished = function(success) {
+			try {
+				var from = path.join(cd, "/frameworks/js-bindings/cocos2d-x"),
+					to = path.normalize("./src/cocos2d-x");
+				console.log("Moving " + from + " to " + to);
+				fs.renameSync(from, to);
+			} catch(e) {
+				console.log("Couldn't move cocos2d-x");
+			}
+			
+			try {
+				var spawn = require('child_process').spawn;
+				var child = spawn("./prebuild");//, ['-v', 'builds/pdf/book.html', '-o', 'builds/pdf/book.pdf']);
+				child.stdout.on("data", function(chunk) {
+					util.print(chunk.toString());
+				});
+			} catch(e) {
+				console.log(e);
+			}
+		};
+	
+	// Does Cocos2d-JS folder exist?
+	try {
+		stat = fs.lstatSync(dest);
+	} catch(e) {}
+	if (typeof stat === "undefined" || !stat.isDirectory()) {
+		downloadUrl(cocos2djsUrl, dest, onDownloadFinished);
+	} else {
+		console.log(dest + " already exists");
+		onDownloadFinished(true);
+	}
+
+};
