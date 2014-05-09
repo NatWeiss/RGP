@@ -1,14 +1,14 @@
-Version 0.9.8 - April 17, 2014
+Version 0.8.3 - April 17, 2014
 
 # begin pro
 	Fixed loading of Android Flurry and AdsMobFox plugins.
 # end pro
 
-Version 0.9.7c - April 14, 2014
+Version 0.8.2 - April 14, 2014
 
 	Fixed Android crash bug due to a JNI error / stale reference.
 	Fixed reference to build_common.xml so Android projects can be built independent of root folder.
 
-Version 0.9.7 - April 12, 2014
+Version 0.8.1 - April 12, 2014
 
 	Initial release. Some feature are still beta.

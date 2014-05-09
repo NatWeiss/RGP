@@ -437,11 +437,11 @@
 		sheet,
 		i;
 
-	cc.loader.resPath = <span class="hljs-keyword">this</span>.getResourceDir();
+	cc.loader.resPath = <span class="hljs-string">"res"</span>;
 	cc.director.setContentScaleFactor(<span class="hljs-keyword">this</span>._contentScaleFactor);
 
 	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; sheets.length; i += <span class="hljs-number">1</span>) {
-		sheet = cc.loader.getUrl(sheets[i]);
+		sheet = cc.loader.getUrl(<span class="hljs-keyword">this</span>.getResourceDir(), sheets[i]);
 		cc.log(<span class="hljs-string">"Loading spritesheet: "</span> + sheet);
 		cc.spriteFrameCache.addSpriteFrames(sheet);
 	}

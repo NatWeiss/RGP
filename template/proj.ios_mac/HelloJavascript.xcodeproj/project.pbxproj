@@ -218,6 +218,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		41301001191D7AE800DA3406 /* html5 */ = {
+			isa = PBXGroup;
+			children = (
+				4142034218C15A490075A075 /* index.html */,
+				419E924E18AC3BDC00232A34 /* Server.js */,
+				416E8E461905CE0400F9B283 /* cocos2d */,
+			);
+			name = html5;
+			sourceTree = "<group>";
+		};
 		4152B64E1894756E00BEF730 /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -291,6 +301,7 @@
 				41DFB47518EA1B9B003F8CD3 /* CCBoot.js */,
 				419E8EB818A9F3C100232A34 /* cocos2d */,
 				419E8EB918A9F3D200232A34 /* extensions */,
+				419E8EA218A9CA7600232A34 /* jsb */,
 			);
 			name = cocos2d;
 			sourceTree = "<group>";
@@ -324,13 +335,10 @@
 			children = (
 				41E17C161888B24000F6AD3C /* AppDelegate.h */,
 				41E17C151888B23F00F6AD3C /* AppDelegate.cpp */,
-				4142034218C15A490075A075 /* index.html */,
 				41F0F5B018DABA5800F5FC64 /* project.json */,
-				419E924E18AC3BDC00232A34 /* Server.js */,
 				4152B77D1894795000BEF730 /* js */,
-				419E8EA218A9CA7600232A34 /* jsb */,
 				41E177A8188794A700F6AD3C /* res */,
-				416E8E461905CE0400F9B283 /* cocos2d */,
+				41301001191D7AE800DA3406 /* html5 */,
 				4152B88118949C3E00BEF730 /* ios */,
 				41F1A4D81894BBA8006E818E /* mac */,
 				4152B64E1894756E00BEF730 /* frameworks */,

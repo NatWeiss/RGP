@@ -8,6 +8,12 @@ cd ${root}
 # GCC_SYMBOLS_PRIVATE_EXTERN=NO prevents a linker warning about visibility.
 xcodeSettings="GCC_SYMBOLS_PRIVATE_EXTERN=NO"
 
+# These settings strip the static libraries of unneeded local symbols
+xcodeSettings="${xcodeSettings} GCC_SYMBOLS_PRIVATE_EXTERN=NO DEPLOYMENT_POSTPROCESSING=YES STRIP_INSTALLED_PRODUCT=YES STRIP_STYLE=non-global"
+
+# Prefer a smaller set of architectures?
+small=0
+
 # Get which command.
 cmd="$1"
 if [ -z "$cmd" ]; then
@@ -105,7 +111,7 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	if [ -d ${dir}/plugin/plugins ]; then
 		rm -r ${dir}/plugin/plugins
 	fi
-	find ${dir} | xargs xattr -c
+	find ${dir} | xargs xattr -c >> ${logFile} 2>&1
 
 	# Copy javascript bindings
 	dir="jsb"
@@ -121,7 +127,7 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	find src/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $dir \;
 	find src/bindings-pluginx -name *.js -exec cp {} $dir \;
 # end pro
-	find ${dir} | xargs xattr -c
+	find ${dir} | xargs xattr -c >> ${logFile} 2>&1
 
 	# Copy Android java files
 	dir="java"
@@ -155,8 +161,8 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	sed -i "" 's/..\/submodules\/android-store\/SoomlaAndroidStore/..\/android-store/g' java/cocos2dx-store/project.properties
 # end pro
 
-	rm -r ${dir}/*/bin
-	rm -r ${dir}/*/gen
+	rm -rf ${dir}/*/bin
+	rm -rf ${dir}/*/gen
      
 	# Create absolute symlinks
 	rm -f ${libDir}/lib
@@ -173,15 +179,24 @@ fi
 
 # Build iOS
 if [ "$cmd" == "ios" ] || [ "$cmd" == "all" ]; then
-	for config in Debug Release; do
-		for sdk in iphoneos iphonesimulator; do
+	if [ "${small}" == "1" ]; then
+		configs="Debug"
+		sdks="iphoneos iphonesimulator"
+	else
+		configs="Debug Release"
+		sdks="iphoneos iphonesimulator"
+	fi
+	for config in ${configs}; do
+		for sdk in ${sdks}; do
 			for proj in ${projs}; do
 				echo "Building ${proj} iOS ${config} ${sdk}..."
-				#if [ "${sdk}" == "iphoneos" ]; then
-				#	archSetting="-arch armv7"
-				#else
-				#	archSetting="-arch i386"
-				#fi
+				if [ "${small}" == "1" ]; then
+					if [ "${sdk}" == "iphoneos" ]; then
+						archSetting="-arch armv7"
+					else
+						archSetting="-arch i386"
+					fi
+				fi
 				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "iOS" -configuration ${config} -sdk ${sdk} ${archSetting} ${xcodeSettings} >> ${logFile} 2>&1
 				res="$?"
 				if [ "$res" == "0" ]; then
@@ -197,11 +212,21 @@ fi
 
 # Build Mac
 if [ "$cmd" == "mac" ] || [ "$cmd" == "all" ]; then
-	for config in Debug Release; do
-		for sdk in macosx; do
+	if [ "${small}" == "1" ]; then
+		configs="Debug"
+		sdks="macosx"
+	else
+		configs="Debug Release"
+		sdks="macosx"
+	fi
+	for config in ${configs}; do
+		for sdk in ${sdks}; do
 			for proj in ${projs}; do
 				echo "Building ${proj} Mac ${config} ${sdk}..."
-				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "Mac" -configuration ${config} -sdk ${sdk} ${xcodeSettings} >> ${logFile} 2>&1
+				if [ "${small}" == "1" ]; then
+					archSetting="-arch i386"
+				fi
+				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "Mac" -configuration ${config} -sdk ${sdk} ${archSetting} ${xcodeSettings} >> ${logFile} 2>&1
 				res="$?"
 				if [ "$res" == "0" ]; then
 					echo "Succeeded."
@@ -216,8 +241,15 @@ fi
 
 # Build Android
 if [ "$cmd" == "android" ] || [ "$cmd" == "all" ]; then
-	for config in debug release; do
-		for arch in armeabi armeabi-v7a x86; do
+	if [ "${small}" == "1" ]; then
+		configs="debug"
+		archs="armeabi"
+	else
+		configs="debug release"
+		archs="armeabi armeabi-v7a x86"
+	fi
+	for config in ${configs}; do
+		for arch in ${archs}; do
 			echo "Building Android ${config} ${arch}..."
 			src/proj.android/build ${arch} ${config} >> ${logFile} 2>&1
 			res="$?"
@@ -230,3 +262,6 @@ if [ "$cmd" == "android" ] || [ "$cmd" == "all" ]; then
 		done
 	done
 fi
+
+# Stripping
+#find . -name *.a -exec strip -x {} \;

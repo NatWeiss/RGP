@@ -162,6 +162,9 @@ docco:
 	if [ -d LemonadeExchange/docs ]; then rm -r LemonadeExchange/docs; fi
 	# todo: remove begin/end pro from App.js
 	docco -o LemonadeExchange/docs -l linear LemonadeExchange/server/Server.js LemonadeExchange/js/*.js LemonadeExchange/js/lib/AdsMobFox.js LemonadeExchange/js/lib/Facebook.js
+	docco -o rez/docs -l linear rez/README-demo.md
+	mv rez/docs/README-demo.html rez/
+	rm -r rez/docs
 
 docker:
 	if [ -d docs ]; then rm -r docs; fi
@@ -235,3 +238,35 @@ minify:
 upload:
 	rsync ../releases/RapidGamePro "natweiss.com:." --stats -avzPe ssh
 
+binary: dest=../releases/RapidGameProDemo/
+binary: src=../releases/RapidGamePro/
+binary: libdir=lib-small
+binary:
+	if [ -d ${dest} ]; then rm -r ${dest}; fi
+	if [ ! -d ${src} ]; then echo "Please make release first"; exit 1; fi
+	cp -R -P ${src}/LemonadeExchange/ ${dest}
+	cp LICENSE_RapidGame.txt ${dest}
+	cp rez/README-demo.md ${dest}/README.md
+	cp rez/README-demo.html ${dest}/docs/README.html
+	sed -i "" 's/SceneMain/README/g' ${dest}/docs.html
+	cp rez/Facebook-stripped.js ${dest}/js/lib/Facebook.js
+	cp rez/AdsMobFox-stripped.js ${dest}/js/lib/AdsMobFox.js
+	cp rez/Facebook-stripped.html ${dest}/docs/Facebook.html
+	cp rez/AdsMobFox-stripped.html ${dest}/docs/AdsMobFox.html
+	rm -rf ${dest}/proj.linux
+	rm -rf ${dest}/proj.win32
+	rm -f ${dest}/lib/cocos2dx-prebuilt/include
+	rm -f ${dest}/lib/cocos2dx-prebuilt/lib
+	rm -f ${dest}/lib/cocos2dx-prebuilt/jsb
+	rm -f ${dest}/lib/cocos2dx-prebuilt/java
+	cp -r include ${dest}/lib/cocos2dx-prebuilt/
+	cp -r java ${dest}/lib/cocos2dx-prebuilt/
+	cp -r template/lib/cocos2dx-prebuilt/jsb ${dest}/lib/cocos2dx-prebuilt/
+	mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphonesimulator
+	mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphoneos
+	mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Android/armeabi
+	mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Mac/macosx
+	cp -r ${libdir}/Debug-iOS/iphonesimulator/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphonesimulator/
+	cp -r ${libdir}/Debug-iOS/iphoneos/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphoneos/
+	cp -r ${libdir}/Debug-Android/armeabi/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Android/armeabi/
+	cp -r ${libdir}/Debug-Mac/macosx/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Mac/macosx/

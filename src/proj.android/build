@@ -72,6 +72,14 @@ if [ ! -f "$ar" ]; then
 fi
 echo "AR=${ar}"
 
+# Get which strip
+strip=$(${NDK_ROOT}/ndk-which strip)
+if [ ! -f "$strip" ]; then
+	echo "Missing the 'strip' NDK build tool. Please install the Android NDK and toolchains."
+	exit 1
+fi
+echo "STRIP=${strip}"
+
 # Create build command
 CMD="${NDK_ROOT}/ndk-build --jobs=${CORES} -C ${PWD} NDK_MODULE_PATH=${NDK_MODULE_PATH} APP_PLATFORM=${APP_PLATFORM} APP_ABI=${arch}"
 echo "CMD=${CMD}"
@@ -109,6 +117,7 @@ for dir in cocos2dxandroid_static cocos2dx_static cocosdenshion_static chipmunk_
 
 do
 	${ar} rs ${dest}/${lib} $(find ${src}/${dir} -name *.o)
+	${strip} -x ${dest}/${lib}
 done
 
 # begin pro
@@ -117,5 +126,6 @@ rm -f ${dest}/${lib}
 for dir in PluginProtocolStatic cocos2dx_store_static jansson_static jsb_pluginx_static jsb_facebook_static jsb_appbindings_static
 do
 	${ar} rs ${dest}/${lib} $(find ${src}/${dir} -name *.o)
+	${strip} -x ${dest}/${lib}
 done
 # end pro

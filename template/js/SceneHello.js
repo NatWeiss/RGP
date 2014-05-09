@@ -50,7 +50,7 @@ var LayerHello = cc.Layer.extend({
 		);
 		this.bg.setAnchorPoint(0, 0);
 		this.addChild(this.bg, 0);
-
+		
 		/* Create Hello World label. */
 		labelHello = cc.LabelTTF.create(
 			App.getLocalizedString("hello-world"),

@@ -308,11 +308,11 @@ App.loadResources = function() {
 		sheet,
 		i;
 
-	cc.loader.resPath = this.getResourceDir();
+	cc.loader.resPath = "res";
 	cc.director.setContentScaleFactor(this._contentScaleFactor);
 
 	for (i = 0; i < sheets.length; i += 1) {
-		sheet = cc.loader.getUrl(sheets[i]);
+		sheet = cc.loader.getUrl(this.getResourceDir(), sheets[i]);
 		cc.log("Loading spritesheet: " + sheet);
 		cc.spriteFrameCache.addSpriteFrames(sheet);
 	}
