@@ -25,7 +25,7 @@ var run = function(args) {
 		.option('-e, --engine', 'engine to use (' + engines.join(', ') + ') [' + defaults.engine + ']', defaults.engine)
 		.option('-o, --output [path]', 'output folder [' + defaults.dest + ']', defaults.dest)
 		.option('-p, --package [name]', 'package name [' + defaults.package + ']', defaults.package)
-//		.option('-d, --delete', 'delete the destination if it exists')
+		//.option('-d, --delete', 'delete the destination if it exists')
 		.parse(args)
 		.name = 'rapidgame';
 

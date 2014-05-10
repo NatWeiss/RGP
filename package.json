@@ -1,6 +1,6 @@
 {
-  "name": "rapidgame",
-  "version": "0.2.0",
+  "name": "rapidgamepro",
+  "version": "0.8.4",
   "description": "The platform-agnostic game project creator.",
   "author": {
     "name": "Nat Weiss",
@@ -37,8 +37,28 @@
     "download": "~0.1.16",
     "glob": "~3.2.9"
   },
-  "main": "./rapidgame",
+  "main": "./rapidgamepro",
   "bin": {
-    "rapidgame": "./bin/rapidgame"
-  }
+    "rapidgamepro": "./bin/rapidgamepro"
+  },
+  "files": [
+    "bin",
+    "package.json",
+    "rapidgamepro.js",
+    "prebuild",
+    "template",
+    "docs",
+    "docs.html",
+    "CHANGELOG.txt",
+    "LICENSE",
+    "LICENSE_RapidGame.txt",
+    "README.md",
+    "src/app",
+    "src/cocos2dx-store",
+    "src/external/jansson",
+    "src/facebook",
+    "src/mobfox",
+    "src/proj.android",
+    "src/proj.ios_mac"
+  ]
 }
