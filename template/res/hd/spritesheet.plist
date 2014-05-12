@@ -4,6 +4,19 @@
     <dict>
         <key>frames</key>
         <dict>
+            <key>CloseButton.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{134,2},{64,64}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{64,64}}</string>
+                <key>sourceSize</key>
+                <string>{64,64}</string>
+            </dict>
             <key>TouchCircle.png</key>
             <dict>
                 <key>frame</key>
@@ -17,19 +30,6 @@
                 <key>sourceSize</key>
                 <string>{144,144}</string>
             </dict>
-            <key>close-button.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{134,2},{32,32}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,2},{32,32}}</string>
-                <key>sourceSize</key>
-                <string>{36,36}</string>
-            </dict>
         </dict>
         <key>metadata</key>
         <dict>
@@ -38,9 +38,9 @@
             <key>realTextureFileName</key>
             <string>spritesheet.png</string>
             <key>size</key>
-            <string>{168,132}</string>
+            <string>{200,132}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:968464051c5f781b5e6272730e95ed84:4042041bdce54fbc8a866c5e309a7ba0:94563296262a30b4f0b9cd48ec7e5860$</string>
+            <string>$TexturePacker:SmartUpdate:958d09f0cb95af24e4536eb182d312e1:74e898b102e1d82e7740c3d5a67bffb2:94563296262a30b4f0b9cd48ec7e5860$</string>
             <key>textureFileName</key>
             <string>spritesheet.png</string>
         </dict>

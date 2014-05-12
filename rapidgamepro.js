@@ -9,32 +9,29 @@ var glob = require("glob");
 var wrench = require("wrench");
 var child_process = require("child_process");
 var version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))).version;
-var engines = ["cocos2d-js", "unity", "corona"];
+var engines = ["cocos2d-js"];//, "unity", "corona"];
 var defaults = {
 	engine: engines[0],
 	package: "org.mycompany.mygame",
 	dest: path.join(path.homedir(), "Desktop/"),
-	prefix: "/usr/local/rapidgame",
-	libDir: path.join(path.homedir(), "Library/Developer/RapidGame")
+	prefix: path.join(path.homedir(), "Library/Developer/RapidGame")
 };
 var cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip";
 
 //
-// postinstall:
-// mkdir ~/Library/Developer/RapidGame
-// sudo ln -s ~/Library/Developer/RapidGame /usr/local/lib/rapidgame
+// Main run method.
 //
-
 var run = function(args) {
 	var cmd = commander;
 	args = args || process.argv;
 	cmd
 		.version(version)
 		.usage("<new-project-name> [options]")
+		.option("-p, --prefix [name]", "library directory [" + defaults.prefix + "]", defaults.prefix)
 		.option("-e, --engine", "engine to use (" + engines.join(", ") + ") [" + defaults.engine + "]", defaults.engine)
 		.option("-o, --output [path]", "output folder [" + defaults.dest + "]", defaults.dest)
-		.option("-p, --package [name]", "package name [" + defaults.package + "]", defaults.package)
-		//.option("-d, --delete", "delete the destination if it exists")
+		.option("-n, --package [name]", "package name [" + defaults.package + "]", defaults.package)
+		.option("-v, --verbose", "be verbose", false)
 		.parse(args)
 		.name = "rapidgamepro";
 
@@ -49,224 +46,139 @@ var run = function(args) {
 	}
 };
 
+//
+// Copy files recursively with a special exclude filter.
+//
+var copyRecursive = function(src, dest, verbose) {
+	var count = 0,
+		ignore = [
+			"cocos2dx-prebuilt",
+			"wsocket.c", "wsocket.h",
+			"usocket.c", "usocket.h",
+			"unix.c", "unix.h",
+			"serial.c",
+		];
+	
+	wrench.copyDirSyncRecursive(src, dest, {
+		forceDelete: true, // Whether to overwrite existing directory or not
+		excludeHiddenUnix: true, // Whether to copy hidden Unix files or not (preceding .)
+		preserveFiles: true, // If we're overwriting something and the file already exists, keep the existing
+		preserveTimestamps: true, // Preserve the mtime and atime when copying files
+		inflateSymlinks: false, // Whether to follow symlinks or not when copying files
+		exclude: function(filename, dir){
+			// Shall this file/dir be exluded?
+			var i, doExclude = false;
+			if (dir.indexOf("proj.android") >= 0) {
+				if (filename === "obj" || filename === "gen" || filename === "assets") {
+					doExclude = true;
+				} else if (dir.indexOf("libs") >= 0) {
+					if (filename === "armeabi" || filename === "armeabi-v7a" || filename === "x86" || filename === "mips") {
+						doExclude = true;
+					}
+				}
+			} else if (dir.indexOf(".xcodeproj") >= 0) {
+				if (filename === "project.xcworkspace" || filename === "xcuserdata") {
+					doExclude = true;
+				}
+			} else {
+				for (i = 0; i < ignore.length; i += 1) {
+					if (filename === ignore[i]) {
+						doExclude = true;
+						break;
+					}
+				}
+			}
+
+			// Report and return
+			if (doExclude && verbose) {
+				console.log("Ignoring filename '" + filename + "' in " + dir);
+			}
+			if (!doExclude) {
+				count += 1;
+			}
+			return doExclude;
+		}
+	});
+
+	return count;
+};
+
+//
+// Create project.
+//
 var createProject = function(cmd) {
 	var name = cmd.args[0],
 		package = cmd.package,
-		src = path.join(__dirname, "template"),
-		dest = path.join(cmd.output, name),
-		ignore = [
-			"lib/cocos2dx-prebuilt/",
-			"proj.android/obj/",
-			"proj.android/bin/",
-			"proj.android/gen/",
-			"proj.android/assets/",
-			"proj.android/libs/armeabi/",
-			"proj.android/libs/armeabi-v7a/",
-			"proj.android/libs/x86",
-			"proj.android/libs/mips",
-			".xcodeproj/project.xcworkspace",
-			".xcodeproj/xcuserdata",
-		],
-		ignored = {};
+		dir = path.join(cmd.output, name),
+		src,
+		dest,
+		fileCount,
+		i;
 	
 	// Copy all template files to destination
-	console.log("Source: " + src);
-	console.log("Destination: " + dest);
+	src = path.join(__dirname, "template");
+	dest = dir;
+	console.log("Copying project files from " + src + " to " + dest);
+	fileCount = copyRecursive(src, dest, cmd.verbose);
+	if (cmd.verbose) {
+		console.log("Successfully copied " + fileCount + " files");
+	}
+	
+	// Replace project name
+	console.log("Replacing project name with '" + name + "'");
+	replace({
+		regex: "HelloJavascript",
+		replacement: name,
+		paths: [dest],
+		include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,*.vcxproj,*.user,*.filters",
+		recursive: true,
+		silent: !cmd.verbose
+	});
 
-	cpr(src, dest, {
-		deleteFirst: true, //cmd.delete,
-		overwrite: true,
-		confirm: false, // true will try to confirm the filtered out files as well
-		filter: function(filename, index, array){
-			for (var i = 0; i < ignore.length; i += 1) {
-				if (filename.indexOf(ignore[i]) >= 0) {
-					ignored[ignore[i]] = ignored[ignore[i]] || 0;
-					ignored[ignore[i]]++;
-					return false;
-				}
-			}
-			return true;
-		}
-	}, function(errs, files) {
-		// Show results
-		var i, dir, dirs, files, from, to;
-		if (errs) {
-			console.log("Errors:");
-			console.log(errs);
-			return;
-		}
-		for (i in ignored) {
-			if (ignored.hasOwnProperty(i)) {
-				console.log("Ignored " + ignored[i] + " files from " + i);
-			}
-		}
-		console.log("Successfully copied " + files.length + " files");
-		
-		// Replace project name
-		console.log("Replacing project name...");
-		replace({
-			regex: "HelloJavascript",
-			replacement: name,
-			paths: [dest],
-			include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.sh,*.rc,*.sln,*.txt,.project,.cproject,makefile",
-			recursive: true,
-			silent: false
-		});
-
-		// Replace package name
-		console.log("Replacing package name with " + package + "...");
-		replace({
-			regex: "org.cocos2dx.hellojavascript",
-			replacement: package,
-			paths: [dest],
-			include: "*.js,*.plist,*.xml,makefile",
-			recursive: true,
-			silent: false
-		});
-		
-		// Rename files & dirs
-		from = dest + "/**/HelloJavascript.*";
-		console.log("Globbing " + from);
-		files = glob.sync(from);
-		for (i = 0; i < files.length; i++) {
-			from = files[i];
-			to = files[i].replace("HelloJavascript", name);
-			console.log("Moving " + from + " to " + to);
-			try {
-				fs.renameSync(from, to);
-			} catch(e) {
-				console.log("Error moving file");
-			}
-		}
-		
-		// Symlinks
-		try {
-			dir = path.join(dest, "lib/cocos2dx-prebuilt");
-			console.log("Making directory " + dir);
-			fs.mkdirSync(dir);
-		} catch(e) {
-			console.log("Error creating directory: " + e);
-		}
-		dirs = ["lib", "include", "java", "jsb"];
-		for (i = 0; i < dirs.length; i += 1) {
-			try {
-				from = fs.realpathSync("./" + dirs[i]);
-				to = path.join(dir, "/" + dirs[i]);
-				console.log("Symlinking from " + from + " to " + to);
-				fs.symlinkSync(from, to);
-			} catch(e) {
-				console.log("Error creating symlink: " + e);
-			}
-		}
-		
-		// Chmod
-		files = ["run-server", "minify", "upload", "proj.android/build_native.py"];
-		for (i = 0; i < files.length; i += 1) {
-			try {
-				to = path.join(dest, files[i]);
-				console.log("Making " + to + " executable");
-				fs.chmodSync(to, "755");
-			} catch(e) {
-				console.log("Error creating symlink: " + e);
-			}
-		}
-		
+	// Replace package name
+	console.log("Replacing package name with '" + package + "'");
+	replace({
+		regex: "org.cocos2dx.hellojavascript",
+		replacement: package,
+		paths: [dest],
+		include: "*.js,*.plist,*.xml,makefile",
+		recursive: true,
+		silent: !cmd.verbose
 	});
 	
+	// Rename files & dirs
+	from = dest + "/**/HelloJavascript.*";
+	console.log("Renaming project files");
+	files = glob.sync(from);
+	for (i = 0; i < files.length; i++) {
+		from = files[i];
+		to = files[i].replace("HelloJavascript", name);
+		if (cmd.verbose) {
+			console.log("Moving " + from + " to " + to);
+		}
+		try {
+			fs.renameSync(from, to);
+		} catch(e) {
+			console.log("Error moving file");
+		}
+	}
+	
+	// Symlink
+	src = cmd.prefix;
+	dest = path.join(dir, "lib/cocos2dx-prebuilt");
+	console.log("Symlinking from " + src + " to " + dest);
+	try {
+		fs.symlinkSync(src, dest);
+	} catch(e) {
+		console.log("Error creating symlink: " + e);
+	}
+
+	console.log("Done creating project " + name);
 };
 
-module.exports = {
-	run: run,
-	version: version
-};
-
-/*
-
-ios_mac:
-{
-    "rename":               ["PROJECT_NAME.xcodeproj",
-	                         "../js/PROJECT_NAME.js"],
-    "remove":               ["PROJECT_NAME.xcodeproj/project.xcworkspace",
-                             "PROJECT_NAME.xcodeproj/xcuserdata"],
-    "replace_package_name": ["ios/Info.plist",
-	                         "mac/Info.plist",
-							 "../js/Config.js"],
-    "replace_project_name": ["ios/Info.plist",
-                             "../src/AppDelegate.cpp",
-                             "../proj.html5/index.html",
-                             "../proj.html5/project.json",
-							 "../js/App.js",
-							 "../proj.html5/build.xml",
-							 "../proj.html5/minified.js",
-							 "mac/en.lproj/MainMenu.xib",
-                             "mac/Info.plist",
-                             "PROJECT_NAME.xcodeproj/project.pbxproj"]
-}
-
-android:
-{
-    "rename":               [],
-    "remove":               ["assets",
-                             "bin",
-                             "libs",
-                             "gen",
-                             "obj",
-                             "wsocket.c",
-                             "wsocket.h"],
-    "replace_package_name": ["AndroidManifest.xml",
-	                         "makefile"],
-    "replace_project_name": [".project",
-                             ".cproject",
-                             "AndroidManifest.xml",
-							 "makefile",
-                             "build.xml",
-                             "build_native.sh",
-                             "build_native.cmd",
-                             "res/values/strings.xml"]
-}
-
-html5:
-{
-    "rename":               [],
-    "remove":               [],
-    "replace_package_name": [],
-    "replace_project_name": []
-}
-
-
-win32:
-{
-    "rename":               ["PROJECT_NAME.vcxproj",
-                             "PROJECT_NAME.vcxproj.filters",
-                             "PROJECT_NAME.vcxproj.user",
-                             "PROJECT_NAME.sln"],
-    "remove":               ["usocket.c",
-                             "usocket.h",
-                             "unix.c",
-                             "unix.h",
-                             "serial.c"],
-    "replace_package_name": [],
-    "replace_project_name": ["PROJECT_NAME.vcxproj",
-                             "PROJECT_NAME.vcxproj.filters",
-                             "PROJECT_NAME.vcxproj.user",
-                             "PROJECT_NAME.sln",
-                             "game.rc",
-                             "main.cpp"]
-}
-
-linux:
-{
-    "rename":               [],
-    "remove":               ["wsocket.c",
-                             "wsocket.h"],
-    "replace_package_name": [],
-    "replace_project_name": ["../CMakeLists.txt"]
-}
-
-
-
-*/
-
+//
+//
+//
 var downloadUrl = function(url, dest, cb) {
 	var done = false,
 		total = 1,
@@ -302,6 +214,9 @@ var downloadUrl = function(url, dest, cb) {
 	});
 };
 
+//
+//
+//
 var copySrcFiles = function(cmd, callback) {
 	var dest,
 		verbose = false,
@@ -342,6 +257,9 @@ var copySrcFiles = function(cmd, callback) {
 	callback();
 };
 
+//
+//
+//
 var downloadCocos = function(cmd, callback) {
 	console.log("Done downloading Cocos");
 	callback();
@@ -375,6 +293,9 @@ var downloadCocos = function(cmd, callback) {
 
 };
 
+//
+//
+//
 var runPrebuild = function(cmd, callback) {
 	try {
 		var file = path.join(defaults.prefix, "prebuild"),
@@ -402,6 +323,9 @@ var runPrebuild = function(cmd, callback) {
 	}
 };
 
+//
+//
+//
 var prebuild = function(cmd) {
 	copySrcFiles(cmd, function() {
 		downloadCocos(cmd, function() {
@@ -410,6 +334,11 @@ var prebuild = function(cmd) {
 			});
 		});
 	});
+};
+
+module.exports = {
+	run: run,
+	version: version
 };
 
 
