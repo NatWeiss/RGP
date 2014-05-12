@@ -30,12 +30,12 @@
     "creator"
   ],
   "dependencies": {
-    "cpr": "~0.1.1",
-    "replace": "~0.2.9",
-    "path-extra": "~0.2.0",
     "commander": "~2.2.0",
     "download": "~0.1.16",
-    "glob": "~3.2.9"
+    "glob": "~3.2.9",
+    "path-extra": "~0.2.0",
+    "replace": "~0.2.9",
+    "wrench": "^1.5.8"
   },
   "main": "./rapidgamepro",
   "bin": {
@@ -45,7 +45,7 @@
     "bin",
     "package.json",
     "rapidgamepro.js",
-    "prebuild",
+    "prebuild.sh",
     "template",
     "docs",
     "docs.html",
@@ -60,5 +60,8 @@
     "src/mobfox",
     "src/proj.android",
     "src/proj.ios_mac"
-  ]
+  ],
+  "scripts": {
+    "postinstall": "echo Hooray"
+  }
 }

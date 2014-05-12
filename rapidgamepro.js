@@ -1,33 +1,42 @@
 
-var path = require('path-extra');
-var fs = require('fs');
-var util = require('util');
-var commander = require('commander');
-var cpr = require('cpr');
-var replace = require('replace');
-var download = require('download');
-var glob = require('glob');
-var version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version;
-var engines = ['cocos2d-js', 'unity', 'corona'];
+var path = require("path-extra");
+var fs = require("fs");
+var util = require("util");
+var commander = require("commander");
+var replace = require("replace");
+var download = require("download");
+var glob = require("glob");
+var wrench = require("wrench");
+var child_process = require("child_process");
+var version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))).version;
+var engines = ["cocos2d-js", "unity", "corona"];
 var defaults = {
 	engine: engines[0],
-	package: 'org.mycompany.mygame',
-	dest: path.join(path.homedir(), 'Desktop/')
+	package: "org.mycompany.mygame",
+	dest: path.join(path.homedir(), "Desktop/"),
+	prefix: "/usr/local/rapidgame",
+	libDir: path.join(path.homedir(), "Library/Developer/RapidGame")
 };
 var cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip";
+
+//
+// postinstall:
+// mkdir ~/Library/Developer/RapidGame
+// sudo ln -s ~/Library/Developer/RapidGame /usr/local/lib/rapidgame
+//
 
 var run = function(args) {
 	var cmd = commander;
 	args = args || process.argv;
 	cmd
 		.version(version)
-		.usage('<new-project-name> [options]')
-		.option('-e, --engine', 'engine to use (' + engines.join(', ') + ') [' + defaults.engine + ']', defaults.engine)
-		.option('-o, --output [path]', 'output folder [' + defaults.dest + ']', defaults.dest)
-		.option('-p, --package [name]', 'package name [' + defaults.package + ']', defaults.package)
-		//.option('-d, --delete', 'delete the destination if it exists')
+		.usage("<new-project-name> [options]")
+		.option("-e, --engine", "engine to use (" + engines.join(", ") + ") [" + defaults.engine + "]", defaults.engine)
+		.option("-o, --output [path]", "output folder [" + defaults.dest + "]", defaults.dest)
+		.option("-p, --package [name]", "package name [" + defaults.package + "]", defaults.package)
+		//.option("-d, --delete", "delete the destination if it exists")
 		.parse(args)
-		.name = 'rapidgame';
+		.name = "rapidgamepro";
 
 	if (cmd.args.length) {
 		if(cmd.args[0] === "prebuild") {
@@ -43,7 +52,7 @@ var run = function(args) {
 var createProject = function(cmd) {
 	var name = cmd.args[0],
 		package = cmd.package,
-		src = path.join(__dirname, 'template'),
+		src = path.join(__dirname, "template"),
 		dest = path.join(cmd.output, name),
 		ignore = [
 			"lib/cocos2dx-prebuilt/",
@@ -293,7 +302,51 @@ var downloadUrl = function(url, dest, cb) {
 	});
 };
 
-var prebuild = function(cmd) {
+var copySrcFiles = function(cmd, callback) {
+	var dest,
+		verbose = false,
+		dir = path.join(defaults.prefix, "/");
+/*
+	console.log("Copying prebuild to " + dir);
+	try {
+		dest = path.join(dir, "prebuild.sh");
+		fs.createReadStream("prebuild").pipe(fs.createWriteStream(dest));
+		fs.chmodSync(dest, "755");
+	} catch(e) {
+		console.log(e);
+	}
+*/
+
+	// Synchronously copy src directory to dest
+	dest = path.join(dir, "/src");
+	console.log("Copying src dir to " + dest);
+	wrench.copyDirSyncRecursive("./src", dest, {
+		forceDelete: true, // Whether to overwrite existing directory or not
+		excludeHiddenUnix: true, // Whether to copy hidden Unix files or not (preceding .)
+		preserveFiles: true, // If we're overwriting something and the file already exists, keep the existing
+		preserveTimestamps: true, // Preserve the mtime and atime when copying files
+		inflateSymlinks: false, // Whether to follow symlinks or not when copying files
+		exclude: function(filename, dir){
+			if (dir.indexOf("proj.android") >= 0) {
+				if (filename === "libs" || filename === "obj" || filename === "gen" || filename === "assets") {
+					if (verbose) {
+						console.log("Ignoring filename " + filename + ", dir " + dir);
+					}
+					return true;
+				}
+			}
+			return false;
+		}
+	});
+
+	callback();
+};
+
+var downloadCocos = function(cmd, callback) {
+	console.log("Done downloading Cocos");
+	callback();
+	return;
+	
 	var dir = "cocos2d-js",
 		cd = dir + "/cocos2d-js-v3.0-alpha2",
 		dest = path.join(__dirname, dir),
@@ -306,16 +359,6 @@ var prebuild = function(cmd) {
 				fs.renameSync(from, to);
 			} catch(e) {
 				console.log("Couldn't move cocos2d-x");
-			}
-			
-			try {
-				var spawn = require('child_process').spawn;
-				var child = spawn("./prebuild");//, ['-v', 'builds/pdf/book.html', '-o', 'builds/pdf/book.pdf']);
-				child.stdout.on("data", function(chunk) {
-					util.print(chunk.toString());
-				});
-			} catch(e) {
-				console.log(e);
 			}
 		};
 	
@@ -331,3 +374,42 @@ var prebuild = function(cmd) {
 	}
 
 };
+
+var runPrebuild = function(cmd, callback) {
+	try {
+		var file = path.join(defaults.prefix, "prebuild"),
+			child;
+
+		child = child_process.spawn("./prebuild.sh", {/*cwd: defaults.prefix,*/ env: process.env});
+		child.stdout.on("data", function(chunk) {
+			util.print(chunk.toString());
+		});
+		child.stderr.on("data", function(chunk) {
+			console.log(chunk.toString());
+		});
+		child.on("error", function(e) {
+			console.log("Error " + e);
+		});
+		child.on("exit", function(code, signal) {
+			console.log("Exit " + code + " " + signal);
+		});
+		child.on("close", function(code) {
+			console.log("Done running prebuild");
+			callback();
+		});
+	} catch(e) {
+		console.log(e);
+	}
+};
+
+var prebuild = function(cmd) {
+	copySrcFiles(cmd, function() {
+		downloadCocos(cmd, function() {
+			runPrebuild(cmd, function() {
+				console.log("Done with prebuild");
+			});
+		});
+	});
+};
+
+

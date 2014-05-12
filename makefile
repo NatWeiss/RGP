@@ -272,6 +272,7 @@ binary:
 	cp -r ${libdir}/Debug-Mac/macosx/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Mac/macosx/
 
 install: dest=/usr/local/lib/node_modules/rapidgamepro
+install: lib=/Users/nat/Library/Developer/RapidGame
 install:
 	cd template/proj.android; make clean
 	mkdir -p /tmp/proj.android
@@ -283,4 +284,5 @@ install:
 	rmdir /tmp/proj.android
 	#sudo rm ${dest}/rapidgamepro.js
 	#sudo ln -s /Users/nat/code/RapidGamePro/rapidgamepro.js ${dest}/rapidgamepro.js
-	sudo cp -r src/bindings src/bindings-pluginx src/cocos2d-x src/external ${dest}/src/
+	mkdir -p ${lib}/src
+	sudo cp -r src/bindings src/bindings-pluginx src/cocos2d-x src/external ${lib}/src/

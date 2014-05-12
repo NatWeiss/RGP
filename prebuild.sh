@@ -1,0 +1,279 @@
+#!/bin/bash
+
+root=$(dirname "$0")
+root=$(cd ${root}; pwd)
+cd ${root}
+if [ -d current ]; then
+	dest=${root}
+else
+	dest="/usr/local/rapidgame"
+	find "${dest}/src" -name *.pch -exec touch {} \;
+fi
+
+# Extra Xcode build settings.
+# GCC_SYMBOLS_PRIVATE_EXTERN=NO prevents a linker warning about visibility.
+xcodeSettings="GCC_SYMBOLS_PRIVATE_EXTERN=NO"
+
+# These settings strip the static libraries of unneeded local symbols
+xcodeSettings="${xcodeSettings} GCC_SYMBOLS_PRIVATE_EXTERN=NO DEPLOYMENT_POSTPROCESSING=YES STRIP_INSTALLED_PRODUCT=YES STRIP_STYLE=non-global"
+
+# Prefer a smaller set of architectures?
+small=0
+
+# Get which command.
+cmd="$1"
+if [ -z "$cmd" ]; then
+	cmd="all"
+fi
+
+# Check for Xcode
+if [ "$cmd" == "ios" ] || [ "$cmd" == "mac" ] || [ "$cmd" == "all" ]; then
+	if hash xcodebuild 2>/dev/null; then
+		xcodebuild -checkFirstLaunchStatus
+		res="$?"
+		if [ "$res" != "0" ]; then
+			echo "Please launch Xcode once before prebuilding."
+			exit 1
+		fi
+	else
+		echo "Please install Xcode and launch it at least once."
+		exit 1
+	fi
+fi
+
+# Check for Android NDK
+if [ "$cmd" == "android" ] || [ "$cmd" == "all" ]; then
+	if [ ! -d "${NDK_ROOT}" ]; then
+		echo "NDK_ROOT=${NDK_ROOT}"
+		echo "Please set the NDK_ROOT environment variable to the path where the Android NDK is located."
+		exit 1
+	fi
+fi
+
+# Get which projects.
+projs="cocos2dx-prebuilt"
+# begin pro
+projs="${projs} cocos2dx-plugins"
+# end pro
+
+# Start build log file.
+logFile="${dest}/build.log"
+echo "Log file: ${logFile}"
+echo "" > $logFile
+
+# Switch to destination
+cd "${dest}"
+
+# Build headers
+if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
+	echo "Building headers..."
+	#libDir="template/lib/cocos2dx-prebuilt"
+	#mkdir -p ${libDir}
+
+	# Clean the include directory
+	dir="${dest}/include"
+	if [ -d "${dir}" ]; then
+		rm -r ${dir}
+	fi
+	mkdir -p ${dir}
+	mkdir -p ${dir}/bindings
+	mkdir -p ${dir}/external
+	mkdir -p ${dir}/frameworks
+	mkdir -p ${dir}/mk
+# begin pro
+	mkdir -p ${dir}/facebook
+	mkdir -p ${dir}/app
+	mkdir -p ${dir}/soomla
+# end pro
+
+	(cd src/cocos2d-x && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-x && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-x && find . -name '*.msg' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp - >> ${logFile} 2>&1)
+ 	(cd src/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp - >> ${logFile} 2>&1)
+# begin pro
+	(cd src/cocos2dx-store && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/soomla && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
+	cp src/facebook/jsb*.h $dir/facebook
+	cp -r src/facebook/proj.ios/FacebookSDK.framework $dir/frameworks
+	cp src/app/jsb*.h $dir/app
+# end pro
+	(cd src && find . -name '*.mk' -print | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	(cd src && find . -name '*.a' -print | grep android | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	rm -r ${dir}/mk/proj.android
+
+	if [ -d ${dir}/docs ]; then
+		rm -r ${dir}/docs
+	fi
+	if [ -d ${dir}/samples ]; then
+		rm -r ${dir}/samples
+	fi
+	if [ -d ${dir}/templates ]; then
+		rm -r ${dir}/templates
+	fi
+	if [ -d ${dir}/tools ]; then
+		rm -r ${dir}/tools
+	fi
+	if [ -d ${dir}/plugin/samples ]; then
+		rm -r ${dir}/plugin/samples
+	fi
+	if [ -d ${dir}/plugin/plugins ]; then
+		rm -r ${dir}/plugin/plugins
+	fi
+	find ${dir} | xargs xattr -c >> ${logFile} 2>&1
+
+	# Copy javascript bindings
+	dir="${dest}/jsb"
+	if [ -d $dir ]; then
+		rm -r ${dir}
+	fi
+	mkdir -p "${dir}"
+	cp src/bindings/script/*.js $dir
+	cp -r src/bindings/script/debugger $dir
+	cp src/bindings/auto/api/*.js $dir
+# begin pro
+	#find src/cocos2dx-store -name *.js -exec cp {} $dir \;
+	find src/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $dir \;
+	find src/bindings-pluginx -name *.js -exec cp {} $dir \;
+# end pro
+	find ${dir} | xargs xattr -c >> ${logFile} 2>&1
+
+	# Copy Android java files
+	dir="${dest}/java"
+	if [ -d $dir ]; then
+		rm -r ${dir}
+	fi
+	mkdir -p "${dir}"
+
+	mkdir -p "${dir}/cocos2d-x"
+	cp -r src/cocos2d-x/cocos/2d/platform/android/java/* ${dir}/cocos2d-x/
+# begin pro
+	mkdir -p "${dir}/cocos2dx-store"
+	cp -r src/cocos2dx-store/android/* ${dir}/cocos2dx-store/
+	mkdir -p "${dir}/android-store"
+	cp -r src/cocos2dx-store/submodules/android-store/SoomlaAndroidStore/* ${dir}/android-store/
+	d=src/cocos2dx-store/submodules/android-store/submodules/android-store-google-play
+	if [ -d ${d} ]; then
+		cp -r ${d}/src/* ${dir}/android-store/src/
+	fi
+	mkdir -p "${dir}/facebook-sdk"
+	cp -r src/facebook/proj.android/facebook-android-sdk/* ${dir}/facebook-sdk/
+	mkdir -p "${dir}/plugin-protocols"
+	cp -r src/cocos2d-x/plugin/protocols/proj.android/* ${dir}/plugin-protocols/
+	mkdir -p "${dir}/flurry"
+	cp -r src/cocos2d-x/plugin/plugins/flurry/proj.android/* ${dir}/flurry/
+	mkdir -p "${dir}/tools/android/"
+	cp -r src/cocos2d-x/plugin/tools/android/* ${dir}/tools/android/
+
+	sed -i "" 's/..\/..\/..\/protocols\/proj.android/..\/plugin-protocols/g' java/flurry/project.properties
+	sed -i "" 's/..\/..\/cocos2d-x\/cocos\/2d\/platform\/android\/java/..\/cocos2d-x/g' java/cocos2dx-store/project.properties
+	sed -i "" 's/..\/submodules\/android-store\/SoomlaAndroidStore/..\/android-store/g' java/cocos2dx-store/project.properties
+# end pro
+
+	rm -rf ${dir}/*/bin
+	rm -rf ${dir}/*/gen
+     
+	# Create absolute symlinks
+	#rm -f ${libDir}/lib
+	#ln -s ${root}/lib ${libDir}/
+
+	#rm -f ${libDir}/include
+	#ln -s ${root}/include ${libDir}/
+
+	#rm -f ${libDir}/java
+	#ln -s ${root}/java ${libDir}/
+
+	echo "Done."
+fi
+
+# Build iOS
+if [ "$cmd" == "ios" ] || [ "$cmd" == "all" ]; then
+	if [ "${small}" == "1" ]; then
+		configs="Debug"
+		sdks="iphoneos iphonesimulator"
+	else
+		configs="Debug Release"
+		sdks="iphoneos iphonesimulator"
+	fi
+	for config in ${configs}; do
+		for sdk in ${sdks}; do
+			for proj in ${projs}; do
+				echo "Building ${proj} iOS ${config} ${sdk}..."
+				if [ "${small}" == "1" ]; then
+					if [ "${sdk}" == "iphoneos" ]; then
+						archSetting="-arch armv7"
+					else
+						archSetting="-arch i386"
+					fi
+				fi
+				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "iOS" -configuration ${config} -sdk ${sdk} ${archSetting} ${xcodeSettings} >> ${logFile} 2>&1
+				res="$?"
+				if [ "$res" == "0" ]; then
+					echo "Succeeded."
+				else
+					echo "Build failed. Please check the file '${logFile}' for errors."
+					exit 1
+				fi
+			done
+		done
+	done
+fi
+
+# Build Mac
+if [ "$cmd" == "mac" ] || [ "$cmd" == "all" ]; then
+	if [ "${small}" == "1" ]; then
+		configs="Debug"
+		sdks="macosx"
+	else
+		configs="Debug Release"
+		sdks="macosx"
+	fi
+	for config in ${configs}; do
+		for sdk in ${sdks}; do
+			for proj in ${projs}; do
+				echo "Building ${proj} Mac ${config} ${sdk}..."
+				if [ "${small}" == "1" ]; then
+					archSetting="-arch i386"
+				fi
+				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "Mac" -configuration ${config} -sdk ${sdk} ${archSetting} ${xcodeSettings} >> ${logFile} 2>&1
+				res="$?"
+				if [ "$res" == "0" ]; then
+					echo "Succeeded."
+				else
+					echo "Build failed. Please check the file '${logFile}' for errors."
+					exit 1
+				fi
+			done
+		done
+	done
+fi
+
+# Build Android
+if [ "$cmd" == "android" ] || [ "$cmd" == "all" ]; then
+	if [ "${small}" == "1" ]; then
+		configs="debug"
+		archs="armeabi"
+	else
+		configs="debug release"
+		archs="armeabi armeabi-v7a x86"
+	fi
+	for config in ${configs}; do
+		for arch in ${archs}; do
+			echo "Building Android ${config} ${arch}..."
+			src/proj.android/build ${arch} ${config} >> ${logFile} 2>&1
+			res="$?"
+			if [ "$res" == "0" ]; then
+				echo "Succeeded."
+			else
+				echo "Build failed. Please check the file '${logFile}' for errors."
+				exit 1
+			fi
+		done
+	done
+fi
+
+# Stripping
+#find . -name *.a -exec strip -x {} \;
