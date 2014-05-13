@@ -284,7 +284,7 @@ To enable set it to a value different than 0. Disabled by default.
  protected by default.
  */
 #ifndef CC_CONSTRUCTOR_ACCESS
-#define CC_CONSTRUCTOR_ACCESS public // Changed to public to get current bindings working
+#define CC_CONSTRUCTOR_ACCESS public
 #endif
 
 #endif // __CCCONFIG_H__

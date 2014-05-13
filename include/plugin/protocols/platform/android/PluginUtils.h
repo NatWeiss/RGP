@@ -24,7 +24,7 @@ THE SOFTWARE.
 #ifndef __PLUGIN_UTILS_H__
 #define __PLUGIN_UTILS_H__
 
-#include "JniHelper.h"
+#include "PluginJniHelper.h"
 #include "PluginJavaData.h"
 #include <map>
 #include "PluginParam.h"
@@ -59,8 +59,8 @@ public:
         PluginJavaData* pData = PluginUtils::getPluginJavaData(thiz);
         return_if_fails(pData != NULL);
 
-        JniMethodInfo t;
-        if (JniHelper::getMethodInfo(t
+        PluginJniMethodInfo t;
+        if (PluginJniHelper::getMethodInfo(t
             , pData->jclassName.c_str()
             , funcName
             , paramCode))
@@ -75,8 +75,8 @@ public:
         PluginJavaData* pData = PluginUtils::getPluginJavaData(thiz);
         return_if_fails(pData != NULL);
 
-        JniMethodInfo t;
-        if (JniHelper::getMethodInfo(t
+        PluginJniMethodInfo t;
+        if (PluginJniHelper::getMethodInfo(t
             , pData->jclassName.c_str()
             , funcName
             , "()V"))
@@ -96,14 +96,14 @@ public:
         PluginJavaData* pData = PluginUtils::getPluginJavaData(thiz);
         return_val_if_fails(pData != NULL, ret);
 
-        JniMethodInfo t;
-        if (JniHelper::getMethodInfo(t
+        PluginJniMethodInfo t;
+        if (PluginJniHelper::getMethodInfo(t
             , pData->jclassName.c_str()
             , funcName
             , paramCode))
         {
             jstring strRet = (jstring)t.env->CallObjectMethod(pData->jobj, t.methodID, param);
-            ret = JniHelper::jstring2string(strRet);
+            ret = PluginJniHelper::jstring2string(strRet);
             t.env->DeleteLocalRef(t.classID);
         }
         return ret;
@@ -115,14 +115,14 @@ public:
         PluginJavaData* pData = PluginUtils::getPluginJavaData(thiz);
         return_val_if_fails(pData != NULL, ret);
 
-        JniMethodInfo t;
-        if (JniHelper::getMethodInfo(t
+        PluginJniMethodInfo t;
+        if (PluginJniHelper::getMethodInfo(t
             , pData->jclassName.c_str()
             , funcName
             , "()Ljava/lang/String;"))
         {
             jstring strRet = (jstring) t.env->CallObjectMethod(pData->jobj, t.methodID);
-            ret = JniHelper::jstring2string(strRet);
+            ret = PluginJniHelper::jstring2string(strRet);
             t.env->DeleteLocalRef(t.classID);
         }
         return ret;
