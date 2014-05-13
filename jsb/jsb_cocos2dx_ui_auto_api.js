@@ -327,16 +327,6 @@ getBottomInParent : function (
 },
 
 /**
- * @method getActionTag
- * @return {int}
- */
-getActionTag : function (
-)
-{
-    return 0;
-},
-
-/**
  * @method getLayoutParameter
  * @param {ccui.LayoutParameterType} arg0
  * @return {ccui.LayoutParameter}
@@ -401,6 +391,16 @@ isFocused : function (
 },
 
 /**
+ * @method getVirtualRendererSize
+ * @return {SizeObject}
+ */
+getVirtualRendererSize : function (
+)
+{
+    return cc.Size;
+},
+
+/**
  * @method isTouchEnabled
  * @return {bool}
  */
@@ -411,13 +411,13 @@ isTouchEnabled : function (
 },
 
 /**
- * @method getContentSize
- * @return {SizeObject}
+ * @method getActionTag
+ * @return {int}
  */
-getContentSize : function (
+getActionTag : function (
 )
 {
-    return cc.Size;
+    return 0;
 },
 
 /**
@@ -852,11 +852,11 @@ char
 
 /**
  * @method setBackGroundImage
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 setBackGroundImage : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -1013,18 +1013,6 @@ getBackGroundStartColor : function (
 },
 
 /**
- * @method hitTest
- * @param {PointObject} arg0
- * @return {bool}
- */
-hitTest : function (
-point 
-)
-{
-    return false;
-},
-
-/**
  * @method setBackGroundImageScale9Enabled
  * @param {bool} arg0
  */
@@ -1152,14 +1140,32 @@ rect
 
 /**
  * @method loadTextureDisabled
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTextureDisabled : function (
-char, 
+str, 
 texturerestype 
 )
 {
+},
+
+/**
+ * @method init
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
+ * @param {ccui.TextureResType} arg3
+ * @return {bool}
+ */
+init : function (
+str, 
+str, 
+str, 
+texturerestype 
+)
+{
+    return false;
 },
 
 /**
@@ -1184,11 +1190,11 @@ rect
 
 /**
  * @method loadTexturePressed
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTexturePressed : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -1196,10 +1202,10 @@ texturerestype
 
 /**
  * @method setTitleFontName
- * @param {char} arg0
+ * @param {String} arg0
  */
 setTitleFontName : function (
-char 
+str 
 )
 {
 },
@@ -1226,15 +1232,15 @@ getCapInsetsPressedRenderer : function (
 
 /**
  * @method loadTextures
- * @param {char} arg0
- * @param {char} arg1
- * @param {char} arg2
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
  * @param {ccui.TextureResType} arg3
  */
 loadTextures : function (
-char, 
-char, 
-char, 
+str, 
+str, 
+str, 
 texturerestype 
 )
 {
@@ -1252,11 +1258,11 @@ isScale9Enabled : function (
 
 /**
  * @method loadTextureNormal
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTextureNormal : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -1284,12 +1290,12 @@ getTitleFontSize : function (
 
 /**
  * @method getTitleFontName
- * @return {char}
+ * @return {String}
  */
 getTitleFontName : function (
 )
 {
-    return 0;
+    return ;
 },
 
 /**
@@ -1314,9 +1320,17 @@ bool
 
 /**
  * @method create
- * @return {ccui.Button}
- */
-create : function (
+* @param {String} str
+* @param {String} str
+* @param {String} str
+* @param {ccui.TextureResType} texturerestype
+* @return {ccui.Button|ccui.Button}
+*/
+create : function(
+str,
+str,
+str,
+texturerestype 
 )
 {
     return ccui.Button;
@@ -1360,11 +1374,11 @@ getSelectedState : function (
 
 /**
  * @method loadTextureBackGroundSelected
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTextureBackGroundSelected : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -1372,11 +1386,11 @@ texturerestype
 
 /**
  * @method loadTextureBackGroundDisabled
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTextureBackGroundDisabled : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -1384,31 +1398,53 @@ texturerestype
 
 /**
  * @method loadTextureFrontCross
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTextureFrontCross : function (
-char, 
+str, 
 texturerestype 
 )
 {
 },
 
 /**
+ * @method init
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
+ * @param {String} arg3
+ * @param {String} arg4
+ * @param {ccui.TextureResType} arg5
+ * @return {bool}
+ */
+init : function (
+str, 
+str, 
+str, 
+str, 
+str, 
+texturerestype 
+)
+{
+    return false;
+},
+
+/**
  * @method loadTextures
- * @param {char} arg0
- * @param {char} arg1
- * @param {char} arg2
- * @param {char} arg3
- * @param {char} arg4
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
+ * @param {String} arg3
+ * @param {String} arg4
  * @param {ccui.TextureResType} arg5
  */
 loadTextures : function (
-char, 
-char, 
-char, 
-char, 
-char, 
+str, 
+str, 
+str, 
+str, 
+str, 
 texturerestype 
 )
 {
@@ -1416,11 +1452,11 @@ texturerestype
 
 /**
  * @method loadTextureBackGround
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTextureBackGround : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -1438,11 +1474,11 @@ bool
 
 /**
  * @method loadTextureFrontCrossDisabled
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTextureFrontCrossDisabled : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -1450,9 +1486,21 @@ texturerestype
 
 /**
  * @method create
- * @return {ccui.CheckBox}
- */
-create : function (
+* @param {String} str
+* @param {String} str
+* @param {String} str
+* @param {String} str
+* @param {String} str
+* @param {ccui.TextureResType} texturerestype
+* @return {ccui.CheckBox|ccui.CheckBox}
+*/
+create : function(
+str,
+str,
+str,
+str,
+str,
+texturerestype 
 )
 {
     return ccui.CheckBox;
@@ -1486,14 +1534,28 @@ ccui.ImageView = {
 
 /**
  * @method loadTexture
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTexture : function (
-char, 
+str, 
 texturerestype 
 )
 {
+},
+
+/**
+ * @method init
+ * @param {String} arg0
+ * @param {ccui.TextureResType} arg1
+ * @return {bool}
+ */
+init : function (
+str, 
+texturerestype 
+)
+{
+    return false;
 },
 
 /**
@@ -1548,9 +1610,13 @@ isScale9Enabled : function (
 
 /**
  * @method create
- * @return {ccui.ImageView}
- */
-create : function (
+* @param {String} str
+* @param {ccui.TextureResType} texturerestype
+* @return {ccui.ImageView|ccui.ImageView}
+*/
+create : function(
+str,
+texturerestype 
 )
 {
     return ccui.ImageView;
@@ -1653,6 +1719,22 @@ str
 },
 
 /**
+ * @method init
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {int} arg2
+ * @return {bool}
+ */
+init : function (
+str, 
+str, 
+int 
+)
+{
+    return false;
+},
+
+/**
  * @method getTextHorizontalAlignment
  * @return {cc.TextHAlignment}
  */
@@ -1734,9 +1816,15 @@ size
 
 /**
  * @method create
- * @return {ccui.Text}
- */
-create : function (
+* @param {String} str
+* @param {String} str
+* @param {int} int
+* @return {ccui.Text|ccui.Text}
+*/
+create : function(
+str,
+str,
+int 
 )
 {
     return ccui.Text;
@@ -1797,6 +1885,14 @@ getStringValue : function (
 },
 
 /**
+ * @method adaptRenderers
+ */
+adaptRenderers : function (
+)
+{
+},
+
+/**
  * @method setStringValue
  * @param {String} arg0
  */
@@ -1808,9 +1904,19 @@ str
 
 /**
  * @method create
- * @return {ccui.TextAtlas}
- */
-create : function (
+* @param {String} str
+* @param {String} str
+* @param {int} int
+* @param {int} int
+* @param {String} str
+* @return {ccui.TextAtlas|ccui.TextAtlas}
+*/
+create : function(
+str,
+str,
+int,
+int,
+str 
 )
 {
     return ccui.TextAtlas;
@@ -1854,11 +1960,11 @@ int
 
 /**
  * @method loadTexture
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadTexture : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -1936,9 +2042,13 @@ getPercent : function (
 
 /**
  * @method create
- * @return {ccui.LoadingBar}
- */
-create : function (
+* @param {String} str
+* @param {int} int
+* @return {ccui.LoadingBar|ccui.LoadingBar}
+*/
+create : function(
+str,
+int 
 )
 {
     return ccui.LoadingBar;
@@ -2542,11 +2652,11 @@ int
 
 /**
  * @method loadSlidBallTextureDisabled
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadSlidBallTextureDisabled : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -2554,11 +2664,11 @@ texturerestype
 
 /**
  * @method loadSlidBallTextureNormal
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadSlidBallTextureNormal : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -2566,11 +2676,11 @@ texturerestype
 
 /**
  * @method loadBarTexture
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadBarTexture : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -2578,11 +2688,11 @@ texturerestype
 
 /**
  * @method loadProgressBarTexture
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadProgressBarTexture : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -2590,15 +2700,15 @@ texturerestype
 
 /**
  * @method loadSlidBallTextures
- * @param {char} arg0
- * @param {char} arg1
- * @param {char} arg2
+ * @param {String} arg0
+ * @param {String} arg1
+ * @param {String} arg2
  * @param {ccui.TextureResType} arg3
  */
 loadSlidBallTextures : function (
-char, 
-char, 
-char, 
+str, 
+str, 
+str, 
 texturerestype 
 )
 {
@@ -2656,11 +2766,11 @@ rect
 
 /**
  * @method loadSlidBallTexturePressed
- * @param {char} arg0
+ * @param {String} arg0
  * @param {ccui.TextureResType} arg1
  */
 loadSlidBallTexturePressed : function (
-char, 
+str, 
 texturerestype 
 )
 {
@@ -3062,9 +3172,15 @@ getTouchSize : function (
 
 /**
  * @method create
- * @return {ccui.TextField}
- */
-create : function (
+* @param {String} str
+* @param {String} str
+* @param {int} int
+* @return {ccui.TextField|ccui.TextField}
+*/
+create : function(
+str,
+str,
+int 
 )
 {
     return ccui.TextField;
@@ -3098,39 +3214,43 @@ ccui.TextBMFont = {
 
 /**
  * @method setFntFile
- * @param {char} arg0
+ * @param {String} arg0
  */
 setFntFile : function (
-char 
+str 
 )
 {
 },
 
 /**
  * @method getStringValue
- * @return {char}
+ * @return {String}
  */
 getStringValue : function (
 )
 {
-    return 0;
+    return ;
 },
 
 /**
  * @method setText
- * @param {char} arg0
+ * @param {String} arg0
  */
 setText : function (
-char 
+str 
 )
 {
 },
 
 /**
  * @method create
- * @return {ccui.TextBMFont}
- */
-create : function (
+* @param {String} str
+* @param {String} str
+* @return {ccui.TextBMFont|ccui.TextBMFont}
+*/
+create : function(
+str,
+str 
 )
 {
     return ccui.TextBMFont;

@@ -894,26 +894,6 @@ getMaxS : function (
 },
 
 /**
- * @method updateWithData
- * @param {void} arg0
- * @param {int} arg1
- * @param {int} arg2
- * @param {int} arg3
- * @param {int} arg4
- * @return {bool}
- */
-updateWithData : function (
-void, 
-int, 
-int, 
-int, 
-int 
-)
-{
-    return false;
-},
-
-/**
  * @method hasPremultipliedAlpha
  * @return {bool}
  */
@@ -1168,6 +1148,16 @@ Texture2D : function (
 cc.EventListener = {
 
 /**
+ * @method setEnabled
+ * @param {bool} arg0
+ */
+setEnabled : function (
+bool 
+)
+{
+},
+
+/**
  * @method clone
  * @return {cc.EventListener}
  */
@@ -1175,6 +1165,16 @@ clone : function (
 )
 {
     return cc.EventListener;
+},
+
+/**
+ * @method isEnabled
+ * @return {bool}
+ */
+isEnabled : function (
+)
+{
+    return false;
 },
 
 /**
@@ -7877,18 +7877,16 @@ AtlasNode : function (
 cc.DrawNode = {
 
 /**
- * @method drawQuadraticBezier
+ * @method drawTriangle
  * @param {PointObject} arg0
  * @param {PointObject} arg1
  * @param {PointObject} arg2
- * @param {unsigned int} arg3
- * @param {Color4FObject} arg4
+ * @param {Color4FObject} arg3
  */
-drawQuadraticBezier : function (
+drawTriangle : function (
 point, 
 point, 
 point, 
-int, 
 color4f 
 )
 {
@@ -7915,22 +7913,6 @@ clear : function (
 },
 
 /**
- * @method drawTriangle
- * @param {PointObject} arg0
- * @param {PointObject} arg1
- * @param {PointObject} arg2
- * @param {Color4FObject} arg3
- */
-drawTriangle : function (
-point, 
-point, 
-point, 
-color4f 
-)
-{
-},
-
-/**
  * @method init
  * @return {bool}
  */
@@ -7949,6 +7931,24 @@ init : function (
 drawDot : function (
 point, 
 float, 
+color4f 
+)
+{
+},
+
+/**
+ * @method drawQuadraticBezier
+ * @param {PointObject} arg0
+ * @param {PointObject} arg1
+ * @param {PointObject} arg2
+ * @param {unsigned int} arg3
+ * @param {Color4FObject} arg4
+ */
+drawQuadraticBezier : function (
+point, 
+point, 
+point, 
+int, 
 color4f 
 )
 {
@@ -9699,16 +9699,6 @@ int
 },
 
 /**
- * @method getFontSize
- * @return {float}
- */
-getFontSize : function (
-)
-{
-    return 0;
-},
-
-/**
  * @method getString
  * @return {String}
  */
@@ -9716,6 +9706,16 @@ getString : function (
 )
 {
     return ;
+},
+
+/**
+ * @method getHeight
+ * @return {unsigned int}
+ */
+getHeight : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -9752,16 +9752,6 @@ getCommonLineHeight : function (
  */
 setWidth : function (
 int 
-)
-{
-},
-
-/**
- * @method setFontName
- * @param {String} arg0
- */
-setFontName : function (
-str 
 )
 {
 },
@@ -9807,13 +9797,13 @@ str
 },
 
 /**
- * @method getHeight
- * @return {unsigned int}
+ * @method setSystemFontName
+ * @param {String} arg0
  */
-getHeight : function (
+setSystemFontName : function (
+str 
 )
 {
-    return 0;
 },
 
 /**
@@ -9831,23 +9821,13 @@ point
 },
 
 /**
- * @method getFontDefinition
- * @return {cc.FontDefinition}
+ * @method setSystemFontSize
+ * @param {float} arg0
  */
-getFontDefinition : function (
+setSystemFontSize : function (
+float 
 )
 {
-    return cc.FontDefinition;
-},
-
-/**
- * @method getFontName
- * @return {String}
- */
-getFontName : function (
-)
-{
-    return ;
 },
 
 /**
@@ -9939,6 +9919,16 @@ int
 },
 
 /**
+ * @method getSystemFontName
+ * @return {String}
+ */
+getSystemFontName : function (
+)
+{
+    return ;
+},
+
+/**
  * @method setVerticalAlignment
  * @param {cc.TextVAlignment} arg0
  */
@@ -9949,13 +9939,13 @@ textvalignment
 },
 
 /**
- * @method setFontSize
- * @param {float} arg0
+ * @method getTTFConfig
+ * @return {cc._ttfConfig}
  */
-setFontSize : function (
-float 
+getTTFConfig : function (
 )
 {
+    return cc._ttfConfig;
 },
 
 /**
@@ -10021,6 +10011,16 @@ int
 },
 
 /**
+ * @method getSystemFontSize
+ * @return {float}
+ */
+getSystemFontSize : function (
+)
+{
+    return 0;
+},
+
+/**
  * @method getTextAlignment
  * @return {cc.TextHAlignment}
  */
@@ -10046,16 +10046,6 @@ getBMFontFilePath : function (
  */
 setHorizontalAlignment : function (
 texthalignment 
-)
-{
-},
-
-/**
- * @method setFontDefinition
- * @param {cc.FontDefinition} arg0
- */
-setFontDefinition : function (
-fontdefinition 
 )
 {
 },
@@ -10094,21 +10084,9 @@ point
 
 /**
  * @method create
-* @param {String} str
-* @param {String} str
-* @param {float} float
-* @param {SizeObject} size
-* @param {cc.TextHAlignment} texthalignment
-* @param {cc.TextVAlignment} textvalignment
-* @return {cc.Label|cc.Label}
-*/
-create : function(
-str,
-str,
-float,
-size,
-texthalignment,
-textvalignment 
+ * @return {cc.Label}
+ */
+create : function (
 )
 {
     return cc.Label;
@@ -10133,14 +10111,22 @@ int
 },
 
 /**
- * @method createWithFontDefinition
+ * @method createWithSystemFont
  * @param {String} arg0
- * @param {cc.FontDefinition} arg1
+ * @param {String} arg1
+ * @param {float} arg2
+ * @param {SizeObject} arg3
+ * @param {cc.TextHAlignment} arg4
+ * @param {cc.TextVAlignment} arg5
  * @return {cc.Label}
  */
-createWithFontDefinition : function (
+createWithSystemFont : function (
 str, 
-fontdefinition 
+str, 
+float, 
+size, 
+texthalignment, 
+textvalignment 
 )
 {
     return cc.Label;
@@ -10399,21 +10385,11 @@ float
 },
 
 /**
- * @method init
- * @return {bool}
- */
-init : function (
-)
-{
-    return false;
-},
-
-/**
  * @method initWithColor
 * @param {Color4BObject|Color4BObject} color4b
 * @param {float} float
 * @param {float} float
-* @return {bool|bool}
+* @return {bool|bool|bool}
 */
 initWithColor : function(
 color4b,
@@ -15706,16 +15682,6 @@ str
 },
 
 /**
- * @method setFilenameLookupDictionary
- * @param {MapObject} arg0
- */
-setFilenameLookupDictionary : function (
-map 
-)
-{
-},
-
-/**
  * @method isAbsolutePath
  * @param {String} arg0
  * @return {bool}
@@ -15786,26 +15752,6 @@ str
 },
 
 /**
- * @method addSearchResolutionsOrder
- * @param {String} arg0
- */
-addSearchResolutionsOrder : function (
-str 
-)
-{
-},
-
-/**
- * @method addSearchPath
- * @param {String} arg0
- */
-addSearchPath : function (
-str 
-)
-{
-},
-
-/**
  * @method isFileExist
  * @param {String} arg0
  * @return {bool}
@@ -15840,6 +15786,16 @@ str
 },
 
 /**
+ * @method getWritablePath
+ * @return {String}
+ */
+getWritablePath : function (
+)
+{
+    return ;
+},
+
+/**
  * @method getInstance
  * @return {cc.FileUtils}
  */
@@ -15854,7 +15810,7 @@ getInstance : function (
 /**
  * @class SAXParser
  */
-cc.SAXParser = {
+cc.PlistParser = {
 
 /**
  * @method init
@@ -17848,6 +17804,16 @@ getMouseButton : function (
 },
 
 /**
+ * @method getScrollY
+ * @return {float}
+ */
+getScrollY : function (
+)
+{
+    return 0;
+},
+
+/**
  * @method setScrollData
  * @param {float} arg0
  * @param {float} arg1
@@ -17857,6 +17823,16 @@ float,
 float 
 )
 {
+},
+
+/**
+ * @method getCursorY
+ * @return {float}
+ */
+getCursorY : function (
+)
+{
+    return 0;
 },
 
 /**
@@ -17870,13 +17846,15 @@ int
 },
 
 /**
- * @method getScrollY
- * @return {float}
+ * @method setCursorPosition
+ * @param {float} arg0
+ * @param {float} arg1
  */
-getScrollY : function (
+setCursorPosition : function (
+float, 
+float 
 )
 {
-    return 0;
 },
 
 /**
@@ -17897,28 +17875,6 @@ getCursorX : function (
 )
 {
     return 0;
-},
-
-/**
- * @method getCursorY
- * @return {float}
- */
-getCursorY : function (
-)
-{
-    return 0;
-},
-
-/**
- * @method setCursorPosition
- * @param {float} arg0
- * @param {float} arg1
- */
-setCursorPosition : function (
-float, 
-float 
-)
-{
 },
 
 /**
