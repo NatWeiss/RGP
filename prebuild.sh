@@ -70,7 +70,9 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	#libDir="template/lib/cocos2dx-prebuilt"
 	#mkdir -p ${libDir}
 
-	# Clean the include directory
+	#
+	# include
+	#
 	dir="${dest}/include"
 	if [ -d "${dir}" ]; then
 		rm -r ${dir}
@@ -85,28 +87,35 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	mkdir -p ${dir}/app
 	mkdir -p ${dir}/soomla
 # end pro
-
-	(cd src/cocos2d-x && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/cocos2d-x && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/cocos2d-x && find . -name '*.msg' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp - >> ${logFile} 2>&1)
- 	(cd src/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp - >> ${logFile} 2>&1)
+	# except if dir is cocos2d-x/plugin (or don't copy plugin/jsbindings and reference the one in include/plugin/jsbindings)
+	(cd src/cocos2d-js/frameworks/js-bindings/cocos2d-x && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings/cocos2d-x && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings/cocos2d-x && find . -name '*.msg' -print | tar --create --files-from -) | (cd $dir && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings/bindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
+ 	(cd src/cocos2d-js/frameworks/js-bindings/bindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings/external && find . -name '*.msg' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp - >> ${logFile} 2>&1)
 # begin pro
 	(cd src/cocos2dx-store && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/soomla && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/bindings-pluginx && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/bindings-pluginx && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/external && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/external && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/jsbindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/jsbindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
 	cp src/facebook/jsb*.h $dir/facebook
 	cp -r src/facebook/proj.ios/FacebookSDK.framework $dir/frameworks
 	cp src/app/jsb*.h $dir/app
 # end pro
 	(cd src && find . -name '*.mk' -print | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings && find . -name '*.mk' -print | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
 	(cd src && find . -name '*.a' -print | grep android | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings && find . -name '*.a' -print | grep android | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	# bonus: call android/strip on include/mk/*.a
 	rm -r ${dir}/mk/proj.android
 
 	if [ -d ${dir}/docs ]; then
 		rm -r ${dir}/docs
+	fi
+	if [ -d ${dir}/tests ]; then
+		rm -r ${dir}/tests
 	fi
 	if [ -d ${dir}/samples ]; then
 		rm -r ${dir}/samples
@@ -123,25 +132,32 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	if [ -d ${dir}/plugin/plugins ]; then
 		rm -r ${dir}/plugin/plugins
 	fi
+	if [ -d ${dir}/mk/cocos2d-js ]; then
+		rm -r ${dir}/mk/cocos2d-js
+	fi
 	find ${dir} | xargs xattr -c >> ${logFile} 2>&1
 
-	# Copy javascript bindings
+	#
+	# jsb
+	#
 	dir="${dest}/jsb"
 	if [ -d $dir ]; then
 		rm -r ${dir}
 	fi
 	mkdir -p "${dir}"
-	cp src/bindings/script/*.js $dir
-	cp -r src/bindings/script/debugger $dir
-	cp src/bindings/auto/api/*.js $dir
+	cp src/cocos2d-js/frameworks/js-bindings/bindings/script/*.js $dir
+	cp -r src/cocos2d-js/frameworks/js-bindings/bindings/script/debugger $dir
+	cp src/cocos2d-js/frameworks/js-bindings/bindings/auto/api/*.js $dir
 # begin pro
 	#find src/cocos2dx-store -name *.js -exec cp {} $dir \;
 	find src/mobfox/proj.ios/MRAID.bundle -name *.js -exec cp {} $dir \;
-	find src/bindings-pluginx -name *.js -exec cp {} $dir \;
+	cp src/cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/jsbindings/script/*.js $dir
 # end pro
 	find ${dir} | xargs xattr -c >> ${logFile} 2>&1
 
-	# Copy Android java files
+	#
+	# java
+	#
 	dir="${dest}/java"
 	if [ -d $dir ]; then
 		rm -r ${dir}
@@ -149,7 +165,7 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	mkdir -p "${dir}"
 
 	mkdir -p "${dir}/cocos2d-x"
-	cp -r src/cocos2d-x/cocos/2d/platform/android/java/* ${dir}/cocos2d-x/
+	cp -r src/cocos2d-js/frameworks/js-bindings/cocos2d-x/cocos/2d/platform/android/java/* ${dir}/cocos2d-x/
 # begin pro
 	mkdir -p "${dir}/cocos2dx-store"
 	cp -r src/cocos2dx-store/android/* ${dir}/cocos2dx-store/
@@ -162,20 +178,24 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	mkdir -p "${dir}/facebook-sdk"
 	cp -r src/facebook/proj.android/facebook-android-sdk/* ${dir}/facebook-sdk/
 	mkdir -p "${dir}/plugin-protocols"
-	cp -r src/cocos2d-x/plugin/protocols/proj.android/* ${dir}/plugin-protocols/
+	cp -r src/cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/protocols/proj.android/* ${dir}/plugin-protocols/
 	mkdir -p "${dir}/flurry"
-	cp -r src/cocos2d-x/plugin/plugins/flurry/proj.android/* ${dir}/flurry/
+	mkdir -p "${dir}/flurry/libs"
+	cp -r src/cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/plugins/flurry/proj.android/* ${dir}/flurry/
+	if [ -d "${dir}/flurry/sdk" ]; then rm -r ${dir}/flurry/sdk; fi
+	cp src/flurry/proj.android/libs/*.jar ${dir}/flurry/libs/
+	if [ -f "${dir}/flurry/src/org/cocos2dx/plugin/AdsFlurry.java" ]; then rm ${dir}/flurry/src/org/cocos2dx/plugin/AdsFlurry.java; fi
 	mkdir -p "${dir}/tools/android/"
-	cp -r src/cocos2d-x/plugin/tools/android/* ${dir}/tools/android/
+	cp -r src/cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/tools/android/* ${dir}/tools/android/
 
 	sed -i "" 's/..\/..\/..\/protocols\/proj.android/..\/plugin-protocols/g' java/flurry/project.properties
-	sed -i "" 's/..\/..\/cocos2d-x\/cocos\/2d\/platform\/android\/java/..\/cocos2d-x/g' java/cocos2dx-store/project.properties
+	sed -i "" 's/..\/..\/cocos2d-js\/frameworks\/js-bindings\/cocos2d-x\/cocos\/2d\/platform\/android/..\/cocos2d-x/g' java/cocos2dx-store/project.properties
 	sed -i "" 's/..\/submodules\/android-store\/SoomlaAndroidStore/..\/android-store/g' java/cocos2dx-store/project.properties
 # end pro
 
 	rm -rf ${dir}/*/bin
 	rm -rf ${dir}/*/gen
-     
+
 	# Create absolute symlinks
 	#rm -f ${libDir}/lib
 	#ln -s ${root}/lib ${libDir}/
@@ -263,7 +283,7 @@ if [ "$cmd" == "android" ] || [ "$cmd" == "all" ]; then
 	for config in ${configs}; do
 		for arch in ${archs}; do
 			echo "Building Android ${config} ${arch}..."
-			src/proj.android/build ${arch} ${config} >> ${logFile} 2>&1
+			src/proj.android/build.sh ${arch} ${config} >> ${logFile} 2>&1
 			res="$?"
 			if [ "$res" == "0" ]; then
 				echo "Succeeded."

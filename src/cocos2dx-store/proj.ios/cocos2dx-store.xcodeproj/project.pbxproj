@@ -851,7 +851,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../cocos2d-x $(SRCROOT)/../../cocos2d-x/cocos $(SRCROOT)/../../cocos2d-x/cocos/base $(SRCROOT)/../../cocos2d-x/cocos/physics $(SRCROOT)/../../cocos2d-x/cocos/math/kazmath $(SRCROOT)/../../cocos2d-x/cocos/2d $(SRCROOT)/../../cocos2d-x/cocos/gui $(SRCROOT)/../../cocos2d-x/cocos/network $(SRCROOT)/../../cocos2d-x/cocos/audio/include $(SRCROOT)/../../cocos2d-x/cocos/editor-support $(SRCROOT)/../../cocos2d-x/extensions $(SRCROOT)/../../cocos2d-x/external $(SRCROOT)/../../cocos2d-x/external/chipmunk/include/chipmunk $(SRCROOT)/../../bindings/manual";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include $(SRCROOT)/../../../include/cocos $(SRCROOT)/../../../include/cocos/base $(SRCROOT)/../../../include/cocos/deprecated $(SRCROOT)/../../../include/cocos/physics $(SRCROOT)/../../../include/cocos/math/kazmath $(SRCROOT)/../../../include/cocos/2d $(SRCROOT)/../../../include/cocos/gui $(SRCROOT)/../../../include/cocos/network $(SRCROOT)/../../../include/cocos/audio/include $(SRCROOT)/../../../include/cocos/editor-support $(SRCROOT)/../../../include/extensions $(SRCROOT)/../../../include/external $(SRCROOT)/../../../include/external/chipmunk/include/chipmunk $(SRCROOT)/../../../include/bindings/manual";
 			};
 			name = Debug;
 		};
@@ -888,7 +888,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../cocos2d-x $(SRCROOT)/../../cocos2d-x/cocos $(SRCROOT)/../../cocos2d-x/cocos/base $(SRCROOT)/../../cocos2d-x/cocos/physics $(SRCROOT)/../../cocos2d-x/cocos/math/kazmath $(SRCROOT)/../../cocos2d-x/cocos/2d $(SRCROOT)/../../cocos2d-x/cocos/gui $(SRCROOT)/../../cocos2d-x/cocos/network $(SRCROOT)/../../cocos2d-x/cocos/audio/include $(SRCROOT)/../../cocos2d-x/cocos/editor-support $(SRCROOT)/../../cocos2d-x/extensions $(SRCROOT)/../../cocos2d-x/external $(SRCROOT)/../../cocos2d-x/external/chipmunk/include/chipmunk $(SRCROOT)/../../bindings/manual";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include $(SRCROOT)/../../../include/cocos $(SRCROOT)/../../../include/cocos/base $(SRCROOT)/../../../include/cocos/deprecated $(SRCROOT)/../../../include/cocos/physics $(SRCROOT)/../../../include/cocos/math/kazmath $(SRCROOT)/../../../include/cocos/2d $(SRCROOT)/../../../include/cocos/gui $(SRCROOT)/../../../include/cocos/network $(SRCROOT)/../../../include/cocos/audio/include $(SRCROOT)/../../../include/cocos/editor-support $(SRCROOT)/../../../include/extensions $(SRCROOT)/../../../include/external $(SRCROOT)/../../../include/external/chipmunk/include/chipmunk $(SRCROOT)/../../../include/bindings/manual";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -907,7 +907,7 @@
 				PRODUCT_NAME = "cocos2dx-store";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../cocos2d-x/cocos/2d/platform/ios $(SRCROOT)/../../external/spidermonkey/include/ios $(SRCROOT)/../submodules/ios-store/SoomlaiOSStore/domain";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/cocos/2d/platform/ios $(SRCROOT)/../../../include/external/spidermonkey/include/ios $(SRCROOT)/../submodules/ios-store/SoomlaiOSStore/domain";
 			};
 			name = Debug;
 		};
@@ -925,7 +925,7 @@
 				PRODUCT_NAME = "cocos2dx-store";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../cocos2d-x/cocos/2d/platform/ios $(SRCROOT)/../../external/spidermonkey/include/ios $(SRCROOT)/../submodules/ios-store/SoomlaiOSStore/domain";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/cocos/2d/platform/ios $(SRCROOT)/../../../include/external/spidermonkey/include/ios $(SRCROOT)/../submodules/ios-store/SoomlaiOSStore/domain";
 			};
 			name = Release;
 		};

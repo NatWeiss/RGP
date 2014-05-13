@@ -49,9 +49,9 @@ $(call import-module,bindings/manual/network)
 $(call import-module,bindings/manual/spine)
 $(call import-module,bindings/manual/ui)
 # begin pro
-$(call import-module,plugin/protocols/proj.android/jni)
-$(call import-module,../cocos2dx-store/android/jni)
-$(call import-module,bindings-pluginx)
+#$(call import-module,plugin/protocols/proj.android/jni) # bindings now include protocols
+$(call import-module,plugin/jsbindings)
+$(call import-module,cocos2dx-store/android/jni)
 $(call import-module,facebook/proj.android/jni)
 $(call import-module,app/proj.android/jni)
 # end pro

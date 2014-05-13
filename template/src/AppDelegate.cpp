@@ -22,7 +22,7 @@
 #include "network/jsb_websocket.h"
 #include "jsb_cocos2dx_spine_auto.hpp"
 // begin pro
-#include "bindings/auto/jsb_pluginx_protocols_auto.hpp"
+#include "bindings/auto/jsb_cocos2dx_pluginx_auto.hpp"
 #include "soomla/Soomla/jsb/jsb_soomla.h"
 #include "facebook/jsb_facebook.h"
 #include "app/jsb_app_bindings.h"
