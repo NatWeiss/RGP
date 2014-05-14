@@ -198,21 +198,20 @@ lemonadex:
 	rm -rf ${dest}/${name}
 	rapidgamepro ${name} -p $(pwd) -o . -k ${key} -v
 	cp -r ${dest}/${name}.old/res ${dest}/${name}/
-	cp -r ${dest}/${name}.old/docs ${dest}/${name}/
-	cp -r ${dest}/${name}.old/proj.android/res ${dest}/${name}/proj.android/
 	cp ${dest}/${name}.old/docs.html ${dest}/${name}/
+	cp -r ${dest}/${name}.old/docs ${dest}/${name}/
 	cp ${dest}/${name}.old/js/*.js ${dest}/${name}/js/
 	cp ${dest}/${name}.old/server/Server.js ${dest}/${name}/server/
-	cp ${dest}/${name}.old/proj.html5/build.xml ${dest}/${name}/proj.html5/
+	cp -r ${dest}/${name}.old/proj.android/res ${dest}/${name}/proj.android/
 	#cp ${dest}/${name}.old/proj.android/AndroidManifest.xml ${dest}/${name}/proj.android/
 	rm -rf ${dest}/${name}/art
 	rm -f ${dest}/${name}/proj.html5/*-min.js
 	rm ${dest}/${name}/js/SceneHello.js
 	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/js/App.js
 	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/project.json
-	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/build.xml
 	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/minified.js
 	sed -i "" 's/Loader\.js/Loader\.js", "js\/LayerGame\.js", "js\/LayerMenu\.js/g' ${dest}/${name}/proj.html5/project.json
+	sed -i "" 's/SceneHello\.js/SceneMain\.js"\/><file name="LayerGame\.js"\/><file name="LayerMenu\.js/g' LemonadeExchange/proj.html5/build.xml
 	sed -i "" 's/MyFacebookAppID/641151319281152/g' ${dest}/${name}/proj.ios_mac/ios/Info.plist
 	rm -rf ${dest}/${name}.old
 

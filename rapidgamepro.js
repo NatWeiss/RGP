@@ -2,7 +2,7 @@
 var path = require("path-extra");
 var fs = require("fs");
 var util = require("util");
-var commander = require("commander");
+var cmd = require("commander");
 var replace = require("replace");
 var download = require("download");
 var glob = require("glob");
@@ -13,8 +13,10 @@ var engines = ["cocos2d-js"];//, "unity", "corona"];
 var defaults = {
 	engine: engines[0],
 	package: "org.mycompany.mygame",
-	dest: path.join(path.homedir(), "Desktop/"),
-	prefix: path.join(path.homedir(), "Library/Developer/RapidGame")
+	//dest: path.join(path.homedir(), "Desktop/"),
+	dest: process.cwd(),
+	//prefix: path.join(path.homedir(), "Library/Developer/RapidGame")
+	prefix: __dirname
 };
 var cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip";
 
@@ -22,7 +24,6 @@ var cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip";
 // Main run method.
 //
 var run = function(args) {
-	var cmd = commander;
 	args = args || process.argv;
 	cmd
 		.version(version)
@@ -37,9 +38,9 @@ var run = function(args) {
 
 	if (cmd.args.length) {
 		if(cmd.args[0] === "prebuild") {
-			return prebuild(cmd);
+			return prebuild();
 		} else {
-			return createProject(cmd);
+			return createProject();
 		}
 	} else {
 		return console.log(cmd.helpInformation());
@@ -52,6 +53,7 @@ var run = function(args) {
 var copyRecursive = function(src, dest, verbose) {
 	var count = 0,
 		ignore = [
+			//"node_modules",
 			"wsocket.c", "wsocket.h",
 			"usocket.c", "usocket.h",
 			"unix.c", "unix.h",
@@ -114,14 +116,17 @@ var copyRecursive = function(src, dest, verbose) {
 //
 // Create project.
 //
-var createProject = function(cmd) {
+var createProject = function() {
 	var name = cmd.args[0],
 		package = cmd.package,
 		dir = path.join(cmd.output, name),
 		src,
 		dest,
 		fileCount,
-		i;
+		i,
+		onFinished = function(){
+			console.log("Done creating project " + name);
+		};
 	
 	// Copy all template files to destination
 	src = path.join(__dirname, "template");
@@ -180,8 +185,40 @@ var createProject = function(cmd) {
 	} catch(e) {
 		console.log("Error creating symlink: " + e);
 	}
+	
+	// Npm install
+	i = null;
+	dest = path.join(dir, "server");
+	try {
+		i = fs.statSync(path.join(dest, "node_modules"));
+	} catch(e) {
+	}
+	if (!i || !i.isDirectory()) {
+		console.log("Installing node modules");
+		try {
+			child_process.exec("npm install", {cwd: dest, env: process.env}, function(a, b, c){
+				execCallback(a, b, c);
+				onFinished();
+			});
+		} catch(e) {
+			console.log("Error installing node modules: " + e);
+		}
+	} else {
+		onFinished();
+	}
+};
 
-	console.log("Done creating project " + name);
+//
+// child_process.exec callback
+//
+var execCallback = function(error, stdout, stderr) {
+	if (cmd.verbose) {
+		console.log(stdout);
+		console.log(stderr);
+	}
+	if (error !== null) {
+		console.log("exec error: " + error);
+	}
 };
 
 //
@@ -225,7 +262,7 @@ var downloadUrl = function(url, dest, cb) {
 //
 //
 //
-var copySrcFiles = function(cmd, callback) {
+var copySrcFiles = function(callback) {
 	var dest,
 		verbose = false,
 		dir = path.join(defaults.prefix, "/");
@@ -268,7 +305,7 @@ var copySrcFiles = function(cmd, callback) {
 //
 //
 //
-var downloadCocos = function(cmd, callback) {
+var downloadCocos = function( callback) {
 	console.log("Done downloading Cocos");
 	callback();
 	return;
@@ -304,7 +341,7 @@ var downloadCocos = function(cmd, callback) {
 //
 //
 //
-var runPrebuild = function(cmd, callback) {
+var runPrebuild = function(callback) {
 	try {
 		var file = path.join(defaults.prefix, "prebuild"),
 			child;
@@ -334,10 +371,10 @@ var runPrebuild = function(cmd, callback) {
 //
 //
 //
-var prebuild = function(cmd) {
-	copySrcFiles(cmd, function() {
-		downloadCocos(cmd, function() {
-			runPrebuild(cmd, function() {
+var prebuild = function() {
+	copySrcFiles(function() {
+		downloadCocos(function() {
+			runPrebuild(function() {
 				console.log("Done with prebuild");
 			});
 		});
