@@ -10,11 +10,11 @@ var SceneHello = cc.Scene.extend({
 	layer: null,
 	
 //
-// ###  SceneHello.init
+// ###  SceneHello.onEnter
 //
 // Create the child layer and keep it as a member variable so `onXXX` callbacks can be triggered via `App.callRunningLayer`.
 //
-	init: function() {
+	onEnter: function() {
 		this._super();
 		this.layer = new LayerHello();
 		this.layer.init();
