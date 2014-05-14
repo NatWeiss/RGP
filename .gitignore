@@ -1,6 +1,5 @@
 .DS_Store
 /build.log
-/lib
 /current
 /java/*/bin
 /java/*/gen
@@ -12,3 +11,5 @@
 /*/proj.android/libs/armeabi-v7a
 /*/proj.android/libs/x86
 /*/proj.android/libs/mips
+/cocos2d/x/lib*
+/node_modules

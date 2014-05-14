@@ -30,7 +30,7 @@ var run = function(args) {
 		.option("-p, --prefix [name]", "library directory [" + defaults.prefix + "]", defaults.prefix)
 		.option("-e, --engine", "engine to use (" + engines.join(", ") + ") [" + defaults.engine + "]", defaults.engine)
 		.option("-o, --output [path]", "output folder [" + defaults.dest + "]", defaults.dest)
-		.option("-n, --package [name]", "package name [" + defaults.package + "]", defaults.package)
+		.option("-k, --package [name]", "package name [" + defaults.package + "]", defaults.package)
 		.option("-v, --verbose", "be verbose", false)
 		.parse(args)
 		.name = "rapidgamepro";
@@ -52,7 +52,6 @@ var run = function(args) {
 var copyRecursive = function(src, dest, verbose) {
 	var count = 0,
 		ignore = [
-			"cocos2dx-prebuilt",
 			"wsocket.c", "wsocket.h",
 			"usocket.c", "usocket.h",
 			"unix.c", "unix.h",
@@ -69,7 +68,7 @@ var copyRecursive = function(src, dest, verbose) {
 			// Shall this file/dir be exluded?
 			var i, doExclude = false;
 			if (dir.indexOf("proj.android") >= 0) {
-				if (filename === "obj" || filename === "gen" || filename === "assets") {
+				if (filename === "obj" || filename === "gen" || filename === "assets" || filename === "bin") {
 					doExclude = true;
 				} else if (dir.indexOf("libs") >= 0) {
 					if (filename === "armeabi" || filename === "armeabi-v7a" || filename === "x86" || filename === "mips") {
@@ -79,6 +78,15 @@ var copyRecursive = function(src, dest, verbose) {
 			} else if (dir.indexOf(".xcodeproj") >= 0) {
 				if (filename === "project.xcworkspace" || filename === "xcuserdata") {
 					doExclude = true;
+				}
+			} else if (filename === "lib") {
+				try {
+					i = fs.lstatSync(path.join(dir, filename));
+					if (i.isSymbolicLink()) {
+						doExclude = true;
+					}
+				} catch(e) {
+					console.log(e);
 				}
 			} else {
 				for (i = 0; i < ignore.length; i += 1) {
@@ -165,7 +173,7 @@ var createProject = function(cmd) {
 	
 	// Symlink
 	src = cmd.prefix;
-	dest = path.join(dir, "lib/cocos2dx-prebuilt");
+	dest = path.join(dir, "lib");
 	console.log("Symlinking from " + src + " to " + dest);
 	try {
 		fs.symlinkSync(src, dest);

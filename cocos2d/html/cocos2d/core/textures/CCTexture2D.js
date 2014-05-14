@@ -184,6 +184,9 @@ if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
                 if (!img) return;
                 self.initWithElement(img);
             }
+            if (!self._htmlElementObj.width || !self._htmlElementObj.height) {
+                return;
+            }
 
             self._isLoaded = true;
             var locElement = self._htmlElementObj;

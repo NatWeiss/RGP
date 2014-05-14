@@ -196,7 +196,7 @@ lemonadex: key=com.wizardfu.lemonadex
 lemonadex:
 	mv ${dest}/${name} ${dest}/${name}.old
 	rm -rf ${dest}/${name}
-	tools/create-project -n ${name} -k ${key} -p ${dest}
+	rapidgamepro ${name} -p $(pwd) -o . -k ${key} -v
 	cp -r ${dest}/${name}.old/res ${dest}/${name}/
 	cp -r ${dest}/${name}.old/docs ${dest}/${name}/
 	cp -r ${dest}/${name}.old/proj.android/res ${dest}/${name}/proj.android/
@@ -204,8 +204,6 @@ lemonadex:
 	cp ${dest}/${name}.old/js/*.js ${dest}/${name}/js/
 	cp ${dest}/${name}.old/server/Server.js ${dest}/${name}/server/
 	cp ${dest}/${name}.old/proj.html5/build.xml ${dest}/${name}/proj.html5/
-	cp ${dest}/${name}.old/proj.html5/minified.js ${dest}/${name}/proj.html5/
-	cp -r ${dest}/${name}.old/lib/cocos2dx-prebuilt/* ${dest}/${name}/lib/cocos2dx-prebuilt/
 	#cp ${dest}/${name}.old/proj.android/AndroidManifest.xml ${dest}/${name}/proj.android/
 	rm -rf ${dest}/${name}/art
 	rm -f ${dest}/${name}/proj.html5/*-min.js
@@ -218,20 +216,8 @@ lemonadex:
 	sed -i "" 's/MyFacebookAppID/641151319281152/g' ${dest}/${name}/proj.ios_mac/ios/Info.plist
 	rm -rf ${dest}/${name}.old
 
-save-lemonadex:
-	cp LemonadeExchange/js/Config.js rez/LemonadeExchange/js/
-	cp LemonadeExchange/js/Layer*.js rez/LemonadeExchange/js/
-	cp LemonadeExchange/js/LemonadeExchange.js rez/LemonadeExchange/js/
-	cp LemonadeExchange/js/SceneMain.js rez/LemonadeExchange/js/
-	cp -r LemonadeExchange/res/* rez/LemonadeExchange/res/
-	cp LemonadeExchange/server/Server.js rez/LemonadeExchange/server/
-	cp LemonadeExchange/upload rez/LemonadeExchange/
-	echo "Note: doesn't save App.js!"
-
 minify:
-	if [ -f template/proj.html5/*-min.js ]; then rm template/proj.html5/*-min.js; fi
 	#template/minify
-	if [ -f LemonadeExchange/proj.html5/*-min.js ]; then rm LemonadeExchange/proj.html5/*-min.js; fi
 	LemonadeExchange/minify
 	LemonadeExchange/upload natweiss.com:le
 

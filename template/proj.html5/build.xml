@@ -1,27 +1,33 @@
 <?xml version="1.0"?>
-<project name="Javascript compress project" basedir="." default="compile_Canvas">
+<project name="Javascript compress project" basedir="." default="compile">
 
 	<taskdef name="jscomp"
 		classname="com.google.javascript.jscomp.ant.CompileTask"
-		classpath="${basedir}/../lib/cocos2d-html5/tools/compiler/compiler.jar"/>
+		classpath="${basedir}/../lib/cocos2d/html/tools/compiler/compiler.jar"/>
 
-	<target name="compile_Canvas">
+	<target name="compile">
 		<jscomp compilationLevel="simple" warning="quiet" debug="false" output="${basedir}/HelloJavascript-min.js"><!--sourceMapOutputFile="sourcemap" sourceMapFormat="V3">-->
-			<sources dir="${basedir}/../lib/cocos2d-html5">
+			<sources dir="${basedir}/../lib/cocos2d/html">
+ 				<file name="Base64Images.js"/>
  				<file name="CCBoot.js"/>
+ 				<file name="CCDebugger.js"/>
+ 				<file name="cocos2d/core/utils/BinaryLoader.js"/>
  				<file name="cocos2d/core/platform/CCClass.js"/>
  				<file name="cocos2d/core/platform/CCCommon.js"/>
  				<file name="cocos2d/core/cocoa/CCGeometry.js"/>
+ 				<file name="cocos2d/core/platform/CCTypesPropertyDefine.js"/>
  				<file name="cocos2d/core/platform/CCSAXParser.js"/>
  				<file name="cocos2d/core/platform/CCLoaders.js"/>
  				<file name="cocos2d/core/platform/CCConfig.js"/>
  				<file name="cocos2d/core/platform/miniFramework.js"/>
  				<file name="cocos2d/core/platform/CCMacro.js"/>
+					<file name="cocos2d/core/platform/CCTypesWebGL.js"/>
  				<file name="cocos2d/core/platform/CCTypes.js"/>
  				<file name="cocos2d/core/platform/CCEGLView.js"/>
  				<file name="cocos2d/core/platform/CCScreen.js"/>
  				<file name="cocos2d/core/platform/CCVisibleRect.js"/>
  				<file name="cocos2d/core/platform/CCInputManager.js"/>
+ 				<file name="cocos2d/core/platform/CCInputExtension.js"/>
  				<file name="cocos2d/core/cocoa/CCAffineTransform.js"/>
  				<file name="cocos2d/core/support/CCPointExtension.js"/>
  				<file name="cocos2d/core/support/CCVertex.js"/>
@@ -30,14 +36,22 @@
  				<file name="cocos2d/core/event-manager/CCEvent.js"/>
  				<file name="cocos2d/core/event-manager/CCEventListener.js"/>
  				<file name="cocos2d/core/event-manager/CCEventManager.js"/>
+ 				<file name="cocos2d/core/base-nodes/BaseNodesWebGL.js"/>
+ 				<file name="cocos2d/core/base-nodes/BaseNodesPropertyDefine.js"/>
  				<file name="cocos2d/core/base-nodes/CCNode.js"/>
  				<file name="cocos2d/core/base-nodes/CCAtlasNode.js"/>
+ 				<file name="cocos2d/core/textures/TexturesWebGL.js"/>
+ 				<file name="cocos2d/core/textures/TexturesPropertyDefine.js"/>
  				<file name="cocos2d/core/textures/CCTexture2D.js"/>
  				<file name="cocos2d/core/textures/CCTextureCache.js"/>
  				<file name="cocos2d/core/textures/CCTextureAtlas.js"/>
  				<file name="cocos2d/core/scenes/CCScene.js"/>
  				<file name="cocos2d/core/scenes/CCLoaderScene.js"/>
+ 				<file name="cocos2d/core/layers/CCLayerWebGL.js"/>
+ 				<file name="cocos2d/core/layers/CCLayerPropertyDefine.js"/>
  				<file name="cocos2d/core/layers/CCLayer.js"/>
+ 				<file name="cocos2d/core/sprites/SpritesWebGL.js"/>
+ 				<file name="cocos2d/core/sprites/SpritesPropertyDefine.js"/>
  				<file name="cocos2d/core/sprites/CCSprite.js"/>
  				<file name="cocos2d/core/sprites/CCAnimation.js"/>
  				<file name="cocos2d/core/sprites/CCAnimationCache.js"/>
@@ -46,10 +60,14 @@
  				<file name="cocos2d/core/sprites/CCSpriteBatchNode.js"/>
  				<file name="cocos2d/core/CCConfiguration.js"/>
  				<file name="cocos2d/core/CCDirector.js"/>
+ 				<file name="cocos2d/core/CCDirectorWebGL.js"/>
  				<file name="cocos2d/core/CCCamera.js"/>
  				<file name="cocos2d/core/CCScheduler.js"/>
- 				<file name="cocos2d/core/CCDrawingPrimitives.js"/>
- 				<file name="cocos2d/core/labelttf/CCLabelTTF.js"/>
+ 				<file name="cocos2d/core/CCDrawingPrimitivesCanvas.js"/>
+ 				<file name="cocos2d/core/CCDrawingPrimitivesWebGL.js"/>
+ 				<file name="cocos2d/core/labelttf/LabelTTFPropertyDefine.js"/>
+					<file name="cocos2d/core/labelttf/LabelTTFWebGL.js"/>
+				<file name="cocos2d/core/labelttf/CCLabelTTF.js"/>
  				<file name="cocos2d/core/CCActionManager.js"/>
  				<file name="cocos2d/kazmath/utility.js"/>
  				<file name="cocos2d/kazmath/vec2.js"/>
@@ -213,7 +231,7 @@
  				<file name="cocos2d/physics/CCPhysicsDebugNode.js"/>
 			</sources>
 			<sources dir="${basedir}/../proj.html5">
-				<file name="minified.js"/>
+				<file name="minified-footer.js"/>
 			</sources>
 			<sources dir="${basedir}/../js">
 				<file name="lib/aes.js"/>
