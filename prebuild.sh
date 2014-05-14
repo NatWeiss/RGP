@@ -67,21 +67,17 @@ cd "${dest}"
 # Build headers
 if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	echo "Building headers..."
-	#libDir="template/lib/cocos2dx-prebuilt"
-	#mkdir -p ${libDir}
 
-	#
-	# include
-	#
-	dir="${dest}/include"
+#
+# include
+#
+	dir="${dest}/cocos2d/x/include"
 	if [ -d "${dir}" ]; then
 		rm -r ${dir}
 	fi
 	mkdir -p ${dir}
 	mkdir -p ${dir}/bindings
 	mkdir -p ${dir}/external
-	mkdir -p ${dir}/frameworks
-	mkdir -p ${dir}/mk
 # begin pro
 	mkdir -p ${dir}/facebook
 	mkdir -p ${dir}/app
@@ -101,46 +97,23 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	(cd src/cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/jsbindings && find . -name '*.hpp' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
 	(cd src/cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/jsbindings && find . -name '*.h' -print | tar --create --files-from -) | (cd $dir/bindings && tar xvfp - >> ${logFile} 2>&1)
 	cp src/facebook/jsb*.h $dir/facebook
-	cp -r src/facebook/proj.ios/FacebookSDK.framework $dir/frameworks
 	cp src/app/jsb*.h $dir/app
 # end pro
-	(cd src && find . -name '*.mk' -print | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/cocos2d-js/frameworks/js-bindings && find . -name '*.mk' -print | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
-	(cd src && find . -name '*.a' -print | grep android | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
-	(cd src/cocos2d-js/frameworks/js-bindings && find . -name '*.a' -print | grep android | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
-	# bonus: call android/strip on include/mk/*.a
-	rm -r ${dir}/mk/proj.android
-
-	if [ -d ${dir}/docs ]; then
-		rm -r ${dir}/docs
-	fi
-	if [ -d ${dir}/tests ]; then
-		rm -r ${dir}/tests
-	fi
-	if [ -d ${dir}/samples ]; then
-		rm -r ${dir}/samples
-	fi
-	if [ -d ${dir}/templates ]; then
-		rm -r ${dir}/templates
-	fi
-	if [ -d ${dir}/tools ]; then
-		rm -r ${dir}/tools
-	fi
-	if [ -d ${dir}/plugin/samples ]; then
-		rm -r ${dir}/plugin/samples
-	fi
-	if [ -d ${dir}/plugin/plugins ]; then
-		rm -r ${dir}/plugin/plugins
-	fi
-	if [ -d ${dir}/mk/cocos2d-js ]; then
-		rm -r ${dir}/mk/cocos2d-js
-	fi
+	if [ -d ${dir}/docs ]; then rm -r ${dir}/docs; fi
+	if [ -d ${dir}/build ]; then rm -r ${dir}/build; fi
+	if [ -d ${dir}/tests ]; then rm -r ${dir}/tests; fi
+	if [ -d ${dir}/samples ]; then rm -r ${dir}/samples; fi
+	if [ -d ${dir}/templates ]; then rm -r ${dir}/templates; fi
+	if [ -d ${dir}/tools ]; then rm -r ${dir}/tools; fi
+	if [ -d ${dir}/plugin/samples ]; then rm -r ${dir}/plugin/samples; fi
+	if [ -d ${dir}/plugin/plugins ]; then rm -r ${dir}/plugin/plugins; fi
+	if [ -d ${dir}/extensions/proj.win32 ]; then rm -r ${dir}/extensions/proj.*; fi
 	find ${dir} | xargs xattr -c >> ${logFile} 2>&1
 
-	#
-	# jsb
-	#
-	dir="${dest}/jsb"
+#
+# jsb
+#
+	dir="${dest}/cocos2d/x/jsb"
 	if [ -d $dir ]; then
 		rm -r ${dir}
 	fi
@@ -155,17 +128,25 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 # end pro
 	find ${dir} | xargs xattr -c >> ${logFile} 2>&1
 
-	#
-	# java
-	#
-	dir="${dest}/java"
+#
+# java
+#
+	dir="${dest}/cocos2d/x/java"
 	if [ -d $dir ]; then
 		rm -r ${dir}
 	fi
 	mkdir -p "${dir}"
-
+	mkdir -p "${dir}/mk"
 	mkdir -p "${dir}/cocos2d-x"
 	cp -r src/cocos2d-js/frameworks/js-bindings/cocos2d-x/cocos/2d/platform/android/java/* ${dir}/cocos2d-x/
+	# .mk and .a
+	(cd src && find . -name '*.mk' -print | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings && find . -name '*.mk' -print | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	(cd src && find . -name '*.a' -print | grep android | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	(cd src/cocos2d-js/frameworks/js-bindings && find . -name '*.a' -print | grep android | tar --create --files-from -) | (cd $dir/mk && tar xvfp - >> ${logFile} 2>&1)
+	# bonus: call android/strip on mk/*.a
+	if [ -d ${dir}/mk/proj.android ]; then rm -r ${dir}/mk/proj.android; fi
+	if [ -d ${dir}/mk/cocos2d-js ]; then rm -r ${dir}/mk/cocos2d-js; fi
 # begin pro
 	mkdir -p "${dir}/cocos2dx-store"
 	cp -r src/cocos2dx-store/android/* ${dir}/cocos2dx-store/
@@ -188,23 +169,22 @@ if [ "$cmd" == "headers" ] || [ "$cmd" == "all" ]; then
 	mkdir -p "${dir}/tools/android/"
 	cp -r src/cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/tools/android/* ${dir}/tools/android/
 
-	sed -i "" 's/..\/..\/..\/protocols\/proj.android/..\/plugin-protocols/g' java/flurry/project.properties
-	sed -i "" 's/..\/..\/cocos2d-js\/frameworks\/js-bindings\/cocos2d-x\/cocos\/2d\/platform\/android/..\/cocos2d-x/g' java/cocos2dx-store/project.properties
-	sed -i "" 's/..\/submodules\/android-store\/SoomlaAndroidStore/..\/android-store/g' java/cocos2dx-store/project.properties
+	sed -i "" 's/..\/..\/..\/protocols\/proj.android/..\/plugin-protocols/g' ${dir}/flurry/project.properties
+	sed -i "" 's/..\/..\/cocos2d-js\/frameworks\/js-bindings\/cocos2d-x\/cocos\/2d\/platform\/android/..\/cocos2d-x/g' ${dir}/cocos2dx-store/project.properties
+	sed -i "" 's/..\/submodules\/android-store\/SoomlaAndroidStore/..\/android-store/g' ${dir}/cocos2dx-store/project.properties
 # end pro
-
 	rm -rf ${dir}/*/bin
 	rm -rf ${dir}/*/gen
 
-	# Create absolute symlinks
-	#rm -f ${libDir}/lib
-	#ln -s ${root}/lib ${libDir}/
-
-	#rm -f ${libDir}/include
-	#ln -s ${root}/include ${libDir}/
-
-	#rm -f ${libDir}/java
-	#ln -s ${root}/java ${libDir}/
+#
+# frameworks
+#
+	dir="${dest}/frameworks"
+	if [ -d $dir ]; then
+		rm -r ${dir}
+	fi
+	mkdir -p "${dir}"
+	cp -r src/facebook/proj.ios/FacebookSDK.framework $dir
 
 	echo "Done."
 fi

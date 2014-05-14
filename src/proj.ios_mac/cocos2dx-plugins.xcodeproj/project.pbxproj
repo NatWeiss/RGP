@@ -220,7 +220,7 @@
 		419E8DC818A9724F00232A34 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		41ADF18F18F644C0000DE7A7 /* AppBindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppBindings.xcodeproj; path = ../app/proj.ios/AppBindings.xcodeproj; sourceTree = "<group>"; };
 		41ADF19518F644D1000DE7A7 /* cocos2dx-store.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "cocos2dx-store.xcodeproj"; path = "../cocos2dx-store/proj.ios/cocos2dx-store.xcodeproj"; sourceTree = "<group>"; };
-		41ADF19B18F644E1000DE7A7 /* PluginJSBindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginJSBindings.xcodeproj; path = PluginJSBindings.xcodeproj; sourceTree = "<group>"; };
+		41ADF19B18F644E1000DE7A7 /* PluginJSBindings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = PluginJSBindings.xcodeproj; sourceTree = "<group>"; };
 		41ADF1A118F644FF000DE7A7 /* PluginProtocol.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginProtocol.xcodeproj; path = "../cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/protocols/proj.ios/PluginProtocol.xcodeproj"; sourceTree = "<group>"; };
 		41ADF1A718F6450F000DE7A7 /* PluginAdmob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginAdmob.xcodeproj; path = "../cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/plugins/admob/proj.ios/PluginAdmob.xcodeproj"; sourceTree = "<group>"; };
 		41ADF1AD18F6451C000DE7A7 /* PluginFlurry.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PluginFlurry.xcodeproj; path = "../cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/plugins/flurry/proj.ios/PluginFlurry.xcodeproj"; sourceTree = "<group>"; };
@@ -520,7 +520,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "outputDir=\"${SRCROOT}/../../lib/${CONFIGURATION}-iOS/${PLATFORM_NAME}\"\necho \"outputDir=$outputDir\"\nmkdir -p \"${outputDir}\"\n\nlibName=\"lib${PROJECT_NAME}.a\"\ntag=\"${CONFIGURATION}-${PLATFORM_NAME}\"\nlibtool -static -o ${outputDir}/${libName} ${BUILD_DIR}/${tag}/*.a\n";
+			shellScript = "outputDir=\"${SRCROOT}/../../cocos2d/x/lib/${CONFIGURATION}-iOS/${PLATFORM_NAME}\"\necho \"outputDir=$outputDir\"\nmkdir -p \"${outputDir}\"\n\nlibName=\"lib${PROJECT_NAME}.a\"\ntag=\"${CONFIGURATION}-${PLATFORM_NAME}\"\nlibtool -static -o ${outputDir}/${libName} ${BUILD_DIR}/${tag}/*.a\n";
 		};
 		41F32FAF18FA78F9006AF300 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -533,7 +533,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "outputDir=\"${SRCROOT}/../../lib/${CONFIGURATION}-Mac/${PLATFORM_NAME}\"\necho \"outputDir=$outputDir\"\nmkdir -p \"${outputDir}\"\n\nlibName=\"lib${PROJECT_NAME}.a\"\ntag=\"${CONFIGURATION}\"\nlibtool -static -o ${outputDir}/${libName} ${BUILD_DIR}/${tag}/*.a\n";
+			shellScript = "outputDir=\"${SRCROOT}/../../cocos2d/x/lib/${CONFIGURATION}-Mac/${PLATFORM_NAME}\"\necho \"outputDir=$outputDir\"\nmkdir -p \"${outputDir}\"\n\nlibName=\"lib${PROJECT_NAME}.a\"\ntag=\"${CONFIGURATION}\"\nlibtool -static -o ${outputDir}/${libName} ${BUILD_DIR}/${tag}/*.a\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

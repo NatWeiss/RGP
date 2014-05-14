@@ -23,7 +23,7 @@ THE SOFTWARE.
 ****************************************************************************/
 #include "PluginFactory.h"
 #include "PluginUtils.h"
-#include "PluginJniHelper.h"
+#include "JniHelper.h"
 #include "ProtocolAds.h"
 #include "ProtocolAnalytics.h"
 #include "ProtocolIAP.h"
@@ -87,8 +87,8 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 		jClassName.append(name);
 		PluginUtils::outputLog("PluginFactory", "Java class name of plugin %s is : %s", name, jClassName.c_str());
 
-		PluginJniMethodInfo t;
-		if (! PluginJniHelper::getStaticMethodInfo(t
+		JniMethodInfo t;
+		if (! JniHelper::getStaticMethodInfo(t
 			, "org/cocos2dx/plugin/PluginWrapper"
 			, "initPlugin"
 			, "(Ljava/lang/String;)Ljava/lang/Object;"))
@@ -107,7 +107,7 @@ PluginProtocol* PluginFactory::createPlugin(const char* name)
 			break;
 		}
 
-		if (! PluginJniHelper::getStaticMethodInfo(t
+		if (! JniHelper::getStaticMethodInfo(t
 			, "org/cocos2dx/plugin/PluginWrapper"
 			, "getPluginType"
 			, "(Ljava/lang/Object;)I"))

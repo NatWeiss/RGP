@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 NAME=HelloJavascript
 PACKAGE_NAME=org.cocos2dx.hellojavascript
-PLUGIN_DIR=$$(cd ../lib/cocos2dx-prebuilt/java && pwd)
+PLUGIN_DIR=$$(cd ../lib/cocos2d/x/java && pwd)
 
 all:
 	@echo "ANDROID_HOME=${ANDROID_HOME}"

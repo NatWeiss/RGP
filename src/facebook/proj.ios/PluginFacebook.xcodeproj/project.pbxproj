@@ -169,7 +169,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include $(SRCROOT)/../../../include/cocos $(SRCROOT)/../../../include/cocos/base $(SRCROOT)/../../../include/cocos/2d $(SRCROOT)/../../../include/cocos/physics $(SRCROOT)/../../../include/cocos/math/kazmath $(SRCROOT)/../../../include/cocos/2d/platform $(SRCROOT)/../../../include/cocos/audio/include $(SRCROOT)/../../../include/cocos/editor-support $(SRCROOT)/../../../include/cocos/editor-support/cocosbuilder $(SRCROOT)/../../../include/cocos/editor-support/cocostudio $(SRCROOT)/../../../include/cocos/editor-support/spine $(SRCROOT)/../../../include/cocos/ui $(SRCROOT)/../../../include/cocos/storage $(SRCROOT)/../../../include/extensions $(SRCROOT)/../../../include/external/chipmunk/include/chipmunk $(SRCROOT)/../../../include/external $(SRCROOT)/../../../include/bindings/auto $(SRCROOT)/../../../include/bindings/manual";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../cocos2d/x/include $(SRCROOT)/../../../cocos2d/x/include/cocos $(SRCROOT)/../../../cocos2d/x/include/cocos/base $(SRCROOT)/../../../cocos2d/x/include/cocos/2d $(SRCROOT)/../../../cocos2d/x/include/cocos/physics $(SRCROOT)/../../../cocos2d/x/include/cocos/math/kazmath $(SRCROOT)/../../../cocos2d/x/include/cocos/2d/platform $(SRCROOT)/../../../cocos2d/x/include/cocos/audio/include $(SRCROOT)/../../../cocos2d/x/include/cocos/editor-support $(SRCROOT)/../../../cocos2d/x/include/cocos/editor-support/cocosbuilder $(SRCROOT)/../../../cocos2d/x/include/cocos/editor-support/cocostudio $(SRCROOT)/../../../cocos2d/x/include/cocos/editor-support/spine $(SRCROOT)/../../../cocos2d/x/include/cocos/ui $(SRCROOT)/../../../cocos2d/x/include/cocos/storage $(SRCROOT)/../../../cocos2d/x/include/extensions $(SRCROOT)/../../../cocos2d/x/include/external/chipmunk/include/chipmunk $(SRCROOT)/../../../cocos2d/x/include/external $(SRCROOT)/../../../cocos2d/x/include/bindings/auto $(SRCROOT)/../../../cocos2d/x/include/bindings/manual";
 			};
 			name = Debug;
 		};
@@ -202,7 +202,7 @@
 				HEADER_SEARCH_PATHS = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				SDKROOT = iphoneos;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../include $(SRCROOT)/../../../include/cocos $(SRCROOT)/../../../include/cocos/base $(SRCROOT)/../../../include/cocos/2d $(SRCROOT)/../../../include/cocos/physics $(SRCROOT)/../../../include/cocos/math/kazmath $(SRCROOT)/../../../include/cocos/2d/platform $(SRCROOT)/../../../include/cocos/audio/include $(SRCROOT)/../../../include/cocos/editor-support $(SRCROOT)/../../../include/cocos/editor-support/cocosbuilder $(SRCROOT)/../../../include/cocos/editor-support/cocostudio $(SRCROOT)/../../../include/cocos/editor-support/spine $(SRCROOT)/../../../include/cocos/ui $(SRCROOT)/../../../include/cocos/storage $(SRCROOT)/../../../include/extensions $(SRCROOT)/../../../include/external/chipmunk/include/chipmunk $(SRCROOT)/../../../include/external $(SRCROOT)/../../../include/bindings/auto $(SRCROOT)/../../../include/bindings/manual";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../cocos2d/x/include $(SRCROOT)/../../../cocos2d/x/include/cocos $(SRCROOT)/../../../cocos2d/x/include/cocos/base $(SRCROOT)/../../../cocos2d/x/include/cocos/2d $(SRCROOT)/../../../cocos2d/x/include/cocos/physics $(SRCROOT)/../../../cocos2d/x/include/cocos/math/kazmath $(SRCROOT)/../../../cocos2d/x/include/cocos/2d/platform $(SRCROOT)/../../../cocos2d/x/include/cocos/audio/include $(SRCROOT)/../../../cocos2d/x/include/cocos/editor-support $(SRCROOT)/../../../cocos2d/x/include/cocos/editor-support/cocosbuilder $(SRCROOT)/../../../cocos2d/x/include/cocos/editor-support/cocostudio $(SRCROOT)/../../../cocos2d/x/include/cocos/editor-support/spine $(SRCROOT)/../../../cocos2d/x/include/cocos/ui $(SRCROOT)/../../../cocos2d/x/include/cocos/storage $(SRCROOT)/../../../cocos2d/x/include/extensions $(SRCROOT)/../../../cocos2d/x/include/external/chipmunk/include/chipmunk $(SRCROOT)/../../../cocos2d/x/include/external $(SRCROOT)/../../../cocos2d/x/include/bindings/auto $(SRCROOT)/../../../cocos2d/x/include/bindings/manual";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -226,7 +226,7 @@
 				PRODUCT_NAME = PluginFacebook;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/external/spidermonkey/include/ios $(SRCROOT)/../../../include/cocos/2d/platform/ios";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../cocos2d/x/include/external/spidermonkey/include/ios $(SRCROOT)/../../../cocos2d/x/include/cocos/2d/platform/ios";
 			};
 			name = Debug;
 		};
@@ -249,7 +249,7 @@
 				PRODUCT_NAME = PluginFacebook;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../include/external/spidermonkey/include/ios $(SRCROOT)/../../../include/cocos/2d/platform/ios";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../cocos2d/x/include/external/spidermonkey/include/ios $(SRCROOT)/../../../cocos2d/x/include/cocos/2d/platform/ios";
 			};
 			name = Release;
 		};

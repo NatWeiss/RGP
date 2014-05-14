@@ -34,8 +34,8 @@ return_val_if_fails(paramCode != NULL && strlen(paramCode) > 0, ret);     \
 PluginJavaData* pData = PluginUtils::getPluginJavaData(thiz);    \
 return_val_if_fails(pData != NULL, ret);                         \
                                                                  \
-PluginJniMethodInfo t;                                           \
-if (PluginJniHelper::getMethodInfo(t                             \
+JniMethodInfo t;                                           \
+if (JniHelper::getMethodInfo(t                             \
     , pData->jclassName.c_str()                                  \
     , funcName                                                   \
     , paramCode))                                                \
@@ -52,8 +52,8 @@ return_val_if_fails(funcName != NULL && strlen(funcName) > 0, ret);       \
 PluginJavaData* pData = PluginUtils::getPluginJavaData(thiz);    \
 return_val_if_fails(pData != NULL, ret);                         \
                                                                  \
-PluginJniMethodInfo t;                                           \
-if (PluginJniHelper::getMethodInfo(t                             \
+JniMethodInfo t;                                           \
+if (JniHelper::getMethodInfo(t                             \
     , pData->jclassName.c_str()                                  \
     , funcName                                                   \
     , paramCode))                                                \

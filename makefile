@@ -240,7 +240,7 @@ upload:
 
 binary: dest=../releases/RapidGameProDemo/
 binary: src=../releases/RapidGamePro/
-binary: libdir=lib-small
+binary: libdir=cocos2d/x/lib-small
 binary:
 	if [ -d ${dest} ]; then rm -r ${dest}; fi
 	if [ ! -d ${src} ]; then echo "Please make release first"; exit 1; fi
@@ -255,21 +255,19 @@ binary:
 	cp rez/AdsMobFox-stripped.html ${dest}/docs/AdsMobFox.html
 	rm -rf ${dest}/proj.linux
 	rm -rf ${dest}/proj.win32
-	rm -f ${dest}/lib/cocos2dx-prebuilt/include
-	rm -f ${dest}/lib/cocos2dx-prebuilt/lib
-	rm -f ${dest}/lib/cocos2dx-prebuilt/jsb
-	rm -f ${dest}/lib/cocos2dx-prebuilt/java
-	cp -r include ${dest}/lib/cocos2dx-prebuilt/
-	cp -r java ${dest}/lib/cocos2dx-prebuilt/
-	cp -r template/lib/cocos2dx-prebuilt/jsb ${dest}/lib/cocos2dx-prebuilt/
-	mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphonesimulator
-	mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphoneos
-	mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Android/armeabi
-	mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Mac/macosx
-	cp -r ${libdir}/Debug-iOS/iphonesimulator/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphonesimulator/
-	cp -r ${libdir}/Debug-iOS/iphoneos/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphoneos/
-	cp -r ${libdir}/Debug-Android/armeabi/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Android/armeabi/
-	cp -r ${libdir}/Debug-Mac/macosx/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Mac/macosx/
+	rm -f ${dest}/lib
+	mkdir -p ${dest}/lib/cocos2d/x/lib
+	mkdir -p ${dest}/lib/cocos2d/html
+	cp -r cocos2d/x/include cocos2d/x/java cocos2d/x/jsb ${dest}/lib/cocos2d/x/
+	cp -r cocos2d/x/lib-small ${dest}/lib/cocos2d/x/lib
+	#mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphonesimulator
+	#mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphoneos
+	#mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Android/armeabi
+	#mkdir -p ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Mac/macosx
+	#cp -r ${libdir}/Debug-iOS/iphonesimulator/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphonesimulator/
+	#cp -r ${libdir}/Debug-iOS/iphoneos/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-iOS/iphoneos/
+	#cp -r ${libdir}/Debug-Android/armeabi/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Android/armeabi/
+	#cp -r ${libdir}/Debug-Mac/macosx/* ${dest}/lib/cocos2dx-prebuilt/lib/Debug-Mac/macosx/
 
 install: dest=/usr/local/lib/node_modules/rapidgamepro
 install: lib=/Users/nat/Library/Developer/RapidGame

@@ -29,12 +29,12 @@ THE SOFTWARE.
 
 namespace cocos2d { namespace plugin {
 
-#define JAVAVM    cocos2d::PluginJniHelper::getJavaVM()
+#define JAVAVM    cocos2d::JniHelper::getJavaVM()
 
 void PluginUtils::initPluginWrapper(android_app* app)
 {
-    PluginJniMethodInfo t;
-    if (! PluginJniHelper::getStaticMethodInfo(t
+    JniMethodInfo t;
+    if (! JniHelper::getStaticMethodInfo(t
         , "org/cocos2dx/plugin/PluginWrapper"
         , "initFromNativeActivity"
         , "(Landroid/app/Activity;)V"))
@@ -180,25 +180,25 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 	}
 
 	jobject obj = NULL;
-	PluginJniMethodInfo t;
+	JniMethodInfo t;
 	JNIEnv* env = PluginUtils::getEnv();
 
 	switch(param->getCurrentType())
 	{
 	case PluginParam::kParamTypeInt:
-		if (PluginJniHelper::getStaticMethodInfo(t, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;"))
+		if (JniHelper::getStaticMethodInfo(t, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;"))
 		{
 			obj = t.env->CallStaticObjectMethod(t.classID, t.methodID, param->getIntValue());
 		}
 		break;
 	case PluginParam::kParamTypeFloat:
-		if (PluginJniHelper::getStaticMethodInfo(t, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;"))
+		if (JniHelper::getStaticMethodInfo(t, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;"))
 		{
 			obj = t.env->CallStaticObjectMethod(t.classID, t.methodID, param->getFloatValue());
 		}
 		break;
 	case PluginParam::kParamTypeBool:
-		if (PluginJniHelper::getStaticMethodInfo(t, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;"))
+		if (JniHelper::getStaticMethodInfo(t, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;"))
 		{
 			obj = t.env->CallStaticObjectMethod(t.classID, t.methodID, param->getBoolValue());
 		}
@@ -215,8 +215,8 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
             std::map<std::string, std::string> mapParam = param->getStrMapValue();
             for (it = mapParam.begin(); it != mapParam.end(); it++)
             {
-                PluginJniMethodInfo tInfo;
-                if (PluginJniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put", "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;"))
+                JniMethodInfo tInfo;
+                if (JniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put", "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;"))
                 {
                     jstring strKey = tInfo.env->NewStringUTF(it->first.c_str());
                     jstring strValue = tInfo.env->NewStringUTF(it->second.c_str());
@@ -240,8 +240,8 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 			std::map<std::string, PluginParam*> mapParam = param->getMapValue();
 			for (it = mapParam.begin(); it != mapParam.end(); it++)
 			{
-				PluginJniMethodInfo tInfo;
-				if (PluginJniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put", "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;"))
+				JniMethodInfo tInfo;
+				if (JniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put", "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;"))
 				{
 					jstring strKey = tInfo.env->NewStringUTF(it->first.c_str());
 					jobject objValue = PluginUtils::getJObjFromParam(it->second);
