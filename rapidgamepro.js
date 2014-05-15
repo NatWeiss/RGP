@@ -134,9 +134,13 @@ var createProject = function() {
 		dest,
 		fileCount,
 		i,
-		onFinished = function(){
-			console.log("Done creating project " + name);
-		};
+		onFinished;
+
+	// Check if dir exists
+	if (dirExists(dir)) {
+		console.log("Output directory already exists: " + dir);
+		process.exit(1);
+	}
 
 	// Check engine and template
 	if (engines.indexOf(cmd.engine) < 0) {
@@ -147,8 +151,8 @@ var createProject = function() {
 		console.log("Template '" + cmd.template + "' not found, defaulting to " + defaults.template);
 		cmd.template = defaults.template;
 	}
-	console.log("Engine: " + cmd.engine);
-	console.log("Template: " + cmd.template);
+	console.log("Rapidly creating a game project named '" + name + "' with engine " +
+		cmd.engine.charAt(0).toUpperCase() + cmd.engine.slice(1) + " and template " + cmd.template);
 	
 	// Copy all template files to destination
 	src = path.join(__dirname, "templates", cmd.engine, cmd.template);
@@ -212,11 +216,10 @@ var createProject = function() {
 	// Npm install
 	i = null;
 	dest = path.join(dir, "server");
-	try {
-		i = fs.statSync(path.join(dest, "node_modules"));
-	} catch(e) {
-	}
-	if (!i || !i.isDirectory()) {
+	onFinished = function(){
+		console.log("Done creating project " + name);
+	};
+	if (!dirExists(path.join(dest, "node_modules"))) {
 		console.log("Installing node modules");
 		try {
 			child_process.exec("npm install", {cwd: dest, env: process.env}, function(a, b, c){
@@ -229,6 +232,18 @@ var createProject = function() {
 	} else {
 		onFinished();
 	}
+};
+
+//
+// Test if a directory exists
+//
+var dirExists = function(path) {
+	var stat;
+	try {
+		stat = fs.statSync(path);
+	} catch(e) {
+	}
+	return (stat && stat.isDirectory());
 };
 
 //
