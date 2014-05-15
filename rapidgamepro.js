@@ -95,7 +95,7 @@ var createProject = function(name) {
 		console.log("Missing template directory: " + src);
 		process.exit(1);
 	}
-	console.log("Rapidly creating a game project named '" + name + "' with engine " +
+	console.log("Rapidly creating a game named '" + name + "' with engine " +
 		cmd.engine.charAt(0).toUpperCase() + cmd.engine.slice(1) + " and template " + cmd.template);
 	
 	// Copy all template files to destination
@@ -112,7 +112,7 @@ var createProject = function(name) {
 		regex: cmd.template,
 		replacement: name,
 		paths: [dest],
-		include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,*.vcxproj,*.user,*.filters",
+		include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,manifest,*.vcxproj,*.user,*.filters",
 		recursive: true,
 		silent: !cmd.verbose
 	});
@@ -124,7 +124,7 @@ var createProject = function(name) {
 		regex: src,
 		replacement: cmd.package,
 		paths: [dest],
-		include: "*.js,*.plist,*.xml,makefile",
+		include: "*.js,*.plist,*.xml,makefile,manifest",
 		recursive: true,
 		silent: !cmd.verbose
 	});
@@ -186,6 +186,7 @@ var copyRecursive = function(src, dest, verbose) {
 	var count = 0,
 		ignore = [
 			//"node_modules",
+			".DS_Store",
 			"wsocket.c", "wsocket.h",
 			"usocket.c", "usocket.h",
 			"unix.c", "unix.h",
@@ -194,7 +195,7 @@ var copyRecursive = function(src, dest, verbose) {
 	
 	wrench.copyDirSyncRecursive(src, dest, {
 		forceDelete: true, // Whether to overwrite existing directory or not
-		excludeHiddenUnix: true, // Whether to copy hidden Unix files or not (preceding .)
+		excludeHiddenUnix: false, // Whether to copy hidden Unix files or not (preceding .)
 		preserveFiles: true, // If we're overwriting something and the file already exists, keep the existing
 		preserveTimestamps: true, // Preserve the mtime and atime when copying files
 		inflateSymlinks: false, // Whether to follow symlinks or not when copying files
