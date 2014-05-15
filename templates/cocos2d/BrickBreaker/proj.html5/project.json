@@ -1,0 +1,23 @@
+{
+    "project_type": "javascript",
+
+    "debugMode": 1,
+    "showFPS": false,
+    "frameRate": 60,
+    "id": "gameCanvas",
+    "renderMode": 0,
+    "engineDir": "lib/cocos2d/html",
+
+    "modules": [
+		"cocos2d",
+		"chipmunk"
+	],
+
+    "jsList": [
+		"js/Config.js",
+		"js/BrickBreaker.js",
+		"js/MenuScene.js",
+		"js/GameScene.js",
+		"js/Loader.js"
+    ]
+}

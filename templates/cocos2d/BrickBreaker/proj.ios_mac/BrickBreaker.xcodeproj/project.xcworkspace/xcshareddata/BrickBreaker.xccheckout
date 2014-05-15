@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>194FE790-91F7-453F-B10E-20BABA5D19DB</string>
+	<string>0D39EB5F-C363-4C69-8386-8D7CE1CEDDA4</string>
 	<key>IDESourceControlProjectName</key>
-	<string>Multiplayerland</string>
+	<string>BrickBreaker</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>DFC0449F-A0DE-4C3E-AF72-9F8A2AE847B0</key>
-		<string>http://natweiss.com/git/multiplayerland.git</string>
+		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>
+		<string>http://natweiss.com/git/rapidgamepro.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>clients/proj.ios_mac/Multiplayerland.xcodeproj/project.xcworkspace</string>
+	<string>templates/cocos2d/BrickBreaker/proj.ios_mac/BrickBreaker.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>DFC0449F-A0DE-4C3E-AF72-9F8A2AE847B0</key>
-		<string>../../../..</string>
+		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>
+		<string>../../../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>http://natweiss.com/git/multiplayerland.git</string>
+	<string>http://natweiss.com/git/rapidgamepro.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>DFC0449F-A0DE-4C3E-AF72-9F8A2AE847B0</string>
+	<string>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>DFC0449F-A0DE-4C3E-AF72-9F8A2AE847B0</string>
+			<string>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</string>
 			<key>IDESourceControlWCCName</key>
-			<string>Multiplayerland</string>
+			<string>RapidGamePro</string>
 		</dict>
 	</array>
 </dict>

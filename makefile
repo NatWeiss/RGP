@@ -47,6 +47,8 @@ release:
 	@rez/delete-text "// end pro" ${dest}/template/src/AppDelegate.cpp --newlines
 	@rez/delete-text "// begin pro" ${dest}/LemonadeExchange/src/AppDelegate.cpp --newlines
 	@rez/delete-text "// end pro" ${dest}/LemonadeExchange/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// begin pro" ${dest}/templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
+	@rez/delete-text "// end pro" ${dest}/templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
 	@rez/delete-text "// begin pro" ${dest}/template/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
 	@rez/delete-text "// end pro" ${dest}/template/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
 	@rez/delete-text "// begin pro" ${dest}/LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
@@ -114,6 +116,8 @@ rapidgame:
 	@rez/delete-between "// begin pro" "// end pro" ${dest}template/js/App.js --newlines
 	cp template/src/AppDelegate.cpp ${dest}template/src/
 	@rez/delete-between "// begin pro" "// end pro" ${dest}template/src/AppDelegate.cpp --newlines
+	cp templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/ios/
+	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
 	cp template/proj.android/src/org/cocos2dx/javascript/AppActivity.java ${dest}template/proj.android/src/org/cocos2dx/javascript/
 	@rez/delete-between "// begin pro" "// end pro" ${dest}template/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
 	cp template/proj.android/AndroidManifest.xml ${dest}template/proj.android/

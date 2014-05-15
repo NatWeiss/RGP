@@ -112,7 +112,7 @@ var createProject = function(name) {
 		regex: cmd.template,
 		replacement: name,
 		paths: [dest],
-		include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,manifest,*.vcxproj,*.user,*.filters",
+		include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.xcscheme,*.xcworkspacedata,*.xccheckout,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,manifest,*.vcxproj,*.user,*.filters",
 		recursive: true,
 		silent: !cmd.verbose
 	});
@@ -147,7 +147,7 @@ var createProject = function(name) {
 	}
 	
 	// Symlink
-	if (cmd.template.indexOf("cocos") >= 0) {
+	if (cmd.engine.indexOf("cocos") >= 0) {
 		src = cmd.prefix;
 		dest = path.join(dir, "lib");
 		console.log("Symlinking from " + src + " to " + dest);

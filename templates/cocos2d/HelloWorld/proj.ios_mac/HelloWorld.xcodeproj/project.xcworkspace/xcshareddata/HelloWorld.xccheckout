@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>E29E0B61-161E-453F-9FC1-E8B0D2FC64ED</string>
 	<key>IDESourceControlProjectName</key>
-	<string>HelloJavascript</string>
+	<string>HelloWorld</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>
 		<string>http://natweiss.com/git/rapidgamepro.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>template/proj.ios_mac/HelloJavascript.xcodeproj/project.xcworkspace</string>
+	<string>template/proj.ios_mac/HelloWorld.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>
