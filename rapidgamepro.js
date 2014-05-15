@@ -1,24 +1,34 @@
 
-var path = require("path-extra");
-var fs = require("fs");
-var util = require("util");
-var cmd = require("commander");
-var replace = require("replace");
-var download = require("download");
-var glob = require("glob");
-var wrench = require("wrench");
-var child_process = require("child_process");
-var version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))).version;
-var engines = ["cocos2d-js"];//, "unity", "corona"];
-var defaults = {
-	engine: engines[0],
-	package: "org.mycompany.mygame",
-	//dest: path.join(path.homedir(), "Desktop/"),
-	dest: process.cwd(),
-	//prefix: path.join(path.homedir(), "Library/Developer/RapidGame")
-	prefix: __dirname
-};
-var cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip";
+//
+// RapidGamePro
+// ------------
+//
+// A cross-platform game project creator which can create Cocos2D JS, Unity, Corona and Appcelerator Titanium games.
+//
+// See:
+// 1. [Selecting a Cross-platform Game Engine](http://www.binpress.com/blog/2014/05/14/selecting-cross-platform-game-engine/).
+//
+
+var path = require("path-extra"),
+	fs = require("fs"),
+	util = require("util"),
+	cmd = require("commander"),
+	replace = require("replace"),
+	download = require("download"),
+	glob = require("glob"),
+	wrench = require("wrench"),
+	child_process = require("child_process"),
+	version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))).version,
+	templates = ["HelloWorld", "BrickBreaker"],
+	engines = ["cocos2d", "unity", "corona", "titanium"],
+	defaults = {
+		engine: engines[0],
+		package: "org.mycompany.mygame",
+		template: templates[0],
+		dest: process.cwd(),
+		prefix: __dirname // or, path.join(path.homedir(), "Library/Developer/RapidGame")?
+	},
+	cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip";
 
 //
 // Main run method.
@@ -28,13 +38,14 @@ var run = function(args) {
 	cmd
 		.version(version)
 		.usage("<new-project-name> [options]")
-		.option("-p, --prefix [name]", "library directory [" + defaults.prefix + "]", defaults.prefix)
+		.option("-t, --template [name]", "template (" + templates.join(", ") + ") [" + defaults.template + "]", defaults.template)
 		.option("-e, --engine", "engine to use (" + engines.join(", ") + ") [" + defaults.engine + "]", defaults.engine)
+		.option("-p, --prefix [name]", "library directory [" + defaults.prefix + "]", defaults.prefix)
 		.option("-o, --output [path]", "output folder [" + defaults.dest + "]", defaults.dest)
 		.option("-k, --package [name]", "package name [" + defaults.package + "]", defaults.package)
 		.option("-v, --verbose", "be verbose", false)
 		.parse(args)
-		.name = "rapidgamepro";
+		.name = path.basename(__filename, ".js");
 
 	if (cmd.args.length) {
 		if(cmd.args[0] === "prebuild") {
@@ -118,7 +129,6 @@ var copyRecursive = function(src, dest, verbose) {
 //
 var createProject = function() {
 	var name = cmd.args[0],
-		package = cmd.package,
 		dir = path.join(cmd.output, name),
 		src,
 		dest,
@@ -127,9 +137,21 @@ var createProject = function() {
 		onFinished = function(){
 			console.log("Done creating project " + name);
 		};
+
+	// Check engine and template
+	if (engines.indexOf(cmd.engine) < 0) {
+		console.log("Engine '" + cmd.engine + "' not found, defaulting to " + defaults.engine);
+		cmd.engine = defaults.engine;
+	}
+	if (templates.indexOf(cmd.template) < 0) {
+		console.log("Template '" + cmd.template + "' not found, defaulting to " + defaults.template);
+		cmd.template = defaults.template;
+	}
+	console.log("Engine: " + cmd.engine);
+	console.log("Template: " + cmd.template);
 	
 	// Copy all template files to destination
-	src = path.join(__dirname, "template");
+	src = path.join(__dirname, "templates", cmd.engine, cmd.template);
 	dest = dir;
 	console.log("Copying project files from " + src + " to " + dest);
 	fileCount = copyRecursive(src, dest, cmd.verbose);
@@ -138,9 +160,9 @@ var createProject = function() {
 	}
 	
 	// Replace project name
-	console.log("Replacing project name with '" + name + "'");
+	console.log("Replacing all '" + cmd.template + "' with '" + name + "'");
 	replace({
-		regex: "HelloJavascript",
+		regex: cmd.template,
 		replacement: name,
 		paths: [dest],
 		include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,*.vcxproj,*.user,*.filters",
@@ -149,10 +171,11 @@ var createProject = function() {
 	});
 
 	// Replace package name
-	console.log("Replacing package name with '" + package + "'");
+	src = "com.wizardfu." + cmd.template.toLowerCase();
+	console.log("Replacing all '" + src + "' with '" + cmd.package + "'");
 	replace({
-		regex: "org.cocos2dx.hellojavascript",
-		replacement: package,
+		regex: src,
+		replacement: cmd.package,
 		paths: [dest],
 		include: "*.js,*.plist,*.xml,makefile",
 		recursive: true,
@@ -160,12 +183,12 @@ var createProject = function() {
 	});
 	
 	// Rename files & dirs
-	from = dest + "/**/HelloJavascript.*";
-	console.log("Renaming project files");
+	from = path.join(dest, "**", cmd.template + ".*");
+	console.log("Renaming all " + from + " files");
 	files = glob.sync(from);
 	for (i = 0; i < files.length; i++) {
 		from = files[i];
-		to = files[i].replace("HelloJavascript", name);
+		to = path.join(path.dirname(from), path.basename(from).replace(cmd.template, name));
 		if (cmd.verbose) {
 			console.log("Moving " + from + " to " + to);
 		}
