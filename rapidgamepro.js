@@ -34,27 +34,148 @@ var path = require("path-extra"),
 // Main run method.
 //
 var run = function(args) {
+	var cmdName = path.basename(__filename, ".js");
 	args = args || process.argv;
 	cmd
 		.version(version)
-		.usage("<new-project-name> [options]")
 		.option("-t, --template [name]", "template (" + templates.join(", ") + ") [" + defaults.template + "]", defaults.template)
-		.option("-e, --engine", "engine to use (" + engines.join(", ") + ") [" + defaults.engine + "]", defaults.engine)
+		.option("-e, --engine [name]", "engine to use (" + engines.join(", ") + ") [" + defaults.engine + "]", defaults.engine)
 		.option("-p, --prefix [name]", "library directory [" + defaults.prefix + "]", defaults.prefix)
 		.option("-o, --output [path]", "output folder [" + defaults.dest + "]", defaults.dest)
 		.option("-k, --package [name]", "package name [" + defaults.package + "]", defaults.package)
-		.option("-v, --verbose", "be verbose", false)
-		.parse(args)
-		.name = path.basename(__filename, ".js");
+		.option("-v, --verbose", "be verbose", false);
+	
+	cmd
+		.command("*")
+		.description("Create a new project using one of the templates, for example: " + cmdName + " Foo")
+		.action(createProject);
 
-	if (cmd.args.length) {
-		if(cmd.args[0] === "prebuild") {
-			return prebuild();
-		} else {
-			return createProject();
+	cmd
+		.command("prebuild")
+		.description("Prebuild Cocos2D JS static libraries for all platforms and architectures")
+		.action(prebuild);
+	
+	cmd
+		.parse(args)
+		.name = cmdName;
+
+	if (!cmd.args.length) {
+		return console.log(cmd.helpInformation());
+	}
+};
+
+//
+// Create project.
+//
+var createProject = function(name) {
+	var dir = path.join(cmd.output, name),
+		src,
+		dest,
+		fileCount,
+		i,
+		onFinished;
+
+	// Check if dirs exist
+	if (dirExists(dir)) {
+		console.log("Output directory already exists: " + dir);
+		process.exit(1);
+	}
+
+	// Check engine and template
+	if (engines.indexOf(cmd.engine) < 0) {
+		console.log("Engine '" + cmd.engine + "' not found, defaulting to " + defaults.engine);
+		cmd.engine = defaults.engine;
+	}
+	if (templates.indexOf(cmd.template) < 0) {
+		console.log("Template '" + cmd.template + "' not found, defaulting to " + defaults.template);
+		cmd.template = defaults.template;
+	}
+	src = path.join(__dirname, "templates", cmd.engine, cmd.template);
+	if (!dirExists(src)) {
+		console.log("Missing template directory: " + src);
+		process.exit(1);
+	}
+	console.log("Rapidly creating a game project named '" + name + "' with engine " +
+		cmd.engine.charAt(0).toUpperCase() + cmd.engine.slice(1) + " and template " + cmd.template);
+	
+	// Copy all template files to destination
+	dest = dir;
+	console.log("Copying project files from " + src + " to " + dest);
+	fileCount = copyRecursive(src, dest, cmd.verbose);
+	if (cmd.verbose) {
+		console.log("Successfully copied " + fileCount + " files");
+	}
+	
+	// Replace project name
+	console.log("Replacing all '" + cmd.template + "' with '" + name + "'");
+	replace({
+		regex: cmd.template,
+		replacement: name,
+		paths: [dest],
+		include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,*.vcxproj,*.user,*.filters",
+		recursive: true,
+		silent: !cmd.verbose
+	});
+
+	// Replace package name
+	src = "com.wizardfu." + cmd.template.toLowerCase();
+	console.log("Replacing all '" + src + "' with '" + cmd.package + "'");
+	replace({
+		regex: src,
+		replacement: cmd.package,
+		paths: [dest],
+		include: "*.js,*.plist,*.xml,makefile",
+		recursive: true,
+		silent: !cmd.verbose
+	});
+	
+	// Rename files & dirs
+	from = path.join(dest, "**", cmd.template + ".*");
+	console.log("Renaming all " + from + " files");
+	files = glob.sync(from);
+	for (i = 0; i < files.length; i++) {
+		from = files[i];
+		to = path.join(path.dirname(from), path.basename(from).replace(cmd.template, name));
+		if (cmd.verbose) {
+			console.log("Moving " + from + " to " + to);
+		}
+		try {
+			fs.renameSync(from, to);
+		} catch(e) {
+			console.log("Error moving file");
+		}
+	}
+	
+	// Symlink
+	if (cmd.template.indexOf("cocos") >= 0) {
+		src = cmd.prefix;
+		dest = path.join(dir, "lib");
+		console.log("Symlinking from " + src + " to " + dest);
+		try {
+			fs.symlinkSync(src, dest);
+		} catch(e) {
+			console.log("Error creating symlink: " + e);
+		}
+	}
+	
+	// Npm install
+	i = null;
+	dest = path.join(dir, "server");
+	onFinished = function(){
+		console.log("Done creating project " + name);
+	};
+	if (dirExists(dest) && !dirExists(path.join(dest, "node_modules"))) {
+		console.log("Installing node modules");
+		try {
+			child_process.exec("npm install", {cwd: dest, env: process.env}, function(a, b, c){
+				execCallback(a, b, c);
+				onFinished();
+			});
+		} catch(e) {
+			console.log("Error installing node modules: " + e);
 		}
 	} else {
-		return console.log(cmd.helpInformation());
+		onFinished();
 	}
 };
 
@@ -122,116 +243,6 @@ var copyRecursive = function(src, dest, verbose) {
 	});
 
 	return count;
-};
-
-//
-// Create project.
-//
-var createProject = function() {
-	var name = cmd.args[0],
-		dir = path.join(cmd.output, name),
-		src,
-		dest,
-		fileCount,
-		i,
-		onFinished;
-
-	// Check if dir exists
-	if (dirExists(dir)) {
-		console.log("Output directory already exists: " + dir);
-		process.exit(1);
-	}
-
-	// Check engine and template
-	if (engines.indexOf(cmd.engine) < 0) {
-		console.log("Engine '" + cmd.engine + "' not found, defaulting to " + defaults.engine);
-		cmd.engine = defaults.engine;
-	}
-	if (templates.indexOf(cmd.template) < 0) {
-		console.log("Template '" + cmd.template + "' not found, defaulting to " + defaults.template);
-		cmd.template = defaults.template;
-	}
-	console.log("Rapidly creating a game project named '" + name + "' with engine " +
-		cmd.engine.charAt(0).toUpperCase() + cmd.engine.slice(1) + " and template " + cmd.template);
-	
-	// Copy all template files to destination
-	src = path.join(__dirname, "templates", cmd.engine, cmd.template);
-	dest = dir;
-	console.log("Copying project files from " + src + " to " + dest);
-	fileCount = copyRecursive(src, dest, cmd.verbose);
-	if (cmd.verbose) {
-		console.log("Successfully copied " + fileCount + " files");
-	}
-	
-	// Replace project name
-	console.log("Replacing all '" + cmd.template + "' with '" + name + "'");
-	replace({
-		regex: cmd.template,
-		replacement: name,
-		paths: [dest],
-		include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,*.vcxproj,*.user,*.filters",
-		recursive: true,
-		silent: !cmd.verbose
-	});
-
-	// Replace package name
-	src = "com.wizardfu." + cmd.template.toLowerCase();
-	console.log("Replacing all '" + src + "' with '" + cmd.package + "'");
-	replace({
-		regex: src,
-		replacement: cmd.package,
-		paths: [dest],
-		include: "*.js,*.plist,*.xml,makefile",
-		recursive: true,
-		silent: !cmd.verbose
-	});
-	
-	// Rename files & dirs
-	from = path.join(dest, "**", cmd.template + ".*");
-	console.log("Renaming all " + from + " files");
-	files = glob.sync(from);
-	for (i = 0; i < files.length; i++) {
-		from = files[i];
-		to = path.join(path.dirname(from), path.basename(from).replace(cmd.template, name));
-		if (cmd.verbose) {
-			console.log("Moving " + from + " to " + to);
-		}
-		try {
-			fs.renameSync(from, to);
-		} catch(e) {
-			console.log("Error moving file");
-		}
-	}
-	
-	// Symlink
-	src = cmd.prefix;
-	dest = path.join(dir, "lib");
-	console.log("Symlinking from " + src + " to " + dest);
-	try {
-		fs.symlinkSync(src, dest);
-	} catch(e) {
-		console.log("Error creating symlink: " + e);
-	}
-	
-	// Npm install
-	i = null;
-	dest = path.join(dir, "server");
-	onFinished = function(){
-		console.log("Done creating project " + name);
-	};
-	if (!dirExists(path.join(dest, "node_modules"))) {
-		console.log("Installing node modules");
-		try {
-			child_process.exec("npm install", {cwd: dest, env: process.env}, function(a, b, c){
-				execCallback(a, b, c);
-				onFinished();
-			});
-		} catch(e) {
-			console.log("Error installing node modules: " + e);
-		}
-	} else {
-		onFinished();
-	}
 };
 
 //
@@ -304,6 +315,10 @@ var copySrcFiles = function(callback) {
 	var dest,
 		verbose = false,
 		dir = path.join(defaults.prefix, "/");
+
+console.log("Prebuild command is under construction");
+process.exit(1);
+
 /*
 	console.log("Copying prebuild to " + dir);
 	try {
