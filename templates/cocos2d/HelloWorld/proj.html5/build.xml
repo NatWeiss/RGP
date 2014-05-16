@@ -246,7 +246,7 @@
 				<file name="HelloWorld.js"/>
 				<file name="lib/Loader.js"/>
 				<file name="SceneHello.js"/>
-				<file name="App.js"/>
+				<file name="lib/App.js"/>
 			</sources>
 		</jscomp>
 	</target>

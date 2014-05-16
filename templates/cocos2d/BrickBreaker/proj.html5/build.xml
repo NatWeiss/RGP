@@ -239,7 +239,7 @@
 				<file name="Config.js"/>
 				<file name="MenuScene.js"/>
 				<file name="GameScene.js"/>
-				<file name="App.js"/>
+				<file name="lib/App.js"/>
 			</sources>
 		</jscomp>
 	</target>

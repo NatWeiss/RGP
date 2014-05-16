@@ -11,7 +11,7 @@ var GameScene = cc.Scene.extend({
 });
 
 var GameLayer = (function(){
-	var paddleSpeed = .5,
+	var paddleSpeed = .333,
 		maxBallAngle = 75,
 		numOfRows = 4,
 		numOfCols = 11,
@@ -69,15 +69,13 @@ var GameLayer = (function(){
 		var sprite = cc.PhysicsSprite.create(filename),
 			body,
 			shape,
-			large = App.isHtml5() ? Infinity : 9999,
 			w, h;
 		
-		w = sprite.width;
-		h = sprite.height;
+		w = sprite.width || 1;
+		h = sprite.height || 1;
 
 		if (static) {
 			body = cp.StaticBody();
-			//body = space.staticBody;
 		} else {
 			body = new cp.Body(1, cp.momentForBox(1, w, h))
 			space.addBody(body);
@@ -86,7 +84,6 @@ var GameLayer = (function(){
 		if (collisionType === collisionTypeBall) {
 			shape = new cp.CircleShape(body, w * .5, cp.v(0,0));
 		} else {
-			//shape = new cp.PolyShape(body, [0,0, 0,h, w,h, w,0], cp.v(0,0));
 			shape = new cp.BoxShape(body, w, h);
 		}
 		shape.setElasticity(elasticity);
@@ -143,10 +140,17 @@ var GameLayer = (function(){
 	
 	return cc.Layer.extend({
 		init: function() {
-			var self = this, i, x, y;
+			var self = this, i, x, y, w, h;
 			this._super();
 
 			clear();
+
+			// Preload particle
+			i = cc.Sprite.create("Particle.png");
+			i = null;
+			
+			// Preload sounds
+			cc.loader.load(["res/Brick.mp3", "res/Paddle.mp3", "res/Die.mp3", "res/Wall.mp3"]);
 			
 			// Stretched big background
 			bg2 = cc.LayerColor.create(cc.color(208, 204, 202, 255));
@@ -179,7 +183,7 @@ var GameLayer = (function(){
 				this.addChild(debugNode, 100);
 			}
 			
-			if (cc.game.config.playMusic) {
+			if (App.config.playMusic) {
 				App.playMusic("Song.mp3");
 			}
 			
@@ -205,9 +209,9 @@ var GameLayer = (function(){
 			this.addChild(ball, 1);
 			
 			// Bricks
-			var i = cc.Sprite.create("Brick.png"),
-				w = i.width + brickPadding,
-				h = i.height + brickPadding;
+			i = cc.Sprite.create("Brick.png");
+			w = i.width + brickPadding;
+			h = i.height + brickPadding;
 			i = null;
 			for (y = 0; y < numOfRows; y += 1) {
 				for (x = 0; x < numOfCols; x += 1) {
@@ -226,7 +230,7 @@ var GameLayer = (function(){
 					i = null;
 				}
 			}
-			
+
 			// Handle collision events
 			space.addCollisionHandler(collisionTypeBall, collisionTypeBrick, null, null, null, function(arbiter, space){
 				// Get brick shape and remove

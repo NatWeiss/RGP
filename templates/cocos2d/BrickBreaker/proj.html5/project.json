@@ -20,9 +20,33 @@
 	],
 
     "jsList": [
-		"js/Config.js",
 		"js/MenuScene.js",
 		"js/GameScene.js",
 		"js/lib/Loader.js"
-    ]
+    ],
+
+	"strings": {
+		"en": {
+			"title": "BrickBreaker"
+		}
+	},
+	
+	"preload": [
+		"Paddle.png",
+		"Ball.png",
+		"Brick.png",
+		"Particle.png"
+	],
+
+	"font": "DolceVita",
+	
+	"loader": {
+		"bg-color": {"r": 218, "g": 214, "b": 212, "a": 255},
+		"text": "L o a d i n g . . .",
+		"text-font": "Arial",
+		"text-color": {"r": 128, "g": 128, "b": 128, "a": 255},
+		"text-size": 40,
+		"bar-color": {"r": 9, "g": 9, "b": 10, "a": 255},
+		"image-win-size-percent": 0.5
+	}
 }

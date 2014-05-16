@@ -282,8 +282,6 @@ App.getResourcesToPreload = function() {
 				}
 			}
 		}
-	} else {
-		cc.log("Missing App.config.preload array");
 	}
 	
 	return ret;
@@ -1141,6 +1139,12 @@ App.boot = function(global) {
 		App.setCanvasSize(document.getElementById("gameDiv"),
 			this._origCanvasSize.width, this._origCanvasSize.height);
 	} else {
+		/* Implement timers. */
+		require("js/lib/timers.js");
+		this.timerLoop = makeWindowTimer(global, function(ms){});
+		cc.director.getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
+
+// begin pro
 		/* Ensure plugin is defined. */
 		global.plugin = global.plugin || {};
 		if (!global.plugin.PluginManager) {
@@ -1148,11 +1152,6 @@ App.boot = function(global) {
 				getInstance:function(){return {loadPlugin:function(){}}}
 			};
 		}
-
-		/* Implement timers. */
-		require("js/lib/timers.js");
-		this.timerLoop = makeWindowTimer(global, function(ms){});
-		cc.director.getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
 
 		/* Location. */
 		require("js/ConfigServer.js");
@@ -1167,15 +1166,7 @@ App.boot = function(global) {
 				userAgent: "Apple-iPhone5C1/1001.525"
 			};
 		}
-		
-		/* Add some functionality to cc. */
-		if (typeof cc.DEGREES_TO_RADIANS === "undefined") {
-			cc.PI = Math.PI;
-			cc.RAD = cc.PI / 180;
-			cc.DEG = 180 / cc.PI;
-			cc.DEGREES_TO_RADIANS = function(angle) {return angle * cc.RAD;};
-			cc.RADIANS_TO_DEGREES = function(angle) {return angle * cc.DEG;};
-		}
+// end pro
 	}
 
 	/*setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);*/
@@ -1207,6 +1198,14 @@ App.main = function() {
 		cacher,
 		dirs = [];
 
+	/* Get config */
+	App.config = App.config || {};
+	for (i in cc.game.config) {
+		if (cc.game.config.hasOwnProperty(i)) {
+			App.config[i] = App.clone(cc.game.config[i]);
+		}
+	}
+
 // begin pro
 	var initialLaunch = this.isInitialLaunch();
 	this.getUUID();
@@ -1219,11 +1218,19 @@ App.main = function() {
 	cc.director.setDisplayStats(cc.game.config[cc.game.CONFIG_KEY.showFPS]);
 	cc.view.setDesignResolutionSize(size.width, size.height, cc.ResolutionPolicy.SHOW_ALL);
 	cc.view.resizeWithBrowserSize(true);
+
 	App.contentHeight = App.winSize.height;
 	App.contentWidth = App.contentHeight * (size.width / size.height);
 	App.contentX = (App.winSize.width - App.contentWidth) * .5;
 	App.contentY = 0;
+
 	cc.loader.resPath = cc.game.config.resourcePath;
+	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
+	cc.log(parseInt(App.winSize.width) + " x " + parseInt(App.winSize.height)
+		+ ", resource dir: " + App.getResourceDir()
+		+ ", language: " + App.getLanguageCode()
+		+ ", " + parseInt(1.0 / cc.director.getAnimationInterval()) + " fps");
+
 
 	if (this.isHtml5()) {
 // begin pro
@@ -1251,15 +1258,7 @@ App.main = function() {
 	if (initialLaunch && typeof this.onInitialLaunch === "function") {
 		this.onInitialLaunch();
 	}
-// end pro
 
-	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
-	cc.log(App.winSize.width + " x " + App.winSize.height
-		+ ", resource dir: " + App.getResourceDir()
-		+ ", language: " + App.getLanguageCode()
-		+ ", " + parseInt(1.0 / cc.director.getAnimationInterval()) + " fps");
-
-// begin pro
 	/* Show currency balances. */
 	this.logCurrencyBalances();
 // end pro
