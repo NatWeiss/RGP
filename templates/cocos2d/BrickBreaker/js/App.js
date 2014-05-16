@@ -14,15 +14,6 @@
 var App = App || {};
 
 //
-// ###  App.getInitialScene
-//
-// Return the initial Scene class.
-//
-App.getInitialScene = function() {
-	return MenuScene;
-};
-
-//
 // ###  App.getTargetFrameRate
 //
 // Return the target frame rate to use. Scale back in HTML5 mode to save a CPU fan somewhere.
@@ -91,62 +82,14 @@ App.getWinSize = function() {
 };
 
 //
-// ###  App.getResourceDir
-//
-// Return the resource directory (SD, HD or HDR) for this device's resolution.
-//
-App.getResourceDir = function() {
-	if (typeof this._resourceDir === "undefined") {
-		var self = this,
-			winSize = this.getWinSize(),
-			maxDimension = Math.max(winSize.width, winSize.height),
-			minDimension = Math.min(winSize.width, winSize.height),
-			setResourceDir = function(dir, contentScaleFactor, scaleFactor){
-				self._resourceDir = dir;
-				self._contentScaleFactor = contentScaleFactor;
-				self._scaleFactor = scaleFactor;
-			};
-		
-		if (this.isHtml5()) {
-			if (minDimension >= 1200 && this._pixelRatio > 1) {
-				setResourceDir("res/hdr", 1, 2);
-			} else if (minDimension >= 600) {
-				setResourceDir("res/hd", 1, 1);
-			} else {
-				setResourceDir("res/sd", 1, .5);
-			}
-		} else {
-			if (maxDimension > 1600) {
-				setResourceDir("res/hdr", 1, 2);
-			} else if (maxDimension >= 960) {
-				setResourceDir("res/hd", 1, 1);
-			} else {
-				setResourceDir("res/sd", 1, .5);
-			}
-		}
-	}
-
-	return this._resourceDir;
-};
-
-//
-// ###  App.scale
-//
-// Scale a number by a factor based on the screen size.
-//
-App.scale = function(floatValue) {
-	return floatValue * this._scaleFactor;
-};
-
-//
 // ###  App.centralize
 //
 // Return a point relative to the center of the screen and scaled.
 //
 App.centralize = function(x, y) {
 	var winSize = this.getWinSize();
-	return cc.p(this.scale(x) + winSize.width * .5,
-		this.scale(y) + winSize.height * .5);
+	return cc.p(x + winSize.width * .5,
+		y + winSize.height * .5);
 };
 
 //
@@ -276,46 +219,21 @@ App.callRunningLayer = function(methodName, param1, param2, param3) {
 // Return an array of files to preload.
 //
 App.getResourcesToPreload = function() {
-	var dir = this.getResourceDir(),
-		files = App.config["preload"],
+	var files = App.config["preload"],
 		ret = [],
 		i;
 
 	if (files) {
 		for (i = 0; i < files.length; i += 1) {
 			if (files[i] && files[i].length) {
-				if (files[i].indexOf("/") < 0) {
-					ret[i] = dir + "/" + files[i];
-				} else {
-					ret[i] = files[i];
-				}
+				ret[i] = files[i];
 			}
 		}
 	} else {
 		cc.log("Missing App.config.preload array");
 	}
-	
+
 	return ret;
-};
-
-//
-// ###  App.loadResources
-//
-// Setup and load resources.
-//
-App.loadResources = function() {
-	var sheets = App.config["spritesheets"],
-		sheet,
-		i;
-
-	cc.loader.resPath = "res";
-	cc.director.setContentScaleFactor(this._contentScaleFactor);
-
-	for (i = 0; i < sheets.length; i += 1) {
-		sheet = cc.loader.getUrl(this.getResourceDir(), sheets[i]);
-		cc.log("Loading spritesheet: " + sheet);
-		cc.spriteFrameCache.addSpriteFrames(sheet);
-	}
 };
 
 //
@@ -324,61 +242,12 @@ App.loadResources = function() {
 // Loads resources and calls the initial scene. Called by `App.main`.
 //
 App.runInitialScene = function() {
-	var Scene = App.getInitialScene(),
+	var Scene = window[cc.game.config.initialScene],
 		scene;
 	
-	App.loadResources();
 	scene = new Scene;
 	scene.init();
 	cc.director.runScene(scene);
-};
-
-//
-// ###  App.isFullscreenAvailable
-//
-// Return true if fullscreen mode is available on this platform.
-//
-App.isFullscreenAvailable = function() {
-	return (this.isHtml5() ?
-		typeof screenfull !== "undefined" && screenfull.enabled :
-		this.isDesktop()
-	);
-};
-
-//
-// ###  App.isFullscreenEnabled
-//
-// Return true if fullscreen mode is enabled.
-//
-App.isFullscreenEnabled = function() {
-	return (this.isHtml5() ?
-		typeof screenfull !== "undefined" && screenfull.isFullscreen :
-		this._fullscreenEnabled ? true : false
-	);
-};
-
-//
-// ###  App.enableFullscreen
-//
-// Enable or disable fullscreen mode.
-//
-// See http://www.sitepoint.com/use-html5-full-screen-api/.
-//
-App.enableFullscreen = function(enabled) {
-	if (this.isFullscreenAvailable()) {
-		if (this.isHtml5()) {
-			if (enabled) {
-				App.setCanvasSize(document.getElementById("gameDiv"),
-					screen.width, screen.height);
-				screenfull.request();
-			}
-			else {
-				App.setCanvasSize(document.getElementById("gameDiv"),
-					this._origCanvasSize.width, this._origCanvasSize.height);
-				screenfull.exit();
-			}
-		}
-	}
 };
 
 //
@@ -397,42 +266,16 @@ App.setCanvasSize = function(e, w, h) {
 	e.height = h * this._pixelRatio;
 	e.style.width = w + "px";
 	e.style.height = h + "px";
+	e.style.backgroundColor = document.body.style.backgroundColor;
 
 	cc.log("Set #" + e.getAttribute("id") + " pixel ratio " + this._pixelRatio +
 		", size " + e.width + "x" + e.height +
 		", style " + e.style.width + " x " + e.style.height +
-		", fullscreen " + App.isFullscreenEnabled() +
 		", parent " + e.parentNode.getAttribute("id"));
 	
 	if (typeof this._origCanvasSize === "undefined") {
 		this._origCanvasSize = {width: w, height: h};
 	}
-};
-
-//
-// ###  App.onWindowSizeChanged
-//
-// Called when the window size has changed.
-//
-App.onWindowSizeChanged = function() {
-	/*var size = (App.isFullscreenEnabled() ?
-		cc.size(screen.width, screen.height) :
-		cc.size(this._origCanvasSize));
-	App.setCanvasSize(document.getElementById("gameDiv"), size.width, size.height);*/
-
-	/*App.setCanvasSize(document.getElementById("Cocos2dGameContainer"));
-	App.setCanvasSize(document.getElementById("gameDiv"));*/
-
-	App.callRunningLayer("onWindowSizeChanged");
-};
-
-//
-// ###  App.toggleFullscreenEnabled
-//
-// Toggle whether fullscreen is enabled.
-//
-App.toggleFullscreenEnabled = function() {
-	this.enableFullscreen(!this.isFullscreenEnabled());
 };
 
 //
@@ -498,6 +341,10 @@ App.isSoundEnabled = function() {
 //
 App.playEffect = function(filename) {
 	if (this.isSoundEnabled()) {
+		/* Automatically prefix with resource path. */
+		if (cc.loader.resPath && filename.indexOf("/") < 0) {
+			filename = cc.loader.resPath + "/" + filename;
+		}
 		return cc.audioEngine.playEffect(filename);
 	}
 	return -1;
@@ -521,232 +368,6 @@ App.playMusic = function(filename) {
 	if (this.isSoundEnabled()) {
 		cc.audioEngine.stopMusic();
 		cc.audioEngine.playMusic(filename);
-	}
-};
-
-//
-// ###   App.isInitialLaunch
-//
-// Returns true if this is the first time the app is being launched. It determines this based on whether the `uuid` key exists within local storage. Deleting this key will essentially reset the app into thinking it's the first run.
-//
-// Must be called before `App.getUUID()`, which creates the `uuid` key.
-//
-App.isInitialLaunch = function() {
-	var v, key;
-	
-	/* Test local storage. */
-	key = "testItem";
-	v = "xyz";
-	cc.sys.localStorage.setItem(key, v);
-	if (cc.sys.localStorage.getItem(key) !== v) {
-		cc.log("ERROR: Local storage test failed");
-		this._localStorage = false;
-		return true;
-	} else {
-		cc.log("Local storage test succeeded");
-		cc.sys.localStorage.removeItem(key);
-		this._localStorage = true;
-	}
-	
-	/* Determine if initial launch. */
-	v = cc.sys.localStorage.getItem("uuid");
-	return (typeof v === "undefined" || v === null || v === "");
-};
-
-//
-// ###  App.getUUID
-//
-// Gets or creates a unique identifier for the current device.
-//
-App.getUUID = function(length) {
-	if (typeof this._uuid === "undefined") {
-		this._uuid = cc.sys.localStorage.getItem("uuid") || "";
-		
-		if (this._uuid.length === 0) {
-			length = length || 32;
-			for (var i = 0; i < length; i += 1) {
-				this._uuid += Math.floor(Math.random() * 16).toString(16);
-			}
-			cc.sys.localStorage.setItem("uuid", this._uuid);
-			/*cc.log("Generated UUID for the first time: " + this._uuid);*/
-		} else {
-			/*cc.log("Already had UUID: " + this._uuid);*/
-		}
-	}
-	return this._uuid;
-};
-
-//
-// ###  App.getHttpQueryParams
-//
-// Return the HTTP query's GET parameters.
-//
-App.getHttpQueryParams = function() {
-	var loc,
-		i,
-		len,
-		query,
-		aux;
-	
-	if (typeof this._GET === "undefined") {
-		this._GET = {};
-		loc = window.location.toString() || "";
-		
-		if (loc.indexOf("?") !== -1) {
-			query = loc.replace(/^.*?\?/, "").split("&");
-			len = query.length;
-
-			for (i = 0; i < len; i += 1) {
-				aux = decodeURIComponent(query[i]).split("=");
-				this._GET[aux[0]] = aux[1];
-			}
-		}
-	}
-	
-	return this._GET;
-};
-
-//
-// ###  App.requestUrl
-//
-// Load the given URL and call the callback when finished. If the third parameter `binary` is truthy, then use binary transfer mode.
-//
-// Uses `XMLHttpRequest` (implemented natively on native platforms).
-//
-App.requestUrl = function(url, callback, binary) {
-	var x,
-		loc,
-		pos;
-	if (XMLHttpRequest) {
-		x = new XMLHttpRequest();
-	} else {
-		x = new ActiveXObject("Microsoft.XMLHTTP");
-	}
-	
-	if (url.indexOf("//") < 0) {
-		cc.log("window.location = " + window.location);
-		loc = window.location.toString() || "";
-		pos = loc.indexOf("?");
-		if (pos > 0) {
-			loc = loc.substring(0, pos);
-		}
-		url = loc + url;
-	}
-	cc.log("Requesting URL: " + url);
-
-	if (x != null) {
-		if (!binary && x.overrideMimeType) {
-			x.overrideMimeType("text/xml");
-		}
-
-		/* Call the callback when done. */
-		x.onreadystatechange = function () {
-			if (x.readyState == 4) { /* 4 == done. */
-				var res = (binary ? x.response : x.responseText);
-				callback(res || "", x.statusText);
-				if (res) {
-					x = null;
-				}
-			}
-		};
-
-		/* Make the request. */
-		x.open("GET", url, true);
-		if (binary) {
-			x.responseType = "arraybuffer";
-		}
-		x.send(null);
-	} else {
-		throw "Your browser does not support XMLHTTPRequest.";
-	}
-};
-
-//
-// ###  App.between
-//
-// Return the substring of `string` between `prefix` and `suffix`.
-//
-App.between = function(string, prefix, suffix, start) {
-	var startPos = string.indexOf(prefix, start || 0),
-		endPos = string.indexOf(suffix, startPos + prefix.length);
-	if (startPos > 0 && endPos > 0) {
-		startPos += prefix.length;
-		return string.substring(startPos, endPos);
-	}
-	return "";
-};
-
-//
-// ###  App.insert
-//
-// Return the given `string` with `insert` inserted after `after`.
-//
-App.insert = function(string, after, insert) {
-	var pos = string.indexOf(after) + after.length;
-	if (pos > 0) {
-		return string.substr(0, pos) + insert + string.substr(pos);
-	}
-	return string;
-};
-
-//
-// ###  App.encodeURIComponents
-//
-// Return a URI string with components encoded given an object of associated key value pairs to encode.
-//
-App.encodeURIComponents = function(o) {
-	var ret = "",
-		count = 0;
-	for (var key in o) {
-		if (typeof o[key] !== "undefined") {
-			ret += (count === 0 ? "?" : "&") +
-				key + "=" + encodeURIComponent(o[key]);
-			count += 1;
-		}
-	}
-	return ret;
-};
-
-//
-// ###  App.loadImage
-//
-// Loads an image asynchronously from the given URL, calling the callback when finished. Different for HTML5 versus native.
-//
-App.loadImage = function(url, callback) {
-	if (url.indexOf("://") == 0) {
-		cc.log("Not a URL: " + url);
-		return;
-	}
-	
-	/* Load image HTML5. */
-	if (typeof Image !== "undefined") {
-		var image = new Image();
-		/* If anonymous doesn't work, try: */
-		/* url = App.insert(url, "://", "www.corsproxy.com/"); */
-		image.crossOrigin = "Anonymous";
-		image.src = url;
-
-		/*cc.log("Loading image: " + url);*/
-		image.addEventListener("load", function(){
-			this.removeEventListener("load", arguments.callee, false);
-			if (image.width && image.height) {
-				cc.textureCache.cacheImage(url, image);
-				if (typeof callback === "function") {
-					callback(url);
-				}
-			}
-		}, false);
-
-	/* Load image native. */
-	} else {
-		/*cc.log("Loading image from raw data: " + url);*/
-		this.requestUrl(url, function(response, status) {
-			var bytes = new Uint8Array(response);
-			App.addImageData(url, bytes);
-			if (typeof callback === "function") {
-				callback(url);
-			}
-		}, true);
 	}
 };
 
@@ -822,55 +443,38 @@ App.boot = function(global) {
 //
 App.main = function() {
 	var i,
+		size = {},
 		sheets,
 		cacher,
-		dirs = [],
-		initialLaunch = this.isInitialLaunch();
+		dirs = [];
 
-	this.getUUID();
 	this.loadSoundEnabled();
 
 	cc.defineGetterSetter(App, "winSize", App.getWinSize);
+	size.width = cc.game.config.designWidth || App.winSize.width;
+	size.height = cc.game.config.designHeight || App.winSize.height;
 	cc.director.setDisplayStats(cc.game.config[cc.game.CONFIG_KEY.showFPS]);
+	cc.view.setDesignResolutionSize(size.width, size.height, cc.ResolutionPolicy.SHOW_ALL);
+	cc.view.resizeWithBrowserSize(true);
+	App.contentHeight = App.winSize.height;
+	App.contentWidth = App.contentHeight * (size.width / size.height);
+	App.contentX = (App.winSize.width - App.contentWidth) * .5;
+	App.contentY = 0;
+	cc.loader.resPath = cc.game.config.resourcePath;
 
 	if (this.isHtml5()) {
-		cc.loader.loadJs("js/lib", ["screenfull.js"], function() {
-			document.addEventListener(screenfull.raw.fullscreenchange, App.onWindowSizeChanged);
-		});
-		
-		cc.view.setDesignResolutionSize(
-			App.winSize.width,
-			App.winSize.height,
-			cc.ResolutionPolicy.SHOW_ALL
-		);
-		cc.view.resizeWithBrowserSize(true);
-		/*window.addEventListener("resize", App.onWindowSizeChanged, false);*/
-
 		App.addImageData = function() {};
 	} else {
 		App.config["font"] = "res/" + App.config["font"] + ".ttf";
 	}
 
-	/* Handle initial launch. */
-	/* Call after loading plugins so initial currency balances can be set. */
-	/*cc.log("Initial launch: " + initialLaunch);*/
-	if (initialLaunch && typeof this.onInitialLaunch === "function") {
-		this.onInitialLaunch();
-	}
-
 	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
 	cc.log(App.winSize.width + " x " + App.winSize.height
-		+ ", resource dir: " + App.getResourceDir()
 		+ ", language: " + App.getLanguageCode()
 		+ ", " + parseInt(1.0 / cc.director.getAnimationInterval()) + " fps");
 
 	/* Preload. */
-	if (this.isHtml5()) {
-		cc.LoaderScene.preload(App.getResourcesToPreload(), App.runInitialScene, this);
-	}
-	else {
-		App.runInitialScene();
-	}
+	cc.LoaderScene.preload(App.getResourcesToPreload(), App.runInitialScene, this);
 };
 
 //

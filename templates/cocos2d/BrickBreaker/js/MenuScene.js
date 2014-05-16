@@ -26,12 +26,6 @@ var MenuLayer = cc.Layer.extend({
 			x, y;
 
 		this._super();
-		
-		// Set content width / height
-		App.contentHeight = App.winSize.height;
-		App.contentWidth = App.contentHeight * 4/3;
-		App.contentX = (App.winSize.width - App.contentWidth) * .5;
-		App.contentY = 0;
 
 		// Determine state
 		if (typeof App.score === "undefined") {
@@ -55,10 +49,9 @@ var MenuLayer = cc.Layer.extend({
 		this.addChild(this.bg, 0);
 		
 		// Logo
-		y = App.scale(12);
+		y = 24;
 		this.logo = cc.Sprite.create("Logo.png");
-		this.logo.setPosition(App.centralize(0, 114));
-		this.logo.setScale(App.scale(.5));
+		this.logo.setPosition(App.centralize(0, 228));
 		this.addChild(this.logo, 1);
 		this.logo.y -= y * .5;
 		this.logo.runAction(cc.RepeatForever.create(cc.Sequence.create(
@@ -70,10 +63,10 @@ var MenuLayer = cc.Layer.extend({
 		this.logoLabel = cc.LabelTTF.create(
 			App.getLocalizedString("title"),
 			font,
-			App.scale(100)
+			200
 		);
 		this.logoLabel.setColor(cc.color(128, 128, 128));
-		this.logoLabel.setPosition(App.centralize(0, 114));
+		this.logoLabel.setPosition(App.centralize(0, 228));
 		this.addChild(this.logoLabel, 1);
 
 		// Menu
@@ -83,15 +76,15 @@ var MenuLayer = cc.Layer.extend({
 
 		// Buttons
 		this.playLabel = cc.MenuItemFont.create("Play", this.onPlayButton, this);
-		this.playLabel.setPosition(App.centralize(-150, -200));
-		this.playLabel.setFontSize(App.scale(60));
+		this.playLabel.setPosition(App.centralize(-300, -400));
+		this.playLabel.setFontSize(120);
 		this.playLabel.setFontName(font);
 		this.playLabel.setColor(cc.color(196, 196, 196));
 		this.menu.addChild(this.playLabel);
 
 		this.exitLabel = cc.MenuItemFont.create("Exit", this.onExitButton, this);
-		this.exitLabel.setPosition(App.centralize(150, -200));
-		this.exitLabel.setFontSize(App.scale(60));
+		this.exitLabel.setPosition(App.centralize(300, -400));
+		this.exitLabel.setFontSize(120);
 		this.exitLabel.setFontName(font);
 		this.exitLabel.setColor(cc.color(196, 196, 196));
 		this.menu.addChild(this.exitLabel);
@@ -100,7 +93,9 @@ var MenuLayer = cc.Layer.extend({
 	},
 	
 	onPlayButton: function() {
-		cc.log("Pressed play button");
+		var scene = new GameScene;
+		scene.init();
+		cc.director.runScene(scene);
 	},
 	
 	onExitButton: function() {

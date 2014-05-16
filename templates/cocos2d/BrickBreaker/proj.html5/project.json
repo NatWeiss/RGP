@@ -1,12 +1,18 @@
 {
-    "project_type": "javascript",
+    "engineDir": "lib/cocos2d/html",
+	"designWidth": 2048,
+	"designHeight": 1536,
+	"initialScene": "GameScene",
+	"resourcePath": "res",
+	"debugPhysics": false,
+	"playMusic": false,
 
+    "project_type": "javascript",
     "debugMode": 1,
     "showFPS": false,
     "frameRate": 60,
     "id": "gameCanvas",
     "renderMode": 0,
-    "engineDir": "lib/cocos2d/html",
 
     "modules": [
 		"cocos2d",
@@ -15,9 +21,8 @@
 
     "jsList": [
 		"js/Config.js",
-		"js/BrickBreaker.js",
 		"js/MenuScene.js",
 		"js/GameScene.js",
-		"js/Loader.js"
+		"js/lib/Loader.js"
     ]
 }

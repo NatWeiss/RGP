@@ -99,11 +99,11 @@
 		4110F71918C7ED7F004E9231 /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
 		4110F71A18C7ED7F004E9231 /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76@2x.png"; sourceTree = "<group>"; };
 		412F317E192330CB007F51FD /* jsb */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jsb; path = ../lib/cocos2d/x/jsb; sourceTree = "<group>"; };
-		412F3181192330E3007F51FD /* AUTHORS.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = AUTHORS.txt; path = AUTHORS.txt; sourceTree = "<group>"; };
-		412F3182192330E3007F51FD /* Base64Images.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = Base64Images.js; path = Base64Images.js; sourceTree = "<group>"; };
-		412F3183192330E3007F51FD /* CCBoot.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = CCBoot.js; path = CCBoot.js; sourceTree = "<group>"; };
-		412F3184192330E3007F51FD /* CCDebugger.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = CCDebugger.js; path = CCDebugger.js; sourceTree = "<group>"; };
-		412F3185192330E3007F51FD /* CHANGELOG.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = CHANGELOG.txt; path = CHANGELOG.txt; sourceTree = "<group>"; };
+		412F3181192330E3007F51FD /* AUTHORS.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS.txt; sourceTree = "<group>"; };
+		412F3182192330E3007F51FD /* Base64Images.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Base64Images.js; sourceTree = "<group>"; };
+		412F3183192330E3007F51FD /* CCBoot.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CCBoot.js; sourceTree = "<group>"; };
+		412F3184192330E3007F51FD /* CCDebugger.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CCDebugger.js; sourceTree = "<group>"; };
+		412F3185192330E3007F51FD /* CHANGELOG.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CHANGELOG.txt; sourceTree = "<group>"; };
 		412F3188192330E3007F51FD /* CCAction.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CCAction.js; sourceTree = "<group>"; };
 		412F3189192330E3007F51FD /* CCActionCamera.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CCActionCamera.js; sourceTree = "<group>"; };
 		412F318A192330E3007F51FD /* CCActionCatmullRom.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CCActionCatmullRom.js; sourceTree = "<group>"; };
@@ -348,8 +348,8 @@
 		412F32BD192330E3007F51FD /* LICENSE_cocos2d-html5.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "LICENSE_cocos2d-html5.txt"; sourceTree = "<group>"; };
 		412F32BE192330E3007F51FD /* LICENSE_cocos2d-x.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "LICENSE_cocos2d-x.txt"; sourceTree = "<group>"; };
 		412F32BF192330E3007F51FD /* LICENSE_zlib.js.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE_zlib.js.txt; sourceTree = "<group>"; };
-		412F32C0192330E3007F51FD /* moduleConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = moduleConfig.json; path = moduleConfig.json; sourceTree = "<group>"; };
-		412F32C1192330E3007F51FD /* README.mdown */ = {isa = PBXFileReference; lastKnownFileType = text; name = README.mdown; path = README.mdown; sourceTree = "<group>"; };
+		412F32C0192330E3007F51FD /* moduleConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = moduleConfig.json; sourceTree = "<group>"; };
+		412F32C1192330E3007F51FD /* README.mdown */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.mdown; sourceTree = "<group>"; };
 		4142034218C15A490075A075 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = ../proj.html5/index.html; sourceTree = "<group>"; };
 		4152B77D1894795000BEF730 /* js */ = {isa = PBXFileReference; lastKnownFileType = folder; name = js; path = ../js; sourceTree = "<group>"; };
 		4152B88218949C3F00BEF730 /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
@@ -489,7 +489,6 @@
 				412F321B192330E3007F51FD /* tilemap */,
 				412F3222192330E3007F51FD /* transitions */,
 			);
-			name = cocos2d;
 			path = cocos2d;
 			sourceTree = "<group>";
 		};
@@ -878,7 +877,6 @@
 				412F327E192330E3007F51FD /* gui */,
 				412F3291192330E3007F51FD /* pluginx */,
 			);
-			name = extensions;
 			path = extensions;
 			sourceTree = "<group>";
 		};
@@ -1227,7 +1225,6 @@
 				412F32B7192330E3007F51FD /* chipmunk */,
 				412F32B9192330E3007F51FD /* socketio */,
 			);
-			name = external;
 			path = external;
 			sourceTree = "<group>";
 		};
@@ -1263,7 +1260,6 @@
 				412F32BE192330E3007F51FD /* LICENSE_cocos2d-x.txt */,
 				412F32BF192330E3007F51FD /* LICENSE_zlib.js.txt */,
 			);
-			name = licenses;
 			path = licenses;
 			sourceTree = "<group>";
 		};

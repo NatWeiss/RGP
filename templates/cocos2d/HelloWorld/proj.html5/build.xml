@@ -244,7 +244,7 @@
 				<file name="Config.js"/>
 				<file name="ConfigServer.js"/>
 				<file name="HelloWorld.js"/>
-				<file name="Loader.js"/>
+				<file name="lib/Loader.js"/>
 				<file name="SceneHello.js"/>
 				<file name="App.js"/>
 			</sources>

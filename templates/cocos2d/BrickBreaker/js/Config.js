@@ -9,19 +9,20 @@ App.config = {
 	},
 	
 	"preload": [
+		"Paddle.png",
+		"Ball.png",
+		"Brick.png",
+		"Particle.png"
 	],
 
-	"spritesheets": [
-	],
-	
 	"font": "DolceVita",
 	
 	"loader": {
-		"bg-color": cc.color(253, 252, 255, 255),
+		"bg-color": cc.color(218, 214, 212, 255),
 		"text": "L o a d i n g . . .",
 		"text-font": "Arial",
-		"text-color": cc.color(180, 180, 180, 255),
-		"text-size": 20,
+		"text-color": cc.color(128, 128, 128, 255),
+		"text-size": 40,
 		"bar-color": cc.color(9, 9, 10, 255),
 		"image-win-size-percent": 0.5
 	},

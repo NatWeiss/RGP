@@ -14,15 +14,6 @@
 var App = App || {};
 
 //
-// ###  App.getInitialScene
-//
-// Return the initial Scene class.
-//
-App.getInitialScene = function() {
-	return SceneHello;
-};
-
-//
 // ###  App.getTargetFrameRate
 //
 // Return the target frame rate to use. Scale back in HTML5 mode to save a CPU fan somewhere.
@@ -308,7 +299,6 @@ App.loadResources = function() {
 		sheet,
 		i;
 
-	cc.loader.resPath = "res";
 	cc.director.setContentScaleFactor(this._contentScaleFactor);
 
 	for (i = 0; i < sheets.length; i += 1) {
@@ -324,7 +314,7 @@ App.loadResources = function() {
 // Loads resources and calls the initial scene. Called by `App.main`.
 //
 App.runInitialScene = function() {
-	var Scene = App.getInitialScene(),
+	var Scene = window[cc.game.config.initialScene],
 		scene;
 	
 	App.loadResources();
@@ -333,6 +323,38 @@ App.runInitialScene = function() {
 	cc.director.runScene(scene);
 };
 
+//
+// ###  App.setCanvasSize
+//
+// Sets the size of the game canvas.
+//
+App.setCanvasSize = function(e, w, h) {
+	var allowHtmlRetina = false;
+	this._pixelRatio = (allowHtmlRetina ? window.devicePixelRatio || 1 : 1);
+	e = e || document.getElementById(cc.game.config[cc.game.CONFIG_KEY.id]);
+	w = w || document.body.clientWidth; // or scrollWidth
+	h = h || document.body.clientHeight;
+
+	e.width = w * this._pixelRatio;
+	e.height = h * this._pixelRatio;
+	e.style.width = w + "px";
+	e.style.height = h + "px";
+	e.style.backgroundColor = document.body.style.backgroundColor;
+
+	cc.log("Set #" + e.getAttribute("id") + " pixel ratio " + this._pixelRatio +
+		", size " + e.width + "x" + e.height +
+		", style " + e.style.width + " x " + e.style.height +
+// begin pro
+		", fullscreen " + App.isFullscreenEnabled() +
+// end pro
+		", parent " + e.parentNode.getAttribute("id"));
+	
+	if (typeof this._origCanvasSize === "undefined") {
+		this._origCanvasSize = {width: w, height: h};
+	}
+};
+
+// begin pro
 //
 // ###  App.isFullscreenAvailable
 //
@@ -382,34 +404,6 @@ App.enableFullscreen = function(enabled) {
 };
 
 //
-// ###  App.setCanvasSize
-//
-// Sets the size of the game canvas.
-//
-App.setCanvasSize = function(e, w, h) {
-	var allowHtmlRetina = false;
-	this._pixelRatio = (allowHtmlRetina ? window.devicePixelRatio || 1 : 1);
-	e = e || document.getElementById(cc.game.config[cc.game.CONFIG_KEY.id]);
-	w = w || document.body.clientWidth; // or scrollWidth
-	h = h || document.body.clientHeight;
-
-	e.width = w * this._pixelRatio;
-	e.height = h * this._pixelRatio;
-	e.style.width = w + "px";
-	e.style.height = h + "px";
-
-	cc.log("Set #" + e.getAttribute("id") + " pixel ratio " + this._pixelRatio +
-		", size " + e.width + "x" + e.height +
-		", style " + e.style.width + " x " + e.style.height +
-		", fullscreen " + App.isFullscreenEnabled() +
-		", parent " + e.parentNode.getAttribute("id"));
-	
-	if (typeof this._origCanvasSize === "undefined") {
-		this._origCanvasSize = {width: w, height: h};
-	}
-};
-
-//
 // ###  App.onWindowSizeChanged
 //
 // Called when the window size has changed.
@@ -434,6 +428,7 @@ App.onWindowSizeChanged = function() {
 App.toggleFullscreenEnabled = function() {
 	this.enableFullscreen(!this.isFullscreenEnabled());
 };
+// end pro
 
 //
 // ###  App.loadSoundEnabled
@@ -498,6 +493,10 @@ App.isSoundEnabled = function() {
 //
 App.playEffect = function(filename) {
 	if (this.isSoundEnabled()) {
+		/* Automatically prefix with resource path. */
+		if (cc.loader.resPath && filename.indexOf("/") < 0) {
+			filename = cc.loader.resPath + "/" + filename;
+		}
 		return cc.audioEngine.playEffect(filename);
 	}
 	return -1;
@@ -861,7 +860,6 @@ App.logCurrencyBalances = function() {
 		}
 	}
 };
-// end pro
 
 //
 // ###   App.isInitialLaunch
@@ -892,7 +890,6 @@ App.isInitialLaunch = function() {
 	return (typeof v === "undefined" || v === null || v === "");
 };
 
-// begin pro
 //
 // ###  App.onInitialLaunch
 //
@@ -934,7 +931,6 @@ App.onInitialLaunch = function() {
 		}
 	}
 };
-// end pro
 
 //
 // ###  App.getUUID
@@ -1132,6 +1128,7 @@ App.loadImage = function(url, callback) {
 		}, true);
 	}
 };
+// end pro
 
 //
 // ###  App.boot
@@ -1205,30 +1202,37 @@ App.boot = function(global) {
 //
 App.main = function() {
 	var i,
+		size = {},
 		sheets,
 		cacher,
-		dirs = [],
-		initialLaunch = this.isInitialLaunch();
+		dirs = [];
 
+// begin pro
+	var initialLaunch = this.isInitialLaunch();
 	this.getUUID();
+// end pro
 	this.loadSoundEnabled();
 
 	cc.defineGetterSetter(App, "winSize", App.getWinSize);
+	size.width = cc.game.config.designWidth || App.winSize.width;
+	size.height = cc.game.config.designHeight || App.winSize.height;
 	cc.director.setDisplayStats(cc.game.config[cc.game.CONFIG_KEY.showFPS]);
+	cc.view.setDesignResolutionSize(size.width, size.height, cc.ResolutionPolicy.SHOW_ALL);
+	cc.view.resizeWithBrowserSize(true);
+	App.contentHeight = App.winSize.height;
+	App.contentWidth = App.contentHeight * (size.width / size.height);
+	App.contentX = (App.winSize.width - App.contentWidth) * .5;
+	App.contentY = 0;
+	cc.loader.resPath = cc.game.config.resourcePath;
 
 	if (this.isHtml5()) {
+// begin pro
 		cc.loader.loadJs("js/lib", ["screenfull.js"], function() {
 			document.addEventListener(screenfull.raw.fullscreenchange, App.onWindowSizeChanged);
 		});
 		
-		cc.view.setDesignResolutionSize(
-			App.winSize.width,
-			App.winSize.height,
-			cc.ResolutionPolicy.SHOW_ALL
-		);
-		cc.view.resizeWithBrowserSize(true);
 		/*window.addEventListener("resize", App.onWindowSizeChanged, false);*/
-
+// end pro
 		App.addImageData = function() {};
 	} else {
 		App.config["font"] = "res/" + App.config["font"] + ".ttf";
@@ -1240,7 +1244,6 @@ App.main = function() {
 	this.getAdsPlugin();
 	this.getSocialPlugin();
 	this.getEconomyPlugin();
-// end pro
 
 	/* Handle initial launch. */
 	/* Call after loading plugins so initial currency balances can be set. */
@@ -1248,6 +1251,7 @@ App.main = function() {
 	if (initialLaunch && typeof this.onInitialLaunch === "function") {
 		this.onInitialLaunch();
 	}
+// end pro
 
 	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
 	cc.log(App.winSize.width + " x " + App.winSize.height
@@ -1261,12 +1265,7 @@ App.main = function() {
 // end pro
 
 	/* Preload. */
-	if (this.isHtml5()) {
-		cc.LoaderScene.preload(App.getResourcesToPreload(), App.runInitialScene, this);
-	}
-	else {
-		App.runInitialScene();
-	}
+	cc.LoaderScene.preload(App.getResourcesToPreload(), App.runInitialScene, this);
 };
 
 //

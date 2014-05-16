@@ -234,18 +234,11 @@
 				<file name="minified-footer.js"/>
 			</sources>
 			<sources dir="${basedir}/../js">
-				<file name="lib/aes.js"/>
 				<file name="lib/timers.js"/>
-				<file name="lib/underscore.js"/>
-				<file name="lib/soomla.js"/>
-				<file name="lib/SoomlaNdk.js"/>
-				<file name="lib/AdsMobFox.js"/>
-				<file name="lib/Facebook.js"/>
+				<file name="lib/Loader.js"/>
 				<file name="Config.js"/>
-				<file name="ConfigServer.js"/>
-				<file name="BrickBreaker.js"/>
-				<file name="Loader.js"/>
-				<file name="SceneHello.js"/>
+				<file name="MenuScene.js"/>
+				<file name="GameScene.js"/>
 				<file name="App.js"/>
 			</sources>
 		</jscomp>
