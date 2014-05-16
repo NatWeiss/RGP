@@ -38,9 +38,6 @@ var http = require("http"),
 // Main run method.
 //
 var run = function(args) {
-	if (!checkPrefix()) {
-		return 1;
-	}
 	checkUpdate();
 	args = args || process.argv;
 	cmd
@@ -51,7 +48,7 @@ var run = function(args) {
 		.option("-o, --output [path]", "output folder [" + defaults.dest + "]", defaults.dest)
 		.option("-k, --package [name]", "package name [" + defaults.package + "]", defaults.package)
 		.option("-v, --verbose", "be verbose", false);
-	
+
 	cmd
 		.command("*")
 		.description("Create a new project using one of the templates, for example: " + cmdName + " Foo")
@@ -61,7 +58,7 @@ var run = function(args) {
 		.command("prebuild")
 		.description("Prebuild Cocos2D JS static libraries for all platforms and architectures")
 		.action(prebuild);
-	
+
 	cmd
 		.parse(args)
 		.name = cmdName;
@@ -324,10 +321,10 @@ var downloadUrl = function(url, dest, cb) {
 var copySrcFiles = function(callback) {
 	var dest,
 		verbose = false,
-		dir = path.join(defaults.prefix, "/");
+		dir = path.join(cmd.prefix, "/");
 
 console.log("Prebuild command is under construction");
-process.exit(1);
+return 1;
 
 /*
 	console.log("Copying prebuild to " + dir);
@@ -435,6 +432,10 @@ var runPrebuild = function(callback) {
 //
 //
 var prebuild = function() {
+	if (!checkPrefix()) {
+		return 1;
+	}
+
 	copySrcFiles(function() {
 		downloadCocos(function() {
 			runPrebuild(function() {
@@ -459,16 +460,23 @@ var checkPrefix = function() {
 		return false;
 	};
 	
-	var orig = defaults.prefix;
-	if (!isWriteable(defaults.prefix)) {
-		defaults.prefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
-		wrench.mkdirSyncRecursive(defaults.prefix);
-		if (!isWriteable(defaults.prefix)) {
-			console.log("Cannot write files to prefix directory: " + defaults.prefix);
+	// Test prefix dir
+	if (!isWriteable(cmd.prefix)) {
+		if (cmd.prefix !== defaults.prefix) {
+			console.log("Cannot write files to prefix directory: " + cmd.prefix);
 			return false;
 		}
+
+		// Try users's home dir if they didn't override the prefix setting
+		var newPrefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
+		wrench.mkdirSyncRecursive(newPrefix);
+		if (!isWriteable(newPrefix)) {
+			console.log("Cannot write files to alternate prefix directory: " + newPrefix);
+			return false;
+		}
+		cmd.prefix = newPrefix;
 	}
-	//console.log("Can successfully write files to prefix directory: " + defaults.prefix);
+	console.log("Can successfully write files to prefix directory: " + cmd.prefix);
 	return true;
 };
 
@@ -537,7 +545,7 @@ var checkUpdate = function() {
 		response.on("end", function() {
 			newVersion = newVersion.toString().trim();
 			if (newVersion !== packageJson.version) {
-				console.log("Good news! An update is available.");
+				console.log("\nGood news! An update is available.");
 				console.log("\t" + packageJson.version + " -> " + newVersion);
 				console.log("Upgrade like this:");
 				if (cmdName.indexOf("pro")) {
