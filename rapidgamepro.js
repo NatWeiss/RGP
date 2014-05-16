@@ -9,7 +9,8 @@
 // 1. [Selecting a Cross-platform Game Engine](http://www.binpress.com/blog/2014/05/14/selecting-cross-platform-game-engine/).
 //
 
-var path = require("path-extra"),
+var http = require("http"),
+	path = require("path-extra"),
 	fs = require("fs"),
 	util = require("util"),
 	cmd = require("commander"),
@@ -37,6 +38,7 @@ var path = require("path-extra"),
 // Main run method.
 //
 var run = function(args) {
+	checkUpdate();
 	args = args || process.argv;
 	cmd
 		.version(version)
@@ -80,7 +82,7 @@ var createProject = function(name) {
 	// Check if dirs exist
 	if (dirExists(dir)) {
 		console.log("Output directory already exists: " + dir);
-		process.exit(1);
+		return 1;
 	}
 
 	// Check engine and template
@@ -96,7 +98,7 @@ var createProject = function(name) {
 	src = path.join(__dirname, "templates", cmd.engine, cmd.template);
 	if (!dirExists(src)) {
 		console.log("Missing template directory: " + src);
-		process.exit(1);
+		return 1;
 	}
 	console.log("Rapidly creating a game named '" + name + "' with engine " +
 		cmd.engine.charAt(0).toUpperCase() + cmd.engine.slice(1) + " and template " + cmd.template);
@@ -490,6 +492,33 @@ var note = function(str) {
 	notes += (notes.length ? ". " : "");
 	notes += str.toString().trim();
 };
+
+//
+// check for upgrade
+//
+var checkUpdate = function() {
+	var req = http.get("http://wizardfu.com/static/rapidgame.version");
+	req.on("response", function(response) {
+		var newVersion = "";
+		response.on("data", function(chunk) {
+			newVersion += chunk;
+		});
+		response.on("end", function() {
+			newVersion = newVersion.toString().trim();
+			if (newVersion !== packageJson.version) {
+				console.log("Good news! An update is available.");
+				console.log("\t" + packageJson.version + " -> " + newVersion);
+				console.log("Upgrade like this:");
+				if (cmdName.indexOf("pro")) {
+					console.log("\tcd " + __dirname + " && npm update");
+				} else {
+					console.log("\tsudo npm update " + cmdName + " -g");
+				}
+			}
+		});
+	});
+	req.on("error", function(){});
+}
 
 module.exports = {
 	run: run,

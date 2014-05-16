@@ -1,4 +1,5 @@
 .DS_Store
+/.id
 /build.log
 /current
 /java/*/bin
