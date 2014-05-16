@@ -1,3 +1,4 @@
 *.ai		-text
 *.psd	-text
 *.aif	-text
+* text=auto

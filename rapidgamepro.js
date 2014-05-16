@@ -18,7 +18,9 @@ var path = require("path-extra"),
 	glob = require("glob"),
 	wrench = require("wrench"),
 	child_process = require("child_process"),
-	version = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))).version,
+	packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))),
+	cmdName = packageJson.name,
+	version = packageJson.version,
 	templates = ["HelloWorld", "BrickBreaker"],
 	engines = ["cocos2d", "unity", "corona", "titanium"],
 	defaults = {
@@ -28,13 +30,13 @@ var path = require("path-extra"),
 		dest: process.cwd(),
 		prefix: __dirname // or, path.join(path.homedir(), "Library/Developer/RapidGame")?
 	},
-	cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip";
+	cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip",
+	notes = "";
 
 //
 // Main run method.
 //
 var run = function(args) {
-	var cmdName = path.basename(__filename, ".js");
 	args = args || process.argv;
 	cmd
 		.version(version)
@@ -74,7 +76,7 @@ var createProject = function(name) {
 		fileCount,
 		i,
 		onFinished;
-
+	
 	// Check if dirs exist
 	if (dirExists(dir)) {
 		console.log("Output directory already exists: " + dir);
@@ -90,6 +92,7 @@ var createProject = function(name) {
 		console.log("Template '" + cmd.template + "' not found, defaulting to " + defaults.template);
 		cmd.template = defaults.template;
 	}
+	report("createProject", "start", cmd.engine + "/" + cmd.template);
 	src = path.join(__dirname, "templates", cmd.engine, cmd.template);
 	if (!dirExists(src)) {
 		console.log("Missing template directory: " + src);
@@ -142,7 +145,7 @@ var createProject = function(name) {
 		try {
 			fs.renameSync(from, to);
 		} catch(e) {
-			console.log("Error moving file");
+			note("Error moving file " + e);
 		}
 	}
 	
@@ -154,7 +157,7 @@ var createProject = function(name) {
 		try {
 			fs.symlinkSync(src, dest);
 		} catch(e) {
-			console.log("Error creating symlink: " + e);
+			note("Error creating symlink: " + e);
 		}
 	}
 	
@@ -163,6 +166,7 @@ var createProject = function(name) {
 	dest = path.join(dir, "server");
 	onFinished = function(){
 		console.log("Done creating project " + name);
+		report("createProject", "done", notes);
 	};
 	if (dirExists(dest) && !dirExists(path.join(dest, "node_modules"))) {
 		console.log("Installing node modules");
@@ -172,7 +176,7 @@ var createProject = function(name) {
 				onFinished();
 			});
 		} catch(e) {
-			console.log("Error installing node modules: " + e);
+			note("Error installing node modules: " + e);
 		}
 	} else {
 		onFinished();
@@ -267,7 +271,7 @@ var execCallback = function(error, stdout, stderr) {
 		console.log(stderr);
 	}
 	if (error !== null) {
-		console.log("exec error: " + error);
+		note("exec error: " + error);
 	}
 };
 
@@ -433,6 +437,58 @@ var prebuild = function() {
 			});
 		});
 	});
+};
+
+//
+// auto bug reporting and insights
+//
+var report = (function() {
+	var ua = require("universal-analytics"),
+		filename = path.join(__dirname, ".id"),
+		uuid,
+		visitor;
+	
+	try {
+		uuid = fs.readFileSync(filename).toString();
+	} catch(e) {
+	}
+	if (uuid && uuid.indexOf("false") >= 0) {
+		console.log("Opted out of automatic bug reporting");
+		return function(){};
+	}
+	if (!uuid || uuid.length < 32 || uuid.indexOf("-") < 0) {
+		console.log("This tool automatically reports bugs & anonymous usage statistics.");
+		console.log("You may opt-out of this feature by setting contents of the file '" + filename + "' to 'false'.");
+		uuid = require("node-uuid").v4();
+		try {
+			fs.writeFileSync(filename, uuid);
+		} catch(e) {
+		}
+	}
+	//console.log("UUID: " + uuid);
+	visitor = ua("UA-597335-12", uuid);
+
+	return function(category, action, label, value, path) {
+		category = category || "unknownCategory";
+		action = action || "unknownAction";
+		label = label || "";
+		value = value || 0;
+		path = path || (category + "/" + action);
+		
+		console.log("Report category '" + category + "' action '" + action + "' label '" + label + "' value '" + value + "' path '" + path + "'");
+		visitor.event(category, action, label, value, {p: path}, function (err) {
+		});
+	}
+}());
+
+//
+// add a note
+//
+var note = function(str) {
+	console.log(str);
+	notes = notes || "";
+	notes += (notes.length ? ". " : "");
+	notes += str.toString().trim();
 };
 
 module.exports = {

@@ -33,8 +33,10 @@
     "commander": "~2.2.0",
     "download": "~0.1.16",
     "glob": "~3.2.9",
+    "node-uuid": "^1.4.1",
     "path-extra": "~0.2.0",
     "replace": "~0.2.9",
+    "universal-analytics": "^0.3.4",
     "wrench": "^1.5.8"
   },
   "main": "./rapidgamepro",
