@@ -29,7 +29,7 @@ var http = require("http"),
 		package: "org.mycompany.mygame",
 		template: templates[0],
 		dest: process.cwd(),
-		prefix: __dirname // or, path.join(path.homedir(), "Library/Developer/RapidGame")?
+		prefix: __dirname
 	},
 	cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip",
 	notes = "";
@@ -38,6 +38,9 @@ var http = require("http"),
 // Main run method.
 //
 var run = function(args) {
+	if (!checkPrefix()) {
+		return 1;
+	}
 	checkUpdate();
 	args = args || process.argv;
 	cmd
@@ -442,6 +445,34 @@ var prebuild = function() {
 };
 
 //
+// check that prefix directory is writeable
+//
+var checkPrefix = function() {
+	var isWriteable = function(dir) {
+		try {
+			dir = path.join(dir, ".testfile");
+			fs.writeFileSync(dir, "test");
+			fs.unlinkSync(dir);
+			return true;
+		} catch(e) {
+		}
+		return false;
+	};
+	
+	var orig = defaults.prefix;
+	if (!isWriteable(defaults.prefix)) {
+		defaults.prefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
+		wrench.mkdirSyncRecursive(defaults.prefix);
+		if (!isWriteable(defaults.prefix)) {
+			console.log("Cannot write files to prefix directory: " + defaults.prefix);
+			return false;
+		}
+	}
+	//console.log("Can successfully write files to prefix directory: " + defaults.prefix);
+	return true;
+};
+
+//
 // auto bug reporting and insights
 //
 var report = (function() {
@@ -514,6 +545,7 @@ var checkUpdate = function() {
 				} else {
 					console.log("\tsudo npm update " + cmdName + " -g");
 				}
+				console.log(" ");
 			}
 		});
 	});
