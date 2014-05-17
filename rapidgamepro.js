@@ -1,12 +1,7 @@
-
 //
-// RapidGamePro
-// ------------
-//
-// A cross-platform game project creator which can create Cocos2D JS, Unity, Corona and Appcelerator Titanium games.
-//
-// See:
-// 1. [Selecting a Cross-platform Game Engine](http://www.binpress.com/blog/2014/05/14/selecting-cross-platform-game-engine/).
+//  Part of the [RapidGame](http://wizardfu.com/rapidgame) project.
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
 //
 
 var http = require("http"),

@@ -1,10 +1,7 @@
 //
-//  This source code is part of the RapidGame project.
-//      http://wizardfu.com/rapidgame
-//
-//  See the file 'LICENSE' for the license governing this code.
-//  Copyright (c) 2014 Wizard Fu, Inc.
-//  Created by Nat Weiss.
+//  Created using [RapidGame](http://wizardfu.com/rapidgame).
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
 //
 
 #pragma once
@@ -21,4 +18,3 @@ class AppDelegate : private cocos2d::Application
 		virtual void applicationDidEnterBackground();
 		virtual void applicationWillEnterForeground();
 };
-

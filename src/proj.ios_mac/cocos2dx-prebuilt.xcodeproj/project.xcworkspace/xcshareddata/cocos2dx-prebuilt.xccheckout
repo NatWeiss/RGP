@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>6DCEC556-AB28-4006-9005-5B48FD4DAC29</string>
+	<string>B0762FED-4F97-490A-996E-52B8C165CFAA</string>
 	<key>IDESourceControlProjectName</key>
 	<string>cocos2dx-prebuilt</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,11 +14,11 @@
 		<string>http://natweiss.com/git/rapidgamepro.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>src/cocos2dx-prebuilt.xcodeproj/project.xcworkspace</string>
+	<string>src/proj.ios_mac/cocos2dx-prebuilt.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>
-		<string>../../..</string>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>http://natweiss.com/git/rapidgamepro.git</string>

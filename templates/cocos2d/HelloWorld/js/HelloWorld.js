@@ -1,3 +1,8 @@
+//
+//  Created using [RapidGame](http://wizardfu.com/rapidgame).
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
+//
 
 //
 // Extend the [App](App.html) object with project-specific functions.

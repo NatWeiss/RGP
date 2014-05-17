@@ -1,3 +1,8 @@
+//
+//  Created using [RapidGame](http://wizardfu.com/rapidgame).
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
+//
 
 //
 // The main App object is a singleton providing boot code, main functions, and other commonly-used, globally-accessible methods.

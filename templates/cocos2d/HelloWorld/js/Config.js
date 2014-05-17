@@ -1,3 +1,8 @@
+//
+//  Created using [RapidGame](http://wizardfu.com/rapidgame).
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
+//
 
 //
 // The game client's config file. Used to localize the game, configure plugins and provide other settings and preferences.

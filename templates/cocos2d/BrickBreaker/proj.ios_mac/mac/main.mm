@@ -1,6 +1,13 @@
+//
+//  Created using [RapidGame](http://wizardfu.com/rapidgame).
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
+//
 
+//
 // in regards to the "AVAudioPlayer is implemented in both..." warning:
 // http://stackoverflow.com/questions/6149673/class-foo-is-implemented-in-both-myapp-and-myapptestcase-one-of-the-two-will-be
+//
 
 #include "AppDelegate.h"
 #include "cocos2d.h"

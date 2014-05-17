@@ -1,3 +1,8 @@
+//
+//  Created using [RapidGame](http://wizardfu.com/rapidgame).
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
+//
 
 //
 // Implements the Facebook plugin for HTML5 clients. Native clients will supercede this by having already defined `plugin.Facebook` (see `src/facebook`).
