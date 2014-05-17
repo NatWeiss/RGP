@@ -10,8 +10,11 @@ if [ ! -d $dest ]; then
 		dest=${root}
 	else
 		dest="/usr/local/rapidgame"
-		find "${dest}/src" -name *.pch -exec touch {} \;
 	fi
+fi
+if [ -d "${root}/src/cocos2d-js" ] && [ "${root}" != "${dest}" ]; then
+	echo "Touching .pch files..."
+	find "${dest}/src" -name *.pch -exec touch {} \;
 fi
 
 # Get which command.

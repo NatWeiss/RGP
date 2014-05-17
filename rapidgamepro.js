@@ -33,7 +33,7 @@ var http = require("http"),
 	},
 	cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip",
 	cocos2dDirGlob = "*ocos2d-js*",
-	notes = "";
+	category;
 
 //
 // Main run method.
@@ -79,6 +79,7 @@ var createProject = function(name) {
 		fileCount,
 		i,
 		onFinished;
+	category = "createProject";
 	
 	// Check if dirs exist
 	if (dirExists(dir) || fileExists(dir)) {
@@ -95,7 +96,7 @@ var createProject = function(name) {
 		console.log("Template '" + cmd.template + "' not found, defaulting to " + defaults.template);
 		cmd.template = defaults.template;
 	}
-	report("createProject", "start", cmd.engine + "/" + cmd.template);
+	report("start", cmd.engine + "/" + cmd.template);
 	src = path.join(__dirname, "templates", cmd.engine, cmd.template);
 	if (!dirExists(src)) {
 		console.log("Missing template directory: " + src);
@@ -148,7 +149,7 @@ var createProject = function(name) {
 		try {
 			fs.renameSync(from, to);
 		} catch(e) {
-			note("Error moving file " + e);
+			logErr("Error moving file " + e);
 		}
 	}
 	
@@ -160,7 +161,7 @@ var createProject = function(name) {
 		try {
 			fs.symlinkSync(src, dest);
 		} catch(e) {
-			note("Error creating symlink: " + e);
+			logErr("Error creating symlink: " + e);
 		}
 	}
 	
@@ -169,7 +170,7 @@ var createProject = function(name) {
 	dest = path.join(dir, "server");
 	onFinished = function(){
 		console.log("Done creating project " + name);
-		report("createProject", "done", notes);
+		report("done");
 	};
 	if (dirExists(dest) && !dirExists(path.join(dest, "node_modules"))) {
 		console.log("Installing node modules");
@@ -179,7 +180,7 @@ var createProject = function(name) {
 				onFinished();
 			});
 		} catch(e) {
-			note("Error installing node modules: " + e);
+			logErr("Error installing node modules: " + e);
 		}
 	} else {
 		onFinished();
@@ -230,6 +231,8 @@ var copyRecursive = function(src, dest, verbose) {
 				} catch(e) {
 					console.log(e);
 				}
+			} else if (dir.indexOf(path.join("build", "build")) >= 0) {
+				doExclude = true;
 			} else {
 				for (i = 0; i < ignore.length; i += 1) {
 					if (filename === ignore[i]) {
@@ -260,7 +263,7 @@ var checkPrefix = function() {
 	// Test prefix dir
 	if (!isWriteableDir(cmd.prefix)) {
 		if (cmd.prefix !== defaults.prefix) {
-			console.log("Cannot write files to prefix directory: " + cmd.prefix);
+			logErr("Cannot write files to prefix directory: " + cmd.prefix);
 			return false;
 		}
 
@@ -268,7 +271,7 @@ var checkPrefix = function() {
 		var newPrefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
 		wrench.mkdirSyncRecursive(newPrefix);
 		if (!isWriteableDir(newPrefix)) {
-			console.log("Cannot write files to alternate prefix directory: " + newPrefix);
+			logErr("Cannot write files to alternate prefix directory: " + newPrefix);
 			return false;
 		}
 		cmd.prefix = newPrefix;
@@ -281,6 +284,12 @@ var checkPrefix = function() {
 // run the prebuild command
 //
 var prebuild = function(platform, config, arch) {
+	category = "prebuild";
+	platform = platform || "";
+	config = config || "";
+	arch = arch || "";
+	report("start");
+
 	if (!checkPrefix()) {
 		return 1;
 	}
@@ -288,6 +297,7 @@ var prebuild = function(platform, config, arch) {
 	copySrcFiles(function() {
 		downloadCocos(function() {
 			runPrebuild(platform, config, arch, function() {
+				report("done");
 			});
 		});
 	});
@@ -320,30 +330,32 @@ var downloadCocos = function(callback) {
 		callback();
 	} else {
 		downloadUrl(cocos2djsUrl, dir, function(success) {
-			var globPath = path.join(dir, cocos2dDirGlob),
-				files = glob.sync(globPath);
-			if (files && files.length === 1) {
-				// Rename extract dir
-				try {
-					console.log("Moving " + files[0] + " to " + dest);
-					fs.renameSync(files[0], dest);
-				} catch(e) {
-					note("Couldn't move " + files[0] + " to " + dest)
-				}
+			if (success) {
+				var globPath = path.join(dir, cocos2dDirGlob),
+					files = glob.sync(globPath);
+				if (files && files.length === 1) {
+					// Rename extract dir
+					try {
+						console.log("Moving " + files[0] + " to " + dest);
+						fs.renameSync(files[0], dest);
 
-				// Apply latest patch
-				src = path.join(dir, "cocos2d.patch");
-				try {
-					console.log("Applying patch file: " + src);
-					child_process.exec("git apply --whitespace=nowarn " + src, {cwd: dest, env: process.env}, function(a, b, c){
-						execCallback(a, b, c);
-						callback();
-					});
-				} catch(e) {
-					note("Couldn't apply patch file: " + src);
+						// Apply latest patch
+						src = path.join(dir, "cocos2d.patch");
+						try {
+							console.log("Applying patch file: " + src);
+							child_process.exec("git apply --whitespace=nowarn " + src, {cwd: dest, env: process.env}, function(a, b, c){
+								execCallback(a, b, c);
+								callback();
+							});
+						} catch(e) {
+							logErr("Couldn't apply patch file: " + src);
+						}
+					} catch(e) {
+						logErr("Couldn't move " + files[0] + " to " + dest)
+					}
+				} else {
+					logErr("Couldn't glob " + globPath);
 				}
-			} else {
-				note("Couldn't glob " + globPath);
 			}
 		});
 	}
@@ -359,9 +371,9 @@ var runPrebuild = function(platform, config, arch, callback) {
 			[
 				cmd.prefix,
 				"all"
-				//platform || "",
-				//config || "",
-				//arch || ""
+				//platform,
+				//config,
+				//arch
 			],
 			{cwd: __dirname, env: process.env}
 		);
@@ -372,17 +384,15 @@ var runPrebuild = function(platform, config, arch, callback) {
 			util.print(chunk.toString());
 		});
 		child.on("error", function(e) {
-			note("Error running prebuild " + e);
+			logErr("Error running prebuild " + e);
 		});
 		child.on("exit", function(code, signal) {
-			//console.log("Exit " + code + " " + signal);
 		});
 		child.on("close", function(code) {
-			//console.log("Done running prebuild");
 			callback();
 		});
 	} catch(e) {
-		note(e);
+		logErr("Error calling prebuild " + e);
 	}
 };
 
@@ -414,8 +424,8 @@ var downloadUrl = function(url, dest, cb) {
 	
 	// Error
 	emitter.on("error", function(status) {
-		console.log("Download error " + status);
-		cb();
+		logErr("Download error " + status);
+		cb(false);
 	});
 	
 	// Done
@@ -454,14 +464,15 @@ var report = (function() {
 	//console.log("UUID: " + uuid);
 	visitor = ua("UA-597335-12", uuid);
 
-	return function(category, action, label, value, path) {
+	return function(action, label, value, path) {
 		category = category || "unknownCategory";
 		action = action || "unknownAction";
 		label = label || "";
 		value = value || 0;
 		path = path || (category + "/" + action);
+		label.trim();
 		
-		console.log("Report category '" + category + "' action '" + action + "' label '" + label + "' value '" + value + "' path '" + path + "'");
+		//console.log("Report " + path + (label ? ": " + label : ""));
 		visitor.event(category, action, label, value, {p: path}, function (err) {
 		});
 	}
@@ -498,11 +509,9 @@ var checkUpdate = function() {
 //
 // add a note
 //
-var note = function(str) {
+var logErr = function(str) {
 	console.log(str);
-	notes = notes || "";
-	notes += (notes.length ? ". " : "");
-	notes += str.toString().trim();
+	report("error", str);
 };
 
 //
@@ -538,7 +547,7 @@ var execCallback = function(error, stdout, stderr) {
 		console.log(stderr);
 	}
 	if (error !== null) {
-		note("exec error: " + error);
+		logErr("exec error: " + error);
 	}
 };
 

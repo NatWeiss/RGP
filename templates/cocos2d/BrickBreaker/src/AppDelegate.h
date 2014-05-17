@@ -1,7 +1,10 @@
 //
-//  See the file 'LICENSE_RapidGame.txt' for the license governing this code.
-//      The license can also be obtained online at:
-//          http://WizardFu.com/licenses
+//  This source code is part of the RapidGame project.
+//      http://wizardfu.com/rapidgame
+//
+//  See the file 'LICENSE' for the license governing this code.
+//  Copyright (c) 2014 Wizard Fu, Inc.
+//  Created by Nat Weiss.
 //
 
 #pragma once
