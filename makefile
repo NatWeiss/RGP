@@ -27,6 +27,7 @@ release:
 	rm ${dest}/*/lib/cocos2dx-prebuilt/lib
 	rm -rf ${dest}/java/*/bin
 	rm -rf ${dest}/java/*/gen
+	find ${dest} -name *.xccheckout -delete
 	@rez/delete-text "# begin pro" ${dest}/prebuild --newlines
 	@rez/delete-text "# end pro" ${dest}/prebuild --newlines
 	@rez/delete-text "# begin pro" ${dest}/README.md --newlines

@@ -32,6 +32,7 @@ var http = require("http"),
 		prefix: __dirname
 	},
 	cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip",
+	cocos2dDirGlob = "*ocos2d-js*",
 	notes = "";
 
 //
@@ -80,7 +81,7 @@ var createProject = function(name) {
 		onFinished;
 	
 	// Check if dirs exist
-	if (dirExists(dir)) {
+	if (dirExists(dir) || fileExists(dir)) {
 		console.log("Output directory already exists: " + dir);
 		return 1;
 	}
@@ -193,14 +194,14 @@ var copyRecursive = function(src, dest, verbose) {
 		ignore = [
 			//"node_modules",
 			".DS_Store",
-			"wsocket.c", "wsocket.h",
-			"usocket.c", "usocket.h",
-			"unix.c", "unix.h",
-			"serial.c",
+			//"wsocket.c", "wsocket.h",
+			//"usocket.c", "usocket.h",
+			//"unix.c", "unix.h",
+			//"serial.c",
 		];
 	
 	wrench.copyDirSyncRecursive(src, dest, {
-		forceDelete: true, // Whether to overwrite existing directory or not
+		forceDelete: false, // Whether to overwrite existing directory or not
 		excludeHiddenUnix: false, // Whether to copy hidden Unix files or not (preceding .)
 		preserveFiles: true, // If we're overwriting something and the file already exists, keep the existing
 		preserveTimestamps: true, // Preserve the mtime and atime when copying files
@@ -253,32 +254,141 @@ var copyRecursive = function(src, dest, verbose) {
 };
 
 //
-// Test if a directory exists
+// check that prefix directory is writeable
 //
-var dirExists = function(path) {
-	var stat;
+var checkPrefix = function() {
+	// Test prefix dir
+	if (!isWriteableDir(cmd.prefix)) {
+		if (cmd.prefix !== defaults.prefix) {
+			console.log("Cannot write files to prefix directory: " + cmd.prefix);
+			return false;
+		}
+
+		// Try users's home dir if they didn't override the prefix setting
+		var newPrefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
+		wrench.mkdirSyncRecursive(newPrefix);
+		if (!isWriteableDir(newPrefix)) {
+			console.log("Cannot write files to alternate prefix directory: " + newPrefix);
+			return false;
+		}
+		cmd.prefix = newPrefix;
+	}
+	//console.log("Can successfully write files to prefix directory: " + cmd.prefix);
+	return true;
+};
+
+//
+// run the prebuild command
+//
+var prebuild = function(platform, config, arch) {
+	if (!checkPrefix()) {
+		return 1;
+	}
+
+	copySrcFiles(function() {
+		downloadCocos(function() {
+			runPrebuild(platform, config, arch, function() {
+			});
+		});
+	});
+};
+
+//
+// copy src directory to prefix
+//
+var copySrcFiles = function(callback) {
+	var src,
+		dest,
+		verbose = false;
+
+	// Synchronously copy src directory to dest
+	src = path.join(__dirname, "src");
+	dest = path.join(cmd.prefix, "src");
+	console.log("Copying " + src + " to " + dest);
+	copyRecursive(src, dest);
+
+	callback();
+};
+
+//
+// download cocos2d js source
+//
+var downloadCocos = function(callback) {
+	var dir = path.join(cmd.prefix, "src"),
+		src, dest = path.join(dir, "cocos2d-js");
+	if (dirExists(dest)) {
+		callback();
+	} else {
+		downloadUrl(cocos2djsUrl, dir, function(success) {
+			var globPath = path.join(dir, cocos2dDirGlob),
+				files = glob.sync(globPath);
+			if (files && files.length === 1) {
+				// Rename extract dir
+				try {
+					console.log("Moving " + files[0] + " to " + dest);
+					fs.renameSync(files[0], dest);
+				} catch(e) {
+					note("Couldn't move " + files[0] + " to " + dest)
+				}
+
+				// Apply latest patch
+				src = path.join(dir, "cocos2d.patch");
+				try {
+					console.log("Applying patch file: " + src);
+					child_process.exec("git apply --whitespace=nowarn " + src, {cwd: dest, env: process.env}, function(a, b, c){
+						execCallback(a, b, c);
+						callback();
+					});
+				} catch(e) {
+					note("Couldn't apply patch file: " + src);
+				}
+			} else {
+				note("Couldn't glob " + globPath);
+			}
+		});
+	}
+};
+
+//
+// run the prebuild command
+//
+var runPrebuild = function(platform, config, arch, callback) {
 	try {
-		stat = fs.statSync(path);
+		var child = child_process.spawn(
+			"./prebuild.sh",
+			[
+				cmd.prefix,
+				"all"
+				//platform || "",
+				//config || "",
+				//arch || ""
+			],
+			{cwd: __dirname, env: process.env}
+		);
+		child.stdout.on("data", function(chunk) {
+			util.print(chunk.toString());
+		});
+		child.stderr.on("data", function(chunk) {
+			util.print(chunk.toString());
+		});
+		child.on("error", function(e) {
+			note("Error running prebuild " + e);
+		});
+		child.on("exit", function(code, signal) {
+			//console.log("Exit " + code + " " + signal);
+		});
+		child.on("close", function(code) {
+			//console.log("Done running prebuild");
+			callback();
+		});
 	} catch(e) {
-	}
-	return (stat && stat.isDirectory());
-};
-
-//
-// child_process.exec callback
-//
-var execCallback = function(error, stdout, stderr) {
-	if (cmd.verbose) {
-		console.log(stdout);
-		console.log(stderr);
-	}
-	if (error !== null) {
-		note("exec error: " + error);
+		note(e);
 	}
 };
 
+
 //
-//
+// download and extract a url to the given destination
 //
 var downloadUrl = function(url, dest, cb) {
 	var done = false,
@@ -310,174 +420,9 @@ var downloadUrl = function(url, dest, cb) {
 	
 	// Done
 	emitter.on("close", function() {
-		console.log("Download finished");
+		console.log("Download + extract finished");
 		cb(true);
 	});
-};
-
-//
-//
-//
-var copySrcFiles = function(callback) {
-	var dest,
-		verbose = false,
-		dir = path.join(cmd.prefix, "/");
-
-console.log("Prebuild command is under construction");
-return 1;
-
-/*
-	console.log("Copying prebuild to " + dir);
-	try {
-		dest = path.join(dir, "prebuild.sh");
-		fs.createReadStream("prebuild").pipe(fs.createWriteStream(dest));
-		fs.chmodSync(dest, "755");
-	} catch(e) {
-		console.log(e);
-	}
-*/
-
-	// Synchronously copy src directory to dest
-	dest = path.join(dir, "/src");
-	console.log("Copying src dir to " + dest);
-	wrench.copyDirSyncRecursive("./src", dest, {
-		forceDelete: true, // Whether to overwrite existing directory or not
-		excludeHiddenUnix: true, // Whether to copy hidden Unix files or not (preceding .)
-		preserveFiles: true, // If we're overwriting something and the file already exists, keep the existing
-		preserveTimestamps: true, // Preserve the mtime and atime when copying files
-		inflateSymlinks: false, // Whether to follow symlinks or not when copying files
-		exclude: function(filename, dir){
-			if (dir.indexOf("proj.android") >= 0) {
-				if (filename === "libs" || filename === "obj" || filename === "gen" || filename === "assets") {
-					if (verbose) {
-						console.log("Ignoring filename " + filename + ", dir " + dir);
-					}
-					return true;
-				}
-			}
-			return false;
-		}
-	});
-
-	callback();
-};
-
-//
-//
-//
-var downloadCocos = function( callback) {
-	console.log("Done downloading Cocos");
-	callback();
-	return;
-	
-	var dir = "cocos2d-js",
-		cd = dir + "/cocos2d-js-v3.0-alpha2",
-		dest = path.join(__dirname, dir),
-		stat,
-		onDownloadFinished = function(success) {
-			try {
-				var from = path.join(cd, "/frameworks/js-bindings/cocos2d-x"),
-					to = path.normalize("./src/cocos2d-x");
-				console.log("Moving " + from + " to " + to);
-				fs.renameSync(from, to);
-			} catch(e) {
-				console.log("Couldn't move cocos2d-x");
-			}
-		};
-	
-	// Does Cocos2d-JS folder exist?
-	try {
-		stat = fs.lstatSync(dest);
-	} catch(e) {}
-	if (typeof stat === "undefined" || !stat.isDirectory()) {
-		downloadUrl(cocos2djsUrl, dest, onDownloadFinished);
-	} else {
-		console.log(dest + " already exists");
-		onDownloadFinished(true);
-	}
-
-};
-
-//
-//
-//
-var runPrebuild = function(callback) {
-	try {
-		var file = path.join(defaults.prefix, "prebuild"),
-			child;
-
-		child = child_process.spawn("./prebuild.sh", {/*cwd: defaults.prefix,*/ env: process.env});
-		child.stdout.on("data", function(chunk) {
-			util.print(chunk.toString());
-		});
-		child.stderr.on("data", function(chunk) {
-			console.log(chunk.toString());
-		});
-		child.on("error", function(e) {
-			console.log("Error " + e);
-		});
-		child.on("exit", function(code, signal) {
-			console.log("Exit " + code + " " + signal);
-		});
-		child.on("close", function(code) {
-			console.log("Done running prebuild");
-			callback();
-		});
-	} catch(e) {
-		console.log(e);
-	}
-};
-
-//
-//
-//
-var prebuild = function() {
-	if (!checkPrefix()) {
-		return 1;
-	}
-
-	copySrcFiles(function() {
-		downloadCocos(function() {
-			runPrebuild(function() {
-				console.log("Done with prebuild");
-			});
-		});
-	});
-};
-
-//
-// check that prefix directory is writeable
-//
-var checkPrefix = function() {
-	var isWriteable = function(dir) {
-		try {
-			dir = path.join(dir, ".testfile");
-			fs.writeFileSync(dir, "test");
-			fs.unlinkSync(dir);
-			return true;
-		} catch(e) {
-		}
-		return false;
-	};
-	
-	// Test prefix dir
-	if (!isWriteable(cmd.prefix)) {
-		if (cmd.prefix !== defaults.prefix) {
-			console.log("Cannot write files to prefix directory: " + cmd.prefix);
-			return false;
-		}
-
-		// Try users's home dir if they didn't override the prefix setting
-		var newPrefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
-		wrench.mkdirSyncRecursive(newPrefix);
-		if (!isWriteable(newPrefix)) {
-			console.log("Cannot write files to alternate prefix directory: " + newPrefix);
-			return false;
-		}
-		cmd.prefix = newPrefix;
-	}
-	console.log("Can successfully write files to prefix directory: " + cmd.prefix);
-	return true;
 };
 
 //
@@ -523,16 +468,6 @@ var report = (function() {
 }());
 
 //
-// add a note
-//
-var note = function(str) {
-	console.log(str);
-	notes = notes || "";
-	notes += (notes.length ? ". " : "");
-	notes += str.toString().trim();
-};
-
-//
 // check for upgrade
 //
 var checkUpdate = function() {
@@ -559,6 +494,67 @@ var checkUpdate = function() {
 	});
 	req.on("error", function(){});
 }
+
+//
+// add a note
+//
+var note = function(str) {
+	console.log(str);
+	notes = notes || "";
+	notes += (notes.length ? ". " : "");
+	notes += str.toString().trim();
+};
+
+//
+// Test if a directory exists
+//
+var dirExists = function(path) {
+	var stat;
+	try {
+		stat = fs.statSync(path);
+	} catch(e) {
+	}
+	return (stat && stat.isDirectory());
+};
+
+//
+// Test if a file exists
+//
+var fileExists = function(path) {
+	var stat;
+	try {
+		stat = fs.statSync(path);
+	} catch(e) {
+	}
+	return (stat && stat.isFile());
+};
+
+//
+// child_process.exec callback
+//
+var execCallback = function(error, stdout, stderr) {
+	if (cmd.verbose) {
+		console.log(stdout);
+		console.log(stderr);
+	}
+	if (error !== null) {
+		note("exec error: " + error);
+	}
+};
+
+//
+// tests if a directory is writeable
+//
+var isWriteableDir = function(dir) {
+	try {
+		dir = path.join(dir, ".testfile");
+		fs.writeFileSync(dir, "test");
+		fs.unlinkSync(dir);
+		return true;
+	} catch(e) {
+	}
+	return false;
+};
 
 module.exports = {
 	run: run,

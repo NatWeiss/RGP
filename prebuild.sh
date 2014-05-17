@@ -3,12 +3,24 @@
 root=$(dirname "$0")
 root=$(cd ${root}; pwd)
 cd ${root}
-if [ -d current ]; then
-	dest=${root}
-else
-	dest="/usr/local/rapidgame"
-	find "${dest}/src" -name *.pch -exec touch {} \;
+
+dest="$1"
+if [ ! -d $dest ]; then
+	if [ -d current ]; then
+		dest=${root}
+	else
+		dest="/usr/local/rapidgame"
+		find "${dest}/src" -name *.pch -exec touch {} \;
+	fi
 fi
+
+# Get which command.
+cmd="$2"
+if [ -z "$cmd" ]; then
+	cmd="all"
+fi
+
+echo "Prebuilding to directory: ${dest}"
 
 # Extra Xcode build settings.
 # GCC_SYMBOLS_PRIVATE_EXTERN=NO prevents a linker warning about visibility.
@@ -19,12 +31,6 @@ xcodeSettings="${xcodeSettings} GCC_SYMBOLS_PRIVATE_EXTERN=NO DEPLOYMENT_POSTPRO
 
 # Prefer a smaller set of architectures?
 small=0
-
-# Get which command.
-cmd="$1"
-if [ -z "$cmd" ]; then
-	cmd="all"
-fi
 
 # Check for Xcode
 if [ "$cmd" == "ios" ] || [ "$cmd" == "mac" ] || [ "$cmd" == "all" ]; then
@@ -209,7 +215,7 @@ if [ "$cmd" == "ios" ] || [ "$cmd" == "all" ]; then
 						archSetting="-arch i386"
 					fi
 				fi
-				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "iOS" -configuration ${config} -sdk ${sdk} ${archSetting} ${xcodeSettings} >> ${logFile} 2>&1
+				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -target "iOS" -configuration ${config} -sdk ${sdk} ${archSetting} ${xcodeSettings} >> ${logFile} 2>&1
 				res="$?"
 				if [ "$res" == "0" ]; then
 					echo "Succeeded."
@@ -238,7 +244,7 @@ if [ "$cmd" == "mac" ] || [ "$cmd" == "all" ]; then
 				if [ "${small}" == "1" ]; then
 					archSetting="-arch i386"
 				fi
-				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -scheme "Mac" -configuration ${config} -sdk ${sdk} ${archSetting} ${xcodeSettings} >> ${logFile} 2>&1
+				xcodebuild -project src/proj.ios_mac/${proj}.xcodeproj -target "Mac" -configuration ${config} -sdk ${sdk} ${archSetting} ${xcodeSettings} >> ${logFile} 2>&1
 				res="$?"
 				if [ "$res" == "0" ]; then
 					echo "Succeeded."
