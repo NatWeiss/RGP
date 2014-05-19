@@ -1,7 +1,7 @@
 {
   "name": "rapidgamepro",
-  "version": "0.8.4",
-  "description": "The platform-agnostic game project creator.",
+  "version": "0.8.5",
+  "description": "A cross platform game templating system for Cocos2D JS, Unity, Corona and Appcelerator Titanium. A library prebuilder for Cocos2D JS.",
   "author": {
     "name": "Nat Weiss",
     "url": "http://wizardfu.com/"
@@ -48,22 +48,14 @@
     "package.json",
     "rapidgamepro.js",
     "prebuild.sh",
-    "template",
+    "templates",
     "docs",
     "docs.html",
     "CHANGELOG.txt",
     "LICENSE",
-    "LICENSE_RapidGame.txt",
     "README.md",
-    "src/app",
-    "src/cocos2dx-store",
-    "src/external/jansson",
-    "src/facebook",
-    "src/mobfox",
+    "src/cocos2d.patch",
     "src/proj.android",
     "src/proj.ios_mac"
-  ],
-  "scripts": {
-    "postinstall": "echo Hooray"
-  }
+  ]
 }

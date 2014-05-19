@@ -1,3 +1,9 @@
+//
+//  Created using [RapidGame](http://wizardfu.com/rapidgame).
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
+//
+
 //#include "AppDelegate.h"
 #include "cocos2d.h"
 #include "CCEventType.h"

@@ -236,7 +236,6 @@
 			<sources dir="${basedir}/../js">
 				<file name="lib/timers.js"/>
 				<file name="lib/Loader.js"/>
-				<file name="Config.js"/>
 				<file name="MenuScene.js"/>
 				<file name="GameScene.js"/>
 				<file name="lib/App.js"/>

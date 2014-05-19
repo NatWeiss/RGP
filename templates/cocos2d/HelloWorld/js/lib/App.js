@@ -105,19 +105,19 @@ App.getResourceDir = function() {
 		
 		if (this.isHtml5()) {
 			if (minDimension >= 1200 && this._pixelRatio > 1) {
-				setResourceDir("res/hdr", 1, 2);
+				setResourceDir("hdr", 1, 2);
 			} else if (minDimension >= 600) {
-				setResourceDir("res/hd", 1, 1);
+				setResourceDir("hd", 1, 1);
 			} else {
-				setResourceDir("res/sd", 1, .5);
+				setResourceDir("sd", 1, .5);
 			}
 		} else {
 			if (maxDimension > 1600) {
-				setResourceDir("res/hdr", 1, 2);
+				setResourceDir("hdr", 1, 2);
 			} else if (maxDimension >= 960) {
-				setResourceDir("res/hd", 1, 1);
+				setResourceDir("hd", 1, 1);
 			} else {
-				setResourceDir("res/sd", 1, .5);
+				setResourceDir("sd", 1, .5);
 			}
 		}
 	}

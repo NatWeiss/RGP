@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 NAME=BrickBreaker
-PACKAGE_NAME=org.mycompany.mygame
+PACKAGE_NAME=com.wizardfu.brickbreaker
 PLUGIN_DIR=$$(cd ../lib/cocos2d/x/java && pwd)
 
 all:
@@ -40,10 +40,10 @@ run-distribution:
 	#adb -d logcat -s
 	adb -d logcat -v raw *:d
 clean:
-	rm -rf obj/
-	rm -rf bin/*
-	rm -rf gen/
-	rm -rf assets/*
+	rm -rf obj
+	rm -rf bin
+	rm -rf gen
+	rm -rf assets
 	rm -rf libs/armeabi
 	rm -rf libs/armeabi-v7a
 	rm -rf libs/x86

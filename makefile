@@ -75,7 +75,7 @@ release:
 
 rapidgame: dest=../releases/RapidGame/
 rapidgame:
-	if [ -d ${dest} ]; then rm -r ${dest}; fi
+	#if [ -d ${dest} ]; then rm -r ${dest}; fi
 	mkdir -p ${dest}src
 	cp README.md ${dest}
 	cp CHANGELOG.txt ${dest}
@@ -87,16 +87,24 @@ rapidgame:
 	cp prebuild.sh ${dest}
 	@rez/delete-between "# begin pro" "# end pro" ${dest}prebuild.sh --newlines
 	cp rapidgamepro.js ${dest}rapidgame.js
+	sed -i "" 's/rapidgamepro/rapidgame/g' ${dest}package.json
 	cp -r bin ${dest}
 	mv ${dest}bin/rapidgamepro ${dest}bin/rapidgame
 	sed -i "" 's/pro//g' ${dest}bin/rapidgame
 	cp -r src/proj.ios_mac ${dest}src/
 	rm -r ${dest}src/proj.ios_mac/cocos2dx-plugins.xcodeproj
+	rm -r ${dest}src/proj.ios_mac/PluginJSBindings.xcodeproj
+	mv src/proj.android/obj src/proj.android/libs /tmp
 	cp -r src/proj.android ${dest}src/
+	mv /tmp/obj /tmp/libs src/proj.android/
+	cd ${dest}src/proj.android && make clean
 	@rez/delete-between "# begin pro" "# end pro" ${dest}src/proj.android/build.sh --newlines
 	@rez/delete-between "# begin pro" "# end pro" ${dest}src/proj.android/jni/Android.mk --newlines
-	cd ${dest}src/proj.android && make clean
-	cp -r -P templates ${dest}
+	rm -f ${dest}templates/cocos2d/HelloWorld/lib
+	rm -f ${dest}templates/cocos2d/BrickBreaker/lib
+	cp -R -P templates ${dest}
+	rm -r ${dest}templates/cocos2d/HelloWorld/server/node_modules
+	rm -r ${dest}templates/cocos2d/BrickBreaker/server/node_modules
 	cd ${dest}templates/cocos2d/HelloWorld/proj.android && make clean
 	cd ${dest}templates/cocos2d/BrickBreaker/proj.android && make clean
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/js/Config.js --newlines
@@ -129,6 +137,15 @@ rapidgame:
 	rm ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AdsMobFox.java
 	rm ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/Facebook.java
 	docco -o ${dest}docs -l linear ${dest}README.md ${dest}/templates/cocos2d/HelloWorld/js/lib/App.js ${dest}/templates/cocos2d/HelloWorld/js/*.js ${dest}/templates/cocos2d/HelloWorld/server/Server.js
+	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/App.html
+	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Config.html
+	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/ConfigServer.html
+	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/HelloWorld.html
+	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/SceneHello.html
+	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Server.html
+	echo ".DS_Store" > ${dest}.gitignore
+	echo "xcuserdata" >> ${dest}.gitignore
+	echo "project.xcworkspace" >> ${dest}.gitignore
 
 docco:
 	if [ -d docs ]; then rm -r docs; fi

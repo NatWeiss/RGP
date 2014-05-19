@@ -12,13 +12,6 @@ LOCAL_MODULE := libcocos2dx-prebuilt
 LOCAL_SRC_FILES := ../../lib/cocos2d/x/lib/$(CONFIG)-Android/$(TARGET_ARCH_ABI)/libcocos2dx-prebuilt.a
 include $(PREBUILT_STATIC_LIBRARY)
 
-# begin pro
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcocos2dx-plugins
-LOCAL_SRC_FILES := ../../lib/cocos2d/x/lib/$(CONFIG)-Android/$(TARGET_ARCH_ABI)/libcocos2dx-plugins.a
-include $(PREBUILT_STATIC_LIBRARY)
-# end pro
-
 include $(CLEAR_VARS)
 LOCAL_MODULE := cocos2djs_shared
 LOCAL_MODULE_FILENAME := libcocos2djs
@@ -48,9 +41,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src \
 				$(LOCAL_PATH)/../../lib/cocos2d/x/include/external/spidermonkey/include/android
 
 LOCAL_WHOLE_STATIC_LIBRARIES := libcocos2dx-prebuilt
-# begin pro
-LOCAL_WHOLE_STATIC_LIBRARIES += libcocos2dx-plugins
-# end pro
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_png_static cocos_jpeg_static cocos_tiff_static cocos_webp_static cocos_curl_static cocos_freetype2_static spidermonkey_static websockets_static
 
 # cocos2d-x/cocos/2d/Android.mk
@@ -84,10 +74,3 @@ $(call import-module,bindings/manual/localstorage)
 $(call import-module,bindings/manual/network)
 $(call import-module,bindings/manual/spine)
 $(call import-module,bindings/manual/ui)
-# begin pro
-#$(call import-module,plugin/protocols/proj.android/jni) # bindings now include protocols
-$(call import-module,plugin/jsbindings)
-$(call import-module,cocos2dx-store/android/jni)
-$(call import-module,facebook/proj.android/jni)
-$(call import-module,app/proj.android/jni)
-# end pro
