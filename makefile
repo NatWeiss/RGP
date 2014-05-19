@@ -107,6 +107,11 @@ rapidgame:
 	rm -r ${dest}templates/cocos2d/BrickBreaker/server/node_modules
 	cd ${dest}templates/cocos2d/HelloWorld/proj.android && make clean
 	cd ${dest}templates/cocos2d/BrickBreaker/proj.android && make clean
+	rm -r ${dest}templates/unity/BrickBreaker/Library
+	rm -rf ${dest}templates/unity/BrickBreaker/Temp
+	rm -r ${dest}templates/unity/BrickBreaker/*.unityproj #*/
+	rm -r ${dest}templates/unity/BrickBreaker/*.sln #*/
+	rm -r ${dest}templates/unity/BrickBreaker/*.userprefs #*/
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/js/Config.js --newlines
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/js/lib/App.js --newlines
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/src/AppDelegate.cpp --newlines
