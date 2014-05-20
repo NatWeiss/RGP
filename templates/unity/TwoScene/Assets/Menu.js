@@ -17,7 +17,7 @@ function Start() {
 	logoStartPos.x = Screen.width * .5;
 	logoStartPos.z = Screen.height * .5 - 100 + .5;
 
-	audio.PlayOneShot(introSound, 0.5);
+	audio.PlayOneShot(introSound, 1.0);
 	labelText = "TwoScene";
 }
 

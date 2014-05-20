@@ -15,7 +15,7 @@ function Update() {
 			(Input.mousePosition.x < Screen.width * .5 ? -1 : 1) * 250,
 			ball.rigidbody.velocity.y < 200 ? 200 : 0,
 			0);
-		audio.PlayOneShot(jumpSound, 0.5);
+		audio.PlayOneShot(jumpSound, 1.0);
 	}
 }
 

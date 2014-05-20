@@ -102,13 +102,11 @@ rg:
 	cd ${dest}src/proj.android && make clean
 	@rez/delete-between "# begin pro" "# end pro" ${dest}src/proj.android/build.sh --newlines
 	@rez/delete-between "# begin pro" "# end pro" ${dest}src/proj.android/jni/Android.mk --newlines
-	rm -f ${dest}templates/cocos2d/HelloWorld/lib
-	rm -f ${dest}templates/cocos2d/BrickBreaker/lib
+	rm -f ${dest}templates/cocos2d/TwoScene/lib
 	cp -R -P templates ${dest}
-	rm -r ${dest}templates/cocos2d/HelloWorld/server/node_modules
-	rm -r ${dest}templates/cocos2d/BrickBreaker/server/node_modules
-	cd ${dest}templates/cocos2d/HelloWorld/proj.android && make clean
-	cd ${dest}templates/cocos2d/BrickBreaker/proj.android && make clean
+	rm -r ${dest}templates/cocos2d/HelloWorld
+	rm -r ${dest}templates/cocos2d/*/server/node_modules #*/
+	cd ${dest}templates/cocos2d/TwoScene/proj.android && make clean
 	rm -r ${dest}templates/unity/*/Library #*/
 	rm -rf ${dest}templates/unity/*/Temp #*/
 	rm -r ${dest}templates/unity/*/*.unityproj #*/
