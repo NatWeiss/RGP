@@ -174,7 +174,7 @@ var createProject = function(engine, name, package) {
 		regex: cmd.template,
 		replacement: name,
 		paths: [dest],
-		include: "*.js,*.plist,*.cpp,*.html,*.json,*.xml,*.xib,*.pbxproj,*.xcscheme,*.xcworkspacedata,*.xccheckout,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,manifest,*.vcxproj,*.user,*.filters",
+		include: "*.js,*.plist,*.cpp,*.md,*.lua,*.html,*.json,*.xml,*.xib,*.pbxproj,*.xcscheme,*.xcworkspacedata,*.xccheckout,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,manifest,*.vcxproj,*.user,*.filters",
 		recursive: true,
 		silent: !cmd.verbose
 	});
@@ -186,7 +186,7 @@ var createProject = function(engine, name, package) {
 		regex: src,
 		replacement: package,
 		paths: [dest],
-		include: "*.js,*.plist,*.xml,makefile,manifest",
+		include: "*.js,*.plist,*.xml,makefile,manifest,*.settings,*.lua,.project",
 		recursive: true,
 		silent: !cmd.verbose
 	});
@@ -224,8 +224,18 @@ var createProject = function(engine, name, package) {
 	i = null;
 	dest = path.join(dir, "server");
 	onFinished = function(){
+		// Show readme
 		console.log("Done creating project " + name);
+		try {
+			var text = fs.readFileSync(path.join(dir, "README.md")).toString().trim();
+			console.log("");
+			console.log(text);
+			console.log("");
+		} catch(e) {
+		}
 		report("done");
+		
+		// Auto prebuild
 		if (isCocos2d && !dirExists(path.join(cmd.prefix, "cocos2d"))) {
 			console.log("");
 			console.log("Automatically prebuilding Cocos2D libraries");
