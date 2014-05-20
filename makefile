@@ -73,8 +73,8 @@ release:
 	open ../releases
 	open -a /Applications/YemuZip.app/
 
-rapidgame: dest=../releases/RapidGame/
-rapidgame:
+rg: dest=../releases/RapidGame/
+rg:
 	#if [ -d ${dest} ]; then rm -r ${dest}; fi
 	mkdir -p ${dest}src
 	cp README.md ${dest}
@@ -94,6 +94,8 @@ rapidgame:
 	cp -r src/proj.ios_mac ${dest}src/
 	rm -r ${dest}src/proj.ios_mac/cocos2dx-plugins.xcodeproj
 	rm -r ${dest}src/proj.ios_mac/PluginJSBindings.xcodeproj
+	rm -r ${dest}src/proj.ios_mac/cocos2dx-prebuilt.xcodeproj/xcuserdata
+	rm -r ${dest}src/proj.ios_mac/cocos2dx-prebuilt.xcodeproj/project.xcworkspace
 	mv src/proj.android/obj src/proj.android/libs /tmp
 	cp -r src/proj.android ${dest}src/
 	mv /tmp/obj /tmp/libs src/proj.android/
