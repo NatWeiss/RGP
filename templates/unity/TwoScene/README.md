@@ -4,3 +4,4 @@ To run your game just open the project directory in Unity and click the triangul
 
 	https://unity3d.com/unity/download
 
+Start customizing your game by editing the Game.js file.

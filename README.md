@@ -72,7 +72,6 @@ Run
 ---
 
 
-To run your [Corona](http://coronalabs.com/products/corona-sdk/starter/) game just run the Corona Simulator then open your `main.lua` file.
 
 To run your [Cocos2D JS](http://cocos2d-x.org/product#cocos2dx-js) game in a browser just launch the server `cd MyGame && ./run-server` and visit [localhost:8000](http://localhost:8000).
 
