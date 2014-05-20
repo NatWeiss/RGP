@@ -6,8 +6,6 @@
 
 public var guiSkin : GUISkin;
 public var introSound : AudioClip;
-public var winSound : AudioClip;
-public var loseSound : AudioClip;
 public var logo : GameObject;
 
 private var labelText = "";
@@ -18,16 +16,9 @@ function Start() {
 	logoStartPos = logo.transform.position;
 	logoStartPos.x = Screen.width * .5;
 	logoStartPos.z = Screen.height * .5 - 100 + .5;
-	if (Game.lives > 0 && Game.score == 0) {
-		audio.PlayOneShot(introSound, 0.5);
-		labelText = "BrickBreaker";
-	} else if (Game.lives <= 0) {
-		audio.PlayOneShot(loseSound, 0.5);
-		labelText = "Game Over";
-	} else {
-		audio.PlayOneShot(winSound, 0.5);
-		labelText = "You Win!";
-	}
+
+	audio.PlayOneShot(introSound, 0.5);
+	labelText = "TwoScene";
 }
 
 function OnGUI() {

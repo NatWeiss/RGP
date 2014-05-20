@@ -71,7 +71,6 @@ If you need cross-platform monetization, in-app purchasing, virtual economies, s
 Run
 ---
 
-To run your Unity game just open the project in [Unity](https://unity3d.com/unity/download) and click the triangular Play button. The Breakout clone currently plays using the arrow keys to move the paddle and spacebar to launch the ball.
 
 To run your [Corona](http://coronalabs.com/products/corona-sdk/starter/) game just run the Corona Simulator then open your `main.lua` file.
 

@@ -26,8 +26,6 @@ function OnMouseUp () {
 	if (quit == true) {
 		Application.Quit();
 	} else {
-		Game.score = 0;
-		Game.lives = 3;
 		Application.LoadLevel("Game");
 	}
 }

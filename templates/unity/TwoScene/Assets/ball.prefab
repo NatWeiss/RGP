@@ -39,9 +39,9 @@ Rigidbody:
   m_GameObject: {fileID: 100000}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: .5
   m_AngularDrag: .0500000007
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -174,11 +174,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ball: {fileID: 100000}
-  dieSound: {fileID: 8300000, guid: 8a91bfa16350c4c418add2a1ac4a2491, type: 3}
-  blockSound: {fileID: 8300000, guid: 8ddf3cbdfc6334645bb87728ba738a9f, type: 3}
   wallSound: {fileID: 8300000, guid: c9b8d689ae72742d8b9838352be73ea0, type: 3}
-  paddleSound: {fileID: 8300000, guid: bb8f8d7c189e848028273173ee02e223, type: 3}
-  particles: {fileID: 19800000, guid: ac931f0fd2490468a8562a60054f8af3, type: 2}
+  jumpSound: {fileID: 8300000, guid: 1727495df212a485c977cf017d8f9b88, type: 3}
 --- !u!135 &13500000
 SphereCollider:
   m_ObjectHideFlags: 1
