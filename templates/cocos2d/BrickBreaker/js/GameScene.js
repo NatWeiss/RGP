@@ -16,7 +16,7 @@ var GameScene = cc.Scene.extend({
 });
 
 var GameLayer = (function(){
-	var paddleSpeed = .333,
+	var paddleSpeed = .8,
 		maxBallAngle = 75,
 		numOfRows = 4,
 		numOfCols = 11,

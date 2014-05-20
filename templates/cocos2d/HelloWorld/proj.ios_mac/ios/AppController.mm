@@ -10,7 +10,9 @@
 #import "AppDelegate.h"
 #import "RootViewController.h"
 #import "CCEAGLView.h"
+// begin pro
 #import <FacebookSDK/FacebookSDK.h>
+// end pro
 
 using namespace cocos2d;
 

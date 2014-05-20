@@ -55,49 +55,55 @@ templates = listDirectories(__dirname, "templates", "cocos2d", "*");
 // Main run method.
 //
 var run = function(args) {
+	var i, commands = [], commandFound = false;
 	checkUpdate();
 	args = args || process.argv;
 	cmd
 		.version(version)
-		.option("-t, --template [name]", "template (" + templates.join(", ") + ") [" + defaults.template + "]", defaults.template)
-		.option("-e, --engine [name]", "engine to use (" + engines.join(", ") + ") [" + defaults.engine + "]", defaults.engine)
-		.option("-p, --prefix [name]", "library directory [" + defaults.prefix + "]", defaults.prefix)
-		.option("-o, --output [path]", "output folder [" + defaults.dest + "]", defaults.dest)
-		.option("-k, --package [name]", "package name [" + defaults.package + "]", defaults.package)
+		.option("-t, --template <name>", "template (" + templates.join(", ") + ") [" + defaults.template + "]", defaults.template)
+		.option("-p, --prefix <name>", "library directory [" + defaults.prefix + "]", defaults.prefix)
+		.option("-o, --output <path>", "output folder [" + defaults.dest + "]", defaults.dest)
 		.option("-v, --verbose", "be verbose", false);
 
 	cmd
-		.command("*")
-		.description("Create a new project using one of the templates, for example: " + cmdName + " Foo")
+		.command("create <engine> <project-name> <package-name>")
+		.description("     Create a new cross-platform game project [engines: " + engines.join(", ") + "]")
 		.action(createProject);
+	commands.push("create");
 
 	cmd
 		.command("prebuild")
-		.description("Prebuild Cocos2D JS static libraries for all platforms and architectures")
+		.description("                            Prebuild Cocos2D X static libraries")
 		.action(prebuild);
+	commands.push("prebuild");
 
-	cmd.on("--help", function(){
-		console.log("  Examples:");
-		console.log("");
-		console.log("    $ " + cmdName + " -e unity -t BrickBreaker MyBrickBreaker");
-		console.log("    $ " + cmdName + " -e cocos2d -t HelloWorld -k com.mycompany.mygame MyHello");
-		console.log("    $ " + cmdName + " prebuild");
-		console.log("");
-	});
+	cmd.on("--help", usageExamples);
 
 	cmd
 		.parse(args)
 		.name = cmdName;
 
 	if (!cmd.args.length) {
-		return console.log(cmd.helpInformation());
+		usage();
+	} else {
+		// Check if command exists
+		for (i = 0; i < commands.length; i += 1) {
+			if (args[2] === commands[i]) {
+				commandFound = true;
+				break;
+			}
+		}
+		if (!commandFound) {
+			console.log("Command '" + args[2] + "' not found");
+			usage();
+		}
 	}
 };
 
 //
 // Create project.
 //
-var createProject = function(name) {
+var createProject = function(engine, name, package) {
 	var dir = path.join(cmd.output, name),
 		src,
 		dest,
@@ -106,45 +112,53 @@ var createProject = function(name) {
 		onFinished,
 		files,
 		isCocos2d = false;
+	
 	category = "createProject";
 	
 	if (!checkPrefix()) {
-		cmd.help();
+		usage();
+		return 1;
+	}
+	
+	// Check engine and name
+	if (!engine || !name || !package) {
+		console.log("Engine, project name and package name are required, for example: " + cmdName + " cocos2d \"Heck Yeah\" com.mycompany.heckyeah");
+		usage();
 		return 1;
 	}
 
 	// Check if dirs exist
 	if (dirExists(dir) || fileExists(dir)) {
 		console.log("Output directory already exists: " + dir);
-		cmd.help();
+		usage();
 		return 1;
 	}
 
 	// Check engine
-	if (engines.indexOf(cmd.engine) < 0) {
-		console.log("Engine '" + cmd.engine + "' not found");
+	if (engines.indexOf(engine) < 0) {
+		console.log("Engine '" + engine + "' not found");
 		console.log("Available engines are: " + engines.join(", "));
-		cmd.help();
+		usage();
 		return 1;
 	}
 	
 	// Check template
-	src = path.join(__dirname, "templates", cmd.engine, cmd.template);
+	src = path.join(__dirname, "templates", engine, cmd.template);
 	if (!dirExists(src)) {
 		console.log("Missing template directory: " + src);
-		files = listDirectories(__dirname, "templates", cmd.engine, "*");
+		files = listDirectories(__dirname, "templates", engine, "*");
 		if (files.length > 0) {
-			console.log("Available templates for " + cmd.engine + " are: " + files.join(", ") + ".");
+			console.log("Available templates for " + engine + " are: " + files.join(", ") + ".");
 		}
-		cmd.help();
+		usage();
 		return 1;
 	}
 	
 	// Start
-	report("start", cmd.engine + "/" + cmd.template);
+	report("start", engine + "/" + cmd.template);
 	console.log("Rapidly creating a game named '" + name + "' with engine " +
-		cmd.engine.charAt(0).toUpperCase() + cmd.engine.slice(1) + " and template " + cmd.template);
-	isCocos2d = (cmd.engine.indexOf("cocos") >= 0);
+		engine.charAt(0).toUpperCase() + engine.slice(1) + " and template " + cmd.template);
+	isCocos2d = (engine.indexOf("cocos") >= 0);
 	
 	// Copy all template files to destination
 	dest = dir;
@@ -167,10 +181,10 @@ var createProject = function(name) {
 
 	// Replace package name
 	src = "com.wizardfu." + cmd.template.toLowerCase();
-	console.log("Replacing all '" + src + "' with '" + cmd.package + "'");
+	console.log("Replacing all '" + src + "' with '" + package + "'");
 	replace({
 		regex: src,
-		replacement: cmd.package,
+		replacement: package,
 		paths: [dest],
 		include: "*.js,*.plist,*.xml,makefile,manifest",
 		recursive: true,
@@ -213,6 +227,7 @@ var createProject = function(name) {
 		console.log("Done creating project " + name);
 		report("done");
 		if (isCocos2d && !dirExists(path.join(cmd.prefix, "cocos2d"))) {
+			console.log("");
 			console.log("Automatically prebuilding Cocos2D libraries");
 			prebuild();
 		}
@@ -335,7 +350,7 @@ var prebuild = function(platform, config, arch) {
 	arch = arch || "";
 
 	if (!checkPrefix()) {
-		cmd.help();
+		usage();
 		return 1;
 	}
 
@@ -573,7 +588,23 @@ var checkUpdate = function() {
 }
 
 //
-// add a note
+// show usage instructions
+//
+var usage = function() {
+	cmd.help();
+	usageExamples();
+};
+var usageExamples = function() {
+	console.log("  Examples:");
+	console.log("");
+	console.log("    $ " + cmdName + " create unity \"Zombie Matrix\" com.mycompany.zombiematrix");
+	console.log("    $ " + cmdName + " create cocos2d \"Heck Yeah\" com.mycompany.heckyeah");
+	console.log("    $ " + cmdName + " prebuild");
+	console.log("");
+};
+
+//
+// log an error
 //
 var logErr = function(str) {
 	console.log(str);

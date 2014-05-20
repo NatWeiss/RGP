@@ -2,10 +2,10 @@
     "engineDir": "lib/cocos2d/html",
 	"designWidth": 2048,
 	"designHeight": 1536,
-	"initialScene": "GameScene",
+	"initialScene": "MenuScene",
 	"resourcePath": "res",
 	"debugPhysics": false,
-	"playMusic": false,
+	"playMusic": true,
 
     "project_type": "javascript",
     "debugMode": 1,

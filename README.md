@@ -2,13 +2,23 @@
 RapidGame
 =========
 
-RapidGame is a suite of tools that takes the grunt work out of game development.
+A Node-based templating system for rapidly creating cross-platform games for a variety of game engines, including Cocos2D-JS, Unity, Corona and Appcelerator Titanium.
 
-More specifically:
+What it does:
 
- 1. A collection of game project templates for Cocos2D JS, Unity, Corona and Appcelerator Titanium
+* Creates new cross-platform game projects from provided or custom templates, which includes scenes, sprites, physics, sound and more. 
+
+* Prebuilds libraries for Cocos2D X that virtually eliminate build, compile and link time, saving in aggregate hours during development, and allowing for more rapid development cycle without having to wait - hence the name RapidGame.
+
+
+Eliminate Grunt Work
+--------------------
+
+RapidGame provides:
+
+ 1. Tested game project templates for Cocos2D-JS, Unity, Corona and Titanium
  2. A cross-platform game project creator
- 3. A library prebuilder for Cocos2D X that virtually eliminates build / compile / link time
+ 3. A library prebuilder for Cocos2D X
 
 The templates have:
 
@@ -17,16 +27,17 @@ The templates have:
  3. Viewport setup
  4. Multiple scenes
  5. Sprites
- 6. Sound
- 7. Music
- 8. Physics
- 9. Simple asychronous game servers (HTML5-based platforms)
+ 6. Custom TTF fonts
+ 7. Sound
+ 8. Music
+ 9. Physics
+ 10. HTTP / Socket.io game servers (HTML5-based platforms)
 
-The project creator makes a copy of one of the templates, does a search and replace on the game title & package name, then installs any required Node modules. Viola. Your own rapidly-created game ready to go with scenes, sprites, physics, etc.
+The project creator makes a copy of one of the templates, does a search and replace on the game title & package name, then installs any required modules. Viola. Your own rapidly-created game ready to go with scenes, sprites, physics, etc.
 
-The library prebuilder creates `.a` files that virtually eliminate build times for the Cocos2D X engine (the native portion of Cocos2D JS). With hundreds of source files to be compiled, building Cocos2D X for just one platform can take at least five minutes. This can be a real time sink, especially when all one has to do is switch from the simulator to device to trigger a rebuild.
+The library prebuilder creates static libraries that virtually eliminate build times for the Cocos2D X engine (the native portion of Cocos2D JS). With hundreds of source files to be compiled, building Cocos2D X for just one platform can take at least five minutes. This can be a real time sink, especially when switching from the simulator to device triggers a rebuild.
 
-The prebuilder automatically downloads the latest Cocos2D JS, patches it to ensure that it's bug-free, then prebuilds Cocos2D X for all possible platforms, configurations and architectures. It takes awhile but it's worth every second. Even better, the project creator will absolutely symlink to the location of the prebuilt libraries so your game projects stay lightweight and can be moved easily.
+The prebuilder automatically downloads the latest Cocos2D JS, patches it to ensure that it is bug-free, then prebuilds Cocos2D X for all possible platforms, configurations and architectures. It is then possible to compile and link native Cocos2D X games in seconds. Even better, the project creator will absolutely symlink to the location of the prebuilt libraries so your game projects stay lightweight and can be moved easily.
 
 
 Create a Game in Under 30 Seconds
@@ -34,13 +45,21 @@ Create a Game in Under 30 Seconds
 
 You'll first need [Node.js](http://nodejs.org/download/) and [Git](http://git-scm.com/downloads).
 
-Install RapidGame:
+There's no need to clone this repo, just install RapidGame:
 
 	sudo npm install rapidgame -g
 
-Create a Unity Breakout clone named BrickMan:
+And, create a Unity game named "Zombie Matrix":
 
-	rapidgame -e unity -t BrickBreaker BrickMan
+	rapidgame create unity "Zombie Matrix" com.myompany.zombiematrix
+
+Or, a Cocos2D JS game named "Heck Yeah":
+
+	rapidgame create cocos2d "Heck Yeah" org.myorg.heckyeah
+
+For usage instructions:
+
+	rapidgame --help
 
 
 Pro Version
@@ -80,17 +99,17 @@ Create Your Own Templates
 
 It's possible to create your own game templates. Here's the step-by-step instructions:
 
- 1. Create your game in a directory with the game name as the directory name. If your game is called "Zombie Revolution", name the directory `Zombie Revolution`, including the space.
+ 1. Create your game directory. If your game is called "Zombie Matrix", name the directory `Zombie Matrix`, including the space.
  
- 2. Use the name of your game (e.g. "Zombie Revolution") including any space or punctation freely throughout your game project. RapidGame is smart enough to automatically rename your game's title in most types of source files.
+ 2. Use the name of your game including any whitespace or punctation throughout your game project. RapidGame will automatically search and replace the title in most types of source and project files.
  
- 3. If you'd like a file or directory renamed, make sure it starts with your game's title. For example, if you have `Zombie Revolution.xcodeproj` it will get changed to `MyNewGame.xcodeproj`.
+ 3. If you'd like a file or directory renamed, make sure it starts with your game's title. For example, if you have `Zombie Matrix.xcodeproj` it will get changed to `MyNewGame.xcodeproj`.
  
  4. Whenever there's an instance of your package name, replace the beginning with `com.wizardfu.`, lowercase the title and remove any punctuation, so `com.mycompany.zombierevolution` becomes `com.wizardfu.zombierevolution`. This will get changed by the templating system when creating new game projects.
  
- 5. Copy your game template to the `templates/<engine>` directory of RapidGame. On Mac / Linux this is `/usr/local/lib/node_modules/rapidgame`. You can use the `npm prefix -g` command to determine where Node modules are installed on your system. If you're on Mac OS X, the template is for Unity and it's called "Zombie Revolution" then the final directory would be `/usr/local/lib/node_modules/rapidgame/templates/unity/Zombie Revolution/`.
+ 5. Copy your game template to the `templates/<engine>` directory of RapidGame. On Mac / Linux this is `/usr/local/lib/node_modules/rapidgame`. You can use the `npm prefix -g` command to determine where Node modules are installed on your system. If you're on Mac OS X, the template is for Unity and it's called "Zombie Matrix" then the final directory would be `/usr/local/lib/node_modules/rapidgame/templates/unity/Zombie Matrix/`.
 
- 6. Your template is now ready for testing. Try it out like this: `rapidgame -e unity -t "Zombie Revolution" MyNewGame`.
+ 6. Your template is now ready for testing. Try it out like this: `rapidgame create unity MyNewGame com.mycompany.mynewgame -t "Zombie Matrix" `.
 
 
 Project Status

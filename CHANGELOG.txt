@@ -1,3 +1,9 @@
+Version 0.8.7 - May 20, 2014
+
+	Simplifed project create command.
+	Fixed templating system to spaces and punctuation are allowed in the project name for Cocos2D JS projects.
+	Fixed a compilation error in Cocos2D JS iOS project.
+
 Version 0.8.6 - May 19, 2014
 
 	Command now dynamically determines available engines and templates.
