@@ -8,14 +8,18 @@
 // A simple Node.js game server that sends static files as requested.
 //
 var express = require("express"),
+	fs = require("fs"),
+	path = require("path"),
 	server = express(),
 	port = 8000,
 	protocolHttp = server.listen(port);
+	projectJson = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "project.json")));
 
-server.use("/", express.static(__dirname + "/../proj.html5/"));
+server.use("/", express.static(__dirname + "/../Projects/html/"));
+server.use("/project.json", express.static(__dirname + "/../project.json"));
 server.use("/lib/", express.static(__dirname + "/../lib/"));
-server.use("/res/", express.static(__dirname + "/../res/"));
-server.use("/js/", express.static(__dirname + "/../js/"));
+server.use("/Assets/", express.static(__dirname + "/../Assets/"));
 server.get("/", function(req,res){res.sendfile("index.html");});
+server.get("/project.json", function(req,res){res.send(projectJson);});
 
 console.log("Started server on port: " + port);

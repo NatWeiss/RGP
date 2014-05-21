@@ -5,7 +5,7 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>F60F379C-6BC6-4904-96DE-3710D4D58785</string>
+	<string>880B6270-83E2-4C98-9741-C01C217DB55D</string>
 	<key>IDESourceControlProjectName</key>
 	<string>TwoScene</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
@@ -14,7 +14,7 @@
 		<string>http://natweiss.com/git/rapidgamepro.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>templates/cocos2d/TwoScene/proj.ios_mac/TwoScene.xcodeproj/project.xcworkspace</string>
+	<string>templates/cocos2d/TwoScene/Projects/TwoScene.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>

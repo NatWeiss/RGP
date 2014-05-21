@@ -477,6 +477,7 @@ Game.createPhysicsSprite = function(filename, elasticity, friction, isCircle, co
 // Boot method. Different for HTML5 versus native. Called at the end of this file.
 //
 Game.boot = function(global) {
+	cc.loader.resPath = cc.game.config.resourcePath;
 	if (this.isHtml5()) {
 		Game.setCanvasSize();
 		Game.setCanvasSize(document.getElementById("gameDiv"),
@@ -539,7 +540,6 @@ Game.main = function() {
 	Game.contentX = (Game.winSize.width - Game.contentWidth) * .5;
 	Game.contentY = 0;
 
-	cc.loader.resPath = cc.game.config.resourcePath;
 	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
 	cc.log(parseInt(Game.winSize.width) + " x " + parseInt(Game.winSize.height)
 		+ ", language: " + Game.getLanguageCode()
@@ -548,7 +548,7 @@ Game.main = function() {
 	if (this.isHtml5()) {
 		Game.addImageData = function() {};
 	} else {
-		Game.config["font"] = "res/" + Game.config["font"] + ".ttf";
+		Game.config["font"] = cc.loader.resPath + "/" + Game.config["font"] + ".ttf";
 	}
 
 	/* Preload. */

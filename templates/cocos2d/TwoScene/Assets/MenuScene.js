@@ -33,7 +33,7 @@ var MenuLayer = cc.Layer.extend({
 		this._super();
 
 		logoText = "TwoScene";
-		Game.playEffect("res/Intro.mp3");
+		Game.playEffect("Intro.mp3");
 
 		// Background
 		this.bg = cc.LayerColor.create(cc.color(218, 214, 212, 255));

@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 NAME=TwoScene
 PACKAGE_NAME=com.wizardfu.twoscene
-PLUGIN_DIR=$$(cd ../lib/cocos2d/x/java && pwd)
+PLUGIN_DIR=$$(cd ../../lib/cocos2d/x/java && pwd)
 
 all:
 	@echo "ANDROID_HOME=${ANDROID_HOME}"

@@ -1,18 +1,6 @@
-Congratulations on creating a Cocos2D JS game!
-
-To run your game just open the Xcode project in the proj.ios_mac directory and run.
-
-Start customizing your game by editing the js/GameScene.js file.
-
-You can also run the HTML5 version. First start the server:
-
-	cd MyGame
-	./run-server
-
-Then browse to http://localhost:8000/ to play.
-
-You can also run the Android version:
-
-	cd MyGame/proj.android
-	make && make run
-
+  Congratulations on creating a Cocos2D JS game!
+  Run it by opening the Xcode project in `Projects`.
+  Or, by running `Server/run` and browsing to: http://localhost:8000
+  Or, by running `cd Projects/android && make && make run`
+  Ready to code? Start with the `Assets/GameScene.js` file.
+  Do `rapidgame prebuild` to get the latest Cocos2D JS.

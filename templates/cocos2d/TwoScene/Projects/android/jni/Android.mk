@@ -9,7 +9,7 @@ $(info APP_CPPFLAGS=$(APP_CPPFLAGS))
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := libcocos2dx-prebuilt
-LOCAL_SRC_FILES := ../../lib/cocos2d/x/lib/$(CONFIG)-Android/$(TARGET_ARCH_ABI)/libcocos2dx-prebuilt.a
+LOCAL_SRC_FILES := ../../../lib/cocos2d/x/lib/$(CONFIG)-Android/$(TARGET_ARCH_ABI)/libcocos2dx-prebuilt.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -17,28 +17,28 @@ LOCAL_MODULE := cocos2djs_shared
 LOCAL_MODULE_FILENAME := libcocos2djs
 
 LOCAL_SRC_FILES := main.cpp \
-                   ../../src/AppDelegate.cpp
+                   ../../AppDelegate.cpp
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos/base \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos/physics \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos/math/kazmath \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos/2d \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos/gui \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos/network \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos/audio/include \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos/editor-support \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/extensions \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/external \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/external/chipmunk/include/chipmunk \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/bindings/auto \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/bindings/manual \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/bindings/cocosbuilder \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/cocos/2d/platform/android \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/plugin/protocols/platform/android \
-				$(LOCAL_PATH)/../../lib/cocos2d/x/include/external/spidermonkey/include/android
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../ \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/base \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/physics \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/math/kazmath \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/2d \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/gui \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/network \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/audio/include \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/editor-support \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/extensions \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/external \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/external/chipmunk/include/chipmunk \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/bindings/auto \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/bindings/manual \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/bindings/cocosbuilder \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/2d/platform/android \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/plugin/protocols/platform/android \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/external/spidermonkey/include/android
 
 LOCAL_WHOLE_STATIC_LIBRARIES := libcocos2dx-prebuilt
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_png_static cocos_jpeg_static cocos_tiff_static cocos_webp_static cocos_curl_static cocos_freetype2_static spidermonkey_static websockets_static

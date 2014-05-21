@@ -11,8 +11,6 @@ fi
 
 options="--stats -azPe ssh --exclude=.DS_Store"
 
-rsync proj.html5/* "${dest}/" $options
-rsync proj.html5 "${dest}/" $options
-rsync js "${dest}/" $options
-rsync res "${dest}/" $options
-rsync server "${dest}/" $options
+rsync index.html favicon.ico "${dest}/" $options
+rsync ../../Assets "${dest}/" $options
+rsync ../../Server "${dest}/" $options

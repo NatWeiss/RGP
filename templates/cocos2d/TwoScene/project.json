@@ -3,7 +3,7 @@
 	"designWidth": 2048,
 	"designHeight": 1536,
 	"initialScene": "MenuScene",
-	"resourcePath": "res",
+	"resourcePath": "Assets",
 	"debugPhysics": false,
 	"playMusic": true,
 
@@ -20,9 +20,9 @@
 	],
 
     "jsList": [
-		"js/MenuScene.js",
-		"js/GameScene.js",
-		"js/lib/Loader.js"
+		"Assets/MenuScene.js",
+		"Assets/GameScene.js",
+		"Assets/lib/Loader.js"
     ],
 
 	"strings": {
