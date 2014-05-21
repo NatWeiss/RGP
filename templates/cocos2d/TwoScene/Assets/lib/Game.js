@@ -394,6 +394,15 @@ Game.playMusic = function(filename) {
 };
 
 //
+// ###  Game.stopMusic
+//
+// Stop music.
+//
+Game.stopMusic = function() {
+	cc.audioEngine.stopMusic();
+};
+
+//
 // ###  Game.startPhysics
 //
 // Start the physics engine.

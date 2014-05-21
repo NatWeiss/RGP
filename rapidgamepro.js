@@ -22,12 +22,14 @@ var http = require("http"),
 	category,
 	engines = [],
 	templates = [],
+	orientations = ["landscape", "portrait"],
 	defaults = {
 		engine: "cocos2d",
 		template: "TwoScene",
 		package: "org.mycompany.mygame",
 		dest: process.cwd(),
-		prefix: __dirname
+		prefix: __dirname,
+		orientation: orientations[0]
 	};
 
 //
@@ -62,7 +64,8 @@ var run = function(args) {
 		.version(version)
 		.option("-t, --template <name>", "template (" + templates.join(", ") + ") [" + defaults.template + "]", defaults.template)
 		.option("-p, --prefix <name>", "library directory [" + defaults.prefix + "]", defaults.prefix)
-		.option("-o, --output <path>", "output folder [" + defaults.dest + "]", defaults.dest)
+		.option("-f, --folder <path>", "output folder [" + defaults.dest + "]", defaults.dest)
+		.option("-o, --orientation <orientation>", "orientation (" + orientations.join(", ") + ") [" + defaults.orientation + "]", defaults.orientation)
 		.option("-v, --verbose", "be verbose", false);
 
 	cmd
@@ -136,7 +139,7 @@ var init = function(directory) {
 // Create project.
 //
 var createProject = function(engine, name, package) {
-	var dir = path.join(cmd.output, name),
+	var dir = path.join(cmd.folder, name),
 		src,
 		dest,
 		fileCount,
@@ -197,7 +200,7 @@ var createProject = function(engine, name, package) {
 	// Copy all template files to destination
 	dest = dir;
 	console.log("Copying project files" + (cmd.verbose ? " from " + src + " to " + dest : ""));
-	fileCount = copyRecursive(src, dest, cmd.verbose);
+	fileCount = copyRecursive(src, dest, cmd.verbose, engine);
 	if (cmd.verbose) {
 		console.log("Successfully copied " + fileCount + " files");
 	}
@@ -288,7 +291,7 @@ var createProject = function(engine, name, package) {
 //
 // Copy files recursively with a special exclude filter.
 //
-var copyRecursive = function(src, dest, verbose) {
+var copyRecursive = function(src, dest, verbose, engine) {
 	var count = 0,
 		ignore = [
 			//"node_modules",
@@ -330,6 +333,10 @@ var copyRecursive = function(src, dest, verbose) {
 					console.log(e);
 				}
 			} else if (dir.indexOf(path.join("build", "build")) >= 0) {
+				doExclude = true;
+			} else if (engine === "titanium" && filename === "build") {
+				doExclude = true;
+			} else if (engine === "unity" && (filename === "Library" || filename === "Temp" || filename.indexOf(".sln") >= 0 || filename.indexOf(".unityproj") >= 0 || filename.indexOf(".userprefs") >= 0)) {
 				doExclude = true;
 			} else {
 				for (i = 0; i < ignore.length; i += 1) {
