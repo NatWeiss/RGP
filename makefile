@@ -112,11 +112,11 @@ rg:
 	rm -r ${dest}templates/cocos2d/HelloWorld
 	rm -r ${dest}templates/cocos2d/*/Server/node_modules #*/
 	cd ${dest}templates/cocos2d/TwoScene/Projects/android && make clean
-	rm -r ${dest}templates/unity/*/Library #*/
+	rm -rf ${dest}templates/unity/*/Library #*/
 	rm -rf ${dest}templates/unity/*/Temp #*/
-	rm -r ${dest}templates/unity/*/*.unityproj #*/
-	rm -r ${dest}templates/unity/*/*.sln #*/
-	rm -r ${dest}templates/unity/*/*.userprefs #*/
+	rm -rf ${dest}templates/unity/*/*.unityproj #*/
+	rm -rf ${dest}templates/unity/*/*.sln #*/
+	rm -rf ${dest}templates/unity/*/*.userprefs #*/
 	rm -rf ${dest}templates/titanium/TwoScene/build
 	#@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/js/Config.js --newlines
 	#@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/js/lib/App.js --newlines
