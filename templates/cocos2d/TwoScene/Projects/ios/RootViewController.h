@@ -9,6 +9,7 @@
 @interface RootViewController : UIViewController
 	{
 		BOOL forcePortrait;
+		BOOL orientPortrait;
 	}
 
 	-(BOOL) prefersStatusBarHidden;

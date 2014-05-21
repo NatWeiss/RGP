@@ -87,7 +87,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	#endif
 
 	ScriptEngineManager::getInstance()->setScriptEngine(sc);
-	sc->runScript("js/lib/Game.js");
+	sc->runScript("Assets/lib/Game.js");
 
 	return true;
 }

@@ -32,10 +32,8 @@
 	},
 	
 	"preload": [
-		"Paddle.png",
 		"Ball.png",
-		"Brick.png",
-		"Particle.png"
+		"Logo.png"
 	],
 
 	"font": "DolceVita",

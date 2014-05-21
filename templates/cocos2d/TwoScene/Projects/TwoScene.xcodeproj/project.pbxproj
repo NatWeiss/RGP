@@ -1531,7 +1531,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "touch ../js";
+			shellScript = "touch \"${SRCROOT}/../Assets\"";
 		};
 		41F1A3E51894BB33006E818E /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1544,7 +1544,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "touch ../js\ntouch ../res";
+			shellScript = "touch \"${SRCROOT}/../Assets\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 

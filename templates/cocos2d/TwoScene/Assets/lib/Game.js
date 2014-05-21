@@ -384,6 +384,10 @@ Game.stopEffect = function(audioId) {
 //
 Game.playMusic = function(filename) {
 	if (this.isSoundEnabled()) {
+		/* Automatically prefix with resource path. */
+		if (cc.loader.resPath && filename.indexOf("/") < 0) {
+			filename = cc.loader.resPath + "/" + filename;
+		}
 		cc.audioEngine.stopMusic();
 		cc.audioEngine.playMusic(filename);
 	}
@@ -484,7 +488,7 @@ Game.boot = function(global) {
 			this._origCanvasSize.width, this._origCanvasSize.height);
 	} else {
 		/* Implement timers. */
-		require("js/lib/timers.js");
+		require(cc.loader.resPath + "/lib/timers.js");
 		this.timerLoop = makeWindowTimer(global, function(ms){});
 		cc.director.getScheduler().scheduleCallbackForTarget(this, this.timerLoop);
 	}
@@ -529,19 +533,27 @@ Game.main = function() {
 	this.loadSoundEnabled();
 
 	cc.defineGetterSetter(Game, "winSize", Game.getWinSize);
-	size.width = cc.game.config.designWidth || Game.winSize.width;
-	size.height = cc.game.config.designHeight || Game.winSize.height;
+	Game.contentWidth = cc.game.config.designWidth || Game.winSize.width;
+	Game.contentHeight = cc.game.config.designHeight || Game.winSize.height;
+	if (Game.winSize.width > Game.winSize.height) {
+		size.width = (Game.contentHeight / Game.winSize.height) * Game.winSize.width;
+		size.height = Game.contentHeight;
+		Game.contentX = (size.width - Game.contentWidth) * .5;
+		Game.contentY = 0;
+	} else {
+		size.width = Game.contentWidth;
+		size.height = (Game.contentWidth / Game.winSize.width) * Game.winSize.height;
+		Game.contentX = 0;
+		Game.contentY = (size.height - Game.contentHeight) * .5;
+	}
 	cc.director.setDisplayStats(cc.game.config[cc.game.CONFIG_KEY.showFPS]);
 	cc.view.setDesignResolutionSize(size.width, size.height, cc.ResolutionPolicy.SHOW_ALL);
 	cc.view.resizeWithBrowserSize(true);
 
-	Game.contentHeight = Game.winSize.height;
-	Game.contentWidth = Game.contentHeight * (size.width / size.height);
-	Game.contentX = (Game.winSize.width - Game.contentWidth) * .5;
-	Game.contentY = 0;
-
 	cc.director.setAnimationInterval(1.0 / this.getTargetFrameRate());
-	cc.log(parseInt(Game.winSize.width) + " x " + parseInt(Game.winSize.height)
+	cc.log(parseInt(Game.winSize.width) + "x" + parseInt(Game.winSize.height)
+		+ " [" + parseInt(Game.contentX) + "," + parseInt(Game.contentY) + " "
+		+ parseInt(Game.contentWidth) + "x" + parseInt(Game.contentHeight) + "]"
 		+ ", language: " + Game.getLanguageCode()
 		+ ", " + parseInt(1.0 / cc.director.getAnimationInterval()) + " fps");
 

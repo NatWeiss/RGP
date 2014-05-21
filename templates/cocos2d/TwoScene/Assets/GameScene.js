@@ -83,10 +83,10 @@ var GameLayer = cc.Layer.extend({
 		
 		// Walls
 		walls = [
-			Game.createPhysicsBox(this.x1, this.wallThickness, this.x2, 0, 0.9, 0, this.collisionTypeWall), // bottom
+			Game.createPhysicsBox(this.x1, this.y1, this.x2, Game.contentY, 0.9, 0, this.collisionTypeWall), // bottom
 			Game.createPhysicsBox(this.x1, this.y2, this.x2, this.y2 + this.wallThickness, 0.9, 0, this.collisionTypeWall), // top
-			Game.createPhysicsBox(0, 0, this.x1, this.y2 + this.wallThickness, 0.9, 0, this.collisionTypeWall), // left
-			Game.createPhysicsBox(this.x2, 0, this.x2 + this.wallThickness, this.y2 + this.wallThickness, 0.9, 0, this.collisionTypeWall) // right
+			Game.createPhysicsBox(Game.contentX, Game.contentY, this.x1, this.y2 + this.wallThickness, 0.9, 0, this.collisionTypeWall), // left
+			Game.createPhysicsBox(this.x2, Game.contentY, this.x2 + this.wallThickness, this.y2 + this.wallThickness, 0.9, 0, this.collisionTypeWall) // right
 		];
 	
 		// Ball
