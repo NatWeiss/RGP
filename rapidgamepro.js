@@ -77,6 +77,12 @@ var run = function(args) {
 		.action(prebuild);
 	commands.push("prebuild");
 
+	cmd
+		.command("init <directory>")
+		.description("                            Create a symlink in the given directory to the libraries")
+		.action(init);
+	commands.push("init");
+
 	cmd.on("--help", usageExamples);
 
 	cmd
@@ -101,6 +107,32 @@ var run = function(args) {
 };
 
 //
+// Initialize the given directory.
+//
+var init = function(directory) {
+	var src, dest;
+
+	if (!checkPrefix()) {
+		usage();
+		return 1;
+	}
+	if (!dirExists(directory)) {
+		console.log("Output directory must exist: " + directory);
+		return 1;
+	}
+
+	// Create lib symlink
+	src = cmd.prefix;
+	dest = path.join(directory, "lib");
+	console.log("Symlinking" + (cmd.verbose ? ": " + dest + " -> " + src : " lib folder"));
+	try {
+		fs.symlinkSync(src, dest);
+	} catch(e) {
+		logErr("Error creating symlink: " + e);
+	}
+};
+
+//
 // Create project.
 //
 var createProject = function(engine, name, package) {
@@ -111,7 +143,9 @@ var createProject = function(engine, name, package) {
 		i,
 		onFinished,
 		files,
-		isCocos2d = false;
+		isCocos2d = false,
+		packageSrc = "com.wizardfu." + cmd.template.toLowerCase();
+	engine = engine.toString().toLowerCase();
 	
 	category = "createProject";
 	
@@ -130,7 +164,6 @@ var createProject = function(engine, name, package) {
 	// Check if dirs exist
 	if (dirExists(dir) || fileExists(dir)) {
 		console.log("Output directory already exists: " + dir);
-		usage();
 		return 1;
 	}
 
@@ -156,20 +189,21 @@ var createProject = function(engine, name, package) {
 	
 	// Start
 	report("start", engine + "/" + cmd.template);
-	console.log("Rapidly creating a game named '" + name + "' with engine " +
-		engine.charAt(0).toUpperCase() + engine.slice(1) + " and template " + cmd.template);
+	console.log("Rapidly creating a game");
+	console.log("Engine: " + engine.charAt(0).toUpperCase() + engine.slice(1));
+	console.log("Template: " + cmd.template + (cmd.verbose ? " " + packageSrc : ""));
 	isCocos2d = (engine.indexOf("cocos") >= 0);
 	
 	// Copy all template files to destination
 	dest = dir;
-	console.log("Copying project files from " + src + " to " + dest);
+	console.log("Copying project files" + (cmd.verbose ? " from " + src + " to " + dest : ""));
 	fileCount = copyRecursive(src, dest, cmd.verbose);
 	if (cmd.verbose) {
 		console.log("Successfully copied " + fileCount + " files");
 	}
 	
 	// Replace project name
-	console.log("Replacing all '" + cmd.template + "' with '" + name + "'");
+	console.log("Setting project name: " + name);
 	replace({
 		regex: cmd.template,
 		replacement: name,
@@ -180,10 +214,9 @@ var createProject = function(engine, name, package) {
 	});
 
 	// Replace package name
-	src = "com.wizardfu." + cmd.template.toLowerCase();
-	console.log("Replacing all '" + src + "' with '" + package + "'");
+	console.log("Setting package name: " + package);
 	replace({
-		regex: src,
+		regex: packageSrc,
 		replacement: package,
 		paths: [dest],
 		include: "*.js,*.plist,*.xml,makefile,manifest,*.settings,*.lua,.project",
@@ -193,7 +226,9 @@ var createProject = function(engine, name, package) {
 	
 	// Rename files & dirs
 	from = path.join(dest, "**", cmd.template + ".*");
-	console.log("Renaming all " + from + " files");
+	if (cmd.verbose) {
+		console.log("Renaming all " + from + " files");
+	}
 	files = glob.sync(from);
 	for (i = 0; i < files.length; i++) {
 		from = files[i];
@@ -210,14 +245,7 @@ var createProject = function(engine, name, package) {
 	
 	// Symlink
 	if (isCocos2d) {
-		src = cmd.prefix;
-		dest = path.join(dir, "lib");
-		console.log("Symlinking from " + src + " to " + dest);
-		try {
-			fs.symlinkSync(src, dest);
-		} catch(e) {
-			logErr("Error creating symlink: " + e);
-		}
+		init(dir);
 	}
 	
 	// Npm install
@@ -225,9 +253,9 @@ var createProject = function(engine, name, package) {
 	dest = path.join(dir, "server");
 	onFinished = function(){
 		// Show readme
-		console.log("Done creating project " + name);
+		console.log("Done");
 		try {
-			var text = fs.readFileSync(path.join(dir, "README.md")).toString().trim();
+			var text = fs.readFileSync(path.join(dir, "README.md")).toString();
 			console.log("");
 			console.log(text);
 			console.log("");
