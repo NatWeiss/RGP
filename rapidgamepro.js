@@ -24,7 +24,7 @@ var http = require("http"),
 	templates = [],
 	defaults = {
 		engine: "cocos2d",
-		template: "BrickBreaker",
+		template: "TwoScene",
 		package: "org.mycompany.mygame",
 		dest: process.cwd(),
 		prefix: __dirname
@@ -601,24 +601,34 @@ var report = (function() {
 // check for upgrade
 //
 var checkUpdate = function() {
-	var req = http.get("http://wizardfu.com/static/rapidgame.version");
+	var req = http.get("http://registry.npmjs.org/rapidgame");
 	req.on("response", function(response) {
-		var newVersion = "";
+		var oldVersion = packageJson.version.toString(),
+			newVersion = "";
 		response.on("data", function(chunk) {
 			newVersion += chunk;
 		});
 		response.on("end", function() {
-			newVersion = newVersion.toString().trim();
-			if (newVersion !== packageJson.version) {
-				console.log("\nAn update is available.");
-				console.log("\t" + packageJson.version + " -> " + newVersion);
-				console.log("Upgrade instructions:");
-				if (cmdName.indexOf("pro")) {
-					console.log("\tcd " + __dirname + " && npm update");
-				} else {
-					console.log("\tsudo npm update " + cmdName + " -g");
+			try {
+				newVersion = JSON.parse(newVersion);
+				if (typeof newVersion === "object"
+				&& typeof newVersion["dist-tags"] === "object") {
+					newVersion = newVersion["dist-tags"]["latest"].toString().trim();
+					var n1 = oldVersion.substring(oldVersion.lastIndexOf(".")+1),
+						n2 = newVersion.substring(newVersion.lastIndexOf(".")+1);
+					if (newVersion !== oldVersion && n1 < n2) {
+						console.log("\nAn update is available.");
+						console.log("\t" + oldVersion + " -> " + newVersion);
+						console.log("Upgrade instructions:");
+						if (cmdName.indexOf("pro") >= 0) {
+							console.log("\tcd " + __dirname + " && npm update");
+						} else {
+							console.log("\tsudo npm update " + cmdName + " -g");
+						}
+						console.log(" ");
+					}
 				}
-				console.log(" ");
+			} catch(e) {
 			}
 		});
 	});
