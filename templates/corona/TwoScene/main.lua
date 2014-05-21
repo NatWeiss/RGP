@@ -191,6 +191,7 @@ function touchListener(event)
 				xVel = -xVel
 			end
 			ball:setLinearVelocity(xVel, -ballSpeed)
+			audio.play(introSound)
 		end
 	end
 end

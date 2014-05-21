@@ -7,7 +7,7 @@
 var platino = require("co.lanica.platino");
 
 var GameScene = function(window, game) {
-	var playMusic = false;
+	var playMusic = true;
 	var ballSpeed = 1500;
 	var wallThickness = 40;
 	var fontName = "Dolce Vita";
@@ -27,6 +27,7 @@ var GameScene = function(window, game) {
 	var scoreLabel = null;
 	var music = Ti.Media.createSound({url:"Song.mp3"});
 	var wallSound = Ti.Media.createSound({url:"Wall.mp3"});
+	var jumpSound = Ti.Media.createSound({url:"Intro.mp3"});
 	
 	var clamped = function(value, lowest, highest){
 		return Math.max(lowest, Math.min(highest, value));		
@@ -147,6 +148,7 @@ var GameScene = function(window, game) {
 		// Launch ball
 		ballVelocity.x = (event.x * game.touchScaleX < screenWidth * .5 ? -1 : 1) * ballSpeed;
 		ballVelocity.y = -ballSpeed; 
+		jumpSound.play();
 	};
 
 	var endScene = function(){

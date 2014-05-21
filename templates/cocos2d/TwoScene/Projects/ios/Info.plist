@@ -61,7 +61,7 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>res/DolceVita.ttf</string>
+		<string>Assets/DolceVita.ttf</string>
 	</array>
 </dict>
 </plist>

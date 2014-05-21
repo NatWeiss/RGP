@@ -389,7 +389,7 @@ Game.playMusic = function(filename) {
 			filename = cc.loader.resPath + "/" + filename;
 		}
 		cc.audioEngine.stopMusic();
-		cc.audioEngine.playMusic(filename);
+		cc.audioEngine.playMusic(filename, true);
 	}
 };
 
