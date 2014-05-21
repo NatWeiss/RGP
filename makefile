@@ -5,71 +5,74 @@ release:
 	find . -name .DS_Store -delete
 	if [ -d ${dest} ]; then rm -r ${dest}; fi
 	mkdir ${dest}
-	cp README.md ${dest}
+	cp -a bin ${dest}
 	cp CHANGELOG.txt ${dest}
-	cp LICENSE_RapidGame.txt ${dest}
-	cp prebuild ${dest}
-	cp docs.html ${dest}
+	mkdir -p ${dest}cocos2d/x
+	cp -r cocos2d/html ${dest}cocos2d/
+	cp -r cocos2d/x/include cocos2d/x/java cocos2d/x/jsb ${dest}cocos2d/x/
+	cp -r cocos2d/x/lib-small ${dest}cocos2d/x/lib
 	cp -a docs ${dest}
-	cp -a include ${dest}
-	cp -a java ${dest}
+	cp docs.html ${dest}
+	cp -r frameworks ${dest}
+	cd LemonadeExchange/proj.android && make clean
 	cp -a LemonadeExchange ${dest}
+	cp LICENSE-pro ${dest}LICENSE
+	cp package.json ${dest}
+	cp prebuild.sh ${dest}
+	cp rapidgamepro.js ${dest}
+	cp README-pro.md ${dest}README.md
+	mv src/proj.android/obj src/proj.android/libs /tmp
 	cp -a src ${dest}
-	cp -a template ${dest}
-	cp -a tools ${dest}
+	rm ${dest}src/cocos2d.patch
+	mv /tmp/obj /tmp/libs src/proj.android/
 	cd ${dest}src/proj.android && make clean
-	cd ${dest}templates/cocos2d/HelloWorld/proj.android && make clean
-	cd ${dest}LemonadeExchange/proj.android && make clean
-	rm -rf ${dest}src/soomla/cocos2dx-store/.git
-	rm ${dest}/*/lib/cocos2dx-prebuilt/include
-	rm ${dest}/*/lib/cocos2dx-prebuilt/java
-	rm -r ${dest}/*/lib/cocos2dx-prebuilt/jsb
-	rm ${dest}/*/lib/cocos2dx-prebuilt/lib
-	rm -rf ${dest}/java/*/bin
-	rm -rf ${dest}/java/*/gen
-	find ${dest} -name *.xccheckout -delete
-	@rez/delete-text "# begin pro" ${dest}/prebuild --newlines
-	@rez/delete-text "# end pro" ${dest}/prebuild --newlines
-	@rez/delete-text "# begin pro" ${dest}/README.md --newlines
-	@rez/delete-text "# end pro" ${dest}/README.md --newlines
-	@rez/delete-text "/* begin pro */" ${dest}/README.md
-	@rez/delete-text "/* end pro */" ${dest}/README.md
-	@rez/delete-text "# begin pro" ${dest}/CHANGELOG.txt --newlines
-	@rez/delete-text "# end pro" ${dest}/CHANGELOG.txt --newlines
-	@rez/delete-text "# begin pro" ${dest}/src/proj.android/build.sh --newlines
-	@rez/delete-text "# end pro" ${dest}/src/proj.android/build.sh --newlines
-	@rez/delete-text "# begin pro" ${dest}/src/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "# end pro" ${dest}/src/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "// begin pro" ${dest}/templates/cocos2d/HelloWorld/js/Config.js --newlines
-	@rez/delete-text "// end pro" ${dest}/templates/cocos2d/HelloWorld/js/Config.js --newlines
-	@rez/delete-text "// begin pro" ${dest}/templates/cocos2d/HelloWorld/js/App.js --newlines
-	@rez/delete-text "// end pro" ${dest}/templates/cocos2d/HelloWorld/js/App.js --newlines
-	@rez/delete-text "// begin pro" ${dest}/templates/cocos2d/HelloWorld/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// end pro" ${dest}/templates/cocos2d/HelloWorld/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// begin pro" ${dest}/LemonadeExchange/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// end pro" ${dest}/LemonadeExchange/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// begin pro" ${dest}/templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
-	@rez/delete-text "// end pro" ${dest}/templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
-	@rez/delete-text "// begin pro" ${dest}/templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "// end pro" ${dest}/templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "// begin pro" ${dest}/LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "// end pro" ${dest}/LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "<!-- begin pro -->" ${dest}/templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml --newlines
-	@rez/delete-text "<!-- end pro -->" ${dest}/templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml --newlines
-	@rez/delete-text "<!-- begin pro -->" ${dest}/LemonadeExchange/proj.android/AndroidManifest.xml --newlines
-	@rez/delete-text "<!-- end pro -->" ${dest}/LemonadeExchange/proj.android/AndroidManifest.xml --newlines
-	@rez/delete-text "# begin pro" ${dest}/templates/cocos2d/HelloWorld/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "# end pro" ${dest}/templates/cocos2d/HelloWorld/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "# begin pro" ${dest}/LemonadeExchange/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "# end pro" ${dest}/LemonadeExchange/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "# begin pro" ${dest}/templates/cocos2d/HelloWorld/proj.android/project.properties --newlines
-	@rez/delete-text "# end pro" ${dest}/templates/cocos2d/HelloWorld/proj.android/project.properties --newlines
-	@rez/delete-text "# begin pro" ${dest}/LemonadeExchange/proj.android/project.properties --newlines
-	@rez/delete-text "# end pro" ${dest}/LemonadeExchange/proj.android/project.properties --newlines
-	@rez/delete-text "<!-- begin pro -->" ${dest}/templates/cocos2d/HelloWorld/proj.html5/index.html --newlines
-	@rez/delete-text "<!-- end pro -->" ${dest}/templates/cocos2d/HelloWorld/proj.html5/index.html --newlines
-	@rez/delete-text "<!-- begin pro -->" ${dest}/LemonadeExchange/proj.html5/index.html --newlines
-	@rez/delete-text "<!-- end pro -->" ${dest}/LemonadeExchange/proj.html5/index.html --newlines
+	cd templates/cocos2d/TwoScene && make clean
+	cd templates/unity/TwoScene && make clean
+	cd templates/titanium/TwoScene && make clean
+	cp -a templates ${dest}
+	rm -rf ${dest}templates/cocos2d/HelloWorld/server/node_modules
+	rm -rf ${dest}cocos2d/x/java/*/bin #*/
+	rm -rf ${dest}cocos2d/x/java/*/gen #*/
+	find ${dest} -name xcuserdata -delete
+	find ${dest} -name project.xcworkspace -delete
+	@rez/delete-text "# begin pro" ${dest}prebuild.sh --newlines
+	@rez/delete-text "# end pro" ${dest}prebuild.sh --newlines
+	@rez/delete-text "# begin pro" ${dest}CHANGELOG.txt --newlines
+	@rez/delete-text "# end pro" ${dest}CHANGELOG.txt --newlines
+	@rez/delete-text "# begin pro" ${dest}src/proj.android/build.sh --newlines
+	@rez/delete-text "# end pro" ${dest}src/proj.android/build.sh --newlines
+	@rez/delete-text "# begin pro" ${dest}src/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# end pro" ${dest}src/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/js/Config.js --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/js/Config.js --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/js/lib/App.js --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/js/lib/App.js --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// end pro" ${dest}LemonadeExchange/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "// end pro" ${dest}LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}LemonadeExchange/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}LemonadeExchange/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text "# begin pro" ${dest}templates/cocos2d/HelloWorld/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# begin pro" ${dest}LemonadeExchange/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# end pro" ${dest}LemonadeExchange/proj.android/jni/Android.mk --newlines
+	@rez/delete-text "# begin pro" ${dest}templates/cocos2d/HelloWorld/proj.android/project.properties --newlines
+	@rez/delete-text "# end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/project.properties --newlines
+	@rez/delete-text "# begin pro" ${dest}LemonadeExchange/proj.android/project.properties --newlines
+	@rez/delete-text "# end pro" ${dest}LemonadeExchange/proj.android/project.properties --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}templates/cocos2d/HelloWorld/proj.html5/index.html --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}templates/cocos2d/HelloWorld/proj.html5/index.html --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}LemonadeExchange/proj.html5/index.html --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}LemonadeExchange/proj.html5/index.html --newlines
 	open ../releases
 	open -a /Applications/YemuZip.app/
 
@@ -121,18 +124,18 @@ rg:
 	#@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
 	#@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
 	#@rez/delete-between "<!-- begin pro -->" "<!-- end pro -->" ${dest}templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml --newlines
-	#@rez/delete-text 'android:name="com.soomla.store.SoomlaApp"' ${dest}/templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml
+	#@rez/delete-text 'android:name="com.soomla.store.SoomlaApp"' ${dest}templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml
 	#@rez/delete-between "# begin pro" "# end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/jni/Android.mk --newlines
 	#@rez/delete-between "# begin pro" "# end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/project.properties --newlines
 	#@rez/delete-between "<!-- begin pro -->" "<!-- end pro -->" ${dest}templates/cocos2d/HelloWorld/proj.html5/index.html --newlines
-	#@rez/delete-text '		"pluginx",' ${dest}/templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/aes.js",' ${dest}/templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/underscore.js",' ${dest}/templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/soomla.js",' ${dest}/templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/SoomlaNdk.js",' ${dest}/templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/AdsMobFox.js",' ${dest}/templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/Facebook.js",' ${dest}/templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '					"-lcocos2dx-plugins",' ${dest}/templates/cocos2d/HelloWorld/proj.ios_mac/HelloWorld.xcodeproj/project.pbxproj --newlines
+	#@rez/delete-text '		"pluginx",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
+	#@rez/delete-text '		"js/lib/aes.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
+	#@rez/delete-text '		"js/lib/underscore.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
+	#@rez/delete-text '		"js/lib/soomla.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
+	#@rez/delete-text '		"js/lib/SoomlaNdk.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
+	#@rez/delete-text '		"js/lib/AdsMobFox.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
+	#@rez/delete-text '		"js/lib/Facebook.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
+	#@rez/delete-text '					"-lcocos2dx-plugins",' ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/HelloWorld.xcodeproj/project.pbxproj --newlines
 	find ${dest} -name *.xccheckout -delete
 	find ${dest} -name .DS_Store -delete
 	#rm ${dest}templates/cocos2d/HelloWorld/js/lib/AdsMobFox.js
@@ -144,7 +147,7 @@ rg:
 	#rm ${dest}templates/cocos2d/HelloWorld/js/lib/underscore.js
 	#rm ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AdsMobFox.java
 	#rm ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/Facebook.java
-	docco -o ${dest}docs -l linear ${dest}README.md ${dest}/templates/cocos2d/TwoScene/Assets/lib/Game.js ${dest}/templates/cocos2d/TwoScene/Assets/*.js ${dest}/templates/cocos2d/TwoScene/Server/server.js #*/
+	docco -o ${dest}docs -l linear ${dest}README.md ${dest}templates/cocos2d/TwoScene/Assets/lib/Game.js ${dest}templates/cocos2d/TwoScene/Assets/*.js ${dest}templates/cocos2d/TwoScene/Server/server.js #*/
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Game.html
 	#@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Config.html
 	#@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/ConfigServer.html
