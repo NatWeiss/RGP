@@ -6,9 +6,9 @@ A Node-based templating system for rapidly creating cross-platform games for a v
 
 What it does:
 
-* Creates new cross-platform game projects from provided or custom templates, which includes scenes, sprites, physics, sound and more. 
+* Creates new cross-platform game projects from provided or custom templates, which include scenes, sprites, physics, sound and more. 
 
-* Prebuilds libraries for Cocos2D X that virtually eliminate build, compile and link time, saving in aggregate hours during development, and allowing for more rapid development cycle without having to wait - hence the name RapidGame.
+* Prebuilds libraries for Cocos2D X that virtually eliminate build, compile and link time, saving in aggregate hours during development, and allowing for a more rapid development cycle without having to wait - hence the name RapidGame.
 
 
 Eliminate Grunt Work
@@ -16,7 +16,7 @@ Eliminate Grunt Work
 
 RapidGame provides:
 
- 1. Tested game project templates for Cocos2D-JS, Unity, Corona and Titanium
+ 1. Tested game project templates for Cocos2D JS, Unity, Corona and Titanium
  2. A cross-platform game project creator
  3. A library prebuilder for Cocos2D X
 
@@ -25,15 +25,29 @@ The templates have:
  1. Cross-platform project files
  2. Resolution / ratio-independence
  3. Viewport setup
- 4. Multiple scenes
+ 4. Menu & Game scenes
  5. Sprites
  6. Custom TTF fonts
  7. Sound
  8. Music
  9. Physics
- 10. HTTP / Socket.io game servers (HTML5-based platforms)
+ 10. HTTP game servers (HTML5-based platforms)
 
-The project creator makes a copy of one of the templates, does a search and replace on the game title & package name, then installs any required modules. Viola. Your own rapidly-created game ready to go with scenes, sprites, physics, etc.
+The project creator makes a copy of one of the templates, does a search and replace on the game title & package name, then installs any required modules. Viola. Your own rapidly-created game ready to go. Here's some example output from running the project creator:
+
+	$ rapidgamepro create Corona "Sword Ball" org.myorg.swordball
+	Rapidly creating a game
+	Engine: Corona
+	Template: TwoScene
+	Copying project files
+	Setting project name: Sword Ball
+	Setting package name: org.myorg.swordball
+	Done
+	
+	  Congratulations on creating a Corona game!
+	  Run it by opening the `main.lua` file in the Corona Simulator.
+	  Ready to code? Start with the `main.lua` file.
+	  
 
 The library prebuilder creates static libraries that virtually eliminate build times for the Cocos2D X engine (the native portion of Cocos2D JS). With hundreds of source files to be compiled, building Cocos2D X for just one platform can take at least five minutes. This can be a real time sink, especially when switching from the simulator to device triggers a rebuild.
 
@@ -68,20 +82,6 @@ Pro Version
 If you need cross-platform monetization, in-app purchasing, virtual economies, social networking, async multiplayer, analytics and/or ads then get [RapidGame Pro](http://www.binpress.com/app/rapidgame-pro-for-ios-android-facebook/1802). It has an example game called Lemonade Exchange written using the Cocos2D JS engine which includes all of the previously mentioned features and works on Facebook, iOS, Mac and Android. Support for more platforms is planned.
 
 
-Run
----
-
-
-
-To run your [Cocos2D JS](http://cocos2d-x.org/product#cocos2dx-js) game in a browser just launch the server `cd MyGame && ./run-server` and visit [localhost:8000](http://localhost:8000).
-
-To run your Cocos2D JS game natively for iOS or Mac, just open `proj.ios_mac/MyGame.xcodeproj` and Run. Note that you will need to have completed the `rapidgame prebuild` command so that Cocos2D X static libraries can be linked against.
-
-To run your Cocos2D JS game for Android: `cd MyGame/proj.android && make && make run`. This also requires Cocos2D X static libraries, so make sure to `rapidgame prebuild`.
-
-To run your [Titanium](http://www.appcelerator.com/titanium/) game just open Titanium Studio and File > Import... > Existing Projects into Workspace. Select your MyGame directory. Make sure you have the [Platino](http://lanica.co/products/platino/engine/) SDK installed.
-
-
 More About Prebuilding
 ----------------------
 
@@ -90,6 +90,19 @@ The command to prebuild Cocos2D X static libraries used by Cocos2D JS on native 
 	rapidgame prebuild
 
 When the command is finished, you'll have a directory (`~/Library/Developer/RapidGame` on Macs) with include files, java files, make files, Javascript bindings and library files for iOS, Mac and Android in Debug and Release mode for all available architectures.
+
+
+Custom Cocos2D Projects
+-----------------------
+
+If you are just using Cocos2D X or you have your own custom project layout, you can still use the prebuilt libraries. Use this command to create a symlink to the libraries directory:
+
+	cd MyGame && rapidgame init .
+
+Then setup your Xcode target to reference the libraries and headers. Example:
+
+	LIBRARY_SEARCH_PATHS = $(SRCROOT)/../lib/cocos2d/x/lib/$(CONFIGURATION)-iOS/$(PLATFORM_NAME)
+	USER_HEADER_SEARCH_PATHS = $(inherited) $(SRCROOT)/../lib/cocos2d/x/include/cocos ...
 
 
 Create Your Own Templates
@@ -107,7 +120,7 @@ It's possible to create your own game templates. Here's the step-by-step instruc
  
  5. Copy your game template to the `templates/<engine>` directory of RapidGame. On Mac / Linux this is `/usr/local/lib/node_modules/rapidgame`. You can use the `npm prefix -g` command to determine where Node modules are installed on your system. If you're on Mac OS X, the template is for Unity and it's called "Zombie Matrix" then the final directory would be `/usr/local/lib/node_modules/rapidgame/templates/unity/Zombie Matrix/`.
 
- 6. Your template is now ready for testing. Try it out like this: `rapidgame create unity MyNewGame com.mycompany.mynewgame -t "Zombie Matrix" `.
+ 6. Your template is now ready for testing. Try it out like this: `rapidgame create <engine> MyNewGame com.mycompany.mynewgame -t "Zombie Matrix" `.
 
 
 Project Status
@@ -115,9 +128,7 @@ Project Status
 
 The `rapidgame` command runs on Mac or Linux. Windows support is planned.
 
-Breakout clones have been written for Unity, Corona, Cocos2D JS and Titanium.
-
-Hello World has been written for Cocos2D JS including project files for iOS, Android and Mac. Win32 and Linux project files are planned.
+Cocos2D JS win32 and linux project files are planned.
 
 
 Contributing

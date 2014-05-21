@@ -1,7 +1,7 @@
 {
   "name": "rapidgamepro",
-  "version": "0.8.6",
-  "description": "A templating system for rapidly creating cross-platform games for a variety of game engines.",
+  "version": "0.8.7",
+  "description": "A templating system for rapidly creating cross-platform games with Cocos2D-JS, Unity, Corona and Titanium.",
   "author": {
     "name": "Nat Weiss",
     "url": "http://wizardfu.com/"
