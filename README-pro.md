@@ -1,59 +1,48 @@
 
-RapidGame Pro
-=============
+RapidGamePro
+============
+
+A Node-based templating system for rapidly creating cross-platform games for a variety of game engines, including Cocos2D-JS, Unity, Corona and Appcelerator Titanium.
+
+What it does:
+
+* Creates new cross-platform game projects from provided or custom templates, which include scenes, sprites, physics, IAP, ads, analytics, a server and more. 
+
+* Prebuilds libraries for Cocos2D X that virtually eliminate build, compile and link time, saving in aggregate hours during development, and allowing for a more rapid development cycle without having to wait - hence the name RapidGame.
 
 
-Quick Start
------------
+Setup
+-----
 
-1. Run the game server: `cd RapidGamePro/LemonadeExchange && ./run-server`
-2. Browse to [localhost:8000](http://localhost:8000/).
-3. Begin prebuilding the static libraries: `cd RapidGamePro && ./prebuild`
+Congratulations on purchasing a license to RapidGamePro. Here's some instructions to get started:
 
+1. You'll need [Node.js](http://nodejs.org/download/) and [Git](http://git-scm.com/downloads).
+2. Move this folder somewhere that it can stay (`~/Library/Developer/RapidGamePro` is recommended on Macs).
+3. Install a link to the commandline app: `cd RapidGamePro && npm link .`
+4. Create a new game project: `rapidgamepro create Cocos2d "Heck Yeah" com.mycompany.heckyeah`
+5. Follow the outputted instructions on how to run your game.
 
-Overview
---------
-
-RapidGame Pro is a multi-platform game template which empowers developers to write games in **100% Javascript** while running native C++ code behind the scenes when possible. Knowledge of C++ is recommended, but not required.
-
-> As of the current release, RapidGame Pro is primarily geared for development on a Mac. Developing on Windows or Linux is a beta feature. Full support and documentation for Windows and Linux development is planned.
+> As of the current release, RapidGamePro is primarily geared for development on a Mac. Full support and documentation for Windows and Linux development is planned.
 
 
 Folder Structure
 ----------------
 
-    RapidGamePro/
-        README.md - Documentation overview in markdown format.
-        docs.html - Documentation overview ready for browser.
-        CHANGELOG.txt - Project change log.
-        prebuild - Executable script which prebuilds the static libraries.
-        docs/ - Documentation folder.
-        include/ - All the header files necessary to compile a native game client.
-        java/ - The java source files necessary to compile Android native game clients.
-        LemonadeExchange/ - A complete example game.
-        lib/ - Contains the static libraries after they have been prebuilt.
-        src/ - Contains source files for the static libraries.
-        template/ - Game template (do not modify, just use tools/create-project).
-            art/ - Contains the sprites and sprite sheet.
-            js/ - Javascript code which controls the game client.
-            lib/ - Libraries.
-                cocos2d-html5/ - Cocos2d-HTML5.
-                cocos2dx-prebuilt/ - Cocos2d-X prebuilt (light-weight and copyable).
-                    include/ - Absolute symlink to RapidGamePro/include.
-                    java/ - Absolute symlink to RapidGamePro/java.
-                    jsb/ - Javascript bindings.
-                    lib/ - Absolute symlink to RapidGamePro/lib.
-            proj.android/ - Android project files.
-            proj.html5/ - HTML5 project files.
-            proj.ios_mac/ - iOS and Mac project files.
-            proj.linux/ - Linux project files.
-            proj.win32/ - Windows project files.
-            res/ - Resources and assets.
-            run-server - Executable script which launches the server.
-            server/ - Contains the server javascript code.
-            src/ - Shared native source code.
-            upload - Executable script which uploads the HTML5 project to a server.
-        tools/ - Contains the project creator.
+	RapidGamePro/
+		bin/ - Commandline app lives here and is symlinked to by `npm link`.
+		CHANGELOG.txt - Project change log.
+		cocos2d/ - Cocos2d includes, scripts, make files and prebuilt static libraries.
+		docs/ - Documentation folder.
+		docs.html - Documentation overview ready for browser.
+		frameworks/ - Frameworks needed, such as the Facebook iOS framework.
+		LemonadeExchange/ - A complete two-currency example game.
+		LICENSE - The license file.
+		package.json - A config file used by the commandline app.
+		prebuild.sh - Executable script which prebuilds the static libraries.
+		rapidgamepro.js - The commandline app's main file.
+		README.md - Documentation overview in markdown format.
+		src/ - Contains source files for the plugins and static libraries.
+		templates/ - Game templates (do not modify, just use the `rapidgamepro create` command).
 
 
 Client-Server Model
