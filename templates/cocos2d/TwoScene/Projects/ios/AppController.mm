@@ -10,6 +10,9 @@
 #import "AppDelegate.h"
 #import "RootViewController.h"
 #import "CCEAGLView.h"
+// begin pro
+#import <FacebookSDK/FacebookSDK.h>
+// end pro
 
 using namespace cocos2d;
 
@@ -70,6 +73,11 @@ void __openURL(const char* urlCstr)
 	-(void) applicationDidBecomeActive:(UIApplication*)application
 	{
 		Director::getInstance()->resume();
+// begin pro
+		// Handle the user leaving the app while the Facebook login dialog is being shown
+		// For example: when the user presses the iOS "home" button while the login dialog is active
+		[FBAppCall handleDidBecomeActive];
+// end pro
 	}
 
 	-(void) applicationDidEnterBackground:(UIApplication*)application
@@ -90,6 +98,16 @@ void __openURL(const char* urlCstr)
 	{
 		Director::getInstance()->purgeCachedData();
 	}
+// begin pro
+	// During the Facebook login flow, your app passes control to the Facebook iOS app or Facebook in a mobile browser.
+	// After authentication, your app will be called back with the session information.
+	-(BOOL) application:(UIApplication*)application
+		openURL:(NSURL*)url
+		sourceApplication:(NSString*)sourceApplication
+		annotation:(id)annotation
+	{
+		return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication];
+	}
+// end pro
 
 @end
-

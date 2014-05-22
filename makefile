@@ -91,6 +91,8 @@ rg:
 	@rez/delete-between "# begin pro" "# end pro" ${dest}prebuild.sh --newlines
 	cp rapidgamepro.js ${dest}rapidgame.js
 	sed -i "" 's/rapidgamepro/rapidgame/g' ${dest}package.json
+	@rez/delete-text '  "private": true,' ${dest}package.json --newlines
+	#sed -i "" 's/  "private": true,//g' ${dest}package.json
 	cp -r bin ${dest}
 	mv ${dest}bin/rapidgamepro ${dest}bin/rapidgame
 	sed -i "" 's/pro//g' ${dest}bin/rapidgame
@@ -105,53 +107,44 @@ rg:
 	cd ${dest}src/proj.android && make clean
 	@rez/delete-between "# begin pro" "# end pro" ${dest}src/proj.android/build.sh --newlines
 	@rez/delete-between "# begin pro" "# end pro" ${dest}src/proj.android/jni/Android.mk --newlines
+	cd templates/cocos2d/TwoScene && make clean
+	cd templates/unity/TwoScene && make clean
+	cd templates/titanium/TwoScene && make clean
 	rm -f ${dest}templates/cocos2d/TwoScene/lib
 	rm -f ${dest}templates/cocos2d/HelloWorld/lib
 	rm -f ${dest}templates/cocos2d/BrickBreaker/lib
 	cp -R -P templates ${dest}
 	rm -r ${dest}templates/cocos2d/HelloWorld
 	rm -r ${dest}templates/cocos2d/*/Server/node_modules #*/
-	cd ${dest}templates/cocos2d/TwoScene/Projects/android && make clean
-	rm -rf ${dest}templates/unity/*/Library #*/
-	rm -rf ${dest}templates/unity/*/Temp #*/
-	rm -rf ${dest}templates/unity/*/*.unityproj #*/
-	rm -rf ${dest}templates/unity/*/*.sln #*/
-	rm -rf ${dest}templates/unity/*/*.userprefs #*/
-	rm -rf ${dest}templates/titanium/TwoScene/build
-	#@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/js/Config.js --newlines
-	#@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/js/lib/App.js --newlines
-	#@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/src/AppDelegate.cpp --newlines
-	#@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
-	#@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	#@rez/delete-between "<!-- begin pro -->" "<!-- end pro -->" ${dest}templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml --newlines
-	#@rez/delete-text 'android:name="com.soomla.store.SoomlaApp"' ${dest}templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml
-	#@rez/delete-between "# begin pro" "# end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/jni/Android.mk --newlines
-	#@rez/delete-between "# begin pro" "# end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/project.properties --newlines
-	#@rez/delete-between "<!-- begin pro -->" "<!-- end pro -->" ${dest}templates/cocos2d/HelloWorld/proj.html5/index.html --newlines
-	#@rez/delete-text '		"pluginx",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/aes.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/underscore.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/soomla.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/SoomlaNdk.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/AdsMobFox.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '		"js/lib/Facebook.js",' ${dest}templates/cocos2d/HelloWorld/proj.html5/project.json --newlines
-	#@rez/delete-text '					"-lcocos2dx-plugins",' ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/HelloWorld.xcodeproj/project.pbxproj --newlines
+	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/AppDelegate.cpp --newlines
+	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/ios/AppController.mm --newlines
+	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-between "<!-- begin pro -->" "<!-- end pro -->" ${dest}templates/cocos2d/TwoScene/Projects/android/AndroidManifest.xml --newlines
+	@rez/delete-text 'android:name="com.soomla.store.SoomlaApp"' ${dest}templates/cocos2d/TwoScene/Projects/android/AndroidManifest.xml
+	@rez/delete-between "# begin pro" "# end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/jni/Android.mk --newlines
+	@rez/delete-between "# begin pro" "# end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/project.properties --newlines
+	@rez/delete-between "<!-- begin pro -->" "<!-- end pro -->" ${dest}templates/cocos2d/TwoScene/Projects/html/index.html --newlines
+	@rez/delete-text '		"pluginx",' ${dest}templates/cocos2d/TwoScene/project.json --newlines
+	@rez/delete-text '		"Assets/lib/Pro.js",' ${dest}templates/cocos2d/TwoScene/project.json --newlines
+	@rez/delete-text '		"Assets/Config.js",' ${dest}templates/cocos2d/TwoScene/project.json --newlines
+	@rez/delete-text '					"-lcocos2dx-plugins",' ${dest}templates/cocos2d/TwoScene/Projects/TwoScene.xcodeproj/project.pbxproj --newlines
+	#@rez/delete-between "	<key>FacebookAppID" "	</array>" ${dest}templates/cocos2d/TwoScene/Projects/ios/Info.plist # this ends too soon on a sub array
 	find ${dest} -name *.xccheckout -delete
 	find ${dest} -name .DS_Store -delete
-	#rm ${dest}templates/cocos2d/HelloWorld/js/lib/AdsMobFox.js
-	#rm ${dest}templates/cocos2d/HelloWorld/js/lib/aes.js
-	#rm ${dest}templates/cocos2d/HelloWorld/js/lib/Facebook.js
-	#rm ${dest}templates/cocos2d/HelloWorld/js/lib/screenfull.js
-	#rm ${dest}templates/cocos2d/HelloWorld/js/lib/soomla.js
-	#rm ${dest}templates/cocos2d/HelloWorld/js/lib/SoomlaNdk.js
-	#rm ${dest}templates/cocos2d/HelloWorld/js/lib/underscore.js
-	#rm ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AdsMobFox.java
-	#rm ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/Facebook.java
+	rm ${dest}templates/cocos2d/TwoScene/Assets/Config.js
+	rm ${dest}templates/cocos2d/TwoScene/Assets/ConfigServer.js
+	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/AdsMobFox.js
+	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/aes.js
+	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/Facebook.js
+	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/Pro.js
+	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/screenfull.js
+	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/soomla.js
+	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/SoomlaNdk.js
+	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/underscore.js
+	rm ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/AdsMobFox.java
+	rm ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/Facebook.java
 	docco -o ${dest}docs -l linear ${dest}README.md ${dest}templates/cocos2d/TwoScene/Assets/lib/Game.js ${dest}templates/cocos2d/TwoScene/Assets/*.js ${dest}templates/cocos2d/TwoScene/Server/server.js #*/
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Game.html
-	#@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Config.html
-	#@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/ConfigServer.html
-	#@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/HelloWorld.html
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/GameScene.html
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/MenuScene.html
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Server.html

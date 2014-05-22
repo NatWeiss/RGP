@@ -43,6 +43,7 @@
   "bin": {
     "rapidgamepro": "./bin/rapidgamepro"
   },
+  "private": true,
   "files": [
     "bin",
     "package.json",

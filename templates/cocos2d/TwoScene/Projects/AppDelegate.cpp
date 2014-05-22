@@ -21,6 +21,12 @@
 #include "bindings/manual/network/XMLHTTPRequest.h"
 #include "network/jsb_websocket.h"
 #include "jsb_cocos2dx_spine_auto.hpp"
+// begin pro
+#include "bindings/auto/jsb_cocos2dx_pluginx_auto.hpp"
+#include "soomla/Soomla/jsb/jsb_soomla.h"
+#include "facebook/jsb_facebook.h"
+#include "app/jsb_app_bindings.h"
+// end pro
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -80,6 +86,14 @@ bool AppDelegate::applicationDidFinishLaunching()
 	sc->addRegisterCallback(register_jsb_websocket);
 	sc->addRegisterCallback(register_all_cocos2dx_spine);
 
+// begin pro
+	#if( CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID )
+		sc->addRegisterCallback(register_all_pluginx_protocols);
+		sc->addRegisterCallback(register_jsb_soomla);
+		sc->addRegisterCallback(register_jsb_facebook);
+		sc->addRegisterCallback(register_jsb_app_bindings);
+	#endif
+// end pro
 	sc->start();
 
 	#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)

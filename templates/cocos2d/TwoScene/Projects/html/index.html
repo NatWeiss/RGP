@@ -43,5 +43,33 @@
 	<script src="lib/cocos2d/html/CCBoot.js"></script>
 	<script src="Assets/lib/Game.js"></script>
 	<!--<script src="TwoScene-min.js"></script>-->
+
+<!-- begin pro -->
+	<script type="text/javascript">
+		// load facebook asynchronously
+		(function(d){
+			var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement('script'); js.id = id; js.async = true;
+			js.src = "https://connect.facebook.net/en_US/all.js";
+			ref.parentNode.insertBefore(js, ref);
+		}(document));
+
+		// load flurry asynchronously
+		(function(d){
+			var js, id = 'flurry-jssdk', ref = d.getElementsByTagName('script')[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement('script'); js.id = id; js.async = true;
+			js.src = "https://cdn.flurry.com/js/flurry.js";
+			js.addEventListener("load", function () {
+				if (typeof Game !== "undefined" && typeof Game.getAnalyticsPlugin !== "undefined") {
+					Game.getAnalyticsPlugin();
+				}
+				this.removeEventListener("load", arguments.callee, false);
+			}, false);
+			ref.parentNode.insertBefore(js, ref);
+		}(document));
+	</script>
+<!-- end pro -->
 </body>
 </html>

@@ -491,6 +491,7 @@ Game.createPhysicsSprite = function(filename, elasticity, friction, isCircle, co
 //
 Game.boot = function(global) {
 	cc.loader.resPath = cc.game.config.resourcePath;
+
 	if (this.isHtml5()) {
 		Game.setCanvasSize();
 		Game.setCanvasSize(document.getElementById("gameDiv"),
@@ -503,7 +504,7 @@ Game.boot = function(global) {
 	}
 
 	/*setTimeout(function(){cc.log("Confirmed setTimeout() works");}, 3333);*/
-
+	
 	/* Embed the equivalent of main.js for faster loading. */
 	cc.game.onStart = function(){
 		Game.main();
@@ -570,6 +571,10 @@ Game.main = function() {
 		Game.addImageData = function() {};
 	} else {
 		Game.config["font"] = cc.loader.resPath + "/" + Game.config["font"] + ".ttf";
+	}
+	
+	if (typeof Game.initPro === "function") {
+		Game.initPro();
 	}
 
 	/* Preload. */

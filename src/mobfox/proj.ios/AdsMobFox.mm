@@ -26,7 +26,7 @@ static void callRunningLayer(const string& method, const string& param1)
 	bool addParam1Quotes = !(param1 == "true" || param1 == "false");
 	jsval ret;
 	stringstream ss;
-	ss << "App.callRunningLayer(\"" << method
+	ss << "Game.callRunningLayer(\"" << method
 		<< "\", " << (addParam1Quotes ? "\"" : "") << param1 << (addParam1Quotes ? "\"" : "") << ");";
 
 	//debugLog("%s Executing script: %s", kTag, ss.str().c_str());

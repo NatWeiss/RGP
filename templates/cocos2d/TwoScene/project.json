@@ -16,10 +16,13 @@
 
     "modules": [
 		"cocos2d",
+		"pluginx",
 		"chipmunk"
 	],
 
     "jsList": [
+		"Assets/Config.js",
+		"Assets/lib/Pro.js",
 		"Assets/MenuScene.js",
 		"Assets/GameScene.js",
 		"Assets/lib/Loader.js"
@@ -27,7 +30,8 @@
 
 	"strings": {
 		"en": {
-			"title": "TwoScene"
+			"title": "TwoScene",
+			"you-are-player-number": "Your magic number is %d."
 		}
 	},
 	

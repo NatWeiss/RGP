@@ -74,7 +74,7 @@ static void callRunningLayer(const string& method, const string& param1, const s
 {
 	jsval ret;
 	stringstream ss;
-	ss << "App.callRunningLayer(\"" << method << "\", " << quote(param1);
+	ss << "Game.callRunningLayer(\"" << method << "\", " << quote(param1);
 	if (param2.size())
 		ss << ", " << quote(param2);
 	ss << ");";
@@ -99,7 +99,7 @@ static NSDictionary* parseURLParams(NSString* query)
 static void loadPlayerImageUrl(const string& playerId)
 {
 	jsval ret;
-	ScriptingCore::getInstance()->evalString("App.scale(App.config[\"social-plugin-profile-image-width\"]);", &ret);
+	ScriptingCore::getInstance()->evalString("Game.scale(Game.config[\"social-plugin-profile-image-width\"]);", &ret);
 	int dim = JSVAL_TO_INT(ret);
 	if (dim < 10)
 		dim = 120;
@@ -123,8 +123,8 @@ static void loadPlayerImageUrl(const string& playerId)
 				// load image
 				jsval ret;
 				stringstream ss;
-				ss << "App.loadImage(\"" << url << "\", function(){"
-					<< "App.callRunningLayer(\"onPlayerImageLoaded\", \"" << userIdForImage << "\", \"" << url << "\");"
+				ss << "Game.loadImage(\"" << url << "\", function(){"
+					<< "Game.callRunningLayer(\"onPlayerImageLoaded\", \"" << userIdForImage << "\", \"" << url << "\");"
 					<< "}); ";
 				//debugLog("%s Executing script: %s", kTag, ss.str().c_str());
 				ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);
