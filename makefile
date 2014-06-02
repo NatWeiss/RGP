@@ -114,7 +114,8 @@ rg:
 	rm -f ${dest}templates/cocos2d/HelloWorld/lib
 	rm -f ${dest}templates/cocos2d/BrickBreaker/lib
 	cp -R -P templates ${dest}
-	rm -r ${dest}templates/cocos2d/HelloWorld
+	rm -rf ${dest}templates/cocos2d/HelloWorld
+	rm -f ${dest}templates/cocos2d/*/lib #*/
 	rm -r ${dest}templates/cocos2d/*/Server/node_modules #*/
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/AppDelegate.cpp --newlines
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/ios/AppController.mm --newlines
