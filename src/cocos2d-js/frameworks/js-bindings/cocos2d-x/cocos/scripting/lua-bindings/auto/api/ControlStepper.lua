@@ -31,7 +31,7 @@
 --------------------------------
 -- @function [parent=#ControlStepper] updateLayoutUsingTouchLocation 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#ControlStepper] setValueWithSendingEvent 

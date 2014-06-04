@@ -6,41 +6,41 @@
 --------------------------------
 -- @function [parent=#PhysicsJointGroove] setAnchr2 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#PhysicsJointGroove] setGrooveA 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#PhysicsJointGroove] setGrooveB 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#PhysicsJointGroove] getGrooveA 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#PhysicsJointGroove] getGrooveB 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#PhysicsJointGroove] getAnchr2 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#PhysicsJointGroove] construct 
 -- @param self
 -- @param #cc.PhysicsBody physicsbody
 -- @param #cc.PhysicsBody physicsbody
--- @param #point_table point
--- @param #point_table point
--- @param #point_table point
+-- @param #cc.Vec2 vec2
+-- @param #cc.Vec2 vec2
+-- @param #cc.Vec2 vec2
 -- @return PhysicsJointGroove#PhysicsJointGroove ret (return value: cc.PhysicsJointGroove)
         
 return nil

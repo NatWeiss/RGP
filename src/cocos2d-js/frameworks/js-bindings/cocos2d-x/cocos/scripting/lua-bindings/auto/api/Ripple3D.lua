@@ -26,19 +26,19 @@
 --------------------------------
 -- @function [parent=#Ripple3D] setPosition 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#Ripple3D] getPosition 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#Ripple3D] create 
 -- @param self
 -- @param #float float
 -- @param #size_table size
--- @param #point_table point
+-- @param #cc.Vec2 vec2
 -- @param #float float
 -- @param #unsigned int int
 -- @param #float float

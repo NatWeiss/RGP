@@ -7,6 +7,10 @@ LOCAL_MODULE_FILENAME := libextension
 
 LOCAL_SRC_FILES := \
 assets-manager/AssetsManager.cpp \
+assets-manager/Downloader.cpp \
+assets-manager/Manifest.cpp \
+assets-manager/CCEventAssetsManager.cpp \
+assets-manager/CCEventListenerAssetsManager.cpp \
 GUI/CCControlExtension/CCControl.cpp \
 GUI/CCControlExtension/CCControlButton.cpp \
 GUI/CCControlExtension/CCControlColourPicker.cpp \
@@ -45,7 +49,7 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/.. \
                     
 include $(BUILD_STATIC_LIBRARY)
 
-$(call import-module,2d)
+$(call import-module,.)
 $(call import-module,audio/android)
 $(call import-module,curl/prebuilt/android)
 $(call import-module,Box2D)

@@ -6,12 +6,12 @@
 --------------------------------
 -- @function [parent=#PhysicsJointSpring] setAnchr2 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#PhysicsJointSpring] setAnchr1 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#PhysicsJointSpring] getDamping 
@@ -31,12 +31,12 @@
 --------------------------------
 -- @function [parent=#PhysicsJointSpring] getAnchr2 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#PhysicsJointSpring] getAnchr1 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#PhysicsJointSpring] getStiffness 
@@ -58,8 +58,8 @@
 -- @param self
 -- @param #cc.PhysicsBody physicsbody
 -- @param #cc.PhysicsBody physicsbody
--- @param #point_table point
--- @param #point_table point
+-- @param #cc.Vec2 vec2
+-- @param #cc.Vec2 vec2
 -- @param #float float
 -- @param #float float
 -- @return PhysicsJointSpring#PhysicsJointSpring ret (return value: cc.PhysicsJointSpring)

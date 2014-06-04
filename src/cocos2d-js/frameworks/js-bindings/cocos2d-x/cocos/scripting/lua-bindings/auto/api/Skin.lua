@@ -11,7 +11,7 @@
 --------------------------------
 -- @function [parent=#Skin] getNodeToWorldTransformAR 
 -- @param self
--- @return kmMat4#kmMat4 ret (return value: kmMat4)
+-- @return Mat4#Mat4 ret (return value: cc.Mat4)
         
 --------------------------------
 -- @function [parent=#Skin] initWithFile 
@@ -62,13 +62,13 @@
 --------------------------------
 -- @function [parent=#Skin] getNodeToWorldTransform 
 -- @param self
--- @return kmMat4#kmMat4 ret (return value: kmMat4)
+-- @return Mat4#Mat4 ret (return value: cc.Mat4)
         
 --------------------------------
 -- @function [parent=#Skin] draw 
 -- @param self
 -- @param #cc.Renderer renderer
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
 -- @param #bool bool
         
 --------------------------------

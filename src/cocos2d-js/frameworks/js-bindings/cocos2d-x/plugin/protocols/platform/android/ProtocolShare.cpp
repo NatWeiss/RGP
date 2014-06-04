@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "ProtocolShare.h"
-#include "JniHelper.h"
+#include "PluginJniHelper.h"
 #include <android/log.h>
 #include "PluginUtils.h"
 #include "PluginJavaData.h"
@@ -32,8 +32,8 @@ namespace cocos2d { namespace plugin {
 extern "C" {
 	JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_ShareWrapper_nativeOnShareResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg)
 	{
-		std::string strMsg = JniHelper::jstring2string(msg);
-		std::string strClassName = JniHelper::jstring2string(className);
+		std::string strMsg = PluginJniHelper::jstring2string(msg);
+		std::string strClassName = PluginJniHelper::jstring2string(className);
 		PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
 		PluginUtils::outputLog("ProtocolShare", "nativeOnShareResult(), Get plugin ptr : %p", pPlugin);
 		if (pPlugin != NULL)
@@ -67,8 +67,8 @@ void ProtocolShare::configDeveloperInfo(TShareDeveloperInfo devInfo)
     else
     {
         PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-    	JniMethodInfo t;
-        if (JniHelper::getMethodInfo(t
+    	PluginJniMethodInfo t;
+        if (PluginJniHelper::getMethodInfo(t
     		, pData->jclassName.c_str()
     		, "configDeveloperInfo"
     		, "(Ljava/util/Hashtable;)V"))
@@ -98,8 +98,8 @@ void ProtocolShare::share(TShareInfo info)
     else
     {
         PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-		JniMethodInfo t;
-		if (JniHelper::getMethodInfo(t
+		PluginJniMethodInfo t;
+		if (PluginJniHelper::getMethodInfo(t
 			, pData->jclassName.c_str()
 			, "share"
 			, "(Ljava/util/Hashtable;)V"))

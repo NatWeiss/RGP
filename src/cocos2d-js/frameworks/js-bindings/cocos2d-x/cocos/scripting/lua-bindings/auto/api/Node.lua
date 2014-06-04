@@ -28,15 +28,6 @@
 -- @param #cc.PhysicsBody physicsbody
         
 --------------------------------
--- overload function: getShaderProgram()
---          
--- overload function: getShaderProgram()
---          
--- @function [parent=#Node] getShaderProgram
--- @param self
--- @return GLProgram#GLProgram ret (retunr value: cc.GLProgram)
-
---------------------------------
 -- @function [parent=#Node] getDescription 
 -- @param self
 -- @return string#string ret (return value: string)
@@ -72,8 +63,8 @@
 --------------------------------
 -- @function [parent=#Node] convertToWorldSpaceAR 
 -- @param self
--- @param #point_table point
--- @return point_table#point_table ret (return value: point_table)
+-- @param #cc.Vec2 vec2
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#Node] isIgnoreAnchorPointForPosition 
@@ -125,19 +116,19 @@
 -- @return int#int ret (return value: int)
         
 --------------------------------
--- @function [parent=#Node] getNodeToWorldAffineTransform 
+-- @function [parent=#Node] getGLProgram 
 -- @param self
--- @return AffineTransform#AffineTransform ret (return value: cc.AffineTransform)
+-- @return GLProgram#GLProgram ret (return value: cc.GLProgram)
         
 --------------------------------
 -- @function [parent=#Node] getNodeToWorldTransform 
 -- @param self
--- @return kmMat4#kmMat4 ret (return value: kmMat4)
+-- @return Mat4#Mat4 ret (return value: cc.Mat4)
         
 --------------------------------
 -- @function [parent=#Node] getPosition3D 
 -- @param self
--- @return Vertex3F#Vertex3F ret (return value: cc.Vertex3F)
+-- @return Vec3#Vec3 ret (return value: cc.Vec3)
         
 --------------------------------
 -- @function [parent=#Node] removeChild 
@@ -148,8 +139,8 @@
 --------------------------------
 -- @function [parent=#Node] convertToWorldSpace 
 -- @param self
--- @param #point_table point
--- @return point_table#point_table ret (return value: point_table)
+-- @param #cc.Vec2 vec2
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#Node] getScene 
@@ -167,9 +158,9 @@
 -- @param #float float
         
 --------------------------------
--- @function [parent=#Node] setSkewY 
+-- @function [parent=#Node] setGLProgramState 
 -- @param self
--- @param #float float
+-- @param #cc.GLProgramState glprogramstate
         
 --------------------------------
 -- @function [parent=#Node] getOpacity 
@@ -180,7 +171,7 @@
 -- @function [parent=#Node] convertTouchToNodeSpace 
 -- @param self
 -- @param #cc.Touch touch
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- overload function: removeAllChildrenWithCleanup(bool)
@@ -209,24 +200,24 @@
 --------------------------------
 -- @function [parent=#Node] getRotation3D 
 -- @param self
--- @return Vertex3F#Vertex3F ret (return value: cc.Vertex3F)
+-- @return Vec3#Vec3 ret (return value: cc.Vec3)
         
 --------------------------------
 -- @function [parent=#Node] getNodeToParentTransform 
 -- @param self
--- @return kmMat4#kmMat4 ret (return value: kmMat4)
+-- @return Mat4#Mat4 ret (return value: cc.Mat4)
         
 --------------------------------
 -- @function [parent=#Node] convertTouchToNodeSpaceAR 
 -- @param self
 -- @param #cc.Touch touch
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#Node] convertToNodeSpace 
 -- @param self
--- @param #point_table point
--- @return point_table#point_table ret (return value: point_table)
+-- @param #cc.Vec2 vec2
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#Node] resume 
@@ -240,7 +231,7 @@
 --------------------------------
 -- overload function: setPosition(float, float)
 --          
--- overload function: setPosition(point_table)
+-- overload function: setPosition(cc.Vec2)
 --          
 -- @function [parent=#Node] setPosition
 -- @param self
@@ -264,6 +255,11 @@
 -- @param #bool bool
         
 --------------------------------
+-- @function [parent=#Node] setSkewY 
+-- @param self
+-- @param #float float
+        
+--------------------------------
 -- @function [parent=#Node] setPositionZ 
 -- @param self
 -- @param #float float
@@ -271,7 +267,7 @@
 --------------------------------
 -- @function [parent=#Node] setRotation3D 
 -- @param self
--- @param #cc.Vertex3F vertex3f
+-- @param #cc.Vec3 vec3
         
 --------------------------------
 -- @function [parent=#Node] setPositionX 
@@ -281,12 +277,12 @@
 --------------------------------
 -- @function [parent=#Node] setNodeToParentTransform 
 -- @param self
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
         
 --------------------------------
 -- @function [parent=#Node] getAnchorPoint 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#Node] getNumberOfRunningActions 
@@ -310,8 +306,8 @@
 --------------------------------
 -- @function [parent=#Node] convertToNodeSpaceAR 
 -- @param self
--- @param #point_table point
--- @return point_table#point_table ret (return value: point_table)
+-- @param #cc.Vec2 vec2
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#Node] addComponent 
@@ -322,18 +318,18 @@
 --------------------------------
 -- overload function: visit()
 --          
--- overload function: visit(cc.Renderer, kmMat4, bool)
+-- overload function: visit(cc.Renderer, cc.Mat4, bool)
 --          
 -- @function [parent=#Node] visit
 -- @param self
 -- @param #cc.Renderer renderer
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
 -- @param #bool bool
 
 --------------------------------
--- @function [parent=#Node] setShaderProgram 
+-- @function [parent=#Node] isOpacityModifyRGB 
 -- @param self
--- @param #cc.GLProgram glprogram
+-- @return bool#bool ret (return value: bool)
         
 --------------------------------
 -- @function [parent=#Node] getRotation 
@@ -343,13 +339,18 @@
 --------------------------------
 -- @function [parent=#Node] getAnchorPointInPoints 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#Node] runAction 
 -- @param self
 -- @param #cc.Action action
 -- @return Action#Action ret (return value: cc.Action)
+        
+--------------------------------
+-- @function [parent=#Node] getGLProgramState 
+-- @param self
+-- @return GLProgramState#GLProgramState ret (return value: cc.GLProgramState)
         
 --------------------------------
 -- @function [parent=#Node] setScheduler 
@@ -373,7 +374,7 @@
 --------------------------------
 -- @function [parent=#Node] getDisplayedColor 
 -- @param self
--- @return color3B_table#color3B_table ret (return value: color3B_table)
+-- @return color3b_table#color3b_table ret (return value: color3b_table)
         
 --------------------------------
 -- @function [parent=#Node] getActionByTag 
@@ -384,11 +385,11 @@
 --------------------------------
 -- overload function: setAdditionalTransform(cc.AffineTransform)
 --          
--- overload function: setAdditionalTransform(kmMat4)
+-- overload function: setAdditionalTransform(cc.Mat4)
 --          
 -- @function [parent=#Node] setAdditionalTransform
 -- @param self
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
 
 --------------------------------
 -- @function [parent=#Node] getDisplayedOpacity 
@@ -427,7 +428,7 @@
 --------------------------------
 -- @function [parent=#Node] setColor 
 -- @param self
--- @param #color3B_table color3b
+-- @param #color3b_table color3b
         
 --------------------------------
 -- @function [parent=#Node] isRunning 
@@ -470,9 +471,14 @@
 -- @param #float float
         
 --------------------------------
+-- @function [parent=#Node] getNodeToWorldAffineTransform 
+-- @param self
+-- @return AffineTransform#AffineTransform ret (return value: cc.AffineTransform)
+        
+--------------------------------
 -- @function [parent=#Node] updateDisplayedColor 
 -- @param self
--- @param #color3B_table color3b
+-- @param #color3b_table color3b
         
 --------------------------------
 -- @function [parent=#Node] setVisible 
@@ -482,7 +488,7 @@
 --------------------------------
 -- @function [parent=#Node] getParentToNodeTransform 
 -- @param self
--- @return kmMat4#kmMat4 ret (return value: kmMat4)
+-- @return Mat4#Mat4 ret (return value: cc.Mat4)
         
 --------------------------------
 -- @function [parent=#Node] setGlobalZOrder 
@@ -563,7 +569,7 @@
 --------------------------------
 -- @function [parent=#Node] getColor 
 -- @param self
--- @return color3B_table#color3B_table ret (return value: color3B_table)
+-- @return color3b_table#color3b_table ret (return value: color3b_table)
         
 --------------------------------
 -- @function [parent=#Node] getBoundingBox 
@@ -583,12 +589,12 @@
 --------------------------------
 -- overload function: draw()
 --          
--- overload function: draw(cc.Renderer, kmMat4, bool)
+-- overload function: draw(cc.Renderer, cc.Mat4, bool)
 --          
 -- @function [parent=#Node] draw
 -- @param self
 -- @param #cc.Renderer renderer
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
 -- @param #bool bool
 
 --------------------------------
@@ -608,7 +614,7 @@
 --------------------------------
 -- @function [parent=#Node] setPosition3D 
 -- @param self
--- @param #cc.Vertex3F vertex3f
+-- @param #cc.Vec3 vec3
         
 --------------------------------
 -- @function [parent=#Node] update 
@@ -622,7 +628,12 @@
 --------------------------------
 -- @function [parent=#Node] getWorldToNodeTransform 
 -- @param self
--- @return kmMat4#kmMat4 ret (return value: kmMat4)
+-- @return Mat4#Mat4 ret (return value: cc.Mat4)
+        
+--------------------------------
+-- @function [parent=#Node] setGLProgram 
+-- @param self
+-- @param #cc.GLProgram glprogram
         
 --------------------------------
 -- @function [parent=#Node] getScale 
@@ -646,11 +657,6 @@
         
 --------------------------------
 -- @function [parent=#Node] isCascadeColorEnabled 
--- @param self
--- @return bool#bool ret (return value: bool)
-        
---------------------------------
--- @function [parent=#Node] isOpacityModifyRGB 
 -- @param self
 -- @return bool#bool ret (return value: bool)
         

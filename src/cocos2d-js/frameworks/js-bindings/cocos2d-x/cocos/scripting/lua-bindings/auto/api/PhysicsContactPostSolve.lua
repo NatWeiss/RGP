@@ -10,7 +10,7 @@
 --------------------------------
 -- @function [parent=#PhysicsContactPostSolve] getSurfaceVelocity 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#PhysicsContactPostSolve] getRestitution 

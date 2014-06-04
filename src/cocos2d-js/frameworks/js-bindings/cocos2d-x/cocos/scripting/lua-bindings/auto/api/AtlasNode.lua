@@ -50,7 +50,7 @@
 -- @function [parent=#AtlasNode] draw 
 -- @param self
 -- @param #cc.Renderer renderer
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
 -- @param #bool bool
         
 --------------------------------
@@ -61,12 +61,12 @@
 --------------------------------
 -- @function [parent=#AtlasNode] setColor 
 -- @param self
--- @param #color3B_table color3b
+-- @param #color3b_table color3b
         
 --------------------------------
 -- @function [parent=#AtlasNode] getColor 
 -- @param self
--- @return color3B_table#color3B_table ret (return value: color3B_table)
+-- @return color3b_table#color3b_table ret (return value: color3b_table)
         
 --------------------------------
 -- @function [parent=#AtlasNode] setOpacityModifyRGB 

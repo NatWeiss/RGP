@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "ProtocolSocial.h"
-#include "JniHelper.h"
+#include "PluginJniHelper.h"
 #include <android/log.h>
 #include "PluginUtils.h"
 #include "PluginJavaData.h"
@@ -32,8 +32,8 @@ namespace cocos2d { namespace plugin {
 extern "C" {
     JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_SocialWrapper_nativeOnSocialResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg)
     {
-        std::string strMsg = JniHelper::jstring2string(msg);
-        std::string strClassName = JniHelper::jstring2string(className);
+        std::string strMsg = PluginJniHelper::jstring2string(msg);
+        std::string strClassName = PluginJniHelper::jstring2string(className);
         PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
         PluginUtils::outputLog("ProtocolSocial", "nativeOnSocialResult(), Get plugin ptr : %p", pPlugin);
         if (pPlugin != NULL)
@@ -71,8 +71,8 @@ void ProtocolSocial::configDeveloperInfo(TSocialDeveloperInfo devInfo)
     else
     {
         PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-        JniMethodInfo t;
-        if (JniHelper::getMethodInfo(t
+        PluginJniMethodInfo t;
+        if (PluginJniHelper::getMethodInfo(t
             , pData->jclassName.c_str()
             , "configDeveloperInfo"
             , "(Ljava/util/Hashtable;)V"))
@@ -91,8 +91,8 @@ void ProtocolSocial::configDeveloperInfo(TSocialDeveloperInfo devInfo)
 void ProtocolSocial::submitScore(const char* leadboardID, long score)
 {
     PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-    JniMethodInfo t;
-    if (JniHelper::getMethodInfo(t
+    PluginJniMethodInfo t;
+    if (PluginJniHelper::getMethodInfo(t
         , pData->jclassName.c_str()
         , "submitScore"
         , "(Ljava/lang/String;J)V"))
@@ -109,8 +109,8 @@ void ProtocolSocial::submitScore(const char* leadboardID, long score)
 void ProtocolSocial::showLeaderboard(const char* leaderboardID)
 {
     PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-    JniMethodInfo t;
-    if (JniHelper::getMethodInfo(t
+    PluginJniMethodInfo t;
+    if (PluginJniHelper::getMethodInfo(t
         , pData->jclassName.c_str()
         , "showLeaderboard"
         , "(Ljava/lang/String;)V"))
@@ -134,8 +134,8 @@ void ProtocolSocial::unlockAchievement(TAchievementInfo achInfo)
     else
     {
         PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-        JniMethodInfo t;
-        if (JniHelper::getMethodInfo(t
+        PluginJniMethodInfo t;
+        if (PluginJniHelper::getMethodInfo(t
             , pData->jclassName.c_str()
             , "unlockAchievement"
             , "(Ljava/util/Hashtable;)V"))

@@ -34,7 +34,7 @@
 --------------------------------
 -- @function [parent=#GridBase] getStep 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#GridBase] set2DProjection 
@@ -43,7 +43,7 @@
 --------------------------------
 -- @function [parent=#GridBase] setStep 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#GridBase] setTextureFlipped 

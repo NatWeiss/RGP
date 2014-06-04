@@ -58,10 +58,11 @@ WidgetReader/TextReader/TextReader.cpp \
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/.. \
 $(LOCAL_PATH)/../../../external
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../2d \
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../.. \
 $(LOCAL_PATH)/../../../external \
 $(LOCAL_PATH)/.. \
-$(LOCAL_PATH)/../..
+$(LOCAL_PATH)/../.. \
+$(LOCAL_PATH)/WidgetReader
 
 LOCAL_CFLAGS += -Wno-psabi -fexceptions
 LOCAL_EXPORT_CFLAGS += -Wno-psabi
@@ -72,7 +73,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES += cocos_ui_static
 
 include $(BUILD_STATIC_LIBRARY)
 
-$(call import-module,2d)
+$(call import-module,.)
 $(call import-module,audio/android)
 $(call import-module,ui)
 

@@ -11,7 +11,7 @@
 --------------------------------
 -- @function [parent=#CardinalSplineTo] updatePosition 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#CardinalSplineTo] initWithDuration 

@@ -31,7 +31,7 @@
 -- @function [parent=#NodeGrid] visit 
 -- @param self
 -- @param #cc.Renderer renderer
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
 -- @param #bool bool
         
 return nil

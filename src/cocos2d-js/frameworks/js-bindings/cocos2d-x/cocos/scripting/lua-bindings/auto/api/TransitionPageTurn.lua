@@ -29,7 +29,7 @@
 -- @function [parent=#TransitionPageTurn] draw 
 -- @param self
 -- @param #cc.Renderer renderer
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
 -- @param #bool bool
         
 --------------------------------

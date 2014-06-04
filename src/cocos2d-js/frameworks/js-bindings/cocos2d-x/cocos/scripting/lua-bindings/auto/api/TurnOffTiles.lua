@@ -6,12 +6,12 @@
 --------------------------------
 -- @function [parent=#TurnOffTiles] turnOnTile 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#TurnOffTiles] turnOffTile 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#TurnOffTiles] shuffle 

@@ -43,12 +43,12 @@
 --------------------------------
 -- @function [parent=#ControlButton] setLabelAnchorPoint 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#ControlButton] getLabelAnchorPoint 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#ControlButton] getTitleTTFSizeForState 
@@ -81,7 +81,7 @@
 --------------------------------
 -- @function [parent=#ControlButton] getCurrentTitleColor 
 -- @param self
--- @return color3B_table#color3B_table ret (return value: color3B_table)
+-- @return color3b_table#color3b_table ret (return value: color3b_table)
         
 --------------------------------
 -- @function [parent=#ControlButton] setEnabled 
@@ -132,12 +132,12 @@
 -- @function [parent=#ControlButton] getTitleColorForState 
 -- @param self
 -- @param #cc.Control::State state
--- @return color3B_table#color3B_table ret (return value: color3B_table)
+-- @return color3b_table#color3b_table ret (return value: color3b_table)
         
 --------------------------------
 -- @function [parent=#ControlButton] setTitleColorForState 
 -- @param self
--- @param #color3B_table color3b
+-- @param #color3b_table color3b
 -- @param #cc.Control::State state
         
 --------------------------------
@@ -248,12 +248,7 @@
 --------------------------------
 -- @function [parent=#ControlButton] setColor 
 -- @param self
--- @param #color3B_table color3b
-        
---------------------------------
--- @function [parent=#ControlButton] getColor 
--- @param self
--- @return color3B_table#color3B_table ret (return value: color3B_table)
+-- @param #color3b_table color3b
         
 --------------------------------
 -- @function [parent=#ControlButton] onTouchCancelled 
@@ -267,9 +262,14 @@
 -- @param #unsigned char char
         
 --------------------------------
--- @function [parent=#ControlButton] getOpacity 
+-- @function [parent=#ControlButton] updateDisplayedOpacity 
 -- @param self
--- @return unsigned char#unsigned char ret (return value: unsigned char)
+-- @param #unsigned char char
+        
+--------------------------------
+-- @function [parent=#ControlButton] updateDisplayedColor 
+-- @param self
+-- @param #color3b_table color3b
         
 --------------------------------
 -- @function [parent=#ControlButton] onTouchBegan 

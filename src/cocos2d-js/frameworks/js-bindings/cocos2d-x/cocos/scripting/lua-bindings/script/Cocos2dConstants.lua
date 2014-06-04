@@ -131,6 +131,8 @@ cc.VERTEX_ATTRIB_FLAG_TEX_COORDS    = 0x4
 cc.VERTEX_ATTRIB_COLOR  = 0x1
 cc.VERTEX_ATTRIB_MAX    = 0x3
 cc.VERTEX_ATTRIB_POSITION   = 0x0
+cc.VERTEX_ATTRIB_TEX_COORD = 0x2
+
 cc.VERTEX_ATTRIB_TEX_COORDS = 0x2
 cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM   = 0x2
 cc.VERTICAL_TEXT_ALIGNMENT_CENTER   = 0x1
@@ -363,6 +365,16 @@ cc.GLYPHCOLLECTION_NEHE    = 1
 cc.GLYPHCOLLECTION_ASCII   = 2
 cc.GLYPHCOLLECTION_CUSTOM  = 3
 
+cc.ResolutionPolicy = 
+{
+    EXACT_FIT = 0,
+    NO_BORDER = 1,
+    SHOW_ALL  = 2,
+    FIXED_HEIGHT  = 3,
+    FIXED_WIDTH  = 4,
+    UNKNOWN  = 5,
+}
+
 cc.LabelEffect = 
 {
     NORMAL  = 0,
@@ -530,6 +542,28 @@ cc.KeyCode =
     KEY_MIDDLE_DOT        = 0x0095,
     KEY_SEARCH            = 0xFFAA,
 };
+
+cc.EventAssetsManager =
+{
+    EventCode = 
+    {
+        ERROR_NO_LOCAL_MANIFEST = 0,
+        ERROR_DOWNLOAD_MANIFEST = 1,
+        ERROR_PARSE_MANIFEST = 2,
+        NEW_VERSION_FOUND = 3,
+        ALREADY_UP_TO_DATE = 4,
+        UPDATE_PROGRESSION = 5,
+        ASSET_UPDATED = 6,
+        ERROR_UPDATING = 7,
+        UPDATE_FINISHED = 8,
+    },
+}
+
+cc.AssetsManagerStatic = 
+{
+    VERSION_ID  = "@version",
+    MANIFEST_ID = "@manifest",
+}
 
 
 

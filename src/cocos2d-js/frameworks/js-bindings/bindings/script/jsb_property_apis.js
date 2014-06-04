@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2014 Chukong Technologies Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 /**
  *  <p>Properties configuration function </br>
  *  All properties in attrs will be set to the node, </br>
@@ -525,7 +547,7 @@ cc.defineGetterSetter(_proto, "selected", _proto.getSelectedState, _proto.setSel
 _proto = ccui.Text.prototype;
 cc.defineGetterSetter(_proto, "boundingWidth", _proto._getBoundingWidth, _proto._setBoundingWidth);
 cc.defineGetterSetter(_proto, "boundingHeight", _proto._getBoundingHeight, _proto._setBoundingHeight);
-cc.defineGetterSetter(_proto, "string", _proto.getStringValue, _proto.setText);
+cc.defineGetterSetter(_proto, "string", _proto.getString, _proto.setString);
 cc.defineGetterSetter(_proto, "stringLength", _proto.getStringLength);
 cc.defineGetterSetter(_proto, "font", _proto._getFont, _proto._setFont);
 cc.defineGetterSetter(_proto, "fontName", _proto.getFontName, _proto.setFontName);
@@ -535,10 +557,10 @@ cc.defineGetterSetter(_proto, "verticalAlign", _proto.getVerticalAlignment, _pro
 cc.defineGetterSetter(_proto, "touchScaleEnabled", _proto.getTouchScaleEnabled, _proto.setTouchScaleEnabled);
 
 _proto = ccui.TextAtlas.prototype;
-cc.defineGetterSetter(_proto, "string", _proto.getStringValue, _proto.setStringValue);
+cc.defineGetterSetter(_proto, "string", _proto.getString, _proto.setString);
 
 _proto = ccui.TextBMFont.prototype;
-cc.defineGetterSetter(_proto, "string", _proto.getStringValue, _proto.setStringValue);
+cc.defineGetterSetter(_proto, "string", _proto.getString, _proto.setString);
 
 _proto = ccui.LoadingBar.prototype;
 cc.defineGetterSetter(_proto, "direction", _proto.getDirection, _proto.setDirection);
@@ -551,7 +573,7 @@ _proto = ccui.TextField.prototype;
 cc.defineGetterSetter(_proto, "maxLengthEnabled", _proto.isMaxLengthEnabled, _proto.setMaxLengthEnabled);
 cc.defineGetterSetter(_proto, "maxLength", _proto.getMaxLength, _proto.setMaxLength);
 cc.defineGetterSetter(_proto, "passwordEnabled", _proto.isPasswordEnabled, _proto.setPasswordEnabled);
-cc.defineGetterSetter(_proto, "string", _proto.getStringValue, _proto.setText);
+cc.defineGetterSetter(_proto, "string", _proto.getString, _proto.setString);
 cc.defineGetterSetter(_proto, "font", _proto._getFont, _proto._setFont);
 cc.defineGetterSetter(_proto, "fontSize", _proto.getFontSize, _proto.setFontSize);
 cc.defineGetterSetter(_proto, "fontName", _proto.getFontName, _proto.setFontName);
@@ -566,7 +588,7 @@ _proto = cc.EditBox.prototype;
 cc.defineGetterSetter(_proto, "font", null, _proto._setFont);
 cc.defineGetterSetter(_proto, "fontName", null, _proto.setFontName);
 cc.defineGetterSetter(_proto, "fontSize", null, _proto.setFontSize);
-cc.defineGetterSetter(_proto, "string", _proto.getText, _proto.setText);
+cc.defineGetterSetter(_proto, "string", _proto.getString, _proto.setString);
 cc.defineGetterSetter(_proto, "maxLength", _proto.getMaxLength, _proto.setMaxLength);
 
 _proto = cc.Control.prototype;

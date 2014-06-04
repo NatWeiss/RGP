@@ -1,4 +1,4 @@
-<img src="http://www.cocos2d-x.org/attachments/801/cocos2dx_portrait.png" width=200>
+<img src="http://www.cocos2d-x.org/attachments/1508/2dh5-logo.png" width=200>
 
 Cocos2d-JS
 ===========
@@ -11,10 +11,15 @@ Furthermore, javascript friendly API makes your game development experience a br
 
 ## API Reference
 
-[Online API reference](http://www.cocos2d-x.org/reference/html5-js/V3.0alpha2/index.html)
+- API Reference: [Online API reference](http://www.cocos2d-x.org/reference/html5-js/V3.0beta/index.html)
 
-And you can download it from
-[Cocos2d-html5_v3.0_Alpha2_API_Doc.zip](http://cdn.cocos2d-x.org/Cocos2d-html5_v3.0_Alpha2_API_Doc.zip)
+- And you can download it from
+[Cocos2d-JS-v3.0-beta-API.zip](http://www.cocos2d-x.org/filedown/Cocos2d-JS-v3.0-beta-API.zip)
+
+## Online demo
+- [MoonWarriors](http://www.cocos2d-x.org/MoonWarriors/index.html)
+- [Testcase](http://www.cocos2d-x.org/js-tests/)
+
 
 ##How to Start a New Game
 
@@ -30,12 +35,6 @@ Example:
     
     $ cocos new MyGame -l js -d /directory/to/project
     $ cd /directory/to/project/MyGame
-    
-    
-
-    
-
-
 
 ###Run the project under the game directory
 
@@ -54,9 +53,25 @@ Example:
 
 You may need to provide your NDK, Android SDK and ANT's path during the setup. Note that this tool is developed with python, so you will need python (32bit) 2.7.5 or later installed on your machine (but it doesn't support Python3). Please refer to [Cocos Console document](http://www.cocos2d-x.org/docs/manual/framework/html5/cocos-console/en).
 
-And if you have any doubt about the usage, please use `-h` with any command to have some help messages. 
+And if you have any doubt about the usage, please use `-h` with any command to have some help messages.
 
-###Built-in Projects
+You can also use prebuilt Xcode or Visual Studio project which is located in `Game/frameworks/runtime-src/proj.xxx`
+
+##Folder structure of new project
+
+- frameworks
+    - cocos2d-html5     : Cocos2d-JS html5 engine source
+    - js-bindings       : JSB engine source (include Cocos2d-x and JSB)
+    - runtime-src       : IDE projects (android, ios, mac, win32)
+- publish               : Published apps
+- runtime               : Debug app files
+- tools                 : JS Bindings generator
+- res                   : Your game resource folder for images, sounds, etc
+- src                   : Your game's js files folder
+- main.js               : The entrance of your game logic
+- index.html            : The web page for hosting your game in web version
+
+##Built-in Projects
 
 There are two prebuilt projects in Cocos2d-JS repo:
 
@@ -74,8 +89,8 @@ run -p ios|mac|android|web
 ```
 And they share the same project file which located in `build` folder, there are Xcode and Visual Studio projects.
 
-Main features
--------------
+##Main features
+
    * Support All modern browsers and native platforms
    * Scene management (workflow)
    * Transitions between scenes
@@ -108,3 +123,15 @@ Main features
    * OpenGL ES 2.0 (mobile) / OpenGL 2.1 (desktop) based
    * Full WebGL support and auto canvas fallback
    
+## Documentations
+
+- [Getting Started with Cocos2d-JS](http://www.cocos2d-x.org/docs/manual/framework/html5/en)
+
+##Github note
+
+If you fork our github repository or download the package from github, you will need to do some extra tasks:
+
+- Run `frameworks/js-bindings/cocos2d-x/download-deps.py` to download external dependencies for Cocos2d-x
+- Run `tools/cocos2d-console/download-bin.py` to download bin files for some cocos2d-console plugins like Google Closure Compiler, JSC Compiler.
+
+Otherwise, you will fail to compile your JSB projects.

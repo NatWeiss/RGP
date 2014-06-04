@@ -6,7 +6,7 @@
 --------------------------------
 -- @function [parent=#FadeOutUpTiles] transformTile 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
 -- @param #float float
         
 --------------------------------

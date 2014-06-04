@@ -4,21 +4,12 @@
 -- @extend Node
 
 --------------------------------
--- overload function: getParallaxArray()
---          
--- overload function: getParallaxArray()
---          
--- @function [parent=#ParallaxNode] getParallaxArray
--- @param self
--- @return _ccArray#_ccArray ret (retunr value: cc._ccArray)
-
---------------------------------
 -- @function [parent=#ParallaxNode] addChild 
 -- @param self
 -- @param #cc.Node node
 -- @param #int int
--- @param #point_table point
--- @param #point_table point
+-- @param #cc.Vec2 vec2
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#ParallaxNode] removeAllChildrenWithCleanup 
@@ -46,7 +37,7 @@
 -- @function [parent=#ParallaxNode] visit 
 -- @param self
 -- @param #cc.Renderer renderer
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
 -- @param #bool bool
         
 --------------------------------

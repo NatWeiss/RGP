@@ -141,19 +141,19 @@
 --------------------------------
 -- @function [parent=#Armature] setAnchorPoint 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#Armature] draw 
 -- @param self
 -- @param #cc.Renderer renderer
--- @param #kmMat4 kmmat4
+-- @param #cc.Mat4 mat4
 -- @param #bool bool
         
 --------------------------------
 -- @function [parent=#Armature] getAnchorPointInPoints 
 -- @param self
--- @return point_table#point_table ret (return value: point_table)
+-- @return Vec2#Vec2 ret (return value: cc.Vec2)
         
 --------------------------------
 -- @function [parent=#Armature] update 
@@ -163,7 +163,7 @@
 --------------------------------
 -- @function [parent=#Armature] getNodeToParentTransform 
 -- @param self
--- @return kmMat4#kmMat4 ret (return value: kmMat4)
+-- @return Mat4#Mat4 ret (return value: cc.Mat4)
         
 --------------------------------
 -- @function [parent=#Armature] getBoundingBox 

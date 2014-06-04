@@ -4,11 +4,6 @@
 -- @extend Ref
 
 --------------------------------
--- @function [parent=#Texture2D] getShaderProgram 
--- @param self
--- @return GLProgram#GLProgram ret (return value: cc.GLProgram)
-        
---------------------------------
 -- @function [parent=#Texture2D] getMaxT 
 -- @param self
 -- @return float#float ret (return value: float)
@@ -29,11 +24,6 @@
 -- @param #cc.Texture2D::PixelFormat pixelformat
 -- @return bool#bool ret (retunr value: bool)
 
---------------------------------
--- @function [parent=#Texture2D] setShaderProgram 
--- @param self
--- @param #cc.GLProgram glprogram
-        
 --------------------------------
 -- @function [parent=#Texture2D] getMaxS 
 -- @param self
@@ -87,12 +77,12 @@
 --------------------------------
 -- overload function: initWithString(char, cc.FontDefinition)
 --          
--- overload function: initWithString(char, char, float, size_table, cc.TextHAlignment, cc.TextVAlignment)
+-- overload function: initWithString(char, string, float, size_table, cc.TextHAlignment, cc.TextVAlignment)
 --          
 -- @function [parent=#Texture2D] initWithString
 -- @param self
 -- @param #char char
--- @param #char char
+-- @param #string str
 -- @param #float float
 -- @param #size_table size
 -- @param #cc.TextHAlignment texthalignment
@@ -137,6 +127,11 @@
 -- @return Texture2D::PixelFormat#Texture2D::PixelFormat ret (return value: cc.Texture2D::PixelFormat)
         
 --------------------------------
+-- @function [parent=#Texture2D] setGLProgram 
+-- @param self
+-- @param #cc.GLProgram glprogram
+        
+--------------------------------
 -- @function [parent=#Texture2D] getContentSizeInPixels 
 -- @param self
 -- @return size_table#size_table ret (return value: size_table)
@@ -149,7 +144,12 @@
 --------------------------------
 -- @function [parent=#Texture2D] drawAtPoint 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
+        
+--------------------------------
+-- @function [parent=#Texture2D] getGLProgram 
+-- @param self
+-- @return GLProgram#GLProgram ret (return value: cc.GLProgram)
         
 --------------------------------
 -- @function [parent=#Texture2D] hasMipmaps 

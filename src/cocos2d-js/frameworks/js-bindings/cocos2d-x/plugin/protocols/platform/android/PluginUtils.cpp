@@ -29,12 +29,12 @@ THE SOFTWARE.
 
 namespace cocos2d { namespace plugin {
 
-#define JAVAVM    cocos2d::JniHelper::getJavaVM()
+#define JAVAVM    cocos2d::PluginJniHelper::getJavaVM()
 
 void PluginUtils::initPluginWrapper(android_app* app)
 {
-    JniMethodInfo t;
-    if (! JniHelper::getStaticMethodInfo(t
+    PluginJniMethodInfo t;
+    if (! PluginJniHelper::getStaticMethodInfo(t
         , "org/cocos2dx/plugin/PluginWrapper"
         , "initFromNativeActivity"
         , "(Landroid/app/Activity;)V"))
@@ -58,7 +58,11 @@ jobject PluginUtils::createJavaMapObject(std::map<std::string, std::string>* par
 		jmethodID add_method= env->GetMethodID( class_Hashtable,"put","(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;");
 		for (std::map<std::string, std::string>::const_iterator it = paramMap->begin(); it != paramMap->end(); ++it)
 		{
-			env->CallObjectMethod(obj_Map, add_method, env->NewStringUTF(it->first.c_str()), env->NewStringUTF(it->second.c_str()));
+            jstring first = env->NewStringUTF(it->first.c_str());
+            jstring second = env->NewStringUTF(it->second.c_str());
+			env->CallObjectMethod(obj_Map, add_method, first, second);
+            env->DeleteLocalRef(first);
+            env->DeleteLocalRef(second);
 		}
 	}
     env->DeleteLocalRef(class_Hashtable);
@@ -180,27 +184,30 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 	}
 
 	jobject obj = NULL;
-	JniMethodInfo t;
+	PluginJniMethodInfo t;
 	JNIEnv* env = PluginUtils::getEnv();
 
 	switch(param->getCurrentType())
 	{
 	case PluginParam::kParamTypeInt:
-		if (JniHelper::getStaticMethodInfo(t, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;"))
+		if (PluginJniHelper::getStaticMethodInfo(t, "java/lang/Integer", "valueOf", "(I)Ljava/lang/Integer;"))
 		{
 			obj = t.env->CallStaticObjectMethod(t.classID, t.methodID, param->getIntValue());
+			t.env->DeleteLocalRef(t.classID);
 		}
 		break;
 	case PluginParam::kParamTypeFloat:
-		if (JniHelper::getStaticMethodInfo(t, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;"))
+		if (PluginJniHelper::getStaticMethodInfo(t, "java/lang/Float", "valueOf", "(F)Ljava/lang/Float;"))
 		{
 			obj = t.env->CallStaticObjectMethod(t.classID, t.methodID, param->getFloatValue());
+			t.env->DeleteLocalRef(t.classID);
 		}
 		break;
 	case PluginParam::kParamTypeBool:
-		if (JniHelper::getStaticMethodInfo(t, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;"))
+		if (PluginJniHelper::getStaticMethodInfo(t, "java/lang/Boolean", "valueOf", "(Z)Ljava/lang/Boolean;"))
 		{
 			obj = t.env->CallStaticObjectMethod(t.classID, t.methodID, param->getBoolValue());
+			t.env->DeleteLocalRef(t.classID);
 		}
 		break;
 	case PluginParam::kParamTypeString:
@@ -211,12 +218,13 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 	        jclass cls = env->FindClass("org/json/JSONObject");
             jmethodID mid = env->GetMethodID(cls,"<init>","()V");
             obj = env->NewObject(cls,mid);
+            env->DeleteLocalRef(cls);
             std::map<std::string, std::string>::iterator it;
             std::map<std::string, std::string> mapParam = param->getStrMapValue();
             for (it = mapParam.begin(); it != mapParam.end(); it++)
             {
-                JniMethodInfo tInfo;
-                if (JniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put", "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;"))
+                PluginJniMethodInfo tInfo;
+                if (PluginJniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put", "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;"))
                 {
                     jstring strKey = tInfo.env->NewStringUTF(it->first.c_str());
                     jstring strValue = tInfo.env->NewStringUTF(it->second.c_str());
@@ -235,13 +243,13 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 			jclass cls = env->FindClass("org/json/JSONObject");
 			jmethodID mid = env->GetMethodID(cls,"<init>","()V");
 			obj = env->NewObject(cls,mid);
-
+            env->DeleteLocalRef(cls);
 			std::map<std::string, PluginParam*>::iterator it;
 			std::map<std::string, PluginParam*> mapParam = param->getMapValue();
 			for (it = mapParam.begin(); it != mapParam.end(); it++)
 			{
-				JniMethodInfo tInfo;
-				if (JniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put", "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;"))
+				PluginJniMethodInfo tInfo;
+				if (PluginJniHelper::getMethodInfo(tInfo, "org/json/JSONObject", "put", "(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;"))
 				{
 					jstring strKey = tInfo.env->NewStringUTF(it->first.c_str());
 					jobject objValue = PluginUtils::getJObjFromParam(it->second);

@@ -6,7 +6,7 @@
 --------------------------------
 -- @function [parent=#ShuffleTiles] placeTile 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
 -- @param #cc.Tile tile
         
 --------------------------------

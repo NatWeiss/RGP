@@ -162,7 +162,7 @@
 --------------------------------
 -- @function [parent=#Bone] getNodeToArmatureTransform 
 -- @param self
--- @return kmMat4#kmMat4 ret (return value: kmMat4)
+-- @return Mat4#Mat4 ret (return value: cc.Mat4)
         
 --------------------------------
 -- @function [parent=#Bone] getDisplayManager 
@@ -192,7 +192,7 @@
 --------------------------------
 -- @function [parent=#Bone] updateDisplayedColor 
 -- @param self
--- @param #color3B_table color3b
+-- @param #color3b_table color3b
         
 --------------------------------
 -- @function [parent=#Bone] setLocalZOrder 
@@ -202,7 +202,7 @@
 --------------------------------
 -- @function [parent=#Bone] getNodeToWorldTransform 
 -- @param self
--- @return kmMat4#kmMat4 ret (return value: kmMat4)
+-- @return Mat4#Mat4 ret (return value: cc.Mat4)
         
 --------------------------------
 -- @function [parent=#Bone] update 

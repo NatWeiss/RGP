@@ -17,21 +17,16 @@
 -- @param self
         
 --------------------------------
--- @function [parent=#TileMapAtlas] getTGAInfo 
--- @param self
--- @return sImageTGA#sImageTGA ret (return value: cc.sImageTGA)
-        
---------------------------------
 -- @function [parent=#TileMapAtlas] getTileAt 
 -- @param self
--- @param #point_table point
--- @return color3B_table#color3B_table ret (return value: color3B_table)
+-- @param #cc.Vec2 vec2
+-- @return color3b_table#color3b_table ret (return value: color3b_table)
         
 --------------------------------
 -- @function [parent=#TileMapAtlas] setTile 
 -- @param self
--- @param #color3B_table color3b
--- @param #point_table point
+-- @param #color3b_table color3b
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#TileMapAtlas] setTGAInfo 

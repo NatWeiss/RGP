@@ -1,10 +1,25 @@
-//
-//  jsb_cocos2dx_spine_manual.cpp
-//  cocos2d_libs
-//
-//  Created by ucchen on 2/12/14.
-//
-//
+/*
+ * Created by ucchen on 2/12/14.
+ * Copyright (c) 2014 Chukong Technologies Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 #include "jsb_cocos2dx_spine_manual.h"
 #include "ScriptingCore.h"
@@ -331,6 +346,44 @@ bool jsb_cocos2dx_spine_findSlot(JSContext *cx, uint32_t argc, jsval *vp)
 	return false;
 }
 
+bool jsb_cocos2dx_spine_setDebugBones(JSContext *cx, uint32_t argc, jsval *vp)
+{
+	jsval *argv = JS_ARGV(cx, vp);
+	JSObject *obj = JS_THIS_OBJECT(cx, vp);
+	js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    spine::Skeleton* cobj = (spine::Skeleton *)(proxy ? proxy->ptr : NULL);
+	JSB_PRECONDITION2( cobj, cx, false, "Invalid Native Object");
+	if (argc == 1) {
+		bool enable = JSVAL_TO_BOOLEAN(argv[0]);
+		cobj->debugBones = enable;
+        
+		JS_SET_RVAL(cx, vp, JSVAL_NULL);
+		return true;
+	}
+    
+	JS_ReportError(cx, "wrong number of arguments: %d, was expecting %d", argc, 1);
+	return false;
+}
+
+bool jsb_cocos2dx_spine_setDebugSolots(JSContext *cx, uint32_t argc, jsval *vp)
+{
+    jsval *argv = JS_ARGV(cx, vp);
+	JSObject *obj = JS_THIS_OBJECT(cx, vp);
+	js_proxy_t *proxy = jsb_get_js_proxy(obj);
+    spine::Skeleton* cobj = (spine::Skeleton *)(proxy ? proxy->ptr : NULL);
+	JSB_PRECONDITION2( cobj, cx, false, "Invalid Native Object");
+	if (argc == 1) {
+		bool enable = JSVAL_TO_BOOLEAN(argv[0]);
+		cobj->debugSlots = enable;
+        
+		JS_SET_RVAL(cx, vp, JSVAL_NULL);
+		return true;
+	}
+    
+	JS_ReportError(cx, "wrong number of arguments: %d, was expecting %d", argc, 1);
+	return false;
+}
+
 bool jsb_cocos2dx_spine_getAttachment(JSContext *cx, uint32_t argc, jsval *vp)
 {
     jsval *argv = JS_ARGV(cx, vp);
@@ -419,8 +472,7 @@ bool jsb_cocos2dx_spine_setAnimation(JSContext *cx, uint32_t argc, jsval *vp)
         const char* arg1;
         std::string arg1_tmp; ok &= jsval_to_std_string(cx, argv[1], &arg1_tmp); arg1 = arg1_tmp.c_str();
         
-        bool arg2;
-        ok &= JS_ValueToBoolean(cx, argv[2], &arg2);
+        bool arg2 = JS::ToBoolean(JS::RootedValue(cx, argv[2]));
         JSB_PRECONDITION2(ok, cx, false, "Error processing arguments");
         
         spTrackEntry* ret = cobj->setAnimation(arg0, arg1, arg2);
@@ -457,8 +509,7 @@ bool jsb_cocos2dx_spine_addAnimation(JSContext *cx, uint32_t argc, jsval *vp)
         const char* arg1;
         std::string arg1_tmp; ok &= jsval_to_std_string(cx, argv[1], &arg1_tmp); arg1 = arg1_tmp.c_str();
         
-        bool arg2;
-        ok &= JS_ValueToBoolean(cx, argv[2], &arg2);
+        bool arg2 = JS::ToBoolean(JS::RootedValue(cx, argv[2]));
         JSB_PRECONDITION2(ok, cx, false, "Error processing arguments");
         
         spTrackEntry* ret = cobj->addAnimation(arg0, arg1, arg2);
@@ -480,8 +531,7 @@ bool jsb_cocos2dx_spine_addAnimation(JSContext *cx, uint32_t argc, jsval *vp)
         const char* arg1;
         std::string arg1_tmp; ok &= jsval_to_std_string(cx, argv[1], &arg1_tmp); arg1 = arg1_tmp.c_str();
         
-        bool arg2;
-        ok &= JS_ValueToBoolean(cx, argv[2], &arg2);
+        bool arg2 = JS::ToBoolean(JS::RootedValue(cx, argv[2]));
         
         double arg3;
         ok &= JS::ToNumber(cx, JS::RootedValue(cx, argv[3]), &arg3);
@@ -574,6 +624,8 @@ void register_all_cocos2dx_spine_manual(JSContext* cx, JSObject* global)
 {
     JS_DefineFunction(cx, jsb_spine_Skeleton_prototype, "findBone", jsb_cocos2dx_spine_findBone, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     JS_DefineFunction(cx, jsb_spine_Skeleton_prototype, "findSlot", jsb_cocos2dx_spine_findSlot, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, jsb_spine_Skeleton_prototype, "setDebugBones", jsb_cocos2dx_spine_setDebugBones, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
+    JS_DefineFunction(cx, jsb_spine_Skeleton_prototype, "setDebugSolots", jsb_cocos2dx_spine_setDebugSolots, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     JS_DefineFunction(cx, jsb_spine_Skeleton_prototype, "getAttachment", jsb_cocos2dx_spine_getAttachment, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     JS_DefineFunction(cx, jsb_spine_SkeletonAnimation_prototype, "getCurrent", jsb_cocos2dx_spine_getCurrent, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     JS_DefineFunction(cx, jsb_spine_SkeletonAnimation_prototype, "setAnimation", jsb_cocos2dx_spine_setAnimation, 3, JSPROP_ENUMERATE | JSPROP_PERMANENT);

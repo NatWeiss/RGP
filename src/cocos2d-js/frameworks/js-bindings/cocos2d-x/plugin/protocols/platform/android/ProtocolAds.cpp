@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "ProtocolAds.h"
-#include "JniHelper.h"
+#include "PluginJniHelper.h"
 #include <android/log.h>
 #include "PluginUtils.h"
 #include "PluginJavaData.h"
@@ -31,8 +31,8 @@ namespace cocos2d { namespace plugin {
 
 extern "C" {
 	JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_AdsWrapper_nativeOnAdsResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg) {
-		std::string strMsg = JniHelper::jstring2string(msg);
-		std::string strClassName = JniHelper::jstring2string(className);
+		std::string strMsg = PluginJniHelper::jstring2string(msg);
+		std::string strClassName = PluginJniHelper::jstring2string(className);
 		PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
 		PluginUtils::outputLog("ProtocolAds", "nativeOnAdsResult(), Get plugin ptr : %p", pPlugin);
 		if (pPlugin != NULL)
@@ -51,7 +51,7 @@ extern "C" {
 	}
 
 	JNIEXPORT void JNICALL Java_org_cocos2dx_plugin_AdsWrapper_nativeOnPlayerGetPoints(JNIEnv*  env, jobject thiz, jstring className, jint points) {
-		std::string strClassName = JniHelper::jstring2string(className);
+		std::string strClassName = PluginJniHelper::jstring2string(className);
 		PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
 		PluginUtils::outputLog("ProtocolAds", "nativeOnPlayerGetPoints(), Get plugin ptr : %p", pPlugin);
 		if (pPlugin != NULL)
@@ -89,8 +89,8 @@ void ProtocolAds::configDeveloperInfo(TAdsDeveloperInfo devInfo)
     else
     {
         PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-    	JniMethodInfo t;
-        if (JniHelper::getMethodInfo(t
+    	PluginJniMethodInfo t;
+        if (PluginJniHelper::getMethodInfo(t
     		, pData->jclassName.c_str()
     		, "configDeveloperInfo"
     		, "(Ljava/util/Hashtable;)V"))
@@ -109,10 +109,10 @@ void ProtocolAds::configDeveloperInfo(TAdsDeveloperInfo devInfo)
 void ProtocolAds::showAds(TAdsInfo info, AdsPos pos)
 {
 	PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-	JniMethodInfo t;
+	PluginJniMethodInfo t;
 
 	PluginUtils::outputLog("ProtocolAds", "Class name : %s", pData->jclassName.c_str());
-	if (JniHelper::getMethodInfo(t
+	if (PluginJniHelper::getMethodInfo(t
 		, pData->jclassName.c_str()
 		, "showAds"
 		, "(Ljava/util/Hashtable;I)V"))
@@ -127,10 +127,10 @@ void ProtocolAds::showAds(TAdsInfo info, AdsPos pos)
 void ProtocolAds::hideAds(TAdsInfo info)
 {
     PluginJavaData* pData = PluginUtils::getPluginJavaData(this);
-    JniMethodInfo t;
+    PluginJniMethodInfo t;
 
     PluginUtils::outputLog("ProtocolAds", "Class name : %s", pData->jclassName.c_str());
-    if (JniHelper::getMethodInfo(t
+    if (PluginJniHelper::getMethodInfo(t
         , pData->jclassName.c_str()
         , "hideAds"
         , "(Ljava/util/Hashtable;)V"))

@@ -1,10 +1,26 @@
-//
-//  ScriptingCore.cpp
-//  testmonkey
-//
-//  Created by Rolando Abarca on 3/14/12.
-//  Copyright (c) 2012 Zynga Inc. All rights reserved.
-//
+/*
+ * Created by Rolando Abarca on 3/14/12.
+ * Copyright (c) 2012 Zynga Inc. All rights reserved.
+ * Copyright (c) 2013-2014 Chukong Technologies Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
 #include "ScriptingCore.h"
 
@@ -396,7 +412,8 @@ void ScriptingCore::string_report(jsval val) {
         LOGD("val : (return value is false");
         // return 1;
     } else if (JSVAL_IS_STRING(val)) {
-        JSString *str = JS_ValueToString(this->getGlobalContext(), val);
+        JSContext* cx = this->getGlobalContext();
+        JSString *str = JS::ToString(cx, JS::RootedValue(cx, val));
         if (NULL == str) {
             LOGD("val : return string is NULL");
         } else {
@@ -423,7 +440,7 @@ bool ScriptingCore::evalString(const char *string, jsval *outVal, const char *fi
     
     JSAutoCompartment ac(cx, global);
     
-    JSScript* script = JS_CompileScript(cx, global, string, strlen(string), filename, 1);
+    JSScript* script = JS_CompileScript(cx, JS::RootedObject(cx, global), string, strlen(string), JS::CompileOptions(cx));
     if (script)
     {
         bool evaluatedOK = JS_ExecuteScript(cx, global, script, outVal);
@@ -504,7 +521,9 @@ void ScriptingCore::createGlobalContext() {
     // Removed in Firefox v27
 //    JS_SetOptions(this->_cx, JSOPTION_TYPE_INFERENCE);
     JS::ContextOptionsRef(_cx).setTypeInference(true);
-    
+    JS::ContextOptionsRef(_cx).setIon(true);
+    JS::ContextOptionsRef(_cx).setBaseline(true);
+
 //    JS_SetVersion(this->_cx, JSVERSION_LATEST);
     
     // Only disable METHODJIT on iOS.
@@ -725,7 +744,7 @@ bool ScriptingCore::executeScript(JSContext *cx, uint32_t argc, jsval *vp)
 {
     if (argc >= 1) {
         jsval* argv = JS_ARGV(cx, vp);
-        JSString* str = JS_ValueToString(cx, argv[0]);
+        JSString* str = JS::ToString(cx, JS::RootedValue(cx, argv[0]));
         JSStringWrapper path(str);
         bool res = false;
         if (argc == 2 && argv[1].isString()) {
@@ -1057,7 +1076,19 @@ bool ScriptingCore::handleTouchEvent(void* nativeObj, cocos2d::EventTouch::Event
         else
         {
             jsval retval;
-            ret = executeFunctionWithOwner(OBJECT_TO_JSVAL(p->obj), funcName.c_str(), 2, dataVal, &retval);
+            executeFunctionWithOwner(OBJECT_TO_JSVAL(p->obj), funcName.c_str(), 2, dataVal, &retval);
+            if(JSVAL_IS_NULL(retval))
+            {
+                ret = false;
+            }
+            else if(JSVAL_IS_BOOLEAN(retval))
+            {
+                ret = JSVAL_TO_BOOLEAN(retval);
+            }
+            else
+            {
+                ret = false;
+            }
         }
     } while(false);
 

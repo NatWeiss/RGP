@@ -36,12 +36,12 @@
 --------------------------------
 -- @function [parent=#EditBox] setPlaceholderFontColor 
 -- @param self
--- @param #color3B_table color3b
+-- @param #color3b_table color3b
         
 --------------------------------
 -- @function [parent=#EditBox] setFontColor 
 -- @param self
--- @param #color3B_table color3b
+-- @param #color3b_table color3b
         
 --------------------------------
 -- @function [parent=#EditBox] setPlaceholderFont 
@@ -109,12 +109,12 @@
 --------------------------------
 -- @function [parent=#EditBox] setAnchorPoint 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#EditBox] setPosition 
 -- @param self
--- @param #point_table point
+-- @param #cc.Vec2 vec2
         
 --------------------------------
 -- @function [parent=#EditBox] setVisible 
