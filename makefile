@@ -20,6 +20,8 @@ release:
 	cp package.json ${dest}
 	cp prebuild.sh ${dest}
 	cp rapidgamepro.js ${dest}
+	@rez/delete-text "// begin pro" ${dest}rapidgamepro.js --newlines
+	@rez/delete-text "// end pro" ${dest}rapidgamepro.js --newlines
 	cp README-pro.md ${dest}README.md
 	mv src/proj.android/obj src/proj.android/libs /tmp
 	cp -a src ${dest}
@@ -87,9 +89,10 @@ rg:
 	cp docs.html ${dest}
 	cp src/cocos2d.patch ${dest}src
 	cp package.json ${dest}
-	cp prebuild.sh ${dest}
-	@rez/delete-between "# begin pro" "# end pro" ${dest}prebuild.sh --newlines
+	#cp prebuild.sh ${dest}
+	#@rez/delete-between "# begin pro" "# end pro" ${dest}prebuild.sh --newlines
 	cp rapidgamepro.js ${dest}rapidgame.js
+	@rez/delete-between "// begin pro" "// end pro" ${dest}rapidgame.js --newlines
 	sed -i "" 's/rapidgamepro/rapidgame/g' ${dest}package.json
 	@rez/delete-text '  "private": true,' ${dest}package.json --newlines
 	#sed -i "" 's/  "private": true,//g' ${dest}package.json

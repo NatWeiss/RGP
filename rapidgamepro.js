@@ -14,17 +14,18 @@ var http = require("http"),
 	glob = require("glob"),
 	wrench = require("wrench"),
 	child_process = require("child_process"),
-	Winreg = require("winreg"),
 	packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))),
 	cmdName = packageJson.name,
 	version = packageJson.version,
-	cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-alpha2.zip",
+	cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.0-beta.zip", // "http://www.cocos2d-x.org/filedown/cocos2d-js-v3.0-beta.zip
 	cocos2dDirGlob = "*ocos2d-js*",
 	category,
 	engines = [],
 	templates = [],
+	builds = [],
 	orientations = ["landscape", "portrait"],
 	copyCount = 0,
+	msBuildPath,
 	defaults = {
 		engine: "cocos2d",
 		template: "TwoScene",
@@ -68,6 +69,8 @@ var run = function(args) {
 		.option("-p, --prefix <name>", "library directory [" + defaults.prefix + "]", defaults.prefix)
 		.option("-f, --folder <path>", "output folder [" + defaults.dest + "]", defaults.dest)
 		.option("-o, --orientation <orientation>", "orientation (" + orientations.join(", ") + ") [" + defaults.orientation + "]", defaults.orientation)
+		.option("--nostrip", "do not strip the prebuilt libraries", false)
+		.option("--minimal", "prebuild only debug libraries and use minimal architectures", false)
 		.option("-v, --verbose", "be verbose", false);
 
 	cmd
@@ -127,7 +130,7 @@ var init = function(directory) {
 	}
 
 	// Create lib symlink
-	src = cmd.prefix;
+	src = path.join(cmd.prefix, version);
 	dest = path.join(directory, "lib");
 	console.log("Symlinking" + (cmd.verbose ? ": " + dest + " -> " + src : " lib folder"));
 	try {
@@ -291,6 +294,220 @@ var createProject = function(engine, name, package) {
 };
 
 //
+// check that prefix directory is writeable
+//
+var checkPrefix = function() {
+	// Test prefix dir
+	if (!isWriteableDir(cmd.prefix)) {
+		if (cmd.prefix !== defaults.prefix) {
+			logErr("Cannot write files to prefix directory: " + cmd.prefix);
+			return false;
+		}
+
+		// Try users's home dir if they didn't override the prefix setting
+		var newPrefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
+		wrench.mkdirSyncRecursive(newPrefix);
+		if (!isWriteableDir(newPrefix)) {
+			logErr("Cannot write files to alternate prefix directory: " + newPrefix);
+			return false;
+		}
+		cmd.prefix = newPrefix;
+	}
+	if (cmd.verbose) {
+		console.log("Can successfully write files to prefix directory: " + cmd.prefix);
+	}
+	return true;
+};
+
+//
+// run the prebuild command
+//
+var prebuild = function(platform, config, arch) {
+	category = "prebuild";
+	platform = platform || "";
+	config = config || "";
+	arch = arch || "";
+
+	if (!checkPrefix()) {
+		usage();
+		return 1;
+	}
+
+	cmd.buildLog = path.join(cmd.prefix, "build.log");
+	try {
+		fs.writeFileSync(cmd.buildLog, "");
+		console.log("Writing build log to: " + cmd.buildLog);
+	} catch(e) {
+		cmd.buildLog = "";
+	}
+
+	report("start");
+	copySrcFiles(function() {
+		downloadCocos(function() {
+			setupPrebuild(function() {
+				runPrebuild(platform, config, arch, function() {
+					report("done");
+				});
+			});
+		});
+	});
+};
+
+//
+// copy src directory to prefix
+//
+var copySrcFiles = function(callback) {
+	var src, dest;
+
+	// Synchronously copy src directory to dest
+	src = path.join(__dirname, "src");
+	dest = path.join(cmd.prefix, "src");
+	if (src !== dest) {
+		console.log("Copying " + src + " to " + dest);
+		copyRecursive(src, dest, true);
+	}
+
+	callback();
+};
+
+//
+// download cocos2d js source
+//
+var downloadCocos = function(callback) {
+	var dir = path.join(cmd.prefix, "src"),
+		src,
+		dest = path.join(dir, "cocos2d-js"),
+		downloaded = path.join(cmd.prefix, "src", "downloaded.txt"),
+		doDownload = !dirExists(dest),
+		ver;
+
+	// check downloaded version
+	try{
+		ver = fs.readFileSync(downloaded).toString().trim();
+	} catch(e) {
+	}
+	if (ver !== cocos2djsUrl) {
+		console.log("Current Cocos2D JS URL: " + cocos2djsUrl);
+		console.log("Downloaded Cocos2D JS URL: " + ver);
+		console.log("Re-downloading");
+		doDownload = true;
+		try {
+			wrench.rmdirSyncRecursive(dest, true);
+		} catch(e) {
+			if (cmd.verbose) {
+				console.log(e);
+			}
+			// try again
+			try {wrench.rmdirSyncRecursive(dest, true);} catch(e) {}
+		}
+	}
+
+	// no need to download
+	if (!doDownload) {
+		callback();
+		return;
+	}
+
+	// warn about git existing
+	src = path.join(cmd.prefix, ".git");
+	if (dirExists(src)) {
+		console.log("WARNING: Directory " + src + " may prevent cocos2d-js from being patched with git apply");
+	}
+
+	// download
+	downloadUrl(cocos2djsUrl, dir, function(success) {
+		if (!success) {
+			return;
+		}
+
+		var globPath = path.join(dir, cocos2dDirGlob),
+			files = glob.sync(globPath);
+		if (!files || files.length !== 1) {
+			logErr("Couldn't glob " + globPath);
+			return;
+		}
+
+		// Rename extract dir
+		try {
+			console.log("Moving " + files[0] + " to " + dest);
+			fs.renameSync(files[0], dest);
+
+			// Save downloaded version
+			fs.writeFileSync(downloaded, cocos2djsUrl);
+
+			// Apply latest patch
+			// (see comments at the end of this file for how to create the patch)
+			src = path.join(dir, "cocos2d.patch");
+			console.log("Applying patch file: " + src);
+			exec("git apply --whitespace=nowarn " + src, {cwd: dest, env: process.env}, function(err){
+				// Delete patch
+				//if (!err) {
+				//	fs.unlinkSync(src);
+				//}
+				
+				callback();
+			});
+		} catch(e) {
+			logErr("Couldn't move " + files[0] + " to " + dest)
+		}
+	});
+};
+
+//
+// Copy files recursively with a special exclude filter.
+//
+var copyRecursive = function(src, dest, filter, overwrite) {
+	if (cmd.verbose) {
+		console.log("Recursively copying " + path.relative(cmd.prefix, src) +
+			" to " + path.relative(cmd.prefix, dest));
+	}
+	
+	// copy using wrench
+	overwrite = overwrite || false;
+	var options = {
+			forceDelete: overwrite, // false Whether to overwrite existing directory or not
+			excludeHiddenUnix: false, // Whether to copy hidden Unix files or not (preceding .)
+			preserveFiles: !overwrite, // true If we're overwriting something and the file already exists, keep the existing
+			preserveTimestamps: true, // Preserve the mtime and atime when copying files
+			inflateSymlinks: false // Whether to follow symlinks or not when copying files
+		};
+	if (filter === true) {
+		options.exclude = excludeFilter;
+	}
+	copyCount = 0;
+	wrench.copyDirSyncRecursive(src, dest, options);
+	return copyCount;
+};
+
+//
+// copy files using glob
+//
+var copyGlobbed = function(src, dest, pattern, grep) {
+	var i, file, files;
+	pattern = path.join("**", pattern);
+	if (cmd.verbose) {
+		console.log("Recursively copying " + path.relative(cmd.prefix, path.join(src, pattern)) +
+			" to " + path.relative(cmd.prefix, dest));
+	}
+
+	files = glob.sync(path.join(src, pattern));
+	for (i = 0; i < files.length; i += 1) {
+		if (grep && files[i].indexOf(grep) < 0) {
+			continue;
+		}
+		file = path.join(dest, path.relative(src, files[i]));
+		//console.log(/*path.relative(cmd.prefix, files[i]) + " -> " + */path.relative(cmd.prefix, file));
+		wrench.mkdirSyncRecursive(path.dirname(file));
+		try{
+			fs.writeFileSync(file, fs.readFileSync(files[i]));
+		} catch(e) {
+			console.log(e);
+		}
+	}
+	return files.length;
+};
+
+//
 // filters files for exclusion
 //
 var excludeFilter = function(filename, dir){
@@ -311,14 +528,6 @@ var excludeFilter = function(filename, dir){
 	} else if (filename === "lib") {
 		try {
 			i = fs.lstatSync(path.join(dir, filename));
-
-/*
-
-need to remove templates/cocos2d/star/lib
-because it's a regular file on windows (not a symlink)
-
-*/
-
 			if (i.isSymbolicLink()) {
 				doExclude = true;
 			}
@@ -361,185 +570,17 @@ because it's a regular file on windows (not a symlink)
 };
 
 //
-// check that prefix directory is writeable
-//
-var checkPrefix = function() {
-	// Test prefix dir
-	if (!isWriteableDir(cmd.prefix)) {
-		if (cmd.prefix !== defaults.prefix) {
-			logErr("Cannot write files to prefix directory: " + cmd.prefix);
-			return false;
-		}
-
-		// Try users's home dir if they didn't override the prefix setting
-		var newPrefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
-		wrench.mkdirSyncRecursive(newPrefix);
-		if (!isWriteableDir(newPrefix)) {
-			logErr("Cannot write files to alternate prefix directory: " + newPrefix);
-			return false;
-		}
-		cmd.prefix = newPrefix;
-	}
-	//console.log("Can successfully write files to prefix directory: " + cmd.prefix);
-	return true;
-};
-
-//
-// run the prebuild command
-//
-var prebuild = function(platform, config, arch) {
-	category = "prebuild";
-	platform = platform || "";
-	config = config || "";
-	arch = arch || "";
-
-	if (!checkPrefix()) {
-		usage();
-		return 1;
-	}
-
-	report("start");
-	copySrcFiles(function() {
-		downloadCocos(function() {
-//			setupPrebuild(function() {
-				runPrebuild(platform, config, arch, function() {
-					report("done");
-				});
-//			});
-		});
-	});
-};
-
-//
-// copy src directory to prefix
-//
-var copySrcFiles = function(callback) {
-	var src, dest;
-
-	// Synchronously copy src directory to dest
-	src = path.join(__dirname, "src");
-	dest = path.join(cmd.prefix, "src");
-	if (src !== dest) {
-		console.log("Copying " + src + " to " + dest);
-		copyRecursive(src, dest, true);
-	}
-
-	callback();
-};
-
-//
-// download cocos2d js source
-//
-var downloadCocos = function(callback) {
-	var dir = path.join(cmd.prefix, "src"),
-		src, dest = path.join(dir, "cocos2d-js");
-	if (dirExists(dest)) {
-		callback();
-	} else {
-		src = path.join(cmd.prefix, ".git");
-		if (dirExists(src)) {
-			console.log("WARNING: Directory " + src + " may prevent cocos2d-js from being patched with git apply");
-		}
-		downloadUrl(cocos2djsUrl, dir, function(success) {
-			if (success) {
-				var globPath = path.join(dir, cocos2dDirGlob),
-					files = glob.sync(globPath);
-				if (files && files.length === 1) {
-					// Rename extract dir
-					try {
-						console.log("Moving " + files[0] + " to " + dest);
-						fs.renameSync(files[0], dest);
-
-						// Apply latest patch
-						src = path.join(dir, "cocos2d.patch");
-						try {
-							console.log("Applying patch file: " + src);
-							child_process.exec("git apply --whitespace=nowarn " + src, {cwd: dest, env: process.env}, function(a, b, c){
-								execCallback(a, b, c);
-								
-								// Delete patch
-								if (!a) {
-									fs.unlinkSync(src);
-								}
-								
-								callback();
-							});
-						} catch(e) {
-							logErr("Couldn't apply patch file: " + src);
-						}
-					} catch(e) {
-						logErr("Couldn't move " + files[0] + " to " + dest)
-					}
-				} else {
-					logErr("Couldn't glob " + globPath);
-				}
-			}
-		});
-	}
-};
-
-//
-// Copy files recursively with a special exclude filter.
-//
-var copyRecursive = function(src, dest, filter) {
-	var isIncludeFilter = (typeof filter === "string"),
-		pattern = (isIncludeFilter ? path.join("**", filter) : "");
-	if (cmd.verbose) {
-		console.log("Recursively copying " + path.relative(cmd.prefix, path.join(src, pattern)) +
-			" to " + path.relative(cmd.prefix, dest));
-	}
-	
-	// copy using glob
-	if (isIncludeFilter) {
-		return copyGlobbed(src, pattern, dest);
-	}
-
-	// copy using wrench
-	var overwrite = false,
-		options = {
-			forceDelete: overwrite, // false Whether to overwrite existing directory or not
-			excludeHiddenUnix: false, // Whether to copy hidden Unix files or not (preceding .)
-			preserveFiles: !overwrite, // true If we're overwriting something and the file already exists, keep the existing
-			preserveTimestamps: true, // Preserve the mtime and atime when copying files
-			inflateSymlinks: false // Whether to follow symlinks or not when copying files
-		};
-	if (filter === true) {
-		options.exclude = excludeFilter;
-	}
-	copyCount = 0;
-	wrench.copyDirSyncRecursive(src, dest, options);
-	return copyCount;
-};
-
-//
-// copy files using glob
-//
-var copyGlobbed = function(src, pattern, dest) {
-	var i, file, files = glob.sync(path.join(src, pattern));
-	for (i = 0; i < files.length; i += 1) {
-		file = path.join(dest, path.relative(src, files[i]));
-		//console.log(/*path.relative(cmd.prefix, files[i]) + " -> " + */path.relative(cmd.prefix, file));
-		wrench.mkdirSyncRecursive(path.dirname(file));
-		try{
-			fs.writeFileSync(file, fs.readFileSync(files[i]));
-		} catch(e) {
-			console.log(e);
-		}
-	}
-	return files.length;
-};
-
-//
 // prebuild setup (copies headers, java files, etc.)
 //
 var setupPrebuild = function(callback) {
-	var dir, src, dest, i, files,
+	var ver, dir, src, dest, i, files,
 		frameworks = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks");
 
 	console.log("Copying header files...");
 
 	// reset cocos2d dir
-	dest = path.join(cmd.prefix, "cocos2d");
+	ver = path.join(cmd.prefix, version);
+	dest = path.join(ver, "cocos2d");
 	files = ["html", path.join("x", "include"), path.join("x", "java"), path.join("x", "jsb")];
 	try {
 		for (i = 0; i < files.length; i += 1) {
@@ -555,30 +596,56 @@ var setupPrebuild = function(callback) {
 		}
 	} catch(e) {
 		console.log("Error cleaning destination: " + dest);
+		if (cmd.verbose) {
+			console.log(e);
+		}
 	}
 
 	// copy cocos2d-html5
-	dest = path.join(cmd.prefix, "cocos2d", "html");
+	dest = path.join(ver, "cocos2d", "html");
 	src = path.join(frameworks, "cocos2d-html5");
-	copyRecursive(src, dest);
+	copyRecursive(src, dest, false, true);
 
 	// copy headers
-	dir = dest = path.join(cmd.prefix, "cocos2d", "x", "include");
+	dir = dest = path.join(ver, "cocos2d", "x", "include");
 	src = path.join(frameworks, "js-bindings", "cocos2d-x");
 	// # except if dir is cocos2d-x/plugin (or don't copy plugin/jsbindings and reference the one in include/plugin/jsbindings)
-	copyRecursive(src, dest, '*.h');
-	copyRecursive(src, dest, '*.hpp');
-	copyRecursive(src, dest, '*.msg');
+	copyGlobbed(src, dest, '*.h');
+	copyGlobbed(src, dest, '*.hpp');
+	copyGlobbed(src, dest, '*.msg');
 
 	dest = path.join(dir, "bindings");
 	src = path.join(frameworks, "js-bindings", "bindings");
-	copyRecursive(src, dest, '*.h');
-	copyRecursive(src, dest, '*.hpp');
+	copyGlobbed(src, dest, '*.h');
+	copyGlobbed(src, dest, '*.hpp');
 
 	dest = path.join(dir, "external");
 	src = path.join(frameworks, "js-bindings", "external");
-	copyRecursive(src, dest, '*.h');
-	copyRecursive(src, dest, '*.msg');
+	copyGlobbed(src, dest, '*.h');
+	copyGlobbed(src, dest, '*.msg');
+
+// begin pro
+	dest = path.join(dir, "soomla");
+	src = path.join(cmd.prefix, "src", "cocos2dx-store");
+	copyGlobbed(src, dest, '*.h');
+	
+	dest = path.join(dir, "external");
+	src = path.join(cmd.prefix, "src", "external");
+	copyGlobbed(src, dest, '*.h');
+
+	dest = path.join(dir, "bindings");
+	src = path.join(frameworks, "js-bindings", "cocos2d-x", "plugin", "jsbindings");
+	copyGlobbed(src, dest, '*.h');
+	copyGlobbed(src, dest, '*.hpp');
+
+	dest = path.join(dir, "facebook");
+	src = path.join(cmd.prefix, "src", "facebook");
+	copyGlobbed(src, dest, 'jsb*.h');
+
+	dest = path.join(dir, "app");
+	src = path.join(cmd.prefix, "src", "app");
+	copyGlobbed(src, dest, 'jsb*.h');
+// end pro
 
 	// remove unneeded
 	files = ["docs", "build", "tests", "samples", "templates", "tools",
@@ -588,25 +655,33 @@ var setupPrebuild = function(callback) {
 	}
 
 	// jsb
-	dest = path.join(cmd.prefix, "cocos2d", "x", "jsb");
+	dest = path.join(ver, "cocos2d", "x", "jsb");
 	src = path.join(frameworks, "js-bindings", "bindings", "script");
-	copyRecursive(src, dest, '*.js');
+	copyGlobbed(src, dest, '*.js');
 	src = path.join(frameworks, "js-bindings", "bindings", "auto", "api");
-	copyRecursive(src, dest, '*.js');
+	copyGlobbed(src, dest, '*.js');
+// begin pro
+	//src = path.join(cmd.prefix, "src", "cocos2dx-store");
+	//copyGlobbed(src, dest, '*.js');
+	src = path.join(cmd.prefix, "src", "mobfox", "proj.ios", "MRAID.bundle");
+	copyGlobbed(src, dest, '*.js');
+	src = path.join(frameworks, "js-bindings", "cocos2d-x", "plugin", "jsbindings", "script");
+	copyGlobbed(src, dest, '*.js');
+// end pro
 
 	// java
-	dir = path.join(cmd.prefix, "cocos2d", "x", "java");
+	dir = path.join(ver, "cocos2d", "x", "java");
 	dest = path.join(dir, "cocos2d-x");
-	src = path.join(frameworks, "js-bindings", "cocos2d-x", "cocos", "2d", "platform", "android", "java");
+	src = path.join(frameworks, "js-bindings", "cocos2d-x", "cocos", "platform", "android", "java");
 	copyRecursive(src, dest);
 	// .mk and .a
 	dest = path.join(dir, "mk");
 	src = path.join(cmd.prefix, "src");
-	copyRecursive(src, dest, "*.mk");
-	copyRecursive(src, dest, "*.a");
+	copyGlobbed(src, dest, "*.mk");
+	copyGlobbed(src, dest, "*.a", "android");
 	src = path.join(frameworks, "js-bindings");
-	copyRecursive(src, dest, "*.mk");
-	copyRecursive(src, dest, "*.a");
+	copyGlobbed(src, dest, "*.mk");
+	copyGlobbed(src, dest, "*.a", "android");
 	// # bonus: call android/strip on mk/*.a
 	files = ["proj.android", "cocos2d-js"];
 	for (i = 0; i < files.length; i += 1) {
@@ -620,6 +695,56 @@ var setupPrebuild = function(callback) {
 	for (i = 0; i < files.length; i += 1) {
 		wrench.rmdirSyncRecursive(files[i], true);
 	}
+// begin pro
+	dest = path.join(dir, "cocos2dx-store");
+	src = path.join(cmd.prefix, "src", "cocos2dx-store", "android");
+	copyRecursive(src, dest, true, true);
+	dest = path.join(dest, "project.properties");
+	sed("../../cocos2d-js/frameworks/js-bindings/cocos2d-x/cocos/2d/platform/android", "../cocos2d-x", dest);
+	sed("../submodules/android-store/SoomlaAndroidStore", "../android-store", dest);
+
+	dest = path.join(dir, "android-store");
+	src = path.join(cmd.prefix, "src", "cocos2dx-store", "submodules", "android-store", "SoomlaAndroidStore");
+	copyRecursive(src, dest, true, true);
+	//src = path.join(cmd.prefix, "src", "cocos2dx-store", "submodules", "android-store", "submodules", "android-store-google-play");
+	//if (dirExists(src)) {
+	//	copyRecursive(src, dest, false, true);
+	//}
+
+	dest = path.join(dir, "facebook-sdk");
+	src = path.join(cmd.prefix, "src", "facebook", "proj.android", "facebook-android-sdk");
+	copyRecursive(src, dest, true, true);
+
+	dest = path.join(dir, "plugin-protocols");
+	src = path.join(frameworks, "js-bindings", "cocos2d-x", "plugin", "protocols", "proj.android");
+	copyRecursive(src, dest, true, true);
+
+	dest = path.join(dir, "flurry");
+	src = path.join(frameworks, "js-bindings", "cocos2d-x", "plugin", "plugins", "flurry", "proj.android");
+	copyRecursive(src, dest, true, true);
+	wrench.rmdirSyncRecursive(path.join(dest, "sdk"));
+	try{fs.unlinkSync(path.join(dest, "src", "org", "cocos2dx", "plugin", "AdsFlurry.java"));} catch(e){}
+	sed("../../../protocols/proj.android", "../plugin-protocols", path.join(dest, "project.properties"));
+
+	dest = path.join(dest, "libs");
+	src = path.join(cmd.prefix, "src", "flurry", "proj.android", "libs");
+	wrench.mkdirSyncRecursive(dest);
+	copyRecursive(src, dest, false, true);
+
+	dest = path.join(dir, "tools", "android");
+	src = path.join(frameworks, "js-bindings", "cocos2d-x", "plugin", "tools", "android");
+	wrench.mkdirSyncRecursive(dest);
+	copyRecursive(src, dest, false, true);
+// end pro
+
+// begin pro
+	// frameworks
+	dir = path.join(ver, "frameworks");
+	dest = path.join(dir, "FacebookSDK.framework");
+	src = path.join(cmd.prefix, "src", "facebook", "proj.ios", "FacebookSDK.framework");
+	wrench.mkdirSyncRecursive(dest);
+	copyRecursive(src, dest, false, true);
+// end pro
 
 	// find ${dir} | xargs xattr -c >> ${logFile} 2>&1
 
@@ -630,38 +755,223 @@ var setupPrebuild = function(callback) {
 // run the prebuild command
 //
 var runPrebuild = function(platform, config, arch, callback) {
-	if (process.platform === "win32") {
-		console.log("Prebuilding win32 libraries");
+	if (process.platform === "darwin") {
+		prebuildMac("iOS", config, arch, function(){
+			prebuildMac("Mac", config, arch, function(){
+				prebuildAndroid(config, arch, function(){
+					callback();
+				});
+			});
+		});
+	} else if (process.platform === "win32") {
 		prebuildWin(config, arch, callback);
+	} else {
+		console.log("No prebuild command written for " + process.platform + " yet");
 	}
 };
 
-/*var fixMSBuild = function(callback) {
-	var root = '\\Software\\Microsoft\\MSBuild\\ToolsVersions\\4.0',
-		regKey = new Winreg({key: root}),
-		key = "VCTargetsPath",
-		value = "$(MSBuildExtensionsPath32)\\Microsoft.Cpp\\v4.0\\";
-	regKey.get(key, function(err, val){
-		if (err || !val) {
-			console.log("Fixing " + root + "\\" + key);
-			regKey.set(key, Winreg.REG_SZ, value, function(err){
-				if (err) {
-					console.log(err);
-				} else {
-					console.log("Fixed");
+//
+// prebuild mac
+//
+var prebuildMac = function(platform, config, arch, callback) {
+	var i, j, k,
+		sdks = (platform === "Mac" ? ["macosx"] : ["iphoneos", "iphonesimulator"]),
+		configs = (config ? [config] : (cmd.minimal ? ["Debug"] : ["Debug", "Release"])),
+		projs = ["cocos2dx-prebuilt"];
+// begin pro
+	projs.push("cocos2dx-plugins");
+// end pro
+
+	// create builds array
+	builds = [];
+	for (i = 0; i < configs.length; i += 1) {
+		for (j = 0; j < sdks.length; j += 1) {
+			for (k = 0; k < projs.length; k += 1) {
+				builds.push([configs[i], sdks[j], projs[k]]);
+			}
+		}
+	}
+	nextBuild(platform, callback);
+};
+
+//
+// prebuild android
+//
+var prebuildAndroid = function(config, arch, callback) {
+	var i, j,
+		configs = (config ? [config] : (cmd.minimal ? ["Debug"] : ["Debug", "Release"])),
+		archs = (cmd.minimal ? ["armeabi"] : ["armeabi", "armeabi-v7a", "x86"]);
+
+	// create builds array
+	builds = [];
+	for (i = 0; i < configs.length; i += 1) {
+		for (j = 0; j < archs.length; j += 1) {
+			builds.push([configs[i], archs[j]]);
+		}
+	}
+	nextBuild("Android", callback);
+};
+
+//
+// prebuild windows
+//
+var prebuildWin = function(config, arch, callback) {
+	var i, configs = (config ? [config] : (cmd.minimal ? ["Debug"] : ["Debug", "Release"]));
+
+	// set VCTargetsPath
+	// (overcome error MSB4019: The imported project "C:\Microsoft.Cpp.Default.props" was not found.)
+	process.env["VCTargetsPath"] = getVCTargetsPath();
+
+	// create builds
+	builds = [];
+	for (i = 0; i < configs.length; i += 1) {
+		builds.push([configs[i]]);
+	}
+
+	// start
+	getMSBuildPath(function(path) {
+		msBuildPath = path;
+		nextBuild("Windows", callback);
+	});
+};
+
+//
+// launch the next build
+//
+var nextBuild = function(platform, callback){
+	if (builds.length) {
+		startBuild(platform, callback, builds.shift());
+	} else {
+		callback();
+	}
+};
+
+//
+// start a given build
+//
+var startBuild = function(platform, callback, settings) {
+	var dir, command, args, config, sdk, proj, arch, targets, archSettings = [], xcodeSettings = [];
+	if (platform === "iOS" || platform === "Mac") {
+		config = settings[0];
+		sdk = settings[1];
+		proj = settings[2];
+		command = "xcodebuild";
+		dir = path.join(cmd.prefix, "src", "proj.ios_mac");
+		xcodeSettings = ["RAPIDGAME_VERSION=" + version, "GCC_SYMBOLS_PRIVATE_EXTERN=NO"];
+		if (!cmd.nostrip) {
+			xcodeSettings.push("DEPLOYMENT_POSTPROCESSING=YES");
+			xcodeSettings.push("STRIP_INSTALLED_PRODUCT=YES");
+			xcodeSettings.push("STRIP_STYLE=non-global");
+		}
+		if (cmd.minimal) {
+			archSettings = (sdk === "iphoneos" ? ["-arch", "armv7"] : ["-arch", "i386"]);
+		}
+		args = [
+			"-project", path.join(dir, proj + ".xcodeproj"),
+			"-scheme", platform,
+			"-configuration", config,
+			"-sdk", sdk
+		];
+		args = args.concat(archSettings);
+		args = args.concat(xcodeSettings);
+	} else if (platform === "Android") {
+		dir = path.join(cmd.prefix, "src", "proj.android");
+		command = path.join(dir, "build.sh");
+		arch = settings[1];
+		args = [
+			arch
+		];
+	} else if (platform === "Windows") {
+		dir = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks", "js-bindings", "cocos2d-x", "build");
+		command = path.join(msBuildPath, "MSBuild.exe");
+		targets = ["libcocos2d", "libAudio", "libBox2D", "libchipmunk", "libCocosBuilder", "libCocosStudio",
+			"libExtensions", "libGUI", "libLocalStorage", "liblua", "libNetwork", "libSpine"];
+		args = [
+			path.join(dir, "cocos2d-win32.vc2012.sln"),
+			"/nologo",
+            "/maxcpucount:4",
+	        "/t:" + targets.join(";"),
+			//"/p:VisualStudioVersion=12.0",
+        	//"/p:PlatformTarget=x86",
+			//"/verbosity:diag",
+			//"/clp:ErrorsOnly",
+  			//"/p:nowarn=4005",
+  			//'/p:WarningLevel=0',
+        	"/p:configuration=" + settings[0]
+		];
+		
+		spawn(command, args, options, function(err){
+			if (!err) {
+				console.log("Done");
+				console.log("Merging libraries");
+			} else {
+				if (!cmd.verbose) {
+					console.log("Build failed. Please run with --verbose or check the build log: " + cmd.buildLog);
 				}
-				callback();
-			});
+			}
+		});
+
+	}
+
+	console.log("Building " + platform + " " + settings[0] +
+		(settings[1] ? " " + settings[1] : "") +
+		(settings[2] ? " " + settings[2] : "") + "...");
+	spawn(command, args, {cwd: dir, env: process.env}, function(err){
+		if (!err){
+			console.log("Succeeded.");
+			if (platform === "Windows") {
+				linkWin(dir, settings[0], function(){
+					nextBuild(platform, callback);
+				});
+			} else {
+				nextBuild(platform, callback);
+			}
 		} else {
-			console.log("VCTargetsPath = ");
-			console.log(val.value);
-			callback();
+			if (!cmd.verbose) {
+				console.log("Build failed. Please run with --verbose or check the build log: " + cmd.buildLog);
+			}
 		}
 	});
-};*/
+};
 
+//
+// link windows
+//
+var linkWin = function(buildDir, config, callback) {
+	var src, dest,
+		options = {
+			cwd: path.join(buildDir, config + ".win32"),
+			env: process.env
+		};
+
+	// copy dlls
+	dest = path.join(cmd.prefix, version, "cocos2d", "x", "lib", config + "-win32", "x86");
+	wrench.mkdirSyncRecursive(dest);
+	copyGlobbed(options.cwd, dest, "*.dll");
+
+	// link
+	dest = path.join(dest, "libcocos2dx-prebuilt.lib");
+	command = '"' + getVCBinDir() + 'lib.exe" ' +
+		'/NOLOGO ' +
+		//'/OPT:REF ' +
+		//'/OPT:ICF ' +
+		'"/OUT:' + dest + '" ' +
+		'*.lib';
+
+	exec(command, options, function(err){
+		if (!err) {
+			console.log("Done");
+		}
+		callback();
+	});
+};
+
+//
+// get the ms build tools path
+//
 var getMSBuildPath = function(callback) {
-	var root = '\\Software\\Microsoft\\MSBuild\\ToolsVersions',
+	var Winreg = require("winreg"),
+		root = '\\Software\\Microsoft\\MSBuild\\ToolsVersions',
 		regKey = new Winreg({key: root});
 	regKey.keys(function (err, items) {
 		var i, key;
@@ -679,7 +989,7 @@ var getMSBuildPath = function(callback) {
 						return;
 					}
 					if (cmd.verbose) {
-						console.log("Got build tools path: " + item.value);
+						console.log("MSBuildToolsPath: " + item.value);
 					}
 					callback(item.value);
 				});
@@ -688,146 +998,52 @@ var getMSBuildPath = function(callback) {
 	  	}
 	  	console.log("Unable to find MSBuild path");
 	});
-
 };
 
-var prebuildWin = function(config, arch, callback) {
-	config = config || "Debug";
-	config = (config.toLowerCase() === "release" ? "Release" : "Debug");
-
-	//fixMSBuild(function(){
-		getMSBuildPath(function(msBuildPath) {
-			var dir = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks", "js-bindings", "cocos2d-x", "build"),
-				src = path.join(dir, "cocos2d-win32.vc2012.sln"),
-				dest,
-				targets = ["libcocos2d", "libAudio", "libBox2D", "libchipmunk", "libCocosBuilder", "libCocosStudio",
-					"libExtensions", "libGUI", "libLocalStorage", "liblua", "libNetwork", "libSpine"],
-				options = {cwd: dir, env: process.env},
-				args = [
-					'"' + src + '"',
-					"/nologo",
-		            "/maxcpucount:4",
-	    	        "/t:" + targets.join(";"),
-					//"/p:VisualStudioVersion=12.0",
-	            	//"/p:PlatformTarget=x86",
-					//"/verbosity:diag",
-	            	"/p:configuration=" + config
-				],
-				command = '"' + path.join(msBuildPath, "MSBuild.exe") + '" ' + args.join(" ");
-			
-			// set VCTargetsPath
-			src = "\\MSBuild\\Microsoft.Cpp\\v4.0\\V120\\";
-			dest = "\\Program Files (x86)" + src;
-			if (!dirExists(dest)) {
-				options.env["VCTargetsPath"] = dest;
-			} else {
-				dest = "C:" + dest;
-				if (dirExists(dest)) {
-					options.env["VCTargetsPath"] = dest;
-				}
-			}
-			console.log(options.env["VCTargetsPath"]);
-			//options.env["VCTargetsPath"] = "$(MSBuildExtensionsPath32)\\Microsoft.Cpp\\v4.0\\";
-			//options.env["VCTargetsPath"] = "\\Program Files (x86)" + dest;
-
+//
+// get the VCTargetsPath
+//
+var getVCTargetsPath = function() {
+	var i,
+		base = "\\MSBuild\\Microsoft.Cpp\\v4.0\\V120\\",
+		//base = "\\MSBuild\\Microsoft.Cpp\\v4.0\\",
+		names = [
+			"\\Program Files (x86)" + base,
+			"C:\\Program Files (x86)" + base,
+			"\\Program Files" + base,
+			"C:\\Program Files" + base
+		];
+	for (i = 0; i < names.length; i += 1) {
+		if (dirExists(names[i])) {
 			if (cmd.verbose) {
-				console.log(command);
+				console.log("VCTargetsPath: " + names[i]);
 			}
-			try {
-				child_process.exec(command, options, function(a, b, c){
-					execCallback(a, b, c);
-
-					if (!a) {
-						console.log("Done");
-						console.log("Merging libraries");
-
-						// copy dlls
-						src = path.join(dir, config + ".win32");
-						dest = path.join(cmd.prefix, "cocos2d", "x", "lib", config + "-win32", "x86");
-						wrench.mkdirSyncRecursive(dest);
-						copyGlobbed(src, "*.dll", dest);
-
-						// link
-						dest = path.join(dest, "libcocos2dx-prebuilt.lib");
-						options.cwd = path.join(dir, config + ".win32");
-						command = '"\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\bin\\lib.exe" ' +
-							'"/OUT:' + dest + '" ' +
-							'*.lib'
-	//						'libcocos2d.lib libAudio.lib freetype250.lib glew32.lib glfw3.lib libchipmunk.lib ' +
-	//						'libcurl_imp.lib libiconv.lib libjpeg.lib libpng.lib libtiff.lib libwebp.lib libzlib.lib ' +
-	//						'websockets.lib' +
-							'';
-
-
-	// libcocos2dx-prebuilt.lib;opengl32.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)
-	// set Debugging > Working Directory to $(ProjectDir) // ? outputdir??
-	// copy .dll files to output dir
-
-						if (cmd.verbose) {
-							console.log("cwd = " + options.cwd);
-							console.log(command);
-						}
-						try {
-							child_process.exec(command, options, function(a, b, c){
-								execCallback(a, b, c);
-								if (!a) {
-									console.log("Done");
-								}
-								callback();
-							});
-						} catch(e) {
-							console.log(e);
-						}
-					}
-				});
-			} catch(e) {
-				console.log(e);
-			}
-	// C:\Program Files (x86)\MSBuild\12.0\bin\amd64\MSBuild.exe C:\Users\nat\Desktop\RapidGame\src\cocos2d-js\frameworks\js-bindings\cocos2d-x\build\cocos2d-win32.vc2012.sln /maxcpucount:4 /t:libcocos2d /p:configuration=Debug
-
-
-
-	// error MSB4019: The imported project "C:\Microsoft.Cpp.Default.props" was not found. Confirm that the path in the <Import> declaration is correct, and that the file exists on disk.
-	// http://stackoverflow.com/questions/16092169/why-does-msbuild-look-in-c-for-microsoft-cpp-default-props-instead-of-c-progr
-	// http://msdn.microsoft.com/en-us/library/ms164309(VS.100).aspx
-
-// $([MSBuild]::ValueOrDefault('$(VCTargetsPath)','$(MSBuildExtensionsPath32)\Microsoft.Cpp\v4.0\V120\'))
-		});
-	//});
+			return names[i];
+		}
+	}
 };
 
-
-/*var runPrebuild = function(platform, config, arch, callback) {
-	try {
-		var command = "./prebuild.sh",
-			args = [
-				cmd.prefix,
-				"all"
-				//platform,
-				//config,
-				//arch
-			],
-			options = {cwd: __dirname, env: process.env};
-
-		var child = child_process.spawn(command, args, options);
-		child.stdout.on("data", function(chunk) {
-			util.print(chunk.toString());
-		});
-		child.stderr.on("data", function(chunk) {
-			util.print(chunk.toString());
-		});
-		child.on("error", function(e) {
-			logErr("Error running prebuild " + e);
-		});
-		child.on("exit", function(code, signal) {
-		});
-		child.on("close", function(code) {
-			callback();
-		});
-	} catch(e) {
-		logErr("Error calling prebuild " + e);
+//
+// get the vc bin dir
+//
+var getVCBinDir = function() {
+	var i,
+		base = "\\Microsoft Visual Studio 12.0\\VC\\bin\\",
+		names = [
+			"\\Program Files (x86)" + base,
+			"C:\\Program Files (x86)" + base,
+			"\\Program Files" + base,
+			"C:\\Program Files" + base
+		];
+	for (i = 0; i < names.length; i += 1) {
+		if (dirExists(names[i])) {
+			if (cmd.verbose) {
+				console.log("VCBinDir: " + names[i]);
+			}
+			return names[i];
+		}
 	}
-};*/
+};
 
 //
 // download and extract a url to the given destination
@@ -985,6 +1201,131 @@ var usageExamples = function() {
 };
 
 //
+// append to the build log
+//
+var logBuild = function(str) {
+	if (cmd.buildLog) {
+		try {
+			fs.appendFileSync(cmd.buildLog, str);
+		} catch(e) {
+		}
+	}
+};
+
+//
+// execute a command
+//
+var exec = function(command, options, callback) {
+	if (cmd.verbose) {
+		console.log(command);
+		console.log("Current dir: " + options.cwd);
+	}
+	try {
+		child_process.exec(command, options, function(err, stdout, stderr){
+			execCallback(err, stdout, stderr);
+			callback(err, stdout, stderr);
+		});
+	} catch(e) {
+		console.log(e);
+	}
+};
+
+//
+// child_process.exec callback
+//
+var execCallback = function(error, stdout, stderr) {
+	if (error !== null) {
+		logErr("exec error: " + error);
+	}
+	if (cmd.verbose || error) {
+		console.log(stdout);
+		console.log(stderr);
+	}
+	logBuild(stdout);
+	logBuild(stderr);
+};
+
+//
+// execute a streaming command
+//
+var spawn = function(command, args, options, callback) {
+	if (cmd.verbose) {
+		console.log(command + ' ' + args.join(' '));
+		console.log("Current dir: " + options.cwd);
+	}
+	try {
+		// spawn the process
+		var child, exitCode = 0;
+		if (args && args.length) {
+			child = child_process.spawn(command, args, options);
+		} else {
+			child = child_process.spawn(command, options);
+		}
+
+		// watch its output
+		child.stdout.on("data", function(chunk) {
+			if (cmd.verbose) {
+				util.print(chunk.toString());
+			}
+			logBuild(chunk.toString());
+		});
+		child.stderr.on("data", function(chunk) {
+			if (cmd.verbose) {
+				util.print(chunk.toString());
+			}
+			logBuild(chunk.toString());
+		});
+		child.on("error", function(e) {
+			logErr("Spawn error " + e);
+			callback(e);
+		});
+
+		// close
+		child.on("exit", function(code, signal) {
+			exitCode = code;
+			//if (code != 0 & cmd.verbose) {
+			//	console.log("Code: " + code);
+			//	console.log("Signal: " + signal);
+			//}
+		});
+		child.on("close", function(code) {
+			if (exitCode) {
+				callback(exitCode);
+			} else {
+				callback();
+			}
+		});
+	} catch(e) {
+		logErr("Spawn error " + e);
+		callback(e);
+	}
+};
+
+//
+// replace occurrences a string with another in a specific file
+//
+var sed = function(search, replace, dest) {
+	if (cmd.verbose) {
+		console.log("Replacing all '" + search + "' with '" + replace + "' in: " + dest);
+	}
+	try{
+		var text = fs.readFileSync(dest).toString(),
+			pos = 0;
+		do {
+			pos = text.indexOf(search);
+			if (pos >= 0) {
+				text = text.substr(0,pos) +
+					replace +
+					text.substr(pos + search.length);
+			}
+		} while(pos >= 0);
+		fs.writeFileSync(dest, text);
+	} catch(e) {
+		console.log(e);
+	}
+}
+
+//
 // log an error
 //
 var logErr = function(str) {
@@ -1017,19 +1358,6 @@ var fileExists = function(path) {
 };
 
 //
-// child_process.exec callback
-//
-var execCallback = function(error, stdout, stderr) {
-	if (error !== null) {
-		logErr("exec error: " + error);
-	}
-	if (cmd.verbose || error) {
-		console.log(stdout);
-		console.log(stderr);
-	}
-};
-
-//
 // tests if a directory is writeable
 //
 var isWriteableDir = function(dir) {
@@ -1049,3 +1377,25 @@ module.exports = {
 };
 
 
+/*
+
+To make a Cocos2d patch:
+
+	cd /tmp
+	cp -r ~/Downloads/cocos2d-js-v3.0-alpha2 .
+	cd cocos2d-js-v3.0-alpha2
+	git init .
+	git add *
+	git commit -a
+	cp -r ~/code/RapidGamePro/src/cocos2d-js .
+	git diff > patch
+	git diff --staged --binary >> patch
+
+	# (it may be possible without git add; try git help diff)
+
+To apply:
+
+	cd cocos2d-js-somewhere
+	git apply --whitespace=nowarn patch
+
+*/
