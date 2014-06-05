@@ -613,6 +613,7 @@ var setupPrebuild = function(callback) {
 	copyGlobbed(src, dest, '*.h');
 	copyGlobbed(src, dest, '*.hpp');
 	copyGlobbed(src, dest, '*.msg');
+	copyGlobbed(src, dest, '*.inl');
 
 	dest = path.join(dir, "bindings");
 	src = path.join(frameworks, "js-bindings", "bindings");
@@ -748,6 +749,11 @@ var setupPrebuild = function(callback) {
 
 	// find ${dir} | xargs xattr -c >> ${logFile} 2>&1
 
+	// symlink latest -> version
+	dest = path.join(cmd.prefix, "latest");
+	try {fs.unlinkSync(dest);} catch(e){}
+	try {fs.symlinkSync(version, dest/*, "dir"*/);} catch(e){}
+
 	callback();
 };
 
@@ -857,7 +863,7 @@ var startBuild = function(platform, callback, settings) {
 		proj = settings[2];
 		command = "xcodebuild";
 		dir = path.join(cmd.prefix, "src", "proj.ios_mac");
-		xcodeSettings = ["RAPIDGAME_VERSION=" + version, "GCC_SYMBOLS_PRIVATE_EXTERN=NO"];
+		xcodeSettings = ["GCC_SYMBOLS_PRIVATE_EXTERN=NO"];
 		if (!cmd.nostrip) {
 			xcodeSettings.push("DEPLOYMENT_POSTPROCESSING=YES");
 			xcodeSettings.push("STRIP_INSTALLED_PRODUCT=YES");

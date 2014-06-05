@@ -1,0 +1,1 @@
+http://cdn.cocos2d-x.org/cocos2d-js-v3.0-beta.zip

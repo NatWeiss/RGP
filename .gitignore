@@ -1,5 +1,6 @@
 .DS_Store
 /.id
+/0.*
 /build.log
 /current
 /java/*/bin
@@ -14,3 +15,5 @@
 /*/proj.android/libs/mips
 /cocos2d/x/lib*
 /node_modules
+xcuserdata
+project.xcworkspace

@@ -45,7 +45,8 @@ endif
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Soomla
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../lib \
-	$(LOCAL_PATH)/../../../../cocos2d/x/include/bindings/manual
+	$(LOCAL_PATH)/../../../../latest/cocos2d/x/include/cocos/deprecated \
+	$(LOCAL_PATH)/../../../../latest/cocos2d/x/include/bindings/manual
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += jansson_static

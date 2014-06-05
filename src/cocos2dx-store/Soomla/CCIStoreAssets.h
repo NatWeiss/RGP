@@ -4,7 +4,7 @@
 
 
 
-#include "CCArray.h"
+#include "CCDeprecated.h"
 
 #ifndef __CCIStoreAssets_H_
 #define __CCIStoreAssets_H_
