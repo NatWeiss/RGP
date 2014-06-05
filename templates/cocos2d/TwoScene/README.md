@@ -3,4 +3,4 @@
   Or, by running `Server/run` and browsing to: http://localhost:8000
   Or, by running `cd Projects/android && make && make run`
   Ready to code? Start with the `Assets/GameScene.js` file.
-  Do `rapidgame prebuild` to get the latest Cocos2D JS.
+  Do `rapidgame prebuild` to prepare Cocos2D-X libraries.

@@ -3,7 +3,7 @@
 //  See the `LICENSE` file for the license governing this code.
 //  Developed by Nat Weiss.
 //
-package org.cocos2dx.javascript;
+package org.cocos2dx.cpp;
 
 import java.util.Arrays;
 import java.util.Map;

@@ -43,7 +43,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../.. \
 				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/bindings/auto \
 				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/bindings/manual \
 				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/bindings/cocosbuilder \
-				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/2d/platform/android \
+				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/cocos/platform/android \
 				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/plugin/protocols/platform/android \
 				$(LOCAL_PATH)/../../../lib/cocos2d/x/include/external/spidermonkey/include/android
 
@@ -73,17 +73,17 @@ LOCAL_LDLIBS := -lGLESv1_CM \
 include $(BUILD_SHARED_LIBRARY)
 
 
-$(call import-module,2d)
+#$(call import-module,2d)
 $(call import-module,audio/android)
 $(call import-module,bindings)
 $(call import-module,bindings/manual/chipmunk)
-$(call import-module,bindings/manual/cocosbuilder)
-$(call import-module,bindings/manual/cocostudio)
 $(call import-module,bindings/manual/extension)
 $(call import-module,bindings/manual/localstorage)
 $(call import-module,bindings/manual/network)
-$(call import-module,bindings/manual/spine)
+$(call import-module,bindings/manual/cocosbuilder)
 $(call import-module,bindings/manual/ui)
+$(call import-module,bindings/manual/cocostudio)
+$(call import-module,bindings/manual/spine)
 # begin pro
 #$(call import-module,plugin/protocols/proj.android/jni) # bindings now include protocols
 $(call import-module,plugin/jsbindings)

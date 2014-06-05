@@ -24,6 +24,7 @@ var http = require("http"),
 	templates = [],
 	builds = [],
 	orientations = ["landscape", "portrait"],
+	platforms = ["headers", "ios", "mac", "android", "windows", "linux"],
 	copyCount = 0,
 	msBuildPath,
 	defaults = {
@@ -80,8 +81,8 @@ var run = function(args) {
 	commands.push("create");
 
 	cmd
-		.command("prebuild")
-		.description("                            Prebuild Cocos2D X static libraries")
+		.command("prebuild <platform>")
+		.description("                            Prebuild Cocos2D X static libraries [platforms: " + platforms.join(", ") + "]")
 		.action(prebuild);
 	commands.push("prebuild");
 
@@ -216,7 +217,7 @@ var createProject = function(engine, name, package) {
 		regex: cmd.template,
 		replacement: name,
 		paths: [dest],
-		include: "*.js,*.plist,*.cpp,*.md,*.lua,*.html,*.json,*.xml,*.xib,*.pbxproj,*.xcscheme,*.xcworkspacedata,*.xccheckout,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.project,.cproject,makefile,manifest,*.vcxproj,*.user,*.filters",
+		include: "*.js,*.plist,*.cpp,*.md,*.lua,*.html,*.json,*.xml,*.xib,*.pbxproj,*.xcscheme,*.xcworkspacedata,*.xccheckout,*.sh,*.cmd,*.py,*.rc,*.sln,*.txt,.classpath,.project,.cproject,makefile,manifest,*.vcxproj,*.user,*.filters",
 		recursive: true,
 		silent: !cmd.verbose
 	});
@@ -274,7 +275,7 @@ var createProject = function(engine, name, package) {
 		// Auto prebuild
 		if (isCocos2d && !dirExists(path.join(cmd.prefix, "cocos2d"))) {
 			console.log("");
-			console.log("Automatically prebuilding Cocos2D libraries");
+			console.log("Static libraries must be prebuilt");
 			prebuild();
 		}
 	};
@@ -294,45 +295,24 @@ var createProject = function(engine, name, package) {
 };
 
 //
-// check that prefix directory is writeable
-//
-var checkPrefix = function() {
-	// Test prefix dir
-	if (!isWriteableDir(cmd.prefix)) {
-		if (cmd.prefix !== defaults.prefix) {
-			logErr("Cannot write files to prefix directory: " + cmd.prefix);
-			return false;
-		}
-
-		// Try users's home dir if they didn't override the prefix setting
-		var newPrefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
-		wrench.mkdirSyncRecursive(newPrefix);
-		if (!isWriteableDir(newPrefix)) {
-			logErr("Cannot write files to alternate prefix directory: " + newPrefix);
-			return false;
-		}
-		cmd.prefix = newPrefix;
-	}
-	if (cmd.verbose) {
-		console.log("Can successfully write files to prefix directory: " + cmd.prefix);
-	}
-	return true;
-};
-
-//
 // run the prebuild command
 //
 var prebuild = function(platform, config, arch) {
 	category = "prebuild";
-	platform = platform || "";
+	platform = (platform || "");
+	platform = platform.toString().toLowerCase();
 	config = config || "";
 	arch = arch || "";
+	if (platforms.indexOf(platform) < 0) {
+		platform = "";
+	}
 
 	if (!checkPrefix()) {
 		usage();
 		return 1;
 	}
 
+	console.log("Happily prebuilding " + platform);
 	cmd.buildLog = path.join(cmd.prefix, "build.log");
 	try {
 		fs.writeFileSync(cmd.buildLog, "");
@@ -387,9 +367,11 @@ var downloadCocos = function(callback) {
 	} catch(e) {
 	}
 	if (ver !== cocos2djsUrl) {
-		console.log("Current Cocos2D JS URL: " + cocos2djsUrl);
-		console.log("Downloaded Cocos2D JS URL: " + ver);
-		console.log("Re-downloading");
+		if (typeof ver !== "undefined") {
+			console.log("Current Cocos2D JS URL: " + cocos2djsUrl);
+			console.log("Downloaded Cocos2D JS URL: " + ver);
+			console.log("Re-downloading");
+		}
 		doDownload = true;
 		try {
 			wrench.rmdirSyncRecursive(dest, true);
@@ -451,122 +433,6 @@ var downloadCocos = function(callback) {
 			logErr("Couldn't move " + files[0] + " to " + dest)
 		}
 	});
-};
-
-//
-// Copy files recursively with a special exclude filter.
-//
-var copyRecursive = function(src, dest, filter, overwrite) {
-	if (cmd.verbose) {
-		console.log("Recursively copying " + path.relative(cmd.prefix, src) +
-			" to " + path.relative(cmd.prefix, dest));
-	}
-	
-	// copy using wrench
-	overwrite = overwrite || false;
-	var options = {
-			forceDelete: overwrite, // false Whether to overwrite existing directory or not
-			excludeHiddenUnix: false, // Whether to copy hidden Unix files or not (preceding .)
-			preserveFiles: !overwrite, // true If we're overwriting something and the file already exists, keep the existing
-			preserveTimestamps: true, // Preserve the mtime and atime when copying files
-			inflateSymlinks: false // Whether to follow symlinks or not when copying files
-		};
-	if (filter === true) {
-		options.exclude = excludeFilter;
-	}
-	copyCount = 0;
-	wrench.copyDirSyncRecursive(src, dest, options);
-	return copyCount;
-};
-
-//
-// copy files using glob
-//
-var copyGlobbed = function(src, dest, pattern, grep) {
-	var i, file, files;
-	pattern = path.join("**", pattern);
-	if (cmd.verbose) {
-		console.log("Recursively copying " + path.relative(cmd.prefix, path.join(src, pattern)) +
-			" to " + path.relative(cmd.prefix, dest));
-	}
-
-	files = glob.sync(path.join(src, pattern));
-	for (i = 0; i < files.length; i += 1) {
-		if (grep && files[i].indexOf(grep) < 0) {
-			continue;
-		}
-		file = path.join(dest, path.relative(src, files[i]));
-		//console.log(/*path.relative(cmd.prefix, files[i]) + " -> " + */path.relative(cmd.prefix, file));
-		wrench.mkdirSyncRecursive(path.dirname(file));
-		try{
-			fs.writeFileSync(file, fs.readFileSync(files[i]));
-		} catch(e) {
-			console.log(e);
-		}
-	}
-	return files.length;
-};
-
-//
-// filters files for exclusion
-//
-var excludeFilter = function(filename, dir){
-	// Shall this file/dir be excluded?
-	var i, ignore, doExclude = false;
-	if (dir.indexOf("proj.android") >= 0) {
-		if (filename === "obj" || filename === "gen" || filename === "assets" || filename === "bin") {
-			doExclude = true;
-		} else if (dir.indexOf("libs") >= 0) {
-			if (filename === "armeabi" || filename === "armeabi-v7a" || filename === "x86" || filename === "mips") {
-				doExclude = true;
-			}
-		}
-	} else if (dir.indexOf(".xcodeproj") >= 0) {
-		if (filename === "project.xcworkspace" || filename === "xcuserdata") {
-			doExclude = true;
-		}
-	} else if (filename === "lib") {
-		try {
-			i = fs.lstatSync(path.join(dir, filename));
-			if (i.isSymbolicLink()) {
-				doExclude = true;
-			}
-		} catch(e) {
-			console.log(e);
-		}
-	} else if (dir.indexOf(path.join("build", "build")) >= 0) {
-		doExclude = true;
-	} else if (cmd.engine === "titanium" && filename === "build") {
-		doExclude = true;
-	} else if (cmd.engine === "unity" && (filename === "Library" || filename === "Temp" || filename.indexOf(".sln") >= 0 || filename.indexOf(".unityproj") >= 0 || filename.indexOf(".userprefs") >= 0)) {
-		doExclude = true;
-	} else if (filename.substr(0,2) === "._") {
-		doExclude = true;
-	} else {
-		ignore = [
-			".DS_Store",
-			//"node_modules",
-			//"wsocket.c", "wsocket.h",
-			//"usocket.c", "usocket.h",
-			//"unix.c", "unix.h",
-			//"serial.c",
-		];
-		for (i = 0; i < ignore.length; i += 1) {
-			if (filename === ignore[i]) {
-				doExclude = true;
-				break;
-			}
-		}
-	}
-
-	// Report and return
-	if (doExclude && cmd.verbose) {
-		console.log("Ignoring filename '" + filename + "' in " + dir);
-	}
-	if (!doExclude) {
-		copyCount += 1;
-	}
-	return doExclude;
 };
 
 //
@@ -703,6 +569,7 @@ var setupPrebuild = function(callback) {
 	dest = path.join(dest, "project.properties");
 	sed("../../cocos2d-js/frameworks/js-bindings/cocos2d-x/cocos/2d/platform/android", "../cocos2d-x", dest);
 	sed("../submodules/android-store/SoomlaAndroidStore", "../android-store", dest);
+	sed("target=android-8", "target=android-10", dest);
 
 	dest = path.join(dir, "android-store");
 	src = path.join(cmd.prefix, "src", "cocos2dx-store", "submodules", "android-store", "SoomlaAndroidStore");
@@ -715,10 +582,7 @@ var setupPrebuild = function(callback) {
 	dest = path.join(dir, "facebook-sdk");
 	src = path.join(cmd.prefix, "src", "facebook", "proj.android", "facebook-android-sdk");
 	copyRecursive(src, dest, true, true);
-
-	dest = path.join(dir, "plugin-protocols");
-	src = path.join(frameworks, "js-bindings", "cocos2d-x", "plugin", "protocols", "proj.android");
-	copyRecursive(src, dest, true, true);
+	sed("target=android-8", "target=android-10", path.join(dest, "project.properties"));
 
 	dest = path.join(dir, "flurry");
 	src = path.join(frameworks, "js-bindings", "cocos2d-x", "plugin", "plugins", "flurry", "proj.android");
@@ -726,6 +590,12 @@ var setupPrebuild = function(callback) {
 	wrench.rmdirSyncRecursive(path.join(dest, "sdk"));
 	try{fs.unlinkSync(path.join(dest, "src", "org", "cocos2dx", "plugin", "AdsFlurry.java"));} catch(e){}
 	sed("../../../protocols/proj.android", "../plugin-protocols", path.join(dest, "project.properties"));
+	sed("target=android-7", "target=android-10", path.join(dest, "project.properties"));
+
+	dest = path.join(dir, "plugin-protocols");
+	src = path.join(frameworks, "js-bindings", "cocos2d-x", "plugin", "protocols", "proj.android");
+	copyRecursive(src, dest, true, true);
+	sed("target=android-7", "target=android-10", path.join(dest, "project.properties"));
 
 	dest = path.join(dest, "libs");
 	src = path.join(cmd.prefix, "src", "flurry", "proj.android", "libs");
@@ -761,14 +631,26 @@ var setupPrebuild = function(callback) {
 // run the prebuild command
 //
 var runPrebuild = function(platform, config, arch, callback) {
-	if (process.platform === "darwin") {
-		prebuildMac("iOS", config, arch, function(){
+	if (platform === "headers") {
+		callback();
+	} else if (process.platform === "darwin") {
+		if (platform === "ios") {
+			prebuildMac("iOS", config, arch, function(){
+				callback();
+			});
+		} else if (platform === "mac") {
 			prebuildMac("Mac", config, arch, function(){
-				prebuildAndroid(config, arch, function(){
-					callback();
+				callback();
+			});
+		} else {
+			prebuildMac("iOS", config, arch, function(){
+				prebuildMac("Mac", config, arch, function(){
+					prebuildAndroid(config, arch, function(){
+						callback();
+					});
 				});
 			});
-		});
+		}
 	} else if (process.platform === "win32") {
 		prebuildWin(config, arch, callback);
 	} else {
@@ -883,9 +765,11 @@ var startBuild = function(platform, callback, settings) {
 	} else if (platform === "Android") {
 		dir = path.join(cmd.prefix, "src", "proj.android");
 		command = path.join(dir, "build.sh");
+		config = settings[0];
 		arch = settings[1];
 		args = [
-			arch
+			arch,
+			config
 		];
 	} else if (platform === "Windows") {
 		dir = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks", "js-bindings", "cocos2d-x", "build");
@@ -1049,6 +933,148 @@ var getVCBinDir = function() {
 			return names[i];
 		}
 	}
+};
+
+//
+// check that prefix directory is writeable
+//
+var checkPrefix = function() {
+	// Test prefix dir
+	if (!isWriteableDir(cmd.prefix)) {
+		if (cmd.prefix !== defaults.prefix) {
+			logErr("Cannot write files to prefix directory: " + cmd.prefix);
+			return false;
+		}
+
+		// Try users's home dir if they didn't override the prefix setting
+		var newPrefix = path.join(path.homedir(), "Library", "Developer", "RapidGame");
+		wrench.mkdirSyncRecursive(newPrefix);
+		if (!isWriteableDir(newPrefix)) {
+			logErr("Cannot write files to alternate prefix directory: " + newPrefix);
+			return false;
+		}
+		cmd.prefix = newPrefix;
+	}
+	if (cmd.verbose) {
+		console.log("Can successfully write files to prefix directory: " + cmd.prefix);
+	}
+	return true;
+};
+
+//
+// Copy files recursively with a special exclude filter.
+//
+var copyRecursive = function(src, dest, filter, overwrite) {
+	if (cmd.verbose) {
+		console.log("Recursively copying " + path.relative(cmd.prefix, src) +
+			" to " + path.relative(cmd.prefix, dest));
+	}
+	
+	// copy using wrench
+	overwrite = overwrite || false;
+	var options = {
+			forceDelete: overwrite, // false Whether to overwrite existing directory or not
+			excludeHiddenUnix: false, // Whether to copy hidden Unix files or not (preceding .)
+			preserveFiles: !overwrite, // true If we're overwriting something and the file already exists, keep the existing
+			preserveTimestamps: true, // Preserve the mtime and atime when copying files
+			inflateSymlinks: false // Whether to follow symlinks or not when copying files
+		};
+	if (filter === true) {
+		options.exclude = excludeFilter;
+	}
+	copyCount = 0;
+	wrench.copyDirSyncRecursive(src, dest, options);
+	return copyCount;
+};
+
+//
+// copy files using glob
+//
+var copyGlobbed = function(src, dest, pattern, grep) {
+	var i, file, files;
+	pattern = path.join("**", pattern);
+	if (cmd.verbose) {
+		console.log("Recursively copying " + path.relative(cmd.prefix, path.join(src, pattern)) +
+			" to " + path.relative(cmd.prefix, dest));
+	}
+
+	files = glob.sync(path.join(src, pattern));
+	for (i = 0; i < files.length; i += 1) {
+		if (grep && files[i].indexOf(grep) < 0) {
+			continue;
+		}
+		file = path.join(dest, path.relative(src, files[i]));
+		//console.log(/*path.relative(cmd.prefix, files[i]) + " -> " + */path.relative(cmd.prefix, file));
+		wrench.mkdirSyncRecursive(path.dirname(file));
+		try{
+			fs.writeFileSync(file, fs.readFileSync(files[i]));
+		} catch(e) {
+			console.log(e);
+		}
+	}
+	return files.length;
+};
+
+//
+// filters files for exclusion
+//
+var excludeFilter = function(filename, dir){
+	// Shall this file/dir be excluded?
+	var i, ignore, doExclude = false;
+	if (dir.indexOf("proj.android") >= 0) {
+		if (filename === "obj" || filename === "gen" || filename === "assets" || filename === "bin") {
+			doExclude = true;
+		} else if (dir.indexOf("libs") >= 0) {
+			if (filename === "armeabi" || filename === "armeabi-v7a" || filename === "x86" || filename === "mips") {
+				doExclude = true;
+			}
+		}
+	} else if (dir.indexOf(".xcodeproj") >= 0) {
+		if (filename === "project.xcworkspace" || filename === "xcuserdata") {
+			doExclude = true;
+		}
+	} else if (filename === "lib") {
+		try {
+			i = fs.lstatSync(path.join(dir, filename));
+			if (i.isSymbolicLink()) {
+				doExclude = true;
+			}
+		} catch(e) {
+			console.log(e);
+		}
+	} else if (dir.indexOf(path.join("build", "build")) >= 0) {
+		doExclude = true;
+	} else if (cmd.engine === "titanium" && filename === "build") {
+		doExclude = true;
+	} else if (cmd.engine === "unity" && (filename === "Library" || filename === "Temp" || filename.indexOf(".sln") >= 0 || filename.indexOf(".unityproj") >= 0 || filename.indexOf(".userprefs") >= 0)) {
+		doExclude = true;
+	} else if (filename.substr(0,2) === "._") {
+		doExclude = true;
+	} else {
+		ignore = [
+			".DS_Store",
+			//"node_modules",
+			//"wsocket.c", "wsocket.h",
+			//"usocket.c", "usocket.h",
+			//"unix.c", "unix.h",
+			//"serial.c",
+		];
+		for (i = 0; i < ignore.length; i += 1) {
+			if (filename === ignore[i]) {
+				doExclude = true;
+				break;
+			}
+		}
+	}
+
+	// Report and return
+	if (doExclude && cmd.verbose) {
+		console.log("Ignoring filename '" + filename + "' in " + dir);
+	}
+	if (!doExclude) {
+		copyCount += 1;
+	}
+	return doExclude;
 };
 
 //
@@ -1388,12 +1414,12 @@ module.exports = {
 To make a Cocos2d patch:
 
 	cd /tmp
-	cp -r ~/Downloads/cocos2d-js-v3.0-alpha2 .
-	cd cocos2d-js-v3.0-alpha2
+	cp -r ~/Downloads/cocos2d-js-v3.0-beta .
+	cd cocos2d-js-v3.0-beta
 	git init .
 	git add *
 	git commit -a
-	cp -r ~/code/RapidGamePro/src/cocos2d-js .
+	cp -r ~/code/RapidGamePro/src/cocos2d-js/* .
 	git diff > patch
 	git diff --staged --binary >> patch
 

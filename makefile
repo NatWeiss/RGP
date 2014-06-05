@@ -101,7 +101,7 @@ rg:
 	sed -i "" 's/pro//g' ${dest}bin/rapidgame
 	cp -r src/proj.ios_mac ${dest}src/
 	rm -r ${dest}src/proj.ios_mac/cocos2dx-plugins.xcodeproj
-	rm -r ${dest}src/proj.ios_mac/PluginJSBindings.xcodeproj
+	#rm -r ${dest}src/proj.ios_mac/PluginJSBindings.xcodeproj
 	rm -r ${dest}src/proj.ios_mac/cocos2dx-prebuilt.xcodeproj/xcuserdata
 	rm -r ${dest}src/proj.ios_mac/cocos2dx-prebuilt.xcodeproj/project.xcworkspace
 	mv src/proj.android/obj src/proj.android/libs /tmp
