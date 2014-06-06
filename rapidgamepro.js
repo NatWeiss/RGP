@@ -81,7 +81,7 @@ var run = function(args) {
 	commands.push("create");
 
 	cmd
-		.command("prebuild <platform>")
+		.command("prebuild [platform]")
 		.description("                            Prebuild Cocos2D X static libraries [platforms: " + platforms.join(", ") + "]")
 		.action(prebuild);
 	commands.push("prebuild");
@@ -324,7 +324,7 @@ var prebuild = function(platform, config, arch) {
 	report("start");
 	copySrcFiles(function() {
 		downloadCocos(function() {
-			setupPrebuild(function() {
+			setupPrebuild(platform, function() {
 				runPrebuild(platform, config, arch, function() {
 					report("done");
 				});
@@ -438,9 +438,14 @@ var downloadCocos = function(callback) {
 //
 // prebuild setup (copies headers, java files, etc.)
 //
-var setupPrebuild = function(callback) {
+var setupPrebuild = function(platform, callback) {
 	var ver, dir, src, dest, i, files,
 		frameworks = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks");
+
+	if (platform && platform !== "headers") {
+		callback();
+		return;
+	}
 
 	console.log("Copying header files...");
 
@@ -631,6 +636,8 @@ var setupPrebuild = function(callback) {
 // run the prebuild command
 //
 var runPrebuild = function(platform, config, arch, callback) {
+	config = "";
+	arch = "";
 	if (platform === "headers") {
 		callback();
 	} else if (process.platform === "darwin") {
@@ -775,7 +782,7 @@ var startBuild = function(platform, callback, settings) {
 		dir = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks", "js-bindings", "cocos2d-x", "build");
 		command = path.join(msBuildPath, "MSBuild.exe");
 		targets = ["libcocos2d", "libAudio", "libBox2D", "libchipmunk", "libCocosBuilder", "libCocosStudio",
-			"libExtensions", "libGUI", "libLocalStorage", "liblua", "libNetwork", "libSpine"];
+			"libExtensions", "libGUI", "libLocalStorage"/*, "liblua"*/, "libNetwork", "libSpine"];
 		args = [
 			path.join(dir, "cocos2d-win32.vc2012.sln"),
 			"/nologo",
@@ -789,18 +796,6 @@ var startBuild = function(platform, callback, settings) {
   			//'/p:WarningLevel=0',
         	"/p:configuration=" + settings[0]
 		];
-		
-		spawn(command, args, options, function(err){
-			if (!err) {
-				console.log("Done");
-				console.log("Merging libraries");
-			} else {
-				if (!cmd.verbose) {
-					console.log("Build failed. Please run with --verbose or check the build log: " + cmd.buildLog);
-				}
-			}
-		});
-
 	}
 
 	console.log("Building " + platform + " " + settings[0] +
@@ -808,12 +803,13 @@ var startBuild = function(platform, callback, settings) {
 		(settings[2] ? " " + settings[2] : "") + "...");
 	spawn(command, args, {cwd: dir, env: process.env}, function(err){
 		if (!err){
-			console.log("Succeeded.");
 			if (platform === "Windows") {
 				linkWin(dir, settings[0], function(){
+					console.log("Succeeded.");
 					nextBuild(platform, callback);
 				});
 			} else {
+				console.log("Succeeded.");
 				nextBuild(platform, callback);
 			}
 		} else {
@@ -849,9 +845,6 @@ var linkWin = function(buildDir, config, callback) {
 		'*.lib';
 
 	exec(command, options, function(err){
-		if (!err) {
-			console.log("Done");
-		}
 		callback();
 	});
 };

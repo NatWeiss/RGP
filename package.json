@@ -1,6 +1,6 @@
 {
   "name": "rapidgamepro",
-  "version": "0.8.7",
+  "version": "0.8.8",
   "description": "A templating system for rapidly creating cross-platform games with Cocos2D-JS, Unity, Corona and Titanium.",
   "author": {
     "name": "Nat Weiss",
@@ -50,7 +50,6 @@
     "bin",
     "package.json",
     "rapidgamepro.js",
-    "prebuild.sh",
     "templates",
     "docs",
     "docs.html",
