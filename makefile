@@ -123,6 +123,9 @@ rg:
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/AppDelegate.cpp --newlines
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/ios/AppController.mm --newlines
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	sed -i "" 's/require("..\/Assets\/ConfigServer")/{}/g' ${dest}templates/cocos2d/TwoScene/Server/server.js #*/
+	@rez/strip-lines 'FacebookSDK.framework' ${dest}templates/cocos2d/TwoScene/Projects/TwoScene.xcodeproj/project.pbxproj
+	@rez/delete-text '$(SRCROOT)/../lib/frameworks' ${dest}templates/cocos2d/TwoScene/Projects/TwoScene.xcodeproj/project.pbxproj
 	@rez/delete-between "<!-- begin pro -->" "<!-- end pro -->" ${dest}templates/cocos2d/TwoScene/Projects/android/AndroidManifest.xml --newlines
 	@rez/delete-text 'android:name="com.soomla.store.SoomlaApp"' ${dest}templates/cocos2d/TwoScene/Projects/android/AndroidManifest.xml
 	@rez/delete-between "# begin pro" "# end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/jni/Android.mk --newlines

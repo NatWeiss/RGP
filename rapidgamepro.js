@@ -273,7 +273,7 @@ var createProject = function(engine, name, package) {
 		report("done");
 		
 		// Auto prebuild
-		if (isCocos2d && !dirExists(path.join(cmd.prefix, "cocos2d"))) {
+		if (isCocos2d && !dirExists(path.join(cmd.prefix, version))) {
 			console.log("");
 			console.log("Static libraries must be prebuilt");
 			prebuild();
@@ -711,21 +711,56 @@ var prebuildAndroid = function(config, arch, callback) {
 // prebuild windows
 //
 var prebuildWin = function(config, arch, callback) {
-	var i, configs = (config ? [config] : (cmd.minimal ? ["Debug"] : ["Debug", "Release"]));
+	var i, j, command, targets, args, projs,
+		jsbindings = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks", "js-bindings"),
+		configs = (config ? [config] : (cmd.minimal ? ["Debug"] : ["Debug", "Release"]));
 
 	// set VCTargetsPath
 	// (overcome error MSB4019: The imported project "C:\Microsoft.Cpp.Default.props" was not found.)
 	process.env["VCTargetsPath"] = getVCTargetsPath();
 
-	// create builds
-	builds = [];
-	for (i = 0; i < configs.length; i += 1) {
-		builds.push([configs[i]]);
-	}
+	// get bindings projects
+	projs = glob.sync(path.join(jsbindings, "bindings", "proj.win32", "*.vcxproj")) || [];
 
-	// start
-	getMSBuildPath(function(path) {
-		msBuildPath = path;
+	getMSBuildPath(function(_msBuildPath) {
+		msBuildPath = _msBuildPath;
+
+		// create builds
+		builds = [];
+		for (i = 0; i < configs.length; i += 1) {
+			command = path.join(msBuildPath, "MSBuild.exe");
+			targets = ["libcocos2d", "libAudio", "libBox2D", "libchipmunk", "libCocosBuilder", "libCocosStudio",
+				"libExtensions", "libGUI", "libLocalStorage"/*, "liblua"*/, "libNetwork", "libSpine"];
+			args = [
+				path.join(jsbindings, "cocos2d-x", "build", "cocos2d-win32.vc2012.sln"),
+				"/nologo",
+				"/maxcpucount:4",
+				"/t:" + targets.join(";"),
+				//"/p:VisualStudioVersion=12.0",
+				//"/p:PlatformTarget=x86",
+				//"/verbosity:diag",
+				//"/clp:ErrorsOnly",
+				//"/p:nowarn=4005",
+				//'/p:WarningLevel=0',
+				"/p:configuration=" + configs[i]
+			];
+
+			// main solution
+			builds.push([configs[i], command, args]);
+
+			// bindings
+			for (j = 0; j < projs.length; j+=1) {
+				args = [
+					projs[j],
+					"/nologo",
+		            "/maxcpucount:4",
+		        	"/p:configuration=" + configs[i]
+				];
+				builds.push([configs[i], command, args, (j == projs.length - 1) ? linkWin : false]);
+			}
+		}
+
+		// start
 		nextBuild("Windows", callback);
 	});
 };
@@ -779,38 +814,24 @@ var startBuild = function(platform, callback, settings) {
 			config
 		];
 	} else if (platform === "Windows") {
-		dir = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks", "js-bindings", "cocos2d-x", "build");
-		command = path.join(msBuildPath, "MSBuild.exe");
-		targets = ["libcocos2d", "libAudio", "libBox2D", "libchipmunk", "libCocosBuilder", "libCocosStudio",
-			"libExtensions", "libGUI", "libLocalStorage"/*, "liblua"*/, "libNetwork", "libSpine"];
-		args = [
-			path.join(dir, "cocos2d-win32.vc2012.sln"),
-			"/nologo",
-            "/maxcpucount:4",
-	        "/t:" + targets.join(";"),
-			//"/p:VisualStudioVersion=12.0",
-        	//"/p:PlatformTarget=x86",
-			//"/verbosity:diag",
-			//"/clp:ErrorsOnly",
-  			//"/p:nowarn=4005",
-  			//'/p:WarningLevel=0',
-        	"/p:configuration=" + settings[0]
-		];
+		dir = cmd.prefix;
+		command = settings[1];
+		args = settings[2];
 	}
 
 	console.log("Building " + platform + " " + settings[0] +
 		(settings[1] ? " " + settings[1] : "") +
 		(settings[2] ? " " + settings[2] : "") + "...");
 	spawn(command, args, {cwd: dir, env: process.env}, function(err){
+		var onFinished = function(){
+			console.log("Succeeded.");
+			nextBuild(platform, callback);
+		};
 		if (!err){
-			if (platform === "Windows") {
-				linkWin(dir, settings[0], function(){
-					console.log("Succeeded.");
-					nextBuild(platform, callback);
-				});
+			if (typeof settings[3] === "function") {
+				settings[3](settings[0], onFinished);
 			} else {
-				console.log("Succeeded.");
-				nextBuild(platform, callback);
+				onFinished();
 			}
 		} else {
 			if (!cmd.verbose) {
@@ -823,29 +844,39 @@ var startBuild = function(platform, callback, settings) {
 //
 // link windows
 //
-var linkWin = function(buildDir, config, callback) {
-	var src, dest,
+var linkWin = function(config, callback) {
+	var i, src,
+		jsbindings = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks", "js-bindings"),
+		libDirs = [
+			path.join(jsbindings, "cocos2d-x", "build", config + ".win32"),
+			path.join(jsbindings, "bindings", "proj.win32", config + ".win32"),
+			path.join(jsbindings, "external", "spidermonkey", "prebuilt", "win32"),
+			path.join(jsbindings, "cocos2d-x", "external", "websockets", "prebuilt", "win32")
+		],
 		options = {
-			cwd: path.join(buildDir, config + ".win32"),
+			cwd: cmd.prefix,
 			env: process.env
-		};
+		},
+		dest = path.join(cmd.prefix, version, "cocos2d", "x", "lib", config + "-win32", "x86"),
+		command = '"' + getVCBinDir() + 'lib.exe" ' +
+			'/NOLOGO ' +
+			//'/OPT:REF ' +
+			//'/OPT:ICF ' +
+			'"/OUT:' + path.join(dest, "libcocos2dx-prebuilt.lib") + '"';
 
-	// copy dlls
-	dest = path.join(cmd.prefix, version, "cocos2d", "x", "lib", config + "-win32", "x86");
+	// copy dlls and finish creating command
 	wrench.mkdirSyncRecursive(dest);
-	copyGlobbed(options.cwd, dest, "*.dll");
+	for (i = 0; i < libDirs.length; i += 1) {
+		copyGlobbed(libDirs[i], dest, "*.dll");
+		command += " " + path.join(libDirs[i], "*.lib");
+	}
+	copyGlobbed(path.join(cmd.prefix, "src", "cocos2d-js", "templates", "js-template-runtime", "runtime", "win32"), dest, "*.dll");
 
-	// link
-	dest = path.join(dest, "libcocos2dx-prebuilt.lib");
-	command = '"' + getVCBinDir() + 'lib.exe" ' +
-		'/NOLOGO ' +
-		//'/OPT:REF ' +
-		//'/OPT:ICF ' +
-		'"/OUT:' + dest + '" ' +
-		'*.lib';
-
+	// execute
 	exec(command, options, function(err){
-		callback();
+		if (!err) {
+			callback();
+		}
 	});
 };
 

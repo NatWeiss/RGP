@@ -2,6 +2,7 @@ Version 0.8.8 - June 5, 2014
 
 	Upgraded to Cocos2d X 3.1 / Cocos2d JS 3.0 beta
 	Now supports prebuilding on Windows
+	Added windows project files to Cocos2d template
 	Prebuild command rewritten in pure JS (no shell script) for portability
 	Prebuild command takes platform as a parameter
 	Added --nostrip and --minimal options for prebuild command
