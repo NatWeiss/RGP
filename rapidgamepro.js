@@ -817,6 +817,8 @@ var startBuild = function(platform, callback, settings) {
 		dir = cmd.prefix;
 		command = settings[1];
 		args = settings[2];
+		settings[1] = "";
+		settings[2] = path.basename(args[0]);
 	}
 
 	console.log("Building " + platform + " " + settings[0] +
