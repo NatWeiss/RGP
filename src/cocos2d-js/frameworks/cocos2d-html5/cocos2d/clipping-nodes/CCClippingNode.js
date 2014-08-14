@@ -153,7 +153,6 @@ cc.ClippingNode = cc.Node.extend(/** @lends cc.ClippingNode# */{
         // store the current stencil layer (position in the stencil buffer),
         // this will allow nesting up to n CCClippingNode,
         // where n is the number of bits of the stencil buffer.
-        cc.ClippingNode._layer = -1;
 
         // all the _stencilBits are in use?
         if (cc.ClippingNode._layer + 1 == cc.stencilBits) {
@@ -226,8 +225,17 @@ cc.ClippingNode = cc.Node.extend(/** @lends cc.ClippingNode# */{
         gl.stencilOp(!this.inverted ? gl.ZERO : gl.REPLACE, gl.KEEP, gl.KEEP);
 
         // draw a fullscreen solid rectangle to clear the stencil buffer
-        //ccDrawSolidRect(CCPointZero, ccpFromSize([[CCDirector sharedDirector] winSize]), ccc4f(1, 1, 1, 1));
-        cc._drawingUtil.drawSolidRect(cc.p(0, 0), cc.pFromSize(cc.director.getWinSize()), cc.color(255, 255, 255, 255));
+        cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
+        cc.kmGLPushMatrix();
+        cc.kmGLLoadIdentity();
+        cc.kmGLMatrixMode(cc.KM_GL_MODELVIEW);
+        cc.kmGLPushMatrix();
+        cc.kmGLLoadIdentity();
+        cc._drawingUtil.drawSolidRect(cc.p(-1,-1), cc.p(1,1), cc.color(255, 255, 255, 255));
+        cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
+        cc.kmGLPopMatrix();
+        cc.kmGLMatrixMode(cc.KM_GL_MODELVIEW);
+        cc.kmGLPopMatrix();
 
         ///////////////////////////////////
         // DRAW CLIPPING STENCIL
@@ -267,9 +275,6 @@ cc.ClippingNode = cc.Node.extend(/** @lends cc.ClippingNode# */{
 
         // restore the depth test state
         gl.depthMask(currentDepthWriteMask);
-        //if (currentDepthTestEnabled) {
-        //    glEnable(GL_DEPTH_TEST);
-        //}
 
         ///////////////////////////////////
         // DRAW CONTENT
@@ -311,10 +316,10 @@ cc.ClippingNode = cc.Node.extend(/** @lends cc.ClippingNode# */{
         }
 
         var context = ctx || cc._renderContext;
+        var canvas = context.canvas;
         // Composition mode, costy but support texture stencil
         if (this._cangodhelpme() || this._stencil instanceof cc.Sprite) {
             // Cache the current canvas, for later use (This is a little bit heavy, replace this solution with other walkthrough)
-            var canvas = context.canvas;
             var locCache = cc.ClippingNode._getSharedCache();
             locCache.width = canvas.width;
             locCache.height = canvas.height;
@@ -346,6 +351,19 @@ cc.ClippingNode = cc.Node.extend(/** @lends cc.ClippingNode# */{
             context.save();
             this.transform(context);
             this._stencil.visit(context);
+            if (this.inverted) {
+                context.save();
+
+                context.setTransform(1, 0, 0, 1, 0, 0);
+
+                context.moveTo(0, 0);
+                context.lineTo(0, canvas.height);
+                context.lineTo(canvas.width, canvas.height);
+                context.lineTo(canvas.width, 0);
+                context.lineTo(0, 0);
+
+                context.restore();
+            }
             context.clip();
 
             // Clip mode doesn't support recusive stencil, so once we used a clip stencil,
@@ -404,11 +422,15 @@ cc.ClippingNode = cc.Node.extend(/** @lends cc.ClippingNode# */{
         else if (stencil instanceof cc.DrawNode) {
             stencil.draw = function () {
                 var locEGL_ScaleX = cc.view.getScaleX(), locEGL_ScaleY = cc.view.getScaleY();
+                locContext.beginPath();
                 for (var i = 0; i < stencil._buffer.length; i++) {
                     var element = stencil._buffer[i];
                     var vertices = element.verts;
+
+                    //cc.assert(cc.vertexListIsClockwise(vertices),
+                    //    "Only clockwise polygons should be used as stencil");
+
                     var firstPoint = vertices[0];
-                    locContext.beginPath();
                     locContext.moveTo(firstPoint.x * locEGL_ScaleX, -firstPoint.y * locEGL_ScaleY);
                     for (var j = 1, len = vertices.length; j < len; j++)
                         locContext.lineTo(vertices[j].x * locEGL_ScaleX, -vertices[j].y * locEGL_ScaleY);
@@ -487,7 +509,7 @@ _p.stencil;
 
 cc.ClippingNode._init_once = null;
 cc.ClippingNode._visit_once = null;
-cc.ClippingNode._layer = null;
+cc.ClippingNode._layer = -1;
 cc.ClippingNode._sharedCache = null;
 
 cc.ClippingNode._getSharedCache = function () {
@@ -497,6 +519,7 @@ cc.ClippingNode._getSharedCache = function () {
 /**
  * Creates and initializes a clipping node with an other node as its stencil.                               <br/>
  * The stencil node will be retained.
+ * @deprecated
  * @param {cc.Node} [stencil=null]
  * @return {cc.ClippingNode}
  */

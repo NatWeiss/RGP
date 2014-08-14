@@ -45,6 +45,9 @@ class AssetsManager : public Ref
 {
 public:
     
+    friend class Downloader;
+    friend int downloadProgressFunc(Downloader::ProgressData *ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded);
+    
     //! Update states
     enum class State
     {
@@ -63,6 +66,7 @@ public:
     
     const static std::string VERSION_ID;
     const static std::string MANIFEST_ID;
+    const static std::string BATCH_UPDATE_ID;
     
     /** @brief Create function for creating a new AssetsManager
      @param manifestUrl   The url for the local manifest file
@@ -81,6 +85,10 @@ public:
     /** @brief Update with the current local manifest.
      */
     void update();
+    
+    /** @brief Reupdate all failed assets under the current AssetsManager context
+     */
+    void downloadFailedAssets();
     
     /** @brief Gets the current update state.
      */
@@ -106,9 +114,19 @@ CC_CONSTRUCTOR_ACCESS:
     
 protected:
     
+    static bool createDirectory(const std::string &path);
+    
+    static bool removeDirectory(const std::string &path);
+    
+    static bool removeFile(const std::string &path);
+    
+    static bool renameFile(const std::string &path, const std::string &oldname, const std::string &name);
+    
+    static long getFileSize(const std::string &filepath);
+    
     std::string get(const std::string& key) const;
     
-    void loadManifest(const std::string& manifestUrl);
+    void loadLocalManifest(const std::string& manifestUrl);
     
     void prepareLocalManifest();
     
@@ -116,25 +134,24 @@ protected:
     
     void adjustPath(std::string &path);
     
-    void dispatchUpdateEvent(EventAssetsManager::EventCode code, std::string message = "", std::string assetId = "");
-    
-    void createDirectory(const std::string &path);
-    
-    void removeDirectory(const std::string &path);
-    
-    void removeFile(const std::string &path);
-    
-    void renameFile(const std::string &path, const std::string &oldname, const std::string &name);
+    void dispatchUpdateEvent(EventAssetsManager::EventCode code, const std::string &message = "", const std::string &assetId = "", int curle_code = 0, int curlm_code = 0);
     
     void downloadVersion();
     void parseVersion();
     void downloadManifest();
     void parseManifest();
     void startUpdate();
-// TODO: For next version
-    //bool uncompress();
+    void updateSucceed();
+    bool decompress(const std::string &filename);
+    void decompressDownloadedZip();
     
-    void batchDownload(const std::unordered_map<std::string, Downloader::DownloadUnit> &units);
+    /** @brief Update a list of assets under the current AssetsManager context
+     */
+    void updateAssets(const Downloader::DownloadUnits& assets);
+    
+    /** @brief Retrieve all failed assets during the last update
+     */
+    const Downloader::DownloadUnits& getFailedAssets() const;
     
     /** @brief Function for destorying the downloaded version file and manifest file
      */
@@ -169,7 +186,7 @@ protected:
      * @js NA
      * @lua NA
      */
-    virtual void onSuccess(const std::string &srcUrl, const std::string &customId);
+    virtual void onSuccess(const std::string &srcUrl, const std::string &storagePath, const std::string &customId);
     
 private:
     
@@ -208,6 +225,9 @@ private:
     //! Local manifest
     Manifest *_localManifest;
     
+    //! Local temporary manifest for download resuming
+    Manifest *_tempManifest;
+    
     //! Remote manifest
     Manifest *_remoteManifest;
     
@@ -215,10 +235,31 @@ private:
     bool _waitToUpdate;
     
     //! All assets unit to download
-    std::unordered_map<std::string, Downloader::DownloadUnit> _downloadUnits;
+    Downloader::DownloadUnits _downloadUnits;
+    
+    //! All failed units
+    Downloader::DownloadUnits _failedUnits;
+    
+    //! All files to be decompressed
+    std::vector<std::string> _compressedFiles;
     
     //! Download percent
     float _percent;
+    
+    //! Download percent by file
+    float _percentByFile;
+    
+    //! Indicate whether the total size should be enabled
+    int _totalEnabled;
+    
+    //! Indicate the number of file whose total size have been collected
+    int _sizeCollected;
+    
+    //! Total file size need to be downloaded (sum of all file)
+    double _totalSize;
+    
+    //! Downloaded size for each file
+    std::unordered_map<std::string, double> _downloadedSize;
     
     //! Total number of assets to download
     int _totalToDownload;

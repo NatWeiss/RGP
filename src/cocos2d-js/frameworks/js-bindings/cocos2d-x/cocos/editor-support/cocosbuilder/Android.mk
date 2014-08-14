@@ -1,4 +1,5 @@
 LOCAL_PATH := $(call my-dir)
+
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := cocosbuilder_static
@@ -35,8 +36,6 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../2d \
 $(LOCAL_PATH) \
 $(LOCAL_PATH)/../../.. 
 
-LOCAL_CFLAGS += -Wno-psabi
-LOCAL_EXPORT_CFLAGS += -Wno-psabi
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos_extension_static
 

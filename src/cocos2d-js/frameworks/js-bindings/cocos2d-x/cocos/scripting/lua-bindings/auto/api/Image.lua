@@ -2,6 +2,7 @@
 --------------------------------
 -- @module Image
 -- @extend Ref
+-- @parent_module cc
 
 --------------------------------
 -- @function [parent=#Image] hasPremultipliedAlpha 
@@ -54,7 +55,7 @@
 --------------------------------
 -- @function [parent=#Image] getFileType 
 -- @param self
--- @return Image::Format#Image::Format ret (return value: cc.Image::Format)
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- @function [parent=#Image] getNumberOfMipmaps 
@@ -64,7 +65,7 @@
 --------------------------------
 -- @function [parent=#Image] getRenderFormat 
 -- @param self
--- @return Texture2D::PixelFormat#Texture2D::PixelFormat ret (return value: cc.Texture2D::PixelFormat)
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- @function [parent=#Image] Image 

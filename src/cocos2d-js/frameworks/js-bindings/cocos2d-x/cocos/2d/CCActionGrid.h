@@ -52,12 +52,13 @@ public:
     virtual GridAction* reverse() const override;
     virtual void startWithTarget(Node *target) override;
 
-protected:
+CC_CONSTRUCTOR_ACCESS:
     GridAction() {}
     virtual ~GridAction() {}
     /** initializes the action with size and duration */
     bool initWithDuration(float duration, const Size& gridSize);
 
+protected:
     Size _gridSize;
     
     NodeGrid* _gridNodeTarget;
@@ -169,7 +170,7 @@ public:
     /** get amplitude rate */
     inline float getRate(void) const { return _rate; }
     /** set amplitude rate */
-    inline void setRate(float fRate) { _rate = fRate; }
+    inline void setRate(float rate) { _rate = rate; }
 
     // Overrides
     virtual void startWithTarget(Node *target) override;
@@ -182,7 +183,7 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~AccelDeccelAmplitude();
     
     /** initializes the action with an inner action that has the amplitude property, and a duration time */
-    bool initWithAction(Action *pAction, float duration);
+    bool initWithAction(Action *action, float duration);
 
 protected:
     float _rate;
@@ -232,7 +233,7 @@ public:
     static DeccelAmplitude* create(Action *action, float duration);
 
     /** get amplitude rate */
-    inline float getRate(void) const { return _rate; }
+    inline float getRate() const { return _rate; }
     /** set amplitude rate */
     inline void setRate(float rate) { _rate = rate; }
 
@@ -273,10 +274,11 @@ public:
 	virtual StopGrid* clone() const override;
 	virtual StopGrid* reverse() const override;
 
-protected:
+CC_CONSTRUCTOR_ACCESS:
     StopGrid() {}
     virtual ~StopGrid() {}
     
+protected:
     NodeGrid* _gridNodeTarget;
     
     void cacheTargetAsGridNode();

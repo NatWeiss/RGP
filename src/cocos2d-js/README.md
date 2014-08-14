@@ -1,3 +1,5 @@
+![](https://travis-ci.org/cocos2d/cocos2d-js.svg?branch=master)
+
 <img src="http://www.cocos2d-x.org/attachments/1508/2dh5-logo.png" width=200>
 
 Cocos2d-JS
@@ -5,16 +7,15 @@ Cocos2d-JS
 
 Cocos2d-JS is Cocos2d-x engine's javascript version which include Cocos2d-html5 and Cocos2d-x JSBinding. It support full Cocos2d-x features with a set of simplified javascript friendly APIs.
 
-Cocos2d-JS provides a consistent development experience for whichever platform you want to distribute to, both web and native. "Code once, run everywhere" is incredibly easy and natural in Cocos2d-JS. With one single javascript code base, you can run your game on both web browsers and native platform including Mac OS, Windows, iOS, Android. This will bring your game great opportunities in almost all canals of distribution.
+Cocos2d-JS provides a consistent development experience for whichever platform you want to distribute to, both web and native. "Code once, run everywhere" is incredibly easy and natural in Cocos2d-JS. With one single javascript code base, you can run your game on both web browsers and native platform including Mac OS, Windows, Linux, iOS, Android. This will bring your game great opportunities in almost all canals of distribution.
 
 Furthermore, javascript friendly API makes your game development experience a breeze, easy to code, test and distribute. Cocos2d-JS also offers Cocos Console, a script tool, to simplify the creation of projects and let you start coding right away. You can use it to create a new project and publish it to android, iOS, Mac OS or web.
 
 ## API Reference
 
-- API Reference: [Online API reference](http://www.cocos2d-x.org/reference/html5-js/V3.0beta/index.html)
-
+- API Reference: [Online API reference](http://www.cocos2d-x.org/reference/html5-js/V3.0rc0/index.html)
 - And you can download it from
-[Cocos2d-JS-v3.0-beta-API.zip](http://www.cocos2d-x.org/filedown/Cocos2d-JS-v3.0-beta-API.zip)
+[Cocos2d-JS-v3.0-rc0-API.zip](http://www.cocos2d-x.org/filedown/Cocos2d-JS-v3.0-rc0-API.zip)
 
 ## Online demo
 - [MoonWarriors](http://www.cocos2d-x.org/MoonWarriors/index.html)
@@ -51,7 +52,7 @@ Example:
 	cocos run -p ios|mac|android|web
 	```
 
-You may need to provide your NDK, Android SDK and ANT's path during the setup. Note that this tool is developed with python, so you will need python (32bit) 2.7.5 or later installed on your machine (but it doesn't support Python3). Please refer to [Cocos Console document](http://www.cocos2d-x.org/docs/manual/framework/html5/cocos-console/en).
+You may need to provide your NDK, Android SDK and ANT's path during the setup. Note that this tool is developed with python, so you will need python (32bit) 2.7.5 or later installed on your machine (but it doesn't support Python3). Please refer to [Cocos Console document](http://www.cocos2d-x.org/docs/manual/framework/html5/v2/cocos-console/en).
 
 And if you have any doubt about the usage, please use `-h` with any command to have some help messages.
 

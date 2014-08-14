@@ -75,12 +75,16 @@ public:
      */
     void enableRetina(bool enabled);
     /** Check whether retina display is enabled. */
-    bool isRetinaEnabled() { return _isRetinaEnabled; };
+    bool isRetinaEnabled() const { return _isRetinaEnabled; };
+    
+    /** Get retina factor */
+    int getRetinaFactor() const { return _retinaFactor; }
 
-protected:
+CC_CONSTRUCTOR_ACCESS:
     GLView();
     virtual ~GLView();
-
+    
+protected:
     bool initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor);
     bool initWithFullScreen(const std::string& viewName);
     bool initWithFullscreen(const std::string& viewname, const GLFWvidmode &videoMode, GLFWmonitor *monitor);

@@ -24,21 +24,7 @@
 // cocos2d constants
 //
 
-cc.ENGINE_VERSION = "Cocos2d-JS-v3.0 alpha 2";
-
-cc.TARGET_PLATFORM = {
-    WINDOWS:0,
-    LINUX:1,
-    MACOS:2,
-    ANDROID:3,
-    IPHONE:4,
-    IPAD:5,
-    BLACKBERRY:6,
-    NACL:7,
-    EMSCRIPTEN:8,
-    MOBILE_BROWSER:100,
-    PC_BROWSER:101
-};
+cc.ENGINE_VERSION = "Cocos2d-JS v3.0 RC2";
 
 cc.ResolutionPolicy = {
     // The entire application is visible in the specified area without trying to preserve the original aspect ratio.
@@ -101,7 +87,8 @@ cc.TEXTURE_PIXELFORMAT_PVRTC4 = 9;
 cc.TEXTURE_PIXELFORMAT_DEFAULT = cc.TEXTURE_PIXELFORMAT_RGBA8888;
 
 cc.IMAGE_FORMAT_JPEG = 0;
-cc.IMAGE_FORMAT_PNG = 0;
+cc.IMAGE_FORMAT_PNG = 1;
+cc.IMAGE_FORMAT_RAWDATA = 9;
 
 cc.TOUCH_ALL_AT_ONCE = 0;
 cc.TOUCH_ONE_BY_ONE = 1;
@@ -121,15 +108,6 @@ cc.YELLOW = {r:255, g:255, b:0};
 cc.POINT_ZERO = {x:0, y:0};
 
 cc.PARTICLE_DEFAULT_CAPACITY = 500;
-
-// XXX: This definition is different than cocos2d-html5
-// cc.REPEAT_FOREVER = - 1;
-// We can't assign -1 to cc.REPEAT_FOREVER, since it will be a very big double value after
-// converting it to double by JS_ValueToNumber on android.
-// Then cast it to unsigned int, the value will be 0. The schedule will not be able to work.
-// I don't know why this occurs only on android.
-// So instead of passing -1 to it, I assign it with max value of unsigned int in c++.
-cc.REPEAT_FOREVER = 0xffffffff;
 
 cc.MENU_STATE_WAITING = 0;
 cc.MENU_STATE_TRACKING_TOUCH = 1;
@@ -272,8 +250,8 @@ cc.SCENE_RADIAL = 0xc001;               //CCTransitionProgress.js
 
 cc.KEY = {
     //android
-    back:8,
-    menu:4199,
+    back:6,
+    menu:15,
     //desktop
     backspace:7,
     tab:8,
@@ -487,7 +465,7 @@ cc.degreesToRadians = function (angle) {
  * @return {Number}
  * @function
  */
-cc.radiansToDegress = function (angle) {
+cc.radiansToDegrees = function (angle) {
 	return angle * cc.DEG;
 };
 
@@ -495,7 +473,7 @@ cc.radiansToDegress = function (angle) {
  * @constant
  * @type Number
  */
-cc.REPEAT_FOREVER = Number.MAX_VALUE - 1;
+cc.REPEAT_FOREVER = 0xffffffff;
 
 /**
  * default gl blend src function. Compatible with premultiplied alpha images.
@@ -1169,15 +1147,28 @@ cc.Color = function (r, g, b, a) {
     this.r = r || 0;
     this.g = g || 0;
     this.b = b || 0;
-    this.a = a || 0;
+    this.a = a || 255;
 };
 
 /**
+ * Generate a color object based on multiple forms of parameters
+ * @example
+ *
+ * // 1. All channels seperately as parameters
+ * var color1 = cc.color(255, 255, 255, 255);
+ *
+ * // 2. Convert a hex string to a color
+ * var color2 = cc.color("#000000");
+ *
+ * // 3. An color object as parameter
+ * var color3 = cc.color({r: 255, g: 255, b: 255, a: 255});
+ *
+ * Alpha channel is optional. Default value is 255
  *
  * @param {Number|String|cc.Color} r
  * @param {Number} g
  * @param {Number} b
- * @param {Number} a
+ * @param {Number} [a=255]
  * @returns {cc.Color}
  */
 cc.color = function (r, g, b, a) {
@@ -1186,8 +1177,8 @@ cc.color = function (r, g, b, a) {
     if (typeof r === "string")
         return cc.hexToColor(r);
     if (typeof r === "object")
-        return {r: r.r, g: r.g, b: r.b, a: r.a};
-    return  {r: r, g: g, b: b, a: a };
+        return {r: r.r, g: r.g, b: r.b, a: r.a || 255};
+    return  {r: r, g: g, b: b, a: a || 255};
 };
 
 /**
@@ -1399,6 +1390,19 @@ cc.base = function(me, opt_methodName, var_args) {
 };
 
 
+var ClassManager = {
+    id : (0|(Math.random()*998)),
+
+    instanceId : (0|(Math.random()*998)),
+
+    getNewID : function(){
+        return this.id++;
+    },
+
+    getNewInstanceId : function(){
+        return this.instanceId++;
+    }
+};
 //
 // 2) Using "extend" subclassing
 // Simple JavaScript Inheritance By John Resig http://ejohn.org/
@@ -1452,6 +1456,13 @@ cc.Class.extend = function (prop) {
         }
     }
 
+    var classId = ClassManager.getNewID();
+    ClassManager[classId] = _super;
+    var desc = { writable: true, enumerable: false, configurable: true };
+    Class.id = classId;
+    desc.value = classId;
+    Object.defineProperty(prototype, '__pid', desc);
+
     // Populate our constructed prototype object
     Class.prototype = prototype;
 
@@ -1465,16 +1476,29 @@ cc.Class.extend = function (prop) {
 };
 
 cc.Node.extend = cc.Class.extend;
+cc.AtlasNode.extend = cc.Class.extend;
 cc.Layer.extend = cc.Class.extend;
 cc.LayerGradient.extend = cc.Class.extend;
 cc.LayerColor.extend = cc.Class.extend;
+cc.LayerMultiplex.extend = cc.Class.extend;
 cc.Sprite.extend = cc.Class.extend;
 cc.SpriteFrame.extend = cc.Class.extend;
+cc.LabelTTF.extend = cc.Class.extend;
+cc.LabelBMFont.extend = cc.Class.extend;
+cc.LabelAtlas.extend = cc.Class.extend;
 cc.Menu.extend = cc.Class.extend;
 cc.MenuItem.extend = cc.Class.extend;
+cc.MenuItemLabel.extend = cc.Class.extend;
 cc.MenuItemFont.extend = cc.Class.extend;
+cc.MenuItemAtlasFont.extend = cc.Class.extend;
+cc.MenuItemSprite.extend = cc.Class.extend;
+cc.MenuItemImage.extend = cc.Class.extend;
 cc.MenuItemToggle.extend = cc.Class.extend;
 cc.Scene.extend = cc.Class.extend;
+cc.ClippingNode.extend = cc.Class.extend;
+cc.Scale9Sprite.extend = cc.Class.extend;
+cc.ProgressTimer.extend = cc.Class.extend;
+cc.ParallaxNode.extend = cc.Class.extend;
 cc.DrawNode.extend = cc.Class.extend;
 cc.Component.extend = cc.Class.extend;
 cc.GridBase.extend = cc.Class.extend;
@@ -1507,6 +1531,12 @@ ccui.Layout.extend = cc.Class.extend;
 ccui.ListView.extend = cc.Class.extend;
 ccui.PageView.extend = cc.Class.extend;
 ccui.ScrollView.extend = cc.Class.extend;
+cc.ControlButton.extend = cc.Class.extend;
+cc.ControlColourPicker.extend = cc.Class.extend;
+cc.ControlPotentiometer.extend = cc.Class.extend;
+cc.ControlSlider.extend = cc.Class.extend;
+cc.ControlStepper.extend = cc.Class.extend;
+cc.ControlSwitch.extend = cc.Class.extend;
 
 // Cocos2d-html5 supports multi scene resources preloading.
 // This is a compatible function for JSB.
@@ -1573,6 +1603,11 @@ var setTimeout = function (code, delay) {
     var target = new WindowTimeFun(code);
     if (arguments.length > 2)
         target._args = Array.prototype.slice.call(arguments, 2);
+    var original = target.fun;
+    target.fun = function () {
+        original.apply(this, arguments);
+        clearTimeout(target._intervalId);
+    }
     cc.Director.getInstance().getScheduler().scheduleCallbackForTarget(target, target.fun, delay / 1000, 0, 0, false);
     _windowTimeFunHash[target._intervalId] = target;
     return target._intervalId;
@@ -1588,7 +1623,7 @@ var setInterval = function (code, delay) {
     var target = new WindowTimeFun(code);
     if (arguments.length > 2)
         target._args = Array.prototype.slice.call(arguments, 2);
-    cc.Director.getInstance().getScheduler().scheduleCallbackForTarget(target, target.fun, delay / 1000, cc.REPEAT_FOREVER, 0, false);
+    cc.director.getScheduler().scheduleCallbackForTarget(target, target.fun, delay / 1000, cc.REPEAT_FOREVER, 0, false);
     _windowTimeFunHash[target._intervalId] = target;
     return target._intervalId;
 };
@@ -1650,7 +1685,10 @@ cc.EventListener.create = function(argObj){
     }
 
     for(var key in argObj) {
-        listener[key] = argObj[key];
+        // Temporary fix for EventMouse to support getDelta functions (doesn't exist in Cocos2d-x)
+        if (key == "onMouseDown" || key == "onMouseMove")
+            listener["_" + key] = argObj[key];
+        else listener[key] = argObj[key];
     }
 
     return listener;
@@ -1679,7 +1717,7 @@ cc.eventManager.dispatchCustomEvent = function (eventName, optionalUserData) {
     var ev = new cc.EventCustom(eventName);
     ev.setUserData(optionalUserData);
     this.dispatchEvent(ev);
-}
+};
 
 cc.EventCustom.prototype.setUserData = function(userData) {
     this._userData = userData;
@@ -1721,8 +1759,62 @@ cc.EventListenerKeyboard.prototype.clone = function() {
     return ret;
 };
 
+cc.EventListenerMouse.prototype.clone = function() {
+    var ret = cc.EventListenerMouse.create();
+    ret._onMouseDown = this._onMouseDown;
+    ret._onMouseMove = this._onMouseMove;
+    ret.onMouseUp = this.onMouseUp;
+    ret.onMouseScroll = this.onMouseScroll;
+    return ret;
+};
+cc.EventListenerMouse.prototype.onMouseMove = function(event) {
+    if (!this._onMouseMove)
+        return;
+    event._listener = this;
+    this._onMouseMove(event);
+    this._previousX = event.getLocationX();
+    this._previousY = event.getLocationY();
+};
+cc.EventListenerMouse.prototype.onMouseDown = function(event) {
+    if (!this._onMouseDown)
+        return;
+    event._listener = this;
+    this._previousX = event.getLocationX();
+    this._previousY = event.getLocationY();
+    this._onMouseDown(event);
+};
+
 cc.EventMouse.prototype.getLocation = function(){
     return { x: this.getLocationX(), y: this.getLocationY() };
+};
+
+cc.EventMouse.prototype.getLocationInView = function() {
+    return {x: this.getLocationX(), y: cc.view.getDesignResolutionSize().height - this.getLocationY()};
+};
+
+// Temporary fix for EventMouse to support getDelta functions (doesn't exist in Cocos2d-x)
+cc.EventMouse.prototype.getDelta = function(){
+    if (isNaN(this._listener._previousX)) {
+        this._listener._previousX = this.getLocationX();
+        this._listener._previousY = this.getLocationY();
+    }
+    return { x: this.getLocationX() - this._listener._previousX, y: this.getLocationY() - this._listener._previousY };
+};
+
+cc.EventMouse.prototype.getDeltaX = function(){
+    if (isNaN(this._listener._previousX)) {
+        this._listener._previousX = this.getLocationX();
+        this._listener._previousY = this.getLocationY();
+    }
+    return this.getLocationX() - this._listener._previousX;
+};
+
+cc.EventMouse.prototype.getDeltaY = function(){
+    if (isNaN(this._listener._previousX)) {
+        this._listener._previousX = this.getLocationX();
+        this._listener._previousY = this.getLocationY();
+    }
+    return this.getLocationY() - this._listener._previousY;
 };
 
 cc.Touch.prototype.getLocationX = function(){
@@ -1732,8 +1824,6 @@ cc.Touch.prototype.getLocationX = function(){
 cc.Touch.prototype.getLocationY = function(){
     return this.getLocation().y;
 };
-
-cc.director = cc.Director.getInstance();
 
 cc.Director.EVENT_PROJECTION_CHANGED = "director_projection_changed";
 cc.Director.EVENT_AFTER_DRAW = "director_after_draw";
@@ -1750,104 +1840,58 @@ cc.Director.prototype.runScene = function(scene){
 };
 
 cc.visibleRect = {
-    _topLeft:cc.p(0,0),
-    _topRight:cc.p(0,0),
-    _top:cc.p(0,0),
-    _bottomLeft:cc.p(0,0),
-    _bottomRight:cc.p(0,0),
-    _bottom:cc.p(0,0),
-    _center:cc.p(0,0),
-    _left:cc.p(0,0),
-    _right:cc.p(0,0),
-    _width:0,
-    _height:0,
-    _isInitialized: false,
+    topLeft:cc.p(0,0),
+    topRight:cc.p(0,0),
+    top:cc.p(0,0),
+    bottomLeft:cc.p(0,0),
+    bottomRight:cc.p(0,0),
+    bottom:cc.p(0,0),
+    center:cc.p(0,0),
+    left:cc.p(0,0),
+    right:cc.p(0,0),
+    width:0,
+    height:0,
+
     init:function(){
-
-        var director = cc.Director.getInstance();
-        var origin = director.getVisibleOrigin();
-        var size = director.getVisibleSize();
-
-        this._width = size.width;
-        this._height = size.height;
-
-        var w = this._width;
-        var h = this._height;
+        var origin = cc.director.getVisibleOrigin();
+        var size = cc.director.getVisibleSize();
+        var w = this.width = size.width;
+        var h = this.height = size.height;
+        var l = origin.x,
+            b = origin.y,
+            t = b + h,
+            r = l + w;
 
         //top
-        this._topLeft.y = h;
-        this._topRight.x = w;
-        this._topRight.y = h;
-        this._top.x = w/2;
-        this._top.y = h;
+        this.topLeft.x = l;
+        this.topLeft.y = t;
+        this.topRight.x = r;
+        this.topRight.y = t;
+        this.top.x = l + w/2;
+        this.top.y = t;
 
         //bottom
-        this._bottomRight.x = w;
-        this._bottom.x = w/2;
+        this.bottomLeft.x = l;
+        this.bottomLeft.y = b;
+        this.bottomRight.x = r;
+        this.bottomRight.y = b;
+        this.bottom.x = l + w/2;
+        this.bottom.y = b;
 
         //center
-        this._center.x = w/2;
-        this._center.y = h/2;
+        this.center.x = l + w/2;
+        this.center.y = b + h/2;
 
         //left
-        this._left.y = h/2;
+        this.left.x = l;
+        this.left.y = b + h/2;
 
         //right
-        this._right.x = w;
-        this._right.y = h/2;
-    },
-    lazyInit: function(){
-        if (!this._isInitialized) {
-            this.init();
-            this._isInitialized = true;
-        }
+        this.right.x = r;
+        this.right.y = b + h/2;
     }
 };
-
-cc.defineGetterSetter(cc.visibleRect, "width", function(){
-    this.lazyInit();
-    return this._width;
-});
-cc.defineGetterSetter(cc.visibleRect, "height", function(){
-    this.lazyInit();
-    return this._height;
-});
-cc.defineGetterSetter(cc.visibleRect, "topLeft", function(){
-    this.lazyInit();
-    return this._topLeft;
-});
-cc.defineGetterSetter(cc.visibleRect, "topRight", function(){
-    this.lazyInit();
-    return this._topRight;
-});
-cc.defineGetterSetter(cc.visibleRect, "top", function(){
-    this.lazyInit();
-    return this._top;
-});
-cc.defineGetterSetter(cc.visibleRect, "bottomLeft", function(){
-    this.lazyInit();
-    return this._bottomLeft;
-});
-cc.defineGetterSetter(cc.visibleRect, "bottomRight", function(){
-    this.lazyInit();
-    return this._bottomRight;
-});
-cc.defineGetterSetter(cc.visibleRect, "bottom", function(){
-    this.lazyInit();
-    return this._bottom;
-});
-cc.defineGetterSetter(cc.visibleRect, "center", function(){
-    this.lazyInit();
-    return this._center;
-});
-cc.defineGetterSetter(cc.visibleRect, "left", function(){
-    this.lazyInit();
-    return this._left;
-});
-cc.defineGetterSetter(cc.visibleRect, "right", function(){
-    this.lazyInit();
-    return this._right;
-});
+cc.visibleRect.init();
 
 // Predefined font definition
 cc.FontDefinition = function () {
@@ -2166,7 +2210,6 @@ var templateSetBlendFunc = function(src, dst) {
         blendf = {src: src, dst: dst};
     this._setBlendFunc(blendf);
     var b = this.getBlendFunc();
-    cc.log((b.src == src) + ", " + (b.dst == dst));
 };
 for (var i = 0, l = protoHasBlend.length; i < l; i++) {
     var proto = protoHasBlend[i];
@@ -2197,7 +2240,24 @@ var easeActions = {
     easeBounceInOut : 14,
     easeBackIn : 15,
     easeBackOut : 16,
-    easeBackInOut : 17
+    easeBackInOut : 17,
+
+    easeBezierAction : 18,
+    easeQuadraticActionIn : 19,
+    easeQuadraticActionOut : 20,
+    easeQuadraticActionInOut : 21,
+    easeQuarticActionIn : 22,
+    easeQuarticActionOut : 23,
+    easeQuarticActionInOut : 24,
+    easeQuinticActionIn : 25,
+    easeQuinticActionOut : 26,
+    easeQuinticActionInOut : 27,
+    easeCircleActionIn : 28,
+    easeCircleActionOut : 29,
+    easeCircleActionInOut : 30,
+    easeCubicActionIn : 31,
+    easeCubicActionOut : 32,
+    easeCubicActionInOut : 33
 };
 
 function templateEaseActions(actionTag) {
@@ -2211,6 +2271,7 @@ for (var a in easeActions) {
     cc[a] = templateEaseActions(actionTag);
 }
 
+// Action2d
 cc.action = cc.Action.create;
 cc.speed = cc.Speed.create;
 cc.follow = cc.Follow.create;
@@ -2251,13 +2312,45 @@ cc.fadeOut = cc.FadeOut.create;
 cc.tintTo = cc.TintTo.create;
 cc.tintBy = cc.TintBy.create;
 cc.delayTime = cc.DelayTime.create;
-//cc.reverseTime = cc.ReverseTime.create;
+cc.reverseTime = cc.ReverseTime.create;
 cc.animate = cc.Animate.create;
 cc.targetedAction = cc.TargetedAction.create;
 cc.actionTween = cc.ActionTween.create;
 
+// Actions3d
+cc.gridAction = cc.GridAction.create;
+cc.grid3DAction = cc.Grid3DAction.create;
+cc.tiledGrid3DAction = cc.TiledGrid3DAction.create;
+cc.stopGrid = cc.StopGrid.create;
+cc.reuseGrid = cc.ReuseGrid.create;
+cc.waves3D = cc.Waves3D.create;
+cc.flipX3D = cc.FlipX3D.create;
+cc.flipY3D = cc.FlipY3D.create;
+cc.lens3D = cc.Lens3D.create;
+cc.ripple3D = cc.Ripple3D.create;
+cc.shaky3D = cc.Shaky3D.create;
+cc.liquid = cc.Liquid.create;
+cc.waves = cc.Waves.create;
+cc.twirl = cc.Twirl.create;
+cc.pageTurn3D = cc.PageTurn3D.create;
+cc.shakyTiles3D = cc.ShakyTiles3D.create;
+cc.shatteredTiles3D = cc.ShatteredTiles3D.create;
+cc.shuffleTiles = cc.ShuffleTiles.create;
+cc.fadeOutTRTiles = cc.FadeOutTRTiles.create;
+cc.fadeOutBLTiles = cc.FadeOutBLTiles.create;
+cc.fadeOutUpTiles = cc.FadeOutUpTiles.create;
+cc.fadeOutDownTiles = cc.FadeOutDownTiles.create;
+cc.turnOffTiles = cc.TurnOffTiles.create;
+cc.wavesTiles3D = cc.WavesTiles3D.create;
+cc.jumpTiles3D = cc.JumpTiles3D.create;
+cc.splitRows = cc.SplitRows.create;
+cc.splitCols = cc.SplitCols.create;
+cc.progressTo = cc.ProgressTo.create;
+cc.progressFromTo = cc.ProgressFromTo.create;
 
+//
 //AffineTransform API
+//
 
 /**
  * @memberOf cc
@@ -2290,7 +2383,7 @@ cc.AffineTransform = function (a, b, c, d, tx, ty) {
  * @return {cc.AffineTransform}
  * Constructor
  */
-cc.AffineTransformMake = function (a, b, c, d, tx, ty) {
+cc.affineTransformMake = function (a, b, c, d, tx, ty) {
     return {a: a, b: b, c: c, d: d, tx: tx, ty: ty};
 };
 
@@ -2302,11 +2395,11 @@ cc.AffineTransformMake = function (a, b, c, d, tx, ty) {
  * @return {cc.Point}
  * Constructor
  */
-cc.PointApplyAffineTransform = function (point, t) {
+cc.pointApplyAffineTransform = function (point, t) {
     return {x: t.a * point.x + t.c * point.y + t.tx, y: t.b * point.x + t.d * point.y + t.ty};
 };
 
-cc._PointApplyAffineTransform = function (x, y, t) {
+cc._pointApplyAffineTransform = function (x, y, t) {
     return {x: t.a * x + t.c * y + t.tx,
         y: t.b * x + t.d * y + t.ty};
 };
@@ -2319,7 +2412,7 @@ cc._PointApplyAffineTransform = function (x, y, t) {
  * @return {cc.Size}
  * Constructor
  */
-cc.SizeApplyAffineTransform = function (size, t) {
+cc.sizeApplyAffineTransform = function (size, t) {
     return {width: t.a * size.width + t.c * size.height, height: t.b * size.width + t.d * size.height};
 };
 
@@ -2329,7 +2422,7 @@ cc.SizeApplyAffineTransform = function (size, t) {
  * @return {cc.AffineTransform}
  * Constructor
  */
-cc.AffineTransformMakeIdentity = function () {
+cc.affineTransformMakeIdentity = function () {
     return {a: 1.0, b: 0.0, c: 0.0, d: 1.0, tx: 0.0, ty: 0.0};
 };
 
@@ -2339,7 +2432,7 @@ cc.AffineTransformMakeIdentity = function () {
  * @return {cc.AffineTransform}
  * Constructor
  */
-cc.AffineTransformIdentity = function () {
+cc.affineTransformIdentity = function () {
     return {a: 1.0, b: 0.0, c: 0.0, d: 1.0, tx: 0.0, ty: 0.0};
 };
 
@@ -2351,7 +2444,7 @@ cc.AffineTransformIdentity = function () {
  * @return {cc.Rect}
  * Constructor
  */
-cc.RectApplyAffineTransform = function (rect, anAffineTransform) {
+cc.rectApplyAffineTransform = function (rect, anAffineTransform) {
     var top = cc.rectGetMinY(rect);
     var left = cc.rectGetMinX(rect);
     var right = cc.rectGetMaxX(rect);
@@ -2370,7 +2463,7 @@ cc.RectApplyAffineTransform = function (rect, anAffineTransform) {
     return cc.rect(minX, minY, (maxX - minX), (maxY - minY));
 };
 
-cc._RectApplyAffineTransformIn = function(rect, anAffineTransform){
+cc._rectApplyAffineTransformIn = function(rect, anAffineTransform){
     var top = cc.rectGetMinY(rect);
     var left = cc.rectGetMinX(rect);
     var right = cc.rectGetMaxX(rect);
@@ -2402,7 +2495,7 @@ cc._RectApplyAffineTransformIn = function(rect, anAffineTransform){
  * @return {cc.AffineTransform}
  * Constructor
  */
-cc.AffineTransformTranslate = function (t, tx, ty) {
+cc.affineTransformTranslate = function (t, tx, ty) {
     return {
         a: t.a,
         b: t.b,
@@ -2422,7 +2515,7 @@ cc.AffineTransformTranslate = function (t, tx, ty) {
  * @return {cc.AffineTransform}
  * Constructor
  */
-cc.AffineTransformScale = function (t, sx, sy) {
+cc.affineTransformScale = function (t, sx, sy) {
     return {a: t.a * sx, b: t.b * sx, c: t.c * sy, d: t.d * sy, tx: t.tx, ty: t.ty};
 };
 
@@ -2434,7 +2527,7 @@ cc.AffineTransformScale = function (t, sx, sy) {
  * @return {cc.AffineTransform}
  * Constructor
  */
-cc.AffineTransformRotate = function (aTransform, anAngle) {
+cc.affineTransformRotate = function (aTransform, anAngle) {
     var fSin = Math.sin(anAngle);
     var fCos = Math.cos(anAngle);
 
@@ -2456,7 +2549,7 @@ cc.AffineTransformRotate = function (aTransform, anAngle) {
  * @return {cc.AffineTransform}
  * Constructor
  */
-cc.AffineTransformConcat = function (t1, t2) {
+cc.affineTransformConcat = function (t1, t2) {
     return {a: t1.a * t2.a + t1.b * t2.c,                          //a
         b: t1.a * t2.b + t1.b * t2.d,                               //b
         c: t1.c * t2.a + t1.d * t2.c,                               //c
@@ -2474,7 +2567,7 @@ cc.AffineTransformConcat = function (t1, t2) {
  * @return {Boolean}
  * Constructor
  */
-cc.AffineTransformEqualToTransform = function (t1, t2) {
+cc.affineTransformEqualToTransform = function (t1, t2) {
     return ((t1.a === t2.a) && (t1.b === t2.b) && (t1.c === t2.c) && (t1.d === t2.d) && (t1.tx === t2.tx) && (t1.ty === t2.ty));
 };
 
@@ -2486,10 +2579,22 @@ cc.AffineTransformEqualToTransform = function (t1, t2) {
  * @return {cc.AffineTransform}
  * Constructor
  */
-cc.AffineTransformInvert = function (t) {
+cc.affineTransformInvert = function (t) {
     var determinant = 1 / (t.a * t.d - t.b * t.c);
     return {a: determinant * t.d, b: -determinant * t.b, c: -determinant * t.c, d: determinant * t.a,
         tx: determinant * (t.c * t.ty - t.d * t.tx), ty: determinant * (t.b * t.tx - t.a * t.ty)};
+};
+
+
+//
+// Node API
+//
+
+cc.Node.prototype.setUserData = function (data) {
+    this.userData = data;
+};
+cc.Node.prototype.getUserData = function () {
+    return this.userData;
 };
 
 /** returns a "world" axis aligned bounding box of the node. <br/>
@@ -2499,7 +2604,7 @@ cc.Node.prototype.getBoundingBoxToWorld = function () {
     var contentSize = this.getContentSize();
     var rect = cc.rect(0, 0, contentSize.width, contentSize.height);
     var matrix = this.getNodeToWorldTransform();
-    var trans = cc.AffineTransformMake(matrix[0], matrix[4], matrix[1], matrix[5], matrix[12], matrix[13]);  
+    var trans = cc.AffineTransformMake(matrix[0], matrix[1], matrix[4], matrix[5], matrix[12], matrix[13]);  
     rect = cc.RectApplyAffineTransform(rect, trans);
 
     //query child's BoundingBox
@@ -2522,7 +2627,7 @@ cc.Node.prototype._getBoundingBoxToCurrentNode = function (parentTransform) {
     var contentSize = this.getContentSize();
     var rect = cc.rect(0, 0, contentSize.width, contentSize.height);
     var matrix = this.getNodeToParentTransform();
-    var _trans = cc.AffineTransformMake(matrix[0], matrix[4], matrix[1], matrix[5], matrix[12], matrix[13]); 
+    var _trans = cc.AffineTransformMake(matrix[0], matrix[1], matrix[4], matrix[5], matrix[12], matrix[13]); 
     var trans = (parentTransform == null) ? _trans : cc.AffineTransformConcat(_trans, parentTransform);
     rect = cc.RectApplyAffineTransform(rect, trans);
 
@@ -2540,4 +2645,17 @@ cc.Node.prototype._getBoundingBoxToCurrentNode = function (parentTransform) {
         }
     }
     return rect;
+};
+
+
+//
+// RenderTexture beginWithClear
+//
+cc.RenderTexture.prototype._beginWithClear = cc.RenderTexture.prototype.beginWithClear;
+cc.RenderTexture.prototype.beginWithClear = function(r, g, b, a, depthValue, stencilValue) {
+    arguments[0] /= 255;
+    arguments[1] /= 255;
+    arguments[2] /= 255;
+    arguments[3] /= 255;
+    this._beginWithClear.apply(this, arguments);
 };

@@ -27,12 +27,13 @@ THE SOFTWARE.
 #include "PluginProtocol.h"
 #include <map>
 #include <string>
+#include <functional>
 
 namespace cocos2d { namespace plugin {
 
 typedef std::map<std::string, std::string> TIAPDeveloperInfo;
 typedef std::map<std::string, std::string> TProductInfo;
-
+typedef std::vector<TProductInfo> TProductList;
 typedef enum 
 {
     kPaySuccess = 0,
@@ -40,11 +41,18 @@ typedef enum
     kPayCancel,
     kPayTimeOut,
 } PayResultCode;
+    
+typedef enum {
+    RequestSuccees=0,
+    RequestFail,
+    RequestTimeout,
+} IAPProductRequest;
 
 class PayResultListener
 {
 public:
     virtual void onPayResult(PayResultCode ret, const char* msg, TProductInfo info) = 0;
+    virtual void onRequestProductsResult(IAPProductRequest ret, TProductList info){}
 };
 
 class ProtocolIAP : public PluginProtocol
@@ -52,6 +60,8 @@ class ProtocolIAP : public PluginProtocol
 public:
 	ProtocolIAP();
 	virtual ~ProtocolIAP();
+
+	typedef std::function<void(int, std::string&)> ProtocolIAPCallback;
 
     /**
     @brief config the developer info
@@ -72,24 +82,51 @@ public:
              Look at the manual of plugins.
     */
     void payForProduct(TProductInfo info);
+    void payForProduct(TProductInfo info, ProtocolIAPCallback cb);
 
     /**
+    @deprecated
     @breif set the result listener
     @param pListener The callback object for pay result
     @wraning Must invoke this interface before payForProduct.
     */
-    void setResultListener(PayResultListener* pListener);
-
+    CC_DEPRECATED_ATTRIBUTE void setResultListener(PayResultListener* pListener);
+    
+    /**
+    @deprecated
+    @breif get the result listener
+    */
+    CC_DEPRECATED_ATTRIBUTE inline PayResultListener* getResultListener()
+    {
+        return _listener;
+    }
+    
     /**
     @brief pay result callback
     */
     void onPayResult(PayResultCode ret, const char* msg);
 
+    /**
+    @brief set callback function
+    */
+    inline void setCallback(ProtocolIAPCallback &cb)
+    {
+    	_callback = cb;
+    }
+
+    /**
+    @brief get callback function
+    */
+    inline ProtocolIAPCallback getCallback()
+    {
+    	return _callback;
+    }
 protected:
     static bool _paying;
 
     TProductInfo _curInfo;
     PayResultListener* _listener;
+    ProtocolIAPCallback _callback;
 };
 
 }} // namespace cocos2d { namespace plugin {

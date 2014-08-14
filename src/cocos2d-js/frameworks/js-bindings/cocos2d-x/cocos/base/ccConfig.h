@@ -89,7 +89,7 @@ To enabled set it to 1. Disabled by default.
 @since v0.99.5
 */
 #ifndef CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
-#define CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL 1
+#define CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL 0
 #endif
 
 /** @def CC_DIRECTOR_FPS_INTERVAL
@@ -199,9 +199,6 @@ Only valid for cocos2d-mac. Not supported on cocos2d-ios.
  Useful for debugging purposes only. It is recommended to leave it disabled.
  
  To enable set it to a value different than 0. Disabled by default:
- 0 -- disabled
- 1 -- draw bounding box
- 2 -- draw texture box
  0 -- disabled
  1 -- draw bounding box
  2 -- draw texture box

@@ -56,10 +56,10 @@ public:
     std::function<void(Touch*, Event*)> onTouchEnded;
     std::function<void(Touch*, Event*)> onTouchCancelled;
     
-private:
+CC_CONSTRUCTOR_ACCESS:
     EventListenerTouchOneByOne();
     bool init();
-    
+private:
     std::vector<Touch*> _claimedTouches;
     bool _needSwallow;
     
@@ -85,7 +85,7 @@ public:
     std::function<void(const std::vector<Touch*>&, Event*)> onTouchesEnded;
     std::function<void(const std::vector<Touch*>&, Event*)> onTouchesCancelled;
     
-private:
+CC_CONSTRUCTOR_ACCESS:
     EventListenerTouchAllAtOnce();
     bool init();
 private:

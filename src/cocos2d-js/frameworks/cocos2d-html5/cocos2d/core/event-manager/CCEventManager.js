@@ -101,12 +101,14 @@ cc.__getListenerID = function (event) {
 };
 
 /**
- * @namespace<p>
+ * <p>
  *  This class manages event listener subscriptions and event dispatching.                                      <br/>
  *                                                                                                              <br/>
  *  The EventListener list is managed in such a way that event listeners can be added and removed even          <br/>
  *  from within an EventListener, while events are being dispatched.
  * </p>
+ * @namespace
+ * @name cc.eventManager
  */
 cc.eventManager = /** @lends cc.eventManager# */{
     //Priority dirty flag
@@ -653,18 +655,15 @@ cc.eventManager = /** @lends cc.eventManager# */{
      *         except calls removeAllListeners().
      */
     addListener: function (listener, nodeOrPriority) {
-
         cc.assert(listener && nodeOrPriority, cc._LogInfos.eventManager_addListener_2);
-
         if(!(listener instanceof cc.EventListener)){
-
             cc.assert(typeof nodeOrPriority !== "number", cc._LogInfos.eventManager_addListener_3);
-
             listener = cc.EventListener.create(listener);
-        } else{
-
-            cc.assert(!listener._isRegistered(), cc._LogInfos.eventManager_addListener_4);
-
+        } else {
+            if(listener._isRegistered()){
+                cc.log(cc._LogInfos.eventManager_addListener_4);
+                return;
+            }
         }
 
         if (!listener.checkAvailable())

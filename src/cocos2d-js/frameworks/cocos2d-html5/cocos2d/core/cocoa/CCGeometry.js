@@ -29,12 +29,6 @@
 // POINT
 //
 //--------------------------------------------------------
-/**
- * @class
- * @param {Number} x
- * @param {Number} y
- * Constructor
- */
 cc.Point = function (x, y) {
     this.x = x || 0;
     this.y = y || 0;
@@ -42,6 +36,9 @@ cc.Point = function (x, y) {
 
 /**
  * Helper macro that creates a cc.Point.
+ *
+ * @class cc.Point
+ * @constructor
  * @param {Number|cc.Point} x a Number or a size object
  * @param {Number} y
  * @return {cc.Point}
@@ -81,19 +78,14 @@ cc.pointEqualToPoint = function (point1, point2) {
 //
 //--------------------------------------------------------
 
-/**
- * @class
- * @param {Number} width
- * @param {Number} height
- * Constructor
- */
 cc.Size = function (width, height) {
     this.width = width || 0;
     this.height = height || 0;
 };
 
 /**
- * @function
+ * @class cc.Size
+ * @constructor
  * @param {Number|cc.Size} w width or a size object
  * @param {Number} h height
  * @return {cc.Size}
@@ -133,14 +125,6 @@ cc.sizeEqualToSize = function (size1, size2) {
 //
 //--------------------------------------------------------
 
-/**
- * @class
- * @param {Number} x a Number value as x
- * @param {Number} y  a Number value as y
- * @param {Number} width
- * @param {Number} height
- * Constructor
- */
 cc.Rect = function (x, y, width, height) {
     this.x = x||0;
     this.y = y||0;
@@ -150,6 +134,8 @@ cc.Rect = function (x, y, width, height) {
 
 /**
  * Return a new Rect
+ * @class cc.Rect
+ * @constructor
  * @param {Number|cc.Rect} x a number or a rect object
  * @param {Number} y
  * @param {Number} w
@@ -274,11 +260,12 @@ cc.rectContainsPoint = function (rect, point) {
  * @param {cc.Rect} rectB
  * @return {Boolean}
  */
-cc.rectIntersectsRect = function (rectA, rectB) {
-    return !(cc.rectGetMaxX(rectA) < cc.rectGetMinX(rectB) ||
-        cc.rectGetMaxX(rectB) < cc.rectGetMinX(rectA) ||
-        cc.rectGetMaxY(rectA) < cc.rectGetMinY(rectB) ||
-        cc.rectGetMaxY(rectB) < cc.rectGetMinY(rectA));
+cc.rectIntersectsRect = function (ra, rb) {
+    var maxax = ra.x + ra.width,
+        maxay = ra.y + ra.height,
+        maxbx = rb.x + rb.width,
+        maxby = rb.y + rb.height;
+    return !(maxax < rb.x || maxbx < ra.x || maxay < rb.y || maxby < ra.y);
 };
 
 /**
