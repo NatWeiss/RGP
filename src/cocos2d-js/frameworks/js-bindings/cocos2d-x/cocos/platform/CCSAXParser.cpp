@@ -59,9 +59,8 @@ bool XmlSaxHander::VisitEnter( const tinyxml2::XMLElement& element, const tinyxm
 	std::vector<const char*> attsVector;
 	for( const tinyxml2::XMLAttribute* attrib = firstAttribute; attrib; attrib = attrib->Next() )
 	{
-		//log("%s", attrib->Name());
+		//log("   %s = %s", attrib->Name(), attrib->Value());
 		attsVector.push_back(attrib->Name());
-		//log("%s",attrib->Value());
 		attsVector.push_back(attrib->Value());
 	}
     

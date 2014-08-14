@@ -102,8 +102,10 @@ rg:
 	cp -r src/proj.ios_mac ${dest}src/
 	rm -r ${dest}src/proj.ios_mac/cocos2dx-plugins.xcodeproj
 	#rm -r ${dest}src/proj.ios_mac/PluginJSBindings.xcodeproj
-	rm -r ${dest}src/proj.ios_mac/cocos2dx-prebuilt.xcodeproj/xcuserdata
-	rm -r ${dest}src/proj.ios_mac/cocos2dx-prebuilt.xcodeproj/project.xcworkspace
+	rm -rf ${dest}src/proj.ios_mac/cocos2dx-prebuilt.xcodeproj/xcuserdata
+	rm -rf ${dest}src/proj.ios_mac/cocos2dx-prebuilt.xcodeproj/project.xcworkspace
+	mkdir -p src/proj.android/obj
+	mkdir -p src/proj.android/libs
 	mv src/proj.android/obj src/proj.android/libs /tmp
 	cp -r src/proj.android ${dest}src/
 	mv /tmp/obj /tmp/libs src/proj.android/
