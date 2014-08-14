@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>D19112CD-4061-4622-A1B9-CF3A7C86C682</string>
+	<string>6CE32ADE-EE52-40C9-BEF6-5C38ECA3FFEC</string>
 	<key>IDESourceControlProjectName</key>
 	<string>TwoScene</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>
+		<key>E788B289-AE74-4F87-ABEF-FDB1D61B47BB</key>
 		<string>http://natweiss.com/git/rapidgamepro.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>templates/cocos2d/TwoScene/Projects/TwoScene.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</key>
+		<key>E788B289-AE74-4F87-ABEF-FDB1D61B47BB</key>
 		<string>../../../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</string>
+	<string>E788B289-AE74-4F87-ABEF-FDB1D61B47BB</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D28589C4-2560-4CB8-923B-1FCE5CCBC4C3</string>
+			<string>E788B289-AE74-4F87-ABEF-FDB1D61B47BB</string>
 			<key>IDESourceControlWCCName</key>
 			<string>RapidGamePro</string>
 		</dict>

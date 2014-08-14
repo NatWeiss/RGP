@@ -28,10 +28,12 @@ Game.initPro = function() {
 //		}
 
 		/* Load plugins. */
-		Game.getAnalyticsPlugin();
-		Game.getAdsPlugin();
-		Game.getSocialPlugin();
-		Game.getEconomyPlugin();
+		if (typeof plugin !== "undefined") {
+			Game.getAnalyticsPlugin();
+			Game.getAdsPlugin();
+			Game.getSocialPlugin();
+			Game.getEconomyPlugin();
+		}
 
 		/* Handle initial launch. */
 		/* Call after loading plugins so initial currency balances can be set. */
@@ -474,7 +476,7 @@ Game.giveItem = function(itemId, amount) {
 Game.logCurrencyBalances = function() {
 	var currencies, len, i, itemId, balance;
 
-	if (Soomla && Soomla.storeInfo) {
+	if (typeof Soomla !== "undefined" && Soomla.storeInfo) {
 		currencies = Soomla.storeInfo.getVirtualCurrencies();
 		len = currencies.length || 0;
 		cc.log("Checking " + len + " currency balances");
