@@ -395,6 +395,9 @@ var downloadCocos = function(callback) {
 	if (dirExists(src)) {
 		console.log("WARNING: Directory " + src + " may prevent cocos2d-js from being patched with git apply");
 	}
+	
+	// copy latest patch
+	copyGlobbed(path.join(__dirname, "src"), dir, "*.patch");
 
 	// download
 	downloadUrl(cocos2djsUrl, dir, function(success) {
