@@ -17,3 +17,4 @@
 /node_modules
 xcuserdata
 project.xcworkspace
+/templates/cocos2d/TwoScene/Server/node_modules
