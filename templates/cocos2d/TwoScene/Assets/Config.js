@@ -34,7 +34,7 @@ Game.config = {
 //
 	"social-plugin": {
 		"name": "Facebook",
-		"debug": true,
+		"debug": false,
 		"app-id": "",
 		"login-permissions": "",
 		"profile-image-width": 100
@@ -47,7 +47,7 @@ Game.config = {
 //
 	"ads-plugin": {
 		"name": "AdsMobFox",
-		"debug": true,
+		"debug": false,
 		"api-key": "",
 		"mode": "test"
 	},
@@ -59,7 +59,7 @@ Game.config = {
 //
 	"economy-plugin": {
 		"name": "Soomla",
-		"debug": true,
+		"debug": false,
 		"secret1": "01234567890123456789012345678901",
 		"secret2": "01234567890123456789012345678901",
 		"android-public-key": " ",

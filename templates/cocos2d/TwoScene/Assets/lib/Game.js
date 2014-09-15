@@ -87,14 +87,25 @@ Game.getWinSize = function() {
 };
 
 //
+// ###  Game.scale
+//
+// Scale a number by a factor based on the screen size.
+//
+Game.scale = function(floatValue) {
+	if (typeof this._scaleFactor === "undefined")
+		this._scaleFactor = 1.0;
+	return floatValue * this._scaleFactor;
+};
+
+//
 // ###  Game.centralize
 //
 // Return a point relative to the center of the screen and scaled.
 //
 Game.centralize = function(x, y) {
 	var winSize = this.getWinSize();
-	return cc.p(x + winSize.width * .5,
-		y + winSize.height * .5);
+	return cc.p(Game.scale(x) + winSize.width * .5,
+		Game.scale(y) + winSize.height * .5);
 };
 
 //
@@ -239,14 +250,15 @@ Game.callRunningLayer = function(methodName, param1, param2, param3) {
 // Return an array of files to preload.
 //
 Game.getResourcesToPreload = function() {
-	var files = Game.config["preload"],
+	var dir = (typeof(Game.getResourceDir) === "function" ? Game.getResourceDir() : ""),
+		files = Game.config["preload"],
 		ret = [],
 		i;
 
 	if (files) {
 		for (i = 0; i < files.length; i += 1) {
 			if (files[i] && files[i].length) {
-				ret[i] = files[i];
+				ret[i] = dir + files[i];
 			}
 		}
 	}
@@ -263,19 +275,8 @@ Game.runInitialScene = function() {
 	var Scene = window[cc.game.config.initialScene],
 		scene;
 
-	/* Show cached textures and load spriteframes. */
-	/*if (cc.textureCache.dumpCachedTextureInfo)
-		cc.textureCache.dumpCachedTextureInfo();*/
-	var files = Game.config["spritesheets"],
-		i;
-	if (files) {
-		for (i = 0; i < files.length; i += 1) {
-			if (files[i] && files[i].length) {
-				cc.log("Loading spritesheet: " + files[i]);
-				cc.spriteFrameCache.addSpriteFrames(files[i]);
-			}
-		}
-	}
+	if (typeof Game.loadResources === "function")
+		Game.loadResources();
 
 	scene = new Scene;
 	scene.init();

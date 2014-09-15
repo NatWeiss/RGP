@@ -196,7 +196,3 @@ Game.checkMusic = function() {
 };
 
 
-
-Game.scale = function(f) {
-	return f;
-};

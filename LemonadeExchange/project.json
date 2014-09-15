@@ -1,9 +1,8 @@
 {
     "engineDir": "lib/cocos2d/html",
-	"designWidth": 2048,
-	"designHeight": 1536,
 	"initialScene": "SceneMain",
 	"resourcePath": "Assets",
+	"resourceTiers": ["sd", "hd", "hdr"],
 	"debugPhysics": false,
 	"playMusic": true,
 
@@ -44,22 +43,22 @@
 	},
 	
 	"preload": [
-		"hd/spritesheet.plist",
-		"hd/spritesheet.png"
+		"spritesheet.plist",
+		"spritesheet.png"
 	],
 
 	"spritesheets": [
-		"hd/spritesheet.plist"
+		"spritesheet.plist"
 	],
 
-	"font": "DolceVita",
+	"font": "Molle",
 	
 	"loader": {
 		"bg-color": {"r": 218, "g": 214, "b": 212, "a": 255},
 		"text": "L o a d i n g . . .",
 		"text-font": "Arial",
 		"text-color": {"r": 128, "g": 128, "b": 128, "a": 255},
-		"text-size": 40,
+		"text-size": 20,
 		"bar-color": {"r": 9, "g": 9, "b": 10, "a": 255},
 		"image-win-size-percent": 0.5
 	}

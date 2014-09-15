@@ -79,21 +79,6 @@ Game.config = {
 	"total-glass-breaking-sounds": 3,
 	
 //
-// ###  loader
-//
-// Settings for the loading scene.
-//
-	"loader": {
-		"bg-color": cc.color(253, 252, 255, 255),
-		"text": "L o a d i n g . . .",
-		"text-font": "Arial",
-		"text-color": cc.color(180, 180, 180, 255),
-		"text-size": 20,
-		"bar-color": cc.color(9, 9, 10, 255),
-		"image-win-size-percent": 0.5
-	},
-
-//
 // ###  analytics-plugin
 //
 // Settings for the analytics plugin. Insert your API key.
@@ -144,48 +129,42 @@ Game.config = {
 		"secret1": "77yMfv8l1yyYq4WoKJ0cVTEa3FU2zuSp",
 		"secret2": "0irOF7InTS2OzA3hc7Ejj8Mhm3l3dI9s",
 		"android-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlYZHeBm9l52JwNB9s6j9z3lbZN6O4ydWctIin1gJFUrEILtJpIGb5z6ER+F9DsOYphmin0QXu1TF1S78BfAKUNzJbJzcKIi85B/IQPgRpSIKx+Y2k5m9dECXwbSVcJgwndUQnBGbxz7EJIJtrY+hPVhN5DCRM4FZSE0rRLA6niWzKwbZOlGrHYr9q/H/a6zKho9/JJtimVTtE8KhoVIjKBhFBUQYhCIkkKRZfzUc4pXgmtv+7G9o77XhE5sPvcZZfZN2EFPjXXl4BdeRtpytZ6b72OhRpzlkciNb8e8cnobe2zviPggM8HzNv3YwTEPbyS9Vez4UcslW/wmrekuQuwIDAQAB",
-		"currencies": [
-			{
-				"name": "Lemonades",
-				"description": "",
-				"itemId": "currency_lemonades"
-			},
-			{
-				"name": "Bux",
-				"description": "",
-				"itemId": "currency_bux"
-			}
-		],
+		"currencies": [{
+			"name": "Lemonades",
+			"description": "",
+			"itemId": "currency_lemonades"
+		},{
+			"name": "Bux",
+			"description": "",
+			"itemId": "currency_bux"
+		}],
 		"initial-balances": {
 			"currency_lemonades": 10,
 			"currency_bux": 100
 		},
-		"currency-packs": [
-			{
-				"name": "Small Bux Pack",
-				"description": "50 bux!",
-				"itemId": "small_bux_pack",
-				"currency_amount": 50,
-				"currency_itemId": "currency_bux",
-				"create_market_item": [
-					"com.wizardfu.lemonadex.small_bux_pack",
-					0.99
-				],
-				"facebook_product_url": "http://wizardfu.com/lemonadex/Assets/small_bux_pack.html"
-			},
-			{
-				"name": "Medium Bux Pack",
-				"description": "300 bux!",
-				"itemId": "medium_bux_pack",
-				"currency_amount": 300,
-				"currency_itemId": "currency_bux",
-				"create_market_item": [
-					"com.wizardfu.lemonadex.medium_bux_pack",
-					4.99
-				],
-				"facebook_product_url": "http://wizardfu.com/lemonadex/Assets/medium_bux_pack.html"
-			}
-		],
+		"currency-packs": [{
+			"name": "Small Bux Pack",
+			"description": "50 bux!",
+			"itemId": "small_bux_pack",
+			"currency_amount": 50,
+			"currency_itemId": "currency_bux",
+			"create_market_item": [
+				"com.wizardfu.lemonadex.small_bux_pack",
+				0.99
+			],
+			"facebook_product_url": "http://wizardfu.com/lemonadex/Assets/small_bux_pack.html"
+		},{
+			"name": "Medium Bux Pack",
+			"description": "300 bux!",
+			"itemId": "medium_bux_pack",
+			"currency_amount": 300,
+			"currency_itemId": "currency_bux",
+			"create_market_item": [
+				"com.wizardfu.lemonadex.medium_bux_pack",
+				4.99
+			],
+			"facebook_product_url": "http://wizardfu.com/lemonadex/Assets/medium_bux_pack.html"
+		}],
 		"single-use-goods": [],
 		"lifetime-goods": [],
 		"equippable-goods": [],

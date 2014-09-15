@@ -741,7 +741,7 @@ var LayerGame = (function(){
 // Animate adding an amount to a certain currency.
 //
 		animateCurrencyAdd: function(destNode, filename) {
-			var angle = cc.DEGREES_TO_RADIANS(Game.rand(180)),
+			var angle = cc.degreesToRadians(Game.rand(180)),
 				radius = Game.scale(300),
 				sprite = cc.Sprite.create("#" + filename),
 				rotation = Game.rand(360 * 2);

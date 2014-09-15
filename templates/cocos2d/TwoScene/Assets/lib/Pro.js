@@ -18,23 +18,26 @@ Game.initPro = function() {
 	var onFinished = function() {
 		var initialLaunch = Game.isInitialLaunch();
 		Game.getUUID();
+		
+		/* Show resource dir. */
+		cc.log("Resource dir: " + Game._resourceDir + ", scale: " + Game._scaleFactor + ", content scale: " + Game._contentScaleFactor);
 
 		/* Ensure plugin is defined. */
-//		window.plugin = window.plugin || {};
-//		if (!window.plugin.PluginManager) {
-//			window.plugin.PluginManager = {
-//				getInstance:function(){return {loadPlugin:function(){}}}
-//			};
-//		}
+		window.plugin = window.plugin || {};
+		if (!window.plugin.PluginManager) {
+			window.plugin.PluginManager = {
+				getInstance:function(){return {loadPlugin:function(){}}}
+			};
+		}
 
 		/* Load plugins. */
-/*		if (typeof plugin !== "undefined") {
+		if (typeof plugin !== "undefined") {
 			Game.getAnalyticsPlugin();
 			Game.getAdsPlugin();
 			Game.getSocialPlugin();
 			Game.getEconomyPlugin();
 		}
-*/
+
 		/* Handle initial launch. */
 		/* Call after loading plugins so initial currency balances can be set. */
 		/*cc.log("Initial launch: " + initialLaunch);*/
@@ -75,6 +78,82 @@ Game.initPro = function() {
 		}
 
 		onFinished();
+	}
+};
+
+//
+// ###  Game.getResourceDir
+//
+// Return the resource directory (SD, HD or HDR) for this device's resolution.
+//
+Game.getResourceDir = function() {
+	if (typeof this._resourceDir === "undefined") {
+		var self = this,
+			winSize = this.getWinSize(),
+			tiers = Game.config["resourceTiers"],
+			maxDimension = parseInt(Math.max(winSize.width, winSize.height)),
+			minDimension = parseInt(Math.min(winSize.width, winSize.height)),
+			setResourceDir = function(dir, contentScaleFactor, scaleFactor){
+				self._resourceDir = dir;
+				self._contentScaleFactor = contentScaleFactor;
+				self._scaleFactor = scaleFactor;
+			};
+		
+		if (typeof tiers === "undefined") {
+			setResourceDir("", 1, 1);
+		} else if (this.isHtml5()) {
+			/*if (minDimension > 1500) {
+				setResourceDir("hdr/", 1, 2);
+			} else*/ if (minDimension >= 600) {
+				setResourceDir(tiers[1] + "/", 1, 1);
+			} else {
+				setResourceDir(tiers[0] + "/", 1, .5);
+			}
+		} else {
+			if (maxDimension > 1600) {
+				setResourceDir(tiers[2] + "/", 1, 2);
+			} else if (maxDimension >= 960) {
+				setResourceDir(tiers[1] + "/", 1, 1);
+			} else {
+				setResourceDir(tiers[0] + "/", 1, .5);
+			}
+		}
+	}
+
+	return this._resourceDir;
+};
+
+//
+// ###  Game.loadResources
+//
+// Setup and load resources.
+//
+Game.loadResources = function() {
+	var sheets = Game.config["spritesheets"],
+		sheet,
+		i;
+
+	cc.director.setContentScaleFactor(this._contentScaleFactor);
+
+	/* Load spritesheets. */
+	var dir = Game.getResourceDir(),
+		files = Game.config["spritesheets"],
+		i;
+	if (files) {
+		for (i = 0; i < files.length; i += 1) {
+			if (files[i] && files[i].length) {
+				cc.log("Loading spritesheet: " + dir + files[i]);
+				cc.spriteFrameCache.addSpriteFrames(dir + files[i]);
+			}
+		}
+	}
+
+	/* Show cached textures. */
+	if (false) {
+		if (cc.textureCache.dumpCachedTextureInfo)
+			cc.textureCache.dumpCachedTextureInfo();
+		if (cc.textureCache.getCachedTextureInfo)
+			cc.log(cc.textureCache.getCachedTextureInfo());
 	}
 };
 
@@ -221,8 +300,7 @@ Game.getAdsPlugin = function() {
 		var name = Game.config["ads-plugin"]["name"];
 
 		this.adsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
-		
-		if (this.adsPlugin === null) {
+		if (typeof this.adsPlugin === "undefined" || this.adsPlugin === null) {
 			this.adsPlugin = new plugin[name]();
 			this.adsPlugin.init();
 		}
