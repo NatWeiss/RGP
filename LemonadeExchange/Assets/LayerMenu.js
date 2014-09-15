@@ -56,9 +56,11 @@ var LayerMenu = (function(){
 			this.addChild(this.menu, 2);
 			
 			/* Preload font. */
-			label = cc.LabelTTF.create(" ", Game.config["font"], 1);
-			label.x = -4000;
-			this.addChild(label, -1);
+			if (Game.isHtml5()) {
+				label = cc.LabelTTF.create(" ", Game.config["font"], 1);
+				label.x = -4000;
+				this.addChild(label, -1);
+			}
 
 			/* Create the logo. */
 			this.logo = cc.Sprite.create("#Logo.png");

@@ -301,8 +301,10 @@ Game.getAdsPlugin = function() {
 
 		this.adsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
 		if (typeof this.adsPlugin === "undefined" || this.adsPlugin === null) {
-			this.adsPlugin = new plugin[name]();
-			this.adsPlugin.init();
+			if (typeof plugin[name] !== "undefined") {
+				this.adsPlugin = new plugin[name]();
+				this.adsPlugin.init();
+			}
 		}
 		
 		if (this.adsPlugin) {
@@ -348,7 +350,7 @@ Game.getSocialPlugin = function() {
 // Get the virtual economy plugin. The first time this is called, the plugin is loaded and configured.
 //
 Game.getEconomyPlugin = function() {
-	if (typeof this.economyPlugin === "undefined") {
+	if (typeof this.economyPlugin === "undefined" && typeof Soomla !== "undefined") {
 		var storeConfig = {
 				soomSec: Game.config["economy-plugin"]["secret1"],
 				customSecret: Game.config["economy-plugin"]["secret2"],

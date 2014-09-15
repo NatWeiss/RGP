@@ -12,22 +12,25 @@
 #include "AppDelegate.h"
 #include "cocos2d.h"
 
-const bool kFullscreen = false;
-const int kWindowWidth = 1024;
-const int kWindowHeight = 768;
-
 using namespace cocos2d;
 
 int main(int argc, char *argv[])
 {
 	AppDelegate app;
-/*	GLView glView;
-	
+	GLView* view = nullptr;
+	bool fullscreen = true;
+	#ifndef NDEBUG
+		fullscreen = false;
+	#endif
+
+	// create the gl view
 	auto name = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"] UTF8String];
-	if( kFullscreen )
-		glView.initWithFullScreen(name);
+	if (fullscreen)
+		view = GLView::createWithFullScreen(name);
 	else
-		glView.init(name, kWindowWidth, kWindowHeight);
-*/
+		view = GLView::createWithRect(name, cocos2d::Rect(0, 0, 960, 640));
+	Director::getInstance()->setOpenGLView(view);
+	
+	// run the app
 	return Application::getInstance()->run();
 }

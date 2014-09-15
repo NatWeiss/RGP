@@ -45,14 +45,6 @@ bool AppDelegate::applicationDidFinishLaunching()
 {
 	// initialize director
 	auto director = Director::getInstance();
-	auto glview = director->getOpenGLView();
-	if( !glview )
-	{
-		cocos2d::Rect r(0,0,900,640);
-		glview = GLView::createWithRect("TwoScene", r);
-		director->setOpenGLView(glview);
-	}
-
 	director->setDisplayStats(true);
 	director->setAnimationInterval(1.0 / 60);
 
@@ -117,3 +109,5 @@ void AppDelegate::applicationWillEnterForeground()
 	SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
 	SimpleAudioEngine::getInstance()->resumeAllEffects();
 }
+
+

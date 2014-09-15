@@ -60,8 +60,6 @@
 		41F1A4B51894BB33006E818E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A922754F1517C094001B78AA /* CoreGraphics.framework */; };
 		41F1A4BC1894BB33006E818E /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 41F1A3E01894BA38006E818E /* Default-568h@2x.png */; };
 		41F1A4E51894BBE3006E818E /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41F1A4DA1894BBE3006E818E /* AppController.mm */; };
-		41F1A4E61894BBE3006E818E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 41F1A4DC1894BBE3006E818E /* InfoPlist.strings */; };
-		41F1A4E71894BBE3006E818E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41F1A4DE1894BBE3006E818E /* MainMenu.xib */; };
 		41F1A4E81894BBE3006E818E /* Icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 41F1A4E01894BBE3006E818E /* Icon.icns */; };
 		41F1A4EA1894BBE3006E818E /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41F1A4E21894BBE3006E818E /* main.mm */; };
 		41F1A5071894BF71006E818E /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41F1A5061894BF71006E818E /* AppKit.framework */; };
@@ -384,8 +382,6 @@
 		41F1A4D61894BB33006E818E /* TwoScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwoScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41F1A4D91894BBE3006E818E /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppController.h; path = mac/AppController.h; sourceTree = "<group>"; };
 		41F1A4DA1894BBE3006E818E /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppController.mm; path = mac/AppController.mm; sourceTree = "<group>"; };
-		41F1A4DD1894BBE3006E818E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
-		41F1A4DF1894BBE3006E818E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = MainMenu.xib; sourceTree = "<group>"; };
 		41F1A4E01894BBE3006E818E /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Icon.icns; path = mac/Icon.icns; sourceTree = "<group>"; };
 		41F1A4E11894BBE3006E818E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = mac/Info.plist; sourceTree = "<group>"; };
 		41F1A4E21894BBE3006E818E /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main.mm; path = mac/main.mm; sourceTree = "<group>"; };
@@ -1385,23 +1381,12 @@
 			children = (
 				41F1A4D91894BBE3006E818E /* AppController.h */,
 				41F1A4DA1894BBE3006E818E /* AppController.mm */,
-				41F1A4DB1894BBE3006E818E /* en.lproj */,
 				41F1A4E01894BBE3006E818E /* Icon.icns */,
 				41F1A4E11894BBE3006E818E /* Info.plist */,
 				41F1A4E21894BBE3006E818E /* main.mm */,
 				41F1A4EC1894BCAE006E818E /* Prefix.pch */,
 			);
 			name = mac;
-			sourceTree = "<group>";
-		};
-		41F1A4DB1894BBE3006E818E /* en.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				41F1A4DC1894BBE3006E818E /* InfoPlist.strings */,
-				41F1A4DE1894BBE3006E818E /* MainMenu.xib */,
-			);
-			name = en.lproj;
-			path = mac/en.lproj;
 			sourceTree = "<group>";
 		};
 		A92275321517C094001B78AA = {
@@ -1498,8 +1483,6 @@
 				41F1A4E81894BBE3006E818E /* Icon.icns in Resources */,
 				41F1A4BC1894BB33006E818E /* Default-568h@2x.png in Resources */,
 				412F337B192C36E1007F51FD /* project.json in Resources */,
-				41F1A4E71894BBE3006E818E /* MainMenu.xib in Resources */,
-				41F1A4E61894BBE3006E818E /* InfoPlist.strings in Resources */,
 				412F337E192C3712007F51FD /* Assets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1583,25 +1566,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		41F1A4DC1894BBE3006E818E /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				41F1A4DD1894BBE3006E818E /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		41F1A4DE1894BBE3006E818E /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				41F1A4DF1894BBE3006E818E /* en */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		41F1A4D41894BB33006E818E /* Debug */ = {
