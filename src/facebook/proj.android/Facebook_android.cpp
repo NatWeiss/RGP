@@ -37,7 +37,7 @@ static void callRunningLayer(const string& method, const string& param1, const s
 {
 	jsval ret;
 	stringstream ss;
-	ss << "App.callRunningLayer(\"" << method << "\", " << quote(param1);
+	ss << "Game.callRunningLayer(\"" << method << "\", " << quote(param1);
 	if (param2.size())
 		ss << ", " << quote(param2);
 	ss << ");";
@@ -77,8 +77,8 @@ extern "C"
 		
 		jsval ret;
 		stringstream ss;
-		ss << "App.loadImage(\"" << url << "\", function(){"
-			<< "App.callRunningLayer(\"onPlayerImageLoaded\", \"" << id << "\", \"" << url << "\");"
+		ss << "Game.loadImage(\"" << url << "\", function(){"
+			<< "Game.callRunningLayer(\"onPlayerImageLoaded\", \"" << id << "\", \"" << url << "\");"
 			<< "}); ";
 		debugLog("%s Executing script: %s", kTag, ss.str().c_str());
 		ScriptingCore::getInstance()->evalString(ss.str().c_str(), &ret);

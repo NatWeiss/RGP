@@ -268,9 +268,11 @@ Game.getAnalyticsPlugin = function() {
 		name = config["name"];
 		this.analyticsPlugin = plugin.PluginManager.getInstance().loadPlugin(name);
 
-		if (this.analyticsPlugin === null) {
-			this.analyticsPlugin = new plugin[name]();
-			this.analyticsPlugin.init();
+		if (typeof this.analyticsPlugin === "undefined" || this.analyticsPlugin === null) {
+			if (typeof plugin[name] !== "undefined") {
+				this.analyticsPlugin = new plugin[name]();
+				this.analyticsPlugin.init();
+			}
 		}
 
 		if (this.analyticsPlugin) {

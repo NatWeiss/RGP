@@ -26,6 +26,7 @@
 
 /* Begin PBXFileReference section */
 		419E922C18AB25D400232A34 /* PluginFacebook-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PluginFacebook-Prefix.pch"; sourceTree = "<group>"; };
+		41C1BC5119C7A1DC00ADF25E /* Facebook_android.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Facebook_android.cpp; path = ../proj.android/Facebook_android.cpp; sourceTree = "<group>"; };
 		41F0F64218E209C900F5FC64 /* Facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Facebook.h; path = ../Facebook.h; sourceTree = "<group>"; };
 		41F0F64418E209C900F5FC64 /* jsb_facebook.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsb_facebook.cpp; path = ../jsb_facebook.cpp; sourceTree = "<group>"; };
 		41F0F64518E209C900F5FC64 /* jsb_facebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsb_facebook.h; path = ../jsb_facebook.h; sourceTree = "<group>"; };
@@ -55,6 +56,7 @@
 				41F0F64518E209C900F5FC64 /* jsb_facebook.h */,
 				41F0F64418E209C900F5FC64 /* jsb_facebook.cpp */,
 				419E922C18AB25D400232A34 /* PluginFacebook-Prefix.pch */,
+				41C1BC5119C7A1DC00ADF25E /* Facebook_android.cpp */,
 				FA09A374168AFD41008C1C7B /* Frameworks */,
 				FA09A373168AFD41008C1C7B /* Products */,
 			);

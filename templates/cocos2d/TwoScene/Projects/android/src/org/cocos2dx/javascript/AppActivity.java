@@ -3,13 +3,14 @@
 //  See the `LICENSE` file for the license governing this code.
 //  Developed by Nat Weiss.
 //
-package org.cocos2dx.cpp;
+package org.cocos2dx.javascript;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 // begin pro
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import com.soomla.store.SoomlaApp;
 import com.soomla.cocos2dx.store.StoreControllerBridge;
+import org.cocos2dx.javascript.Facebook;
 import com.facebook.*;
 import com.facebook.model.*;
 import android.content.Intent;
@@ -25,12 +26,12 @@ public class AppActivity extends Cocos2dxActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// Setup plugins
+		PluginWrapper.init(this);
+
 		// Setup Facebook
 		facebook = new Facebook(this, getApplicationContext());
 		facebook.onCreate(savedInstanceState);
-
-		// Setup plugins
-		PluginWrapper.init(this);
 	}
 
 	@Override
