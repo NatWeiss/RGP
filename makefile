@@ -1,5 +1,6 @@
 .PHONY: docs
 
+#release: latest=0.8.9
 release: dest=../releases/RapidGamePro/
 release:
 	find . -name .DS_Store -delete
@@ -7,21 +8,19 @@ release:
 	mkdir ${dest}
 	cp -a bin ${dest}
 	cp CHANGELOG.txt ${dest}
-	mkdir -p ${dest}cocos2d/x
-	cp -r cocos2d/html ${dest}cocos2d/
-	cp -r cocos2d/x/include cocos2d/x/java cocos2d/x/jsb ${dest}cocos2d/x/
-	cp -r cocos2d/x/lib-small ${dest}cocos2d/x/lib
+	#mkdir -p ${dest}${latest}/cocos2d/x
+	#cp -r ${latest}/cocos2d/html ${dest}${latest}/cocos2d/
+	#cp -r ${latest}/cocos2d/x/include ${latest}/cocos2d/x/java ${latest}/cocos2d/x/script ${dest}${latest}/cocos2d/x/
+	#cp -r ${latest}/cocos2d/x/lib-small ${dest}${latest}/cocos2d/x/lib
 	cp -a docs ${dest}
 	cp docs.html ${dest}
-	cp -r frameworks ${dest}
+	#cp -r ${latest}/frameworks ${dest}${latest}/
 	cd LemonadeExchange/proj.android && make clean
 	cp -a LemonadeExchange ${dest}
 	cp LICENSE-pro ${dest}LICENSE
 	cp package.json ${dest}
-	cp prebuild.sh ${dest}
+	#cp prebuild.sh ${dest}
 	cp rapidgamepro.js ${dest}
-	@rez/delete-text "// begin pro" ${dest}rapidgamepro.js --newlines
-	@rez/delete-text "// end pro" ${dest}rapidgamepro.js --newlines
 	cp README-pro.md ${dest}README.md
 	mv src/proj.android/obj src/proj.android/libs /tmp
 	cp -a src ${dest}
@@ -32,47 +31,49 @@ release:
 	cd templates/unity/TwoScene && make clean
 	cd templates/titanium/TwoScene && make clean
 	cp -a templates ${dest}
-	rm -rf ${dest}templates/cocos2d/HelloWorld/server/node_modules
+	rm -rf ${dest}templates/cocos2d/TwoScene/Server/node_modules
 	rm -rf ${dest}cocos2d/x/java/*/bin #*/
 	rm -rf ${dest}cocos2d/x/java/*/gen #*/
 	find ${dest} -name xcuserdata -delete
 	find ${dest} -name project.xcworkspace -delete
-	@rez/delete-text "# begin pro" ${dest}prebuild.sh --newlines
-	@rez/delete-text "# end pro" ${dest}prebuild.sh --newlines
+	@rez/delete-text "// begin pro" ${dest}rapidgamepro.js --newlines
+	@rez/delete-text "// end pro" ${dest}rapidgamepro.js --newlines
+	#@rez/delete-text "# begin pro" ${dest}prebuild.sh --newlines
+	#@rez/delete-text "# end pro" ${dest}prebuild.sh --newlines
 	@rez/delete-text "# begin pro" ${dest}CHANGELOG.txt --newlines
 	@rez/delete-text "# end pro" ${dest}CHANGELOG.txt --newlines
 	@rez/delete-text "# begin pro" ${dest}src/proj.android/build.sh --newlines
 	@rez/delete-text "# end pro" ${dest}src/proj.android/build.sh --newlines
 	@rez/delete-text "# begin pro" ${dest}src/proj.android/jni/Android.mk --newlines
 	@rez/delete-text "# end pro" ${dest}src/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/js/Config.js --newlines
-	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/js/Config.js --newlines
-	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/js/lib/App.js --newlines
-	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/js/lib/App.js --newlines
-	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// end pro" ${dest}LemonadeExchange/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
-	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/proj.ios_mac/ios/AppController.mm --newlines
-	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "// end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "// end pro" ${dest}LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "<!-- begin pro -->" ${dest}templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml --newlines
-	@rez/delete-text "<!-- end pro -->" ${dest}templates/cocos2d/HelloWorld/proj.android/AndroidManifest.xml --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/TwoScene/Assets/Config.js --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/TwoScene/Assets/Config.js --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/TwoScene/Assets/lib/Game.js --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/TwoScene/Assets/lib/Game.js --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/TwoScene/Projects/AppDelegate.cpp --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/AppDelegate.cpp --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/TwoScene/Projects/ios/AppController.mm --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/ios/AppController.mm --newlines
+	@rez/delete-text "// begin pro" ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}templates/cocos2d/TwoScene/Projects/android/AndroidManifest.xml --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}templates/cocos2d/TwoScene/Projects/android/AndroidManifest.xml --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}templates/cocos2d/TwoScene/Projects/html/index.html --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}templates/cocos2d/TwoScene/Projects/html/index.html --newlines
+	@rez/delete-text "# begin pro" ${dest}templates/cocos2d/TwoScene/Projects/android/jni/Android.mk --newlines
+	@rez/delete-text "# end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/jni/Android.mk --newlines
+	@rez/delete-text "# begin pro" ${dest}templates/cocos2d/TwoScene/Projects/android/project.properties --newlines
+	@rez/delete-text "# end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/project.properties --newlines
 	@rez/delete-text "<!-- begin pro -->" ${dest}LemonadeExchange/proj.android/AndroidManifest.xml --newlines
 	@rez/delete-text "<!-- end pro -->" ${dest}LemonadeExchange/proj.android/AndroidManifest.xml --newlines
-	@rez/delete-text "# begin pro" ${dest}templates/cocos2d/HelloWorld/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "# end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/jni/Android.mk --newlines
 	@rez/delete-text "# begin pro" ${dest}LemonadeExchange/proj.android/jni/Android.mk --newlines
 	@rez/delete-text "# end pro" ${dest}LemonadeExchange/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "# begin pro" ${dest}templates/cocos2d/HelloWorld/proj.android/project.properties --newlines
-	@rez/delete-text "# end pro" ${dest}templates/cocos2d/HelloWorld/proj.android/project.properties --newlines
 	@rez/delete-text "# begin pro" ${dest}LemonadeExchange/proj.android/project.properties --newlines
 	@rez/delete-text "# end pro" ${dest}LemonadeExchange/proj.android/project.properties --newlines
-	@rez/delete-text "<!-- begin pro -->" ${dest}templates/cocos2d/HelloWorld/proj.html5/index.html --newlines
-	@rez/delete-text "<!-- end pro -->" ${dest}templates/cocos2d/HelloWorld/proj.html5/index.html --newlines
+	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// end pro" ${dest}LemonadeExchange/src/AppDelegate.cpp --newlines
+	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "// end pro" ${dest}LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
 	@rez/delete-text "<!-- begin pro -->" ${dest}LemonadeExchange/proj.html5/index.html --newlines
 	@rez/delete-text "<!-- end pro -->" ${dest}LemonadeExchange/proj.html5/index.html --newlines
 	open ../releases
@@ -116,10 +117,10 @@ rg:
 	cd templates/unity/TwoScene && make clean
 	cd templates/titanium/TwoScene && make clean
 	rm -f ${dest}templates/cocos2d/TwoScene/lib
-	rm -f ${dest}templates/cocos2d/HelloWorld/lib
+	#rm -f ${dest}templates/cocos2d/HelloWorld/lib
 	rm -f ${dest}templates/cocos2d/BrickBreaker/lib
 	cp -R -P templates ${dest}
-	rm -rf ${dest}templates/cocos2d/HelloWorld
+	#rm -rf ${dest}templates/cocos2d/HelloWorld
 	rm -f ${dest}templates/cocos2d/*/lib #*/
 	rm -r ${dest}templates/cocos2d/*/Server/node_modules #*/
 	@rez/delete-between "// begin pro" "// end pro" ${dest}templates/cocos2d/TwoScene/Projects/AppDelegate.cpp --newlines
@@ -164,21 +165,21 @@ rg:
 docco:
 	if [ -d docs ]; then rm -r docs; fi
 	cp README.md README.litcoffee
-	cp templates/cocos2d/HelloWorld/js/App.js templates/cocos2d/HelloWorld/js/App.js.bak
-	cp templates/cocos2d/HelloWorld/js/Config.js templates/cocos2d/HelloWorld/js/Config.js.bak
+	#cp templates/cocos2d/TwoScene/Assets/lib/Game.js templates/cocos2d/TwoScene/Assets/lib/Game.js.bak
+	cp templates/cocos2d/TwoScene/Assets/Config.js templates/cocos2d/TwoScene/Assets/Config.js.bak
 	@rez/delete-text "# begin pro" README.litcoffee --newlines
 	@rez/delete-text "# end pro" README.litcoffee --newlines
 	@rez/delete-text "/* begin pro */" README.litcoffee
 	@rez/delete-text "/* end pro */" README.litcoffee
-	@rez/delete-text "// begin pro" templates/cocos2d/HelloWorld/js/Config.js --newlines
-	@rez/delete-text "// end pro" templates/cocos2d/HelloWorld/js/Config.js --newlines
-	@rez/delete-text "// begin pro" templates/cocos2d/HelloWorld/js/App.js --newlines
-	@rez/delete-text "// end pro" templates/cocos2d/HelloWorld/js/App.js --newlines
-	docco -l linear README.litcoffee templates/cocos2d/HelloWorld/server/Server.js templates/cocos2d/HelloWorld/js/*.js templates/cocos2d/HelloWorld/js/lib/AdsMobFox.js templates/cocos2d/HelloWorld/js/lib/Facebook.js
+	@rez/delete-text "// begin pro" templates/cocos2d/TwoScene/Assets/Config.js --newlines
+	@rez/delete-text "// end pro" templates/cocos2d/TwoScene/Assets/Config.js --newlines
+	#@rez/delete-text "// begin pro" templates/cocos2d/TwoScene/Assets/lib/Game.js --newlines
+	#@rez/delete-text "// end pro" templates/cocos2d/TwoScene/Assets/lib.Game.js --newlines
+	docco -l linear README.litcoffee templates/cocos2d/TwoScene/Server/Server.js templates/cocos2d/TwoScene/Assets/*.js templates/cocos2d/TwoScene/Assets/lib/AdsMobFox.js templates/cocos2d/TwoScene/Assets/lib/Facebook.js
 	sed -i "" 's/README.litcoffee/README.md/g' docs/*.html
 	rm README.litcoffee
-	mv templates/cocos2d/HelloWorld/js/App.js.bak templates/cocos2d/HelloWorld/js/App.js
-	mv templates/cocos2d/HelloWorld/js/Config.js.bak templates/cocos2d/HelloWorld/js/Config.js
+	#mv templates/cocos2d/TwoScene/Assets/lib/Game.js.bak templates/cocos2d/TwoScene/Assets/lib/Game.js
+	mv templates/cocos2d/TwoScene/Assets/Config.js.bak templates/cocos2d/TwoScene/Assets/Config.js
 	if [ -d LemonadeExchange/docs ]; then rm -r LemonadeExchange/docs; fi
 	# todo: remove begin/end pro from App.js
 	docco -o LemonadeExchange/docs -l linear LemonadeExchange/server/Server.js LemonadeExchange/js/*.js LemonadeExchange/js/lib/AdsMobFox.js LemonadeExchange/js/lib/Facebook.js
@@ -186,20 +187,16 @@ docco:
 	mv rez/docs/README-demo.html rez/
 	rm -r rez/docs
 
-docker:
-	if [ -d docs ]; then rm -r docs; fi
-	docker -o docs -i template -c manni -s yes -I --extras fileSearch -x lib/*
-
 icons:
-	cp rez/KandleIcon-iOS/Icon*.png templates/cocos2d/HelloWorld/proj.ios_mac/ios
-	cp rez/KandleIcon-Android/36.png templates/cocos2d/HelloWorld/proj.android/res/drawable-ldpi/icon.png
-	cp rez/KandleIcon-Android/48.png templates/cocos2d/HelloWorld/proj.android/res/drawable-mdpi/icon.png
-	cp rez/KandleIcon-Android/72.png templates/cocos2d/HelloWorld/proj.android/res/drawable-hdpi/icon.png
-	cp rez/KandleIcon-Android/96.png templates/cocos2d/HelloWorld/proj.android/res/drawable-xhdpi/icon.png
-	cp rez/KandleIcon-misc/KandleIcon-round.icns templates/cocos2d/HelloWorld/proj.ios_mac/mac/Icon.icns
-	cp rez/KandleIcon-misc/KandleIcon-round.ico templates/cocos2d/HelloWorld/proj.win32/res/game.ico
-	cp rez/KandleIcon-misc/favicon_32x32.ico templates/cocos2d/HelloWorld/proj.html5/favicon.ico
-	cp rez/KandleIcon-misc/KandleIcon-round_512x512x32.png templates/cocos2d/HelloWorld/proj.linux/Icon-512.png
+	cp rez/KandleIcon-iOS/Icon*.png templates/cocos2d/TwoScene/Projects/ios
+	cp rez/KandleIcon-Android/36.png templates/cocos2d/TwoScene/Projects/android/res/drawable-ldpi/icon.png
+	cp rez/KandleIcon-Android/48.png templates/cocos2d/TwoScene/Projects/android/res/drawable-mdpi/icon.png
+	cp rez/KandleIcon-Android/72.png templates/cocos2d/TwoScene/Projects/android/res/drawable-hdpi/icon.png
+	cp rez/KandleIcon-Android/96.png templates/cocos2d/TwoScene/Projects/android/res/drawable-xhdpi/icon.png
+	cp rez/KandleIcon-misc/KandleIcon-round.icns templates/cocos2d/TwoScene/Projects/mac/Icon.icns
+	cp rez/KandleIcon-misc/KandleIcon-round.ico templates/cocos2d/TwoScene/Projects/windows/res/game.ico
+	cp rez/KandleIcon-misc/favicon_32x32.ico templates/cocos2d/TwoScene/Projects/html/favicon.ico
+	#cp rez/KandleIcon-misc/KandleIcon-round_512x512x32.png templates/cocos2d/TwoScene/Projects/linux/Icon-512.png
 	cp rez/LE-Icon-iOS/Icon*.png LemonadeExchange/proj.ios_mac/ios
 	cp rez/LE-Icon-Android/36.png LemonadeExchange/proj.android/res/drawable-ldpi/icon.png
 	cp rez/LE-Icon-Android/48.png LemonadeExchange/proj.android/res/drawable-mdpi/icon.png
@@ -236,7 +233,7 @@ lemonadex:
 	rm -rf ${dest}/${name}.old
 
 minify:
-	#templates/cocos2d/HelloWorld/minify
+	#templates/cocos2d/TwoScene/Projects/html/minify
 	LemonadeExchange/minify
 	LemonadeExchange/upload natweiss.com:le
 
@@ -277,7 +274,7 @@ binary:
 install: dest=/usr/local/lib/node_modules/rapidgamepro
 install: lib=/Users/nat/Library/Developer/RapidGame
 install:
-	cd templates/cocos2d/HelloWorld/proj.android; make clean
+	cd templates/cocos2d/TwoScene/Projects/android; make clean
 	mkdir -p /tmp/proj.android
 	if [ -d /tmp/proj.android/obj ]; then mv /tmp/proj.android/* src/proj.android; fi
 	cd src/proj.android; mv obj libs /tmp/proj.android
@@ -289,3 +286,8 @@ install:
 	#sudo ln -s /Users/nat/code/RapidGamePro/rapidgamepro.js ${dest}/rapidgamepro.js
 	mkdir -p ${lib}/src
 	sudo cp -r src/bindings src/bindings-pluginx src/cocos2d-x src/external ${lib}/src/
+
+#docker:
+#	if [ -d docs ]; then rm -r docs; fi
+#	docker -o docs -i template -c manni -s yes -I --extras fileSearch -x lib/*
+
