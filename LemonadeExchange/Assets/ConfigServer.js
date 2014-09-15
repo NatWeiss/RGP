@@ -6,9 +6,9 @@
 //
 // ###  module
 //
-// Get the module object. Use Node.js style `module` or `module.exports` for the server. Use the `App` singleton for client.
+// Get the module object. Use Node.js style `module` or `module.exports` for the server. Use the `Game` singleton for client.
 //
-var module = (module ? module.exports : (App ? App : {}));
+var module = (module ? module.exports : (Game ? Game : {}));
 
 //
 // ###  module.serverAddress

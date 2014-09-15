@@ -1,0 +1,1 @@
+../templates/cocos2d/TwoScene/makefile

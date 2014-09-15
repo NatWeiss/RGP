@@ -1,38 +1,51 @@
 #include "main.h"
 #include "AppDelegate.h"
-#include "CCEGLView.h"
+#include "cocos2d.h"
 
-USING_NS_CC;
+#include <TCHAR.h>
+#include <stdio.h>
+#include <shellapi.h>
 
-// uncomment below line, open debug console
-// #define USE_WIN32_CONSOLE
+using namespace cocos2d;
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                        HINSTANCE hPrevInstance,
                        LPTSTR    lpCmdLine,
                        int       nCmdShow)
 {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
 
-#ifdef USE_WIN32_CONSOLE
-    AllocConsole();
-    freopen("CONIN$", "r", stdin);
-    freopen("CONOUT$", "w", stdout);
-    freopen("CONOUT$", "w", stderr);
-#endif
+	// set current working directory to executable's path
+	{
+		// get to path to the exe
+		TCHAR exePath[MAX_PATH];
+		GetModuleFileName(NULL, exePath, MAX_PATH);
 
-    // create the application instance
-    AppDelegate app;
-    CCEGLView* eglView = CCEGLView::sharedOpenGLView();
-    eglView->setViewName("MultiSprite");
-    eglView->setFrameSize(480, 320);
+		// terminate the string at the end of the path
+		TCHAR* trailingSlash = wcsrchr(exePath, '\\');
+		if(trailingSlash)
+			*trailingSlash = NULL;
 
-    int ret = CCApplication::sharedApplication()->run();
+		// switch to the directory of the exe
+		SetCurrentDirectory(exePath);
+	}
 
-#ifdef USE_WIN32_CONSOLE
-    FreeConsole();
-#endif
+	bool fullscreen = false;
+	#ifdef NDEBUG
+		fullscreen = false;
+	#endif
 
-    return ret;
+	// create the application instance
+	AppDelegate app;
+
+	// set the view
+	GLView* view = nullptr;
+	if (fullscreen)
+		view = GLView::createWithFullScreen("LemonadeExchange");
+	else
+		view = GLView::createWithRect("LemonadeExchange", Rect(0, 0, 1024, 768));
+	Director::getInstance()->setOpenGLView(view);
+
+	return Application::getInstance()->run();
 }

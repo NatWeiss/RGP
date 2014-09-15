@@ -1,7 +1,7 @@
 //
-//  See the file 'LICENSE_RapidGame.txt' for the license governing this code.
-//      The license can also be obtained online at:
-//          http://WizardFu.com/licenses
+//  Created using [RapidGame](http://wizardfu.com/rapidgame).
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
 //
 
 #pragma once
@@ -18,4 +18,3 @@ class AppDelegate : private cocos2d::Application
 		virtual void applicationDidEnterBackground();
 		virtual void applicationWillEnterForeground();
 };
-

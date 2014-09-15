@@ -28,13 +28,13 @@ Game.initPro = function() {
 //		}
 
 		/* Load plugins. */
-		if (typeof plugin !== "undefined") {
+/*		if (typeof plugin !== "undefined") {
 			Game.getAnalyticsPlugin();
 			Game.getAdsPlugin();
 			Game.getSocialPlugin();
 			Game.getEconomyPlugin();
 		}
-
+*/
 		/* Handle initial launch. */
 		/* Call after loading plugins so initial currency balances can be set. */
 		/*cc.log("Initial launch: " + initialLaunch);*/

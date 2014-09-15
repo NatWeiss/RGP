@@ -207,30 +207,29 @@ icons:
 	cp rez/LE-Icon-misc/favicon-32.ico LemonadeExchange/proj.html5/favicon.ico
 	cp rez/LE-Icon-misc/LE-Icon-Rounded_512x512x32.png LemonadeExchange/proj.linux/Icon-512.png
 
-lemonadex: dest=.
-lemonadex: name=LemonadeExchange
-lemonadex: key=com.wizardfu.lemonadex
-lemonadex:
-	mv ${dest}/${name} ${dest}/${name}.old
-	rm -rf ${dest}/${name}
-	rapidgamepro ${name} -p $(pwd) -o . -k ${key} -v
-	cp -r ${dest}/${name}.old/res ${dest}/${name}/
-	cp ${dest}/${name}.old/docs.html ${dest}/${name}/
-	cp -r ${dest}/${name}.old/docs ${dest}/${name}/
-	cp ${dest}/${name}.old/js/*.js ${dest}/${name}/js/
-	cp ${dest}/${name}.old/server/Server.js ${dest}/${name}/server/
-	cp -r ${dest}/${name}.old/proj.android/res ${dest}/${name}/proj.android/
-	#cp ${dest}/${name}.old/proj.android/AndroidManifest.xml ${dest}/${name}/proj.android/
-	rm -rf ${dest}/${name}/art
-	rm -f ${dest}/${name}/proj.html5/*-min.js
-	rm ${dest}/${name}/js/SceneHello.js
-	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/js/App.js
-	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/project.json
-	sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/minified.js
-	sed -i "" 's/Loader\.js/Loader\.js", "js\/LayerGame\.js", "js\/LayerMenu\.js/g' ${dest}/${name}/proj.html5/project.json
-	sed -i "" 's/SceneHello\.js/SceneMain\.js"\/><file name="LayerGame\.js"\/><file name="LayerMenu\.js/g' LemonadeExchange/proj.html5/build.xml
-	sed -i "" 's/MyFacebookAppID/641151319281152/g' ${dest}/${name}/proj.ios_mac/ios/Info.plist
-	rm -rf ${dest}/${name}.old
+#lemonadex: dest=.
+#lemonadex: name=LemonadeExchange
+#lemonadex: key=com.wizardfu.lemonadex
+#lemonadex:
+#	mv ${dest}/${name} ${dest}/${name}.old
+#	rm -rf ${dest}/${name}
+#	rapidgamepro create cocos2d ${name} ${key}
+#	cp -r ${dest}/${name}.old/Assets ${dest}/${name}/
+#	cp ${dest}/${name}.old/docs.html ${dest}/${name}/
+#	cp -r ${dest}/${name}.old/docs ${dest}/${name}/
+#	cp ${dest}/${name}.old/Server/server.js ${dest}/${name}/Server/
+#	cp -r ${dest}/${name}.old/Projects/android/res ${dest}/${name}/Projects/android/res
+#	cp ${dest}/${name}.old/Projects/android/AndroidManifest.xml ${dest}/${name}/Projects/android/
+#	rm -rf ${dest}/${name}/art
+#	rm -f ${dest}/${name}/Projects/html/*-min.js
+#	#rm ${dest}/${name}/js/SceneHello.js
+#	#sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/js/App.js
+#	#sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/project.json
+#	#sed -i "" 's/SceneHello/SceneMain/g' ${dest}/${name}/proj.html5/minified.js
+#	#sed -i "" 's/Loader\.js/Loader\.js", "js\/LayerGame\.js", "js\/LayerMenu\.js/g' ${dest}/${name}/proj.html5/project.json
+#	#sed -i "" 's/SceneHello\.js/SceneMain\.js"\/><file name="LayerGame\.js"\/><file name="LayerMenu\.js/g' LemonadeExchange/proj.html5/build.xml
+#	sed -i "" 's/MyFacebookAppID/641151319281152/g' ${dest}/${name}/Projects/ios/Info.plist
+#	rm -rf ${dest}/${name}.old
 
 minify:
 	#templates/cocos2d/TwoScene/Projects/html/minify

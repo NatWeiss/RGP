@@ -27,10 +27,10 @@ var SceneMain = (function() {
 // Setup the background layer and start the animation. Create the initial foreground layer.
 //
 		init: function() {
-			var winSize = App.getWinSize();
+			var winSize = Game.getWinSize();
 			this._super();
 			
-			EFFECT_ORBIT_RADIUS = App.scale(EFFECT_ORBIT_RADIUS);
+			EFFECT_ORBIT_RADIUS = Game.scale(EFFECT_ORBIT_RADIUS);
 			
 			/* Create the background layer. */
 			this.bg = cc.Sprite.create("#Bg.png");
@@ -42,7 +42,7 @@ var SceneMain = (function() {
 			this.addChild(this.bg, 0);
 			
 			/* Create the first foreground layer. */
-			this.createLayer(App.getInitialLayer(), false);
+			this.createLayer(Game.getInitialLayer(), false);
 			
 			/* Schedule an update to run a custom effect on the background. */
 			this.scheduleUpdate();
@@ -81,7 +81,7 @@ var SceneMain = (function() {
 			this.bg.y = (EFFECT_ORBIT_RADIUS * -1 +
 				Math.cos(percent * Math.PI * 2) * EFFECT_ORBIT_RADIUS) * yScale;
 			
-			App.startMusic();
+			Game.startMusic();
 		}
 
 	}); // end or scene extend

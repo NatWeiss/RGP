@@ -1,3 +1,8 @@
+//
+//  Created using [RapidGamePro](http://wizardfu.com/rapidgame).
+//  See the `LICENSE` file for the license governing this code.
+//  Developed by Nat Weiss.
+//
 
 //
 // A simple Node.js game server that:
@@ -20,12 +25,15 @@ var protocolHttps = https.createServer({
 //
 // ### Setup
 //
-var config = require("../js/ConfigServer"),
+var config = require("../Assets/ConfigServer"),
 	express = require("express"),
+	fs = require("fs"),
+	path = require("path"),
 	server = express(),
-	protocolHttp = server.listen(config.serverPort || 8000),
-	io = require("socket.io"),
-	sockets = io.listen(protocolHttp),
+	port = config.serverPort || 8000,
+	protocolHttp = server.listen(port),
+	//io = require("socket.io"),
+	//sockets = io.listen(protocolHttp),
 	self = {};
 
 console.log("Started server on port: " + config.serverPort);
@@ -35,11 +43,20 @@ console.log("Started server on port: " + config.serverPort);
 //
 // Serve static files as requested.
 //
-server.use("/", express.static(__dirname + "/../proj.html5/"));
+server.use("/", express.static(__dirname + "/../Projects/html/"));
+server.use("/project.json", express.static(__dirname + "/../project.json"));
 server.use("/lib/", express.static(__dirname + "/../lib/"));
-server.use("/res/", express.static(__dirname + "/../res/"));
-server.use("/js/", express.static(__dirname + "/../js/"));
-server.get("/", function(req,res){res.sendfile("index.html");});
+server.use("/Assets/", express.static(__dirname + "/../Assets/"));
+server.get("/", function(req,res){
+	res.sendfile("index.html");
+});
+server.get("/project.json", function(req,res){
+	try {
+		res.send(JSON.parse(fs.readFileSync(path.join(__dirname, "..", "project.json"))));
+	} catch(e) {
+		console.log("Error reading project.json");
+	}
+});
 
 //
 // ###  Public API

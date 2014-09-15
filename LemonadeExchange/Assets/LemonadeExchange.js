@@ -1,35 +1,35 @@
 
 //
-// Extend the [App](App.html) object with project-specific functions.
+// Extend the [Game](Game.html) object with project-specific functions.
 //
 
 //
-// ###  App
+// ###  Game
 //
-// Get or create the App object.
+// Get or create the Game object.
 //
-var App = App || {};
+var Game = Game || {};
 
 //
-// ###  App.playClickSound
+// ###  Game.playClickSound
 //
 // Play one of the click sounds in sequential order.
 //
-App.playClickSound = function() {
-	var sounds = App.config["click-sounds"];
+Game.playClickSound = function() {
+	var sounds = Game.config["click-sounds"];
 	this.clickSound = this.clickSound || 0;
 	
-	App.playEffect(sounds[this.clickSound]);
+	Game.playEffect(sounds[this.clickSound]);
 	
 	this.clickSound = (this.clickSound + 1) % sounds.length;
 };
 
 //
-// ###  App.showTouchCircle
+// ###  Game.showTouchCircle
 //
 // Show an expanding, fading circle at the given position or the given item's position.
 //
-App.showTouchCircle = function(parentNode, pos, item) {
+Game.showTouchCircle = function(parentNode, pos, item) {
 	var circle;
 	
 	if (typeof pos === "undefined" || pos === null) {
@@ -72,21 +72,21 @@ App.showTouchCircle = function(parentNode, pos, item) {
 };
 
 //
-// ###  App.getInitialLayer
+// ###  Game.getInitialLayer
 //
 // Get the initial layer to run.
 //
-App.getInitialLayer = function() {
+Game.getInitialLayer = function() {
 	return LayerMenu;
 };
 
 //
-// ###  App.createButton
+// ###  Game.createButton
 //
 // Creates a button.
 //
-App.createButton = function(obj, spriteFilename, tag, position, anchorPoint, movement, duration, delay, easeRate) {
-	var winSize = App.getWinSize(),
+Game.createButton = function(obj, spriteFilename, tag, position, anchorPoint, movement, duration, delay, easeRate) {
+	var winSize = Game.getWinSize(),
 		normalSprite = cc.Sprite.create("#" + spriteFilename),
 		selectedSprite = cc.Sprite.create("#" + spriteFilename),
 		disabledSprite = cc.Sprite.create("#" + spriteFilename),
@@ -112,86 +112,91 @@ App.createButton = function(obj, spriteFilename, tag, position, anchorPoint, mov
 };
 
 //
-// ###  App.addCurrencyToButton
+// ###  Game.addCurrencyToButton
 //
 // Adds a currency amount to the given button.
 //
-App.addCurrencyToButton = function(button, amount, currencyAmount, spriteFrameName) {
+Game.addCurrencyToButton = function(button, amount, currencyAmount, spriteFrameName) {
 	var label,
 		sprite,
-		margin = App.scale(12),
-		shadowDistance = App.scale(4),
+		margin = Game.scale(12),
+		shadowDistance = Game.scale(4),
 		buttonSize = button.getContentSize(),
-		font = App.config["font"];
+		font = Game.config["font"];
 
 	sprite = cc.Sprite.create("#" + spriteFrameName);
 	sprite.setPosition(buttonSize.width * .5, buttonSize.height * .5);
 	sprite.setScale(0.9);
 	button.addChild(sprite);
 
-	label = cc.LabelTTF.create(amount, font, App.scale(50));
+	label = cc.LabelTTF.create(amount, font, Game.scale(50));
 	label.setAnchorPoint(0, 1);
 	label.setPosition(margin * 1.5, buttonSize.height - margin);
 	button.addChild(label, 1);
 
-	label = cc.LabelTTF.create(amount, font, App.scale(50));
+	label = cc.LabelTTF.create(amount, font, Game.scale(50));
 	label.setAnchorPoint(0, 1);
-	label.setColor(App.config["font-shadow-color"]);
+	label.setColor(Game.config["font-shadow-color"]);
 	label.setPosition(margin * 1.5, buttonSize.height - margin - shadowDistance);
 	button.addChild(label);
 
-	label = cc.LabelTTF.create(currencyAmount, font, App.scale(50));
+	label = cc.LabelTTF.create(currencyAmount, font, Game.scale(50));
 	label.setAnchorPoint(1, 0);
 	label.setPosition(buttonSize.width - margin * 1.5, margin);
 	button.addChild(label, 1);
 
-	label = cc.LabelTTF.create(currencyAmount, font, App.scale(50));
+	label = cc.LabelTTF.create(currencyAmount, font, Game.scale(50));
 	label.setAnchorPoint(1, 0);
-	label.setColor(App.config["font-shadow-color"]);
+	label.setColor(Game.config["font-shadow-color"]);
 	label.setPosition(buttonSize.width - margin * 1.5, margin - shadowDistance);
 	button.addChild(label);
 };
 
 //
-// ###  App.startMusic
+// ###  Game.startMusic
 //
 // Starts music playing, cycling through the available songs. Safe to be called even if music is already playing.
 //
-App.startMusic = function() {
+Game.startMusic = function() {
 	var self = this,
 		song;
 	
 	if (!this._didPlaySong
-	&& App.isSoundEnabled()
+	&& Game.isSoundEnabled()
 	&& !cc.audioEngine.isMusicPlaying()) {
 		this._songNumber = this._songNumber || 0;
-		song = App.config["songs"][this._songNumber]
+		song = Game.config["songs"][this._songNumber]
 		
-		App.playEffect("res/music-start.wav");
-		App.playMusic(song.file);
+		Game.playEffect("Assets/music-start.wav");
+		Game.playMusic(song.file);
 		
-		this._songNumber = (this._songNumber + 1) % App.config["songs"].length;
+		this._songNumber = (this._songNumber + 1) % Game.config["songs"].length;
 		this._didPlaySong = true;
-		cc.director.getRunningScene().schedule(App.checkMusic, 1, 30);
+		cc.director.getRunningScene().schedule(Game.checkMusic, 1, 30);
 	}
 };
 
 //
-// ###  App.checkMusic
+// ###  Game.checkMusic
 //
 // Checks that music started playing. Workaround for an issue where Chrome takes a few seconds to play music.
 //
-App.checkMusic = function() {
-	var enabled = App.isSoundEnabled(),
+Game.checkMusic = function() {
+	var enabled = Game.isSoundEnabled(),
 		playing = cc.audioEngine.isMusicPlaying();
 	if (enabled && playing) {
-		App._didPlaySong = false;
+		Game._didPlaySong = false;
 		/*cc.log("Started song");*/
-		cc.director.getRunningScene().unschedule(App.checkMusic);
+		cc.director.getRunningScene().unschedule(Game.checkMusic);
 	} else if (!enabled) {
-		App._didPlaySong = false;
+		Game._didPlaySong = false;
 		/*cc.log("checkMusic stopping");*/
-		cc.director.getRunningScene().unschedule(App.checkMusic);
+		cc.director.getRunningScene().unschedule(Game.checkMusic);
 	}
 };
 
+
+
+Game.scale = function(f) {
+	return f;
+};

@@ -39,14 +39,14 @@ var LayerMenu = (function(){
 //
 		init: function(canResume) {
 			var self = this,
-				winSize = App.getWinSize(),
+				winSize = Game.getWinSize(),
 				layer,
 				sprite,
 				label,
 				button,
 				loggedIn,
 				pos = cc.p(0,0),
-				xSpacing = App.scale(300),
+				xSpacing = Game.scale(300),
 				numButtons = 2;
 			this._super();
 
@@ -56,13 +56,13 @@ var LayerMenu = (function(){
 			this.addChild(this.menu, 2);
 			
 			/* Preload font. */
-			label = cc.LabelTTF.create(" ", App.config["font"], 1);
+			label = cc.LabelTTF.create(" ", Game.config["font"], 1);
 			label.x = -4000;
 			this.addChild(label, -1);
 
 			/* Create the logo. */
 			this.logo = cc.Sprite.create("#Logo.png");
-			this.logo.setPosition(App.centralize(20, 114));
+			this.logo.setPosition(Game.centralize(20, 114));
 			this.addChild(this.logo, 1);
 			this.logo.setPositionY(this.logo.getPositionY() + winSize.height);
 			this.logo.runAction(cc.Sequence.create(
@@ -80,10 +80,10 @@ var LayerMenu = (function(){
 			layer = cc.LayerColor.create(
 				cc.color(0,0,0,202),
 				winSize.width * 1.2,
-				App.scale(185)
+				Game.scale(185)
 			);
-			layer.x = App.scale(-20);
-			layer.y = winSize.height * .5 - App.scale(275) - winSize.height;
+			layer.x = Game.scale(-20);
+			layer.y = winSize.height * .5 - Game.scale(275) - winSize.height;
 			layer.setRotation(-2);
 			this.addChild(layer, 1);
 			layer.runAction(cc.RepeatForever.create(cc.Sequence.create(
@@ -95,9 +95,9 @@ var LayerMenu = (function(){
 			));
 			
 			/* Create the buttons. */
-			pos = App.centralize(0,-183);
+			pos = Game.centralize(0,-183);
 			pos.x -= ((numButtons - 1) * .5) * xSpacing;
-			button = App.createButton(this, "ButtonPlay.png", TAG_PLAY_RESUME, pos,
+			button = Game.createButton(this, "ButtonPlay.png", TAG_PLAY_RESUME, pos,
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 1.0, 1.5);
 			button.runAction(cc.RepeatForever.create(cc.Sequence.create(
 				cc.DelayTime.create(1.5),
@@ -106,41 +106,41 @@ var LayerMenu = (function(){
 			)));
 
 			pos.x += xSpacing;
-			this.buttonLogin = App.createButton(this, "ButtonLogin.png",
+			this.buttonLogin = Game.createButton(this, "ButtonLogin.png",
 				TAG_LOGIN_LOGOUT, pos, cc.p(.5, .5),
 				cc.p(winSize.width, 0), 0.5, 0.7, 1.5);
-			this.buttonLogout = App.createButton(this, "ButtonLogout.png",
+			this.buttonLogout = Game.createButton(this, "ButtonLogout.png",
 				TAG_LOGIN_LOGOUT, pos, cc.p(.5, .5),
 				cc.p(winSize.width, 0), 0.5, 0.7, 1.5);
-			loggedIn = App.getSocialPlugin().isLoggedIn();
+			loggedIn = Game.getSocialPlugin().isLoggedIn();
 			this.buttonLogin.setVisible(!loggedIn);
 			this.buttonLogout.setVisible(loggedIn);
 
 			/*pos.x += xSpacing;
-			button = App.createButton(this, "ButtonAbout.png", TAG_INFO, pos,
+			button = Game.createButton(this, "ButtonAbout.png", TAG_INFO, pos,
 				cc.p(.5, .5), cc.p(winSize.width, 0), 0.5, 0.4, 1.5);*/
 
-			this.buttonSound = App.createButton(this, "ButtonSound.png",
-				TAG_TOGGLE_SOUND, App.centralize(-420, 260), cc.p(.5, .5),
+			this.buttonSound = Game.createButton(this, "ButtonSound.png",
+				TAG_TOGGLE_SOUND, Game.centralize(-420, 260), cc.p(.5, .5),
 				cc.p(winSize.width * .5, -winSize.height), 0.5, 0.25, 1.5);
-			this.buttonNoSound = App.createButton(this, "ButtonNoSound.png",
-				TAG_TOGGLE_SOUND, App.centralize(-420, 260), cc.p(.5, .5),
+			this.buttonNoSound = Game.createButton(this, "ButtonNoSound.png",
+				TAG_TOGGLE_SOUND, Game.centralize(-420, 260), cc.p(.5, .5),
 				cc.p(winSize.width * .5, -winSize.height), 0.5, 0.25, 1.5);
 			this.buttonSound.setScale(0.8);
 			this.buttonNoSound.setScale(0.8);
-			this.buttonSound.setVisible(App.isSoundEnabled());
-			this.buttonNoSound.setVisible(!App.isSoundEnabled());
+			this.buttonSound.setVisible(Game.isSoundEnabled());
+			this.buttonNoSound.setVisible(!Game.isSoundEnabled());
 
-			this.buttonFullscreen = App.createButton(this, "ButtonFullscreen.png",
-				TAG_TOGGLE_FULLSCREEN, App.centralize(420, 260), cc.p(.5, .5),
+			this.buttonFullscreen = Game.createButton(this, "ButtonFullscreen.png",
+				TAG_TOGGLE_FULLSCREEN, Game.centralize(420, 260), cc.p(.5, .5),
 				cc.p(-winSize.width * .5, -winSize.height), 0.5, 0.25, 1.5);
-			this.buttonMinimize = App.createButton(this, "ButtonMinimize.png",
-				TAG_TOGGLE_FULLSCREEN, App.centralize(420, 260), cc.p(.5, .5),
+			this.buttonMinimize = Game.createButton(this, "ButtonMinimize.png",
+				TAG_TOGGLE_FULLSCREEN, Game.centralize(420, 260), cc.p(.5, .5),
 				cc.p(-winSize.width * .5, -winSize.height), 0.5, 0.25, 1.5);
 			this.buttonFullscreen.setScale(0.8);
 			this.buttonMinimize.setScale(0.8);
 			this.buttonMinimize.setVisible(false);
-			if (!App.isHtml5()) {
+			if (!Game.isHtml5()) {
 				this.buttonFullscreen.setVisible(false);
 			}
 			
@@ -149,8 +149,8 @@ var LayerMenu = (function(){
 				event: cc.EventListener.TOUCH_ALL_AT_ONCE,
 				onTouchesBegan: function(touches, event) {
 					if (touches) {
-						App.showTouchCircle(self, touches[0].getLocation());
-						App.playClickSound();
+						Game.showTouchCircle(self, touches[0].getLocation());
+						Game.playClickSound();
 					}
 				}
 			}, this);
@@ -168,8 +168,8 @@ var LayerMenu = (function(){
 				tag = sender.getTag(),
 				socialPlugin;
 			
-			App.playClickSound();
-			App.showTouchCircle(this, null, sender);
+			Game.playClickSound();
+			Game.showTouchCircle(this, null, sender);
 			
 			if (tag == TAG_PLAY_RESUME) {
 				this.getParent().createLayer(LayerGame, true);
@@ -178,25 +178,25 @@ var LayerMenu = (function(){
 				this.buttonLogin.setEnabled(false);
 				this.buttonLogout.setEnabled(false);
 
-				socialPlugin = App.getSocialPlugin();
+				socialPlugin = Game.getSocialPlugin();
 				if (socialPlugin.isLoggedIn()) {
 					socialPlugin.logout();
 				} else {
-					socialPlugin.login(App.config["social-plugin-login-permissions"]);
+					socialPlugin.login(Game.config["social-plugin-login-permissions"]);
 				}
 			}
 			else if (tag == TAG_TOGGLE_SOUND) {
-				if (App.isSoundEnabled()) {
-					App.playEffect("res/music-stop.wav");
+				if (Game.isSoundEnabled()) {
+					Game.playEffect("Assets/music-stop.wav");
 				}
-				App.toggleSoundEnabled();
-				this.buttonSound.setVisible(App.isSoundEnabled());
-				this.buttonNoSound.setVisible(!App.isSoundEnabled());
+				Game.toggleSoundEnabled();
+				this.buttonSound.setVisible(Game.isSoundEnabled());
+				this.buttonNoSound.setVisible(!Game.isSoundEnabled());
 			}
 			else if (tag == TAG_TOGGLE_FULLSCREEN) {
-				App.toggleFullscreenEnabled();
-				this.buttonFullscreen.setVisible(!App.isFullscreenEnabled());
-				this.buttonMinimize.setVisible(App.isFullscreenEnabled());
+				Game.toggleFullscreenEnabled();
+				this.buttonFullscreen.setVisible(!Game.isFullscreenEnabled());
+				this.buttonMinimize.setVisible(Game.isFullscreenEnabled());
 			}
 			else if (tag == TAG_INFO) {
 			}
@@ -220,8 +220,8 @@ var LayerMenu = (function(){
 // Called when the window size changes or fullscreen mode is enabled / disabled.
 //
 		onWindowSizeChanged: function() {
-			this.buttonFullscreen.setVisible(!App.isFullscreenEnabled());
-			this.buttonMinimize.setVisible(App.isFullscreenEnabled());
+			this.buttonFullscreen.setVisible(!Game.isFullscreenEnabled());
+			this.buttonMinimize.setVisible(Game.isFullscreenEnabled());
 		}
 		
 	}); // end of layer extend

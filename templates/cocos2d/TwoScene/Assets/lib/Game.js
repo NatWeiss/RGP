@@ -262,7 +262,21 @@ Game.getResourcesToPreload = function() {
 Game.runInitialScene = function() {
 	var Scene = window[cc.game.config.initialScene],
 		scene;
-	
+
+	/* Show cached textures and load spriteframes. */
+	/*if (cc.textureCache.dumpCachedTextureInfo)
+		cc.textureCache.dumpCachedTextureInfo();*/
+	var files = Game.config["spritesheets"],
+		i;
+	if (files) {
+		for (i = 0; i < files.length; i += 1) {
+			if (files[i] && files[i].length) {
+				cc.log("Loading spritesheet: " + files[i]);
+				cc.spriteFrameCache.addSpriteFrames(files[i]);
+			}
+		}
+	}
+
 	scene = new Scene;
 	scene.init();
 	cc.director.runScene(scene);

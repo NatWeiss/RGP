@@ -98,7 +98,7 @@
 		4110F71818C7ED7F004E9231 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
 		4110F71918C7ED7F004E9231 /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
 		4110F71A18C7ED7F004E9231 /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76@2x.png"; sourceTree = "<group>"; };
-		411C1A77199D692E001D212A /* script */ = {isa = PBXFileReference; lastKnownFileType = folder; name = script; path = ../../../../0.8.9/cocos2d/x/script; sourceTree = "<group>"; };
+		411C1A77199D692E001D212A /* script */ = {isa = PBXFileReference; lastKnownFileType = folder; name = script; path = ../../../../latest/cocos2d/x/script; sourceTree = "<group>"; };
 		412F3181192330E3007F51FD /* AUTHORS.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS.txt; sourceTree = "<group>"; };
 		412F3182192330E3007F51FD /* Base64Images.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Base64Images.js; sourceTree = "<group>"; };
 		412F3183192330E3007F51FD /* CCBoot.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = CCBoot.js; sourceTree = "<group>"; };
@@ -378,6 +378,8 @@
 		419E8E6018A9922800232A34 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		419E8EA018A9C68100232A34 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
 		419E924E18AC3BDC00232A34 /* server.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = server.js; path = ../server/server.js; sourceTree = "<group>"; };
+		41C1BC2B19C6BADD00ADF25E /* minified-footer.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "minified-footer.js"; path = "html/minified-footer.js"; sourceTree = "<group>"; };
+		41C1BC2E19C6BBEE00ADF25E /* build.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = build.xml; path = html/build.xml; sourceTree = "<group>"; };
 		41F1A3E01894BA38006E818E /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		41F1A4D61894BB33006E818E /* TwoScene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwoScene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		41F1A4D91894BBE3006E818E /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppController.h; path = mac/AppController.h; sourceTree = "<group>"; };
@@ -1284,6 +1286,8 @@
 			children = (
 				412F3380192C37F4007F51FD /* index.html */,
 				419E924E18AC3BDC00232A34 /* server.js */,
+				41C1BC2E19C6BBEE00ADF25E /* build.xml */,
+				41C1BC2B19C6BADD00ADF25E /* minified-footer.js */,
 				416E8E461905CE0400F9B283 /* cocos2d */,
 			);
 			name = html;
