@@ -13,9 +13,9 @@ release:
 	#cp -r ${latest}/cocos2d/html ${dest}${latest}/cocos2d/
 	#cp -r ${latest}/cocos2d/x/include ${latest}/cocos2d/x/java ${latest}/cocos2d/x/script ${dest}${latest}/cocos2d/x/
 	#cp -r ${latest}/cocos2d/x/lib-small ${dest}${latest}/cocos2d/x/lib
+	#cp -r ${latest}/frameworks ${dest}${latest}/
 	cp -a docs ${dest}
 	cp docs.html ${dest}
-	#cp -r ${latest}/frameworks ${dest}${latest}/
 	cd LemonadeExchange/Projects/android && make clean
 	mv LemonadeExchange/lib /tmp
 	cp -r LemonadeExchange ${dest}
@@ -23,7 +23,6 @@ release:
 	cd ${dest}LemonadeExchange && ln -s ../latest lib
 	cp LICENSE-pro ${dest}LICENSE
 	cp package.json ${dest}
-	#cp prebuild.sh ${dest}
 	cp rapidgamepro.js ${dest}
 	cp README-pro.md ${dest}README.md
 	mv src/proj.android/obj src/proj.android/libs /tmp
@@ -42,8 +41,6 @@ release:
 	find ${dest} -name project.xcworkspace -delete
 	@rez/delete-text "// begin pro" ${dest}rapidgamepro.js --newlines
 	@rez/delete-text "// end pro" ${dest}rapidgamepro.js --newlines
-	#@rez/delete-text "# begin pro" ${dest}prebuild.sh --newlines
-	#@rez/delete-text "# end pro" ${dest}prebuild.sh --newlines
 	@rez/delete-text "# begin pro" ${dest}CHANGELOG.txt --newlines
 	@rez/delete-text "# end pro" ${dest}CHANGELOG.txt --newlines
 	@rez/delete-text "# begin pro" ${dest}src/proj.android/build.sh --newlines
@@ -157,8 +154,14 @@ rg:
 	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/underscore.js
 	rm ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/AdsMobFox.java
 	rm ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/Facebook.java
-	docco -o ${dest}docs -c rez/docco/docco.css -t rez/docco/docco.jst -l linear ${dest}README.md ${dest}templates/cocos2d/TwoScene/Assets/lib/Game.js ${dest}templates/cocos2d/TwoScene/Assets/*.js ${dest}templates/cocos2d/TwoScene/Server/server.js #*/
+	cp README.md README.litcoffee
+	mv ${dest}templates/cocos2d/TwoScene/Server/server.js ${dest}templates/cocos2d/TwoScene/Server/Server.js
+	docco -o ${dest}docs -c rez/docco/docco.css -t rez/docco/docco.jst -l linear README.litcoffee ${dest}templates/cocos2d/TwoScene/Assets/lib/Game.js ${dest}templates/cocos2d/TwoScene/Assets/*.js ${dest}templates/cocos2d/TwoScene/Server/Server.js #*/
+	mv ${dest}templates/cocos2d/TwoScene/Server/Server.js ${dest}templates/cocos2d/TwoScene/Server/server.js
 	cp -r rez/docco/public ${dest}docs/
+	cp -r rez/docco/index.html ${dest}docs/
+	rm README.litcoffee
+	cp -r ${dest}docs/* ../wizardfu.com/docs/rapidgame/ #*/
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Game.html
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/GameScene.html
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/MenuScene.html
