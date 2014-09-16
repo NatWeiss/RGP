@@ -1,20 +1,23 @@
+///
+/// > See the `LICENSE` file for the license governing this code.
+///
 
-//
-// Extend the [Game](Game.html) object with project-specific functions.
-//
+///
+/// Extend the [Game](Game.html) object with project-specific functions.
+///
 
-//
-// ###  Game
-//
-// Get or create the Game object.
-//
+///
+/// ###  Game
+///
+/// Get or create the Game object.
+///
 var Game = Game || {};
 
-//
-// ###  Game.playClickSound
-//
-// Play one of the click sounds in sequential order.
-//
+///
+/// ###  Game.playClickSound
+///
+/// Play one of the click sounds in sequential order.
+///
 Game.playClickSound = function() {
 	var sounds = Game.config["click-sounds"];
 	this.clickSound = this.clickSound || 0;
@@ -24,11 +27,11 @@ Game.playClickSound = function() {
 	this.clickSound = (this.clickSound + 1) % sounds.length;
 };
 
-//
-// ###  Game.showTouchCircle
-//
-// Show an expanding, fading circle at the given position or the given item's position.
-//
+///
+/// ###  Game.showTouchCircle
+///
+/// Show an expanding, fading circle at the given position or the given item's position.
+///
 Game.showTouchCircle = function(parentNode, pos, item) {
 	var circle;
 	
@@ -71,20 +74,20 @@ Game.showTouchCircle = function(parentNode, pos, item) {
 	parentNode.addChild(circle, 11);
 };
 
-//
-// ###  Game.getInitialLayer
-//
-// Get the initial layer to run.
-//
+///
+/// ###  Game.getInitialLayer
+///
+/// Get the initial layer to run.
+///
 Game.getInitialLayer = function() {
 	return LayerMenu;
 };
 
-//
-// ###  Game.createButton
-//
-// Creates a button.
-//
+///
+/// ###  Game.createButton
+///
+/// Creates a button.
+///
 Game.createButton = function(obj, spriteFilename, tag, position, anchorPoint, movement, duration, delay, easeRate) {
 	var winSize = Game.getWinSize(),
 		normalSprite = cc.Sprite.create("#" + spriteFilename),
@@ -111,11 +114,11 @@ Game.createButton = function(obj, spriteFilename, tag, position, anchorPoint, mo
 	return button;
 };
 
-//
-// ###  Game.addCurrencyToButton
-//
-// Adds a currency amount to the given button.
-//
+///
+/// ###  Game.addCurrencyToButton
+///
+/// Adds a currency amount to the given button.
+///
 Game.addCurrencyToButton = function(button, amount, currencyAmount, spriteFrameName) {
 	var label,
 		sprite,
@@ -152,11 +155,11 @@ Game.addCurrencyToButton = function(button, amount, currencyAmount, spriteFrameN
 	button.addChild(label);
 };
 
-//
-// ###  Game.startMusic
-//
-// Starts music playing, cycling through the available songs. Safe to be called even if music is already playing.
-//
+///
+/// ###  Game.startMusic
+///
+/// Starts music playing, cycling through the available songs. Safe to be called even if music is already playing.
+///
 Game.startMusic = function() {
 	var self = this,
 		song;
@@ -176,11 +179,11 @@ Game.startMusic = function() {
 	}
 };
 
-//
-// ###  Game.checkMusic
-//
-// Checks that music started playing. Workaround for an issue where Chrome takes a few seconds to play music.
-//
+///
+/// ###  Game.checkMusic
+///
+/// Checks that music started playing. Workaround for an issue where Chrome takes a few seconds to play music.
+///
 Game.checkMusic = function() {
 	var enabled = Game.isSoundEnabled(),
 		playing = cc.audioEngine.isMusicPlaying();

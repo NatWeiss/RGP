@@ -6,10 +6,10 @@ Thanks for purchasing a license! Here's some instructions to get RapidGamePro se
 
 1. You'll need [Node.js](http://nodejs.org/download/) and [Git](http://git-scm.com/downloads).
 2. Move this folder somewhere that it can stay (`~/Library/Developer/RapidGamePro` is recommended on Macs).
-3. Install a link to the commandline app: `cd RapidGamePro && npm link .`
+3. Install a link to the commandline app: `cd RapidGamePro && npm link . && cd ..`
 4. Change directories to where you want your new game project: `cd ~/MyGames`
 5. Create a new game project: `rapidgamepro create cocos2d "Heck Yeah" com.mycompany.heckyeah`
-6. This will create your game's project files, then automatically download cocos2d-x and prebuild static libraries.
+6. This will create your game's project files, then prebuild the static libraries.
 7. In the meantime, you can follow the outputted instructions on how to run your game in a browser.
 8. Once the libraries have been prebuilt, you can run the iOS, Mac and Android versions.
 
@@ -18,7 +18,16 @@ Playing the example game:
 1. Run the server: `cd LemonadeExchange/Server && node server.js`
 2. Browse to: [http://localhost:8000](http://localhost:8000).
 
-> As of the current release, RapidGamePro is primarily geared for development on a Mac. Full support and documentation for Windows and Linux development is planned.
+On Windows, you'll need to create symlinks to the lib folders:
+
+	cd RapidGamePro\templates\cocos2d\TwoScene
+	del lib
+	mklink /j lib ..\..\..\latest
+
+	cd RapidGamePro\LemonadeExchange
+	del lib
+	mklink /j lib ..\latest
+
 
 
 Folder Structure
@@ -32,17 +41,15 @@ Folder Structure
 		docs/ - Documentation folder.
 		docs.html - Documentation overview ready for browser.
 		latest/ - Symlink to the latest prebuild libraries folder.
-		frameworks/ - Frameworks needed, such as the Facebook iOS framework.
 		LemonadeExchange/ - A complete two-currency example game.
 		LICENSE - The license file.
 		node_modules/ - Directory containing supporting scripts used by the commandline app.
 		package.json - A config file used by the commandline app.
 		prebuild.sh - Executable script which prebuilds the static libraries.
-		rapidgamepro.js - The commandline app's main file.
+		rapidgamepro.js - Main file for the commandline app.
 		README.md - Documentation overview in markdown format.
 		src/ - Contains source files for the plugins and static libraries.
 		templates/ - Game templates (do not modify, just use the `rapidgamepro create` command).
-
 
 Client-Server Model
 -------------------
@@ -57,9 +64,9 @@ Client Overview
 
 The client uses the Cocos2d JS game engine which is a combination of Cocos2d-X and Cocos2d-HTML5.
 
-On HTML5, the engine starts by loading `proj.html5/index.html` which boots Cocos2d-HTML5 by loading `lib/cocos2d-html5/CCBoot.js` and then runs `js/App.js` which does the rest. The client's javascript files run in the browser.
+On HTML5, the engine starts by loading `Projects/html/index.html` which boots Cocos2d-HTML5 by loading `lib/cocos2d/html/CCBoot.js` and then runs `Assets/lib/Game.js` which does the rest. The client's javascript files run in the browser.
 
-On native platforms, the engine starts with `main.m` or `main.cpp`, depending on the platform. This loads `src/AppDelegate.cpp` which finishes booting Cocos2d-X and then runs `js/App.js`. The game's javascript files are pre-compiled to byte codes and executed using the SpiderMonkey JS Engine. Some of the files (for example, `js/lib/Facebook.js`) are superceded by custom bindings which expose exactly the same Javascript API but run C++ or other native code (see `RapidGamePro/src/facebook`).
+On native platforms, the engine starts with `main.m` or `main.cpp`, depending on the platform. This loads `Projects/AppDelegate.cpp` which finishes booting Cocos2d-X and then runs `Assets/lib/Game.js`. The game's javascript files are pre-compiled to byte codes and executed using the SpiderMonkey JS Engine. Some of the files (for example, `Assets/lib/Facebook.js`) are superceded by custom bindings which expose exactly the same Javascript API but run C++ or other native code (see `RapidGamePro/src/facebook`).
 
 
 Pre-building for Rapid Development
@@ -79,30 +86,13 @@ RapidGame Pro's solution is to prebuild Cocos2d-X as static libraries for all ar
 
 To prebuild Cocos2d-X and plugins:
 
-    cd RapidGamePro
-	./prebuild
+	cd RapidGamePro
+	node rapidgamepro.js prebuild # or `rapidgamepro prebuild` if you followed the setup instructions
 
-When the `prebuild` command is finished, the static libraries will reside in `RapidGamePro/lib`. The library files are large because they incorporate object files for all architectures and platforms. When using the project creator, an absolute symlink is established to the `lib` folder so that:
+When the `prebuild` command is finished, the static libraries will reside in `RapidGamePro/latest`. The library files are large because they incorporate object files for all architectures and platforms. When using the project creator, an absolute symlink is established to the `latest` folder so that:
 
 1. The static libraries reside in one and only one place.
 2. Each game project's folder can be copied or moved quickly and without disturbing the absolute symlink.
-
-
-Project Creator
----------------
-
-The project creator tool can be used to rapidly create a new project that uses the static libraries. Either the built-in GUI or the commandline version can be used.
-
-To use the GUI version:
-
-    cd RapidGamePro
-    tools/create-project
-
-To use the commandline version:
-
-    cd RapidGamePro
-    tools/create-project --help
-    tools/create-project -n HelloWorld -k com.mycompany.helloworld -p ~/code
 
 
 iOS Notes
@@ -146,7 +136,7 @@ Android Notes
 
 To build via the commandline:
 
-1. Open up a Terminal or Command prompt and switch to your project's `proj.android` directory.
+1. Open up a Terminal or Command prompt and switch to your project's `Projects/android` directory.
 
 2. Connect your Android device via USB and execute this command:
 		make && make run

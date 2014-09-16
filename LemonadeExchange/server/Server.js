@@ -1,18 +1,16 @@
-//
-//  Created using [RapidGamePro](http://wizardfu.com/rapidgame).
-//  See the `LICENSE` file for the license governing this code.
-//  Developed by Nat Weiss.
-//
+///
+/// > See the `LICENSE` file for the license governing this code.
+///
 
-//
-// A simple Node.js game server that:
-// 1. Sends static files as requested.
-// 2. Provides a basic API to game clients.
-//
-// Keep it running on your own host using [forever](http://blog.nodejitsu.com/keep-a-nodejs-server-up-with-forever/). Remember the -g option on install.
-//
-// Here's a [post](http://stackoverflow.com/a/14272874) about using SSL and some example code:
-//
+///
+/// A simple Node.js game server that:
+/// 1. Sends static files as requested.
+/// 2. Provides a basic API to game clients.
+///
+/// Keep it running on your own host using [forever](http://blog.nodejitsu.com/keep-a-nodejs-server-up-with-forever/). Remember the -g option on install.
+///
+/// Here's a [post](http://stackoverflow.com/a/14272874) about using SSL and some example code:
+///
 /*
 var https = require("https");
 var fs = require("fs");
@@ -22,9 +20,9 @@ var protocolHttps = https.createServer({
 }, server).listen(443);
 */
 
-//
-// ### Setup
-//
+///
+/// ### Setup
+///
 var config = require("../Assets/ConfigServer"),
 	express = require("express"),
 	fs = require("fs"),
@@ -38,11 +36,11 @@ var config = require("../Assets/ConfigServer"),
 
 console.log("Started server on port: " + config.serverPort);
 
-//
-// ###  Static Files
-//
-// Serve static files as requested.
-//
+///
+/// ###  Static Files
+///
+/// Serve static files as requested.
+///
 server.use("/", express.static(__dirname + "/../Projects/html/"));
 server.use("/project.json", express.static(__dirname + "/../project.json"));
 server.use("/lib/", express.static(__dirname + "/../lib/"));
@@ -58,9 +56,9 @@ server.get("/project.json", function(req,res){
 	}
 });
 
-//
-// ###  Public API
-//
+///
+/// ###  Public API
+///
 (function(){
 	var i,
 		exchangeRate = 10.0,
@@ -82,20 +80,20 @@ server.get("/project.json", function(req,res){
 			res.send(exchangeRate + "");
 		};
 
-//
-// ###  api/exchange-rate
-//
-// Returns the current exchange rate.
-//
+///
+/// ###  api/exchange-rate
+///
+/// Returns the current exchange rate.
+///
 	server.get("/api/exchange-rate", function(req,res){
 		res.send(exchangeRate + "");
 	});
 	
-//
-// ###  api/...
-//
-// Provide `api/drink`, `api/give`, `api/buy` and `api/sell`, all of which modify the current exchange rate.
-//
+///
+/// ###  api/...
+///
+/// Provide `api/drink`, `api/give`, `api/buy` and `api/sell`, all of which modify the current exchange rate.
+///
 	for (i in multipliers) {
 		server.get("/api/" + i, modifyExchangeRateRequest);
 	}

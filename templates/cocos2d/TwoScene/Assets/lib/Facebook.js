@@ -1,14 +1,12 @@
-//
-//  Created using [RapidGame](http://wizardfu.com/rapidgame).
-//  See the `LICENSE` file for the license governing this code.
-//  Developed by Nat Weiss.
-//
+///
+/// > See the `LICENSE` file for the license governing this code.
+///
 
-//
-// Implements the Facebook plugin for HTML5 clients. Native clients will supercede this by having already defined `plugin.Facebook` (see `src/facebook`).
-//
-// Uses the module pattern. The object `module` will contain all private variables used by the plugin. Public methods will be returned by the module and accessible via `plugin.Facebook`.
-//
+///
+/// Implements the Facebook plugin for HTML5 clients. Native clients will supercede this by having already defined `plugin.Facebook` (see `src/facebook`).
+///
+/// Uses the module pattern. The object `module` will contain all private variables used by the plugin. Public methods will be returned by the module and accessible via `plugin.Facebook`.
+///
 var plugin = plugin || {};
 
 if (typeof plugin.Facebook === "undefined") {
@@ -23,11 +21,11 @@ if (typeof plugin.Facebook === "undefined") {
 				userId: ""
 			};
 
-//
-// ###  module.reset
-//
-// Reset the module's data. Used initially and when the player logs out.
-//
+///
+/// ###  module.reset
+///
+/// Reset the module's data. Used initially and when the player logs out.
+///
 		module.reset = function() {
 			module.playerNames = {"me": "Me"};
 			module.playerFirstNames = {"me": "Me"};
@@ -38,22 +36,22 @@ if (typeof plugin.Facebook === "undefined") {
 		
 		module.reset();
 		
-//
-// ###  module.log
-//
-// Logs the given message to the console if the module has debug mode enabled. Log messages are prefixed with the module's `logPrefix`.
-//
+///
+/// ###  module.log
+///
+/// Logs the given message to the console if the module has debug mode enabled. Log messages are prefixed with the module's `logPrefix`.
+///
 		module.log = function(msg) {
 			if (module.debug) {
 				cc.log(logPrefix + msg);
 			}
 		};
 
-//
-// ###  module.checkForFB
-//
-// Returns true if the Facebook SDK has been loaded.
-//
+///
+/// ###  module.checkForFB
+///
+/// Returns true if the Facebook SDK has been loaded.
+///
 		module.checkForFB = function() {
 			if (typeof FB === "undefined") {
 				module.log("FB unavailable. Please ensure that all.js is being loaded.");
@@ -62,23 +60,23 @@ if (typeof plugin.Facebook === "undefined") {
 			return true;
 		};
 
-//
-// ###  window.fbAsyncInit
-//
-// Called by Facebook JS SDK when loaded asynchronosly.
-//
+///
+/// ###  window.fbAsyncInit
+///
+/// Called by Facebook JS SDK when loaded asynchronosly.
+///
 		window.fbAsyncInit = function() {
 			/*module.log("fbAsyncInit");*/
 			module.init();
 		};
 		
-//
-// ###  module.init
-//
-// Intializes the module. Configures Facebook and subscribes to authorization changes. Detects if running within the Facebook canvas.
-//
-// This method can be called multiple times. It will initialize only once.
-//
+///
+/// ###  module.init
+///
+/// Intializes the module. Configures Facebook and subscribes to authorization changes. Detects if running within the Facebook canvas.
+///
+/// This method can be called multiple times. It will initialize only once.
+///
 		module.init = function() {
 			if (typeof FB !== "undefined" && !module.initialized) {
 				module.initialized = true;
@@ -110,13 +108,13 @@ if (typeof plugin.Facebook === "undefined") {
 			}
 		};
 		
-//
-// ###  module.onCheckLoginStatus
-//
-// Callback used by Facebook whenever the player's login status changes. Handles cases where the player is logged in, not authorized or not logged in.
-//
-// If logged in, asynchronous requests will be made to get the player's info, profile image, friends and current permissions.
-//
+///
+/// ###  module.onCheckLoginStatus
+///
+/// Callback used by Facebook whenever the player's login status changes. Handles cases where the player is logged in, not authorized or not logged in.
+///
+/// If logged in, asynchronous requests will be made to get the player's info, profile image, friends and current permissions.
+///
 		module.onCheckLoginStatus = function(response) {
 			if (response && response.status === "connected") {
 				module.log("User is authorized, token: " +
@@ -173,11 +171,11 @@ if (typeof plugin.Facebook === "undefined") {
 			Game.callRunningLayer("onGetLoginStatus", module.loggedIn);
 		};
 		
-//
-// ###  module.loadPlayerImage
-//
-// Loads a player's profile image URL, then loads the image and uses `cc.textureCache` to cache it using the URL as the key.
-//
+///
+/// ###  module.loadPlayerImage
+///
+/// Loads a player's profile image URL, then loads the image and uses `cc.textureCache` to cache it using the URL as the key.
+///
 		module.loadPlayerImage = function(id) {
 			var request,
 				config = Game.config["social-plugin"],
@@ -203,11 +201,11 @@ if (typeof plugin.Facebook === "undefined") {
 			}
 		};
 		
-//
-// ###  module.onGetFriends
-//
-// Callback used when the player's friends list is loaded. Parses the friends list, saving IDs and names.
-//
+///
+/// ###  module.onGetFriends
+///
+/// Callback used when the player's friends list is loaded. Parses the friends list, saving IDs and names.
+///
 		module.onGetFriends = function(friends) {
 			var i,
 				len = friends.length,
@@ -228,11 +226,11 @@ if (typeof plugin.Facebook === "undefined") {
 			module.log("Parsed " + module.friendIds.length + " friends");
 		};
 		
-//
-// ###  module.deleteRequests
-//
-// Deletes any pending invitation requests. The requests are passed from Facebook when a player is responding to an invitation request and look something like [this](https://apps.facebook.com/your-app-name/?fb_source=notification&request_ids=221921991333209%2C1426088330967926&ref=notif&app_request_type=user_to_user&notif_t=app_invite).
-//
+///
+/// ###  module.deleteRequests
+///
+/// Deletes any pending invitation requests. The requests are passed from Facebook when a player is responding to an invitation request and look something like [this](https://apps.facebook.com/your-app-name/?fb_source=notification&request_ids=221921991333209%2C1426088330967926&ref=notif&app_request_type=user_to_user&notif_t=app_invite).
+///
 		module.deleteRequests = function() {
 			var i,
 				len,
@@ -260,11 +258,11 @@ if (typeof plugin.Facebook === "undefined") {
 			}
 		};
 		
-//
-// ###  module.getCurrentPermissions
-//
-// Requests the player's current permissions and stores the result.
-//
+///
+/// ###  module.getCurrentPermissions
+///
+/// Requests the player's current permissions and stores the result.
+///
 		module.getCurrentPermissions = function() {
 			if (module.checkForFB()) {
 				FB.api("/me/permissions", function(response) {
@@ -277,30 +275,30 @@ if (typeof plugin.Facebook === "undefined") {
 			}
 		};
 		
-//
-// ###  Public Methods
-//
-// Here begins the public methods accessible via `plugin.Facebook`.
-//
+///
+/// ###  Public Methods
+///
+/// Here begins the public methods accessible via `plugin.Facebook`.
+///
 		return cc.Class.extend({
 
-//
-// ###  Facebook.init
-//
-// Initializes the plugin and configures it with the given info object.
-//
+///
+/// ###  Facebook.init
+///
+/// Initializes the plugin and configures it with the given info object.
+///
 			init: function(devInfo) {
 				module.devInfo = devInfo;
 				module.init();
 			},
 			
-//
-// ###  Facebook.login
-//
-// Logs the player in with the given [permissions](https://developers.facebook.com/docs/facebook-login/permissions).
-//
-// Calls the running layer's `onGetLoginStatus` method when finished. Calls the running layer's `onGetMyPlayerName` method when finished retrieving the current player's details.
-//
+///
+/// ###  Facebook.login
+///
+/// Logs the player in with the given [permissions](https://developers.facebook.com/docs/facebook-login/permissions).
+///
+/// Calls the running layer's `onGetLoginStatus` method when finished. Calls the running layer's `onGetMyPlayerName` method when finished retrieving the current player's details.
+///
 			login: function(permissions) {
 				if (module.checkForFB()) {
 					module.log("Logging in with permissions: " + permissions);
@@ -312,11 +310,11 @@ if (typeof plugin.Facebook === "undefined") {
 				}
 			},
 			
-//
-// ###  Facebook.requestPublishPermissions
-//
-// Requests the given publishing permissions.
-//
+///
+/// ###  Facebook.requestPublishPermissions
+///
+/// Requests the given publishing permissions.
+///
 			requestPublishPermissions: function(permissions) {
 				var i,
 					requestingPerms,
@@ -348,40 +346,40 @@ if (typeof plugin.Facebook === "undefined") {
 				}
 			},
 			
-//
-// ###  Facebook.logout
-//
-// Logs the player out.
-//
+///
+/// ###  Facebook.logout
+///
+/// Logs the player out.
+///
 			logout: function() {
 				if (module.checkForFB()) {
 					FB.logout(null);
 				}
 			},
 			
-//
-// ###  Facebook.isLoggedIn
-//
-// Returns true if the player is logged in.
-//
+///
+/// ###  Facebook.isLoggedIn
+///
+/// Returns true if the player is logged in.
+///
 			isLoggedIn: function() {
 				return module.loggedIn;
 			},
 			
-//
-// ###  Facebook.isCanvasMode
-//
-// Returns true if the HTML5 client is running within a Facebook canvas.
-//
+///
+/// ###  Facebook.isCanvasMode
+///
+/// Returns true if the HTML5 client is running within a Facebook canvas.
+///
 			isCanvasMode: function() {
 				return module.isCanvas;
 			},
 			
-//
-// ###  Facebook.getPlayerName
-//
-// Returns the player name for the given ID.
-//
+///
+/// ###  Facebook.getPlayerName
+///
+/// Returns the player name for the given ID.
+///
 			getPlayerName: function(id) {
 				if (!id) {
 					id = "me";
@@ -389,11 +387,11 @@ if (typeof plugin.Facebook === "undefined") {
 				return module.playerNames[id];
 			},
 
-//
-// ###  Facebook.getPlayerFirstName
-//
-// Returns the player's first name for the given ID.
-//
+///
+/// ###  Facebook.getPlayerFirstName
+///
+/// Returns the player's first name for the given ID.
+///
 			getPlayerFirstName: function(id) {
 				if (!id) {
 					id = "me";
@@ -401,13 +399,13 @@ if (typeof plugin.Facebook === "undefined") {
 				return module.playerFirstNames[id];
 			},
 
-//
-// ###  Facebook.getPlayerImageUrl
-//
-// Returns the player's image URL for the given ID.
-//
-// Calls the running layer's `onGetPlayerImageUrl` when complete.
-//
+///
+/// ###  Facebook.getPlayerImageUrl
+///
+/// Returns the player's image URL for the given ID.
+///
+/// Calls the running layer's `onGetPlayerImageUrl` when complete.
+///
 			getPlayerImageUrl: function(id) {
 				if (!id) {
 					id = "me";
@@ -419,23 +417,23 @@ if (typeof plugin.Facebook === "undefined") {
 				return module.playerImageUrls[id];
 			},
 			
-//
-// ###  Facebook.getRandomFriendId
-//
-// Returns a random player ID from the list of friends.
-//
+///
+/// ###  Facebook.getRandomFriendId
+///
+/// Returns a random player ID from the list of friends.
+///
 			getRandomFriendId: function() {
 				var index = Game.rand(module.friendIds.length);
 				return module.friendIds[index];
 			},
 			
-//
-// ###  Facebook.buy
-//
-// Attempts to purchase the given product with Facebook Payments. Only works for HTML5 clients running within a Facebook canvas.
-//
-// See the following [reference](https://developers.facebook.com/docs/concepts/payments/dialog/).
-//
+///
+/// ###  Facebook.buy
+///
+/// Attempts to purchase the given product with Facebook Payments. Only works for HTML5 clients running within a Facebook canvas.
+///
+/// See the following [reference](https://developers.facebook.com/docs/concepts/payments/dialog/).
+///
 			buy: function(productUrl, successCallback, failureCallback) {
 				var responseReceived = false,
 					responseTimeout = 35;
@@ -484,13 +482,13 @@ if (typeof plugin.Facebook === "undefined") {
 				}, responseTimeout * 1000);
 			},
 
-//
-// ###  Facebook.showUI
-//
-// Shows the Facebook [UI](https://developers.facebook.com/docs/javascript/reference/FB.ui/) with the given settings, calling the running layer's `onSocialUIResponse` when finished.
-//
-// Requests dialog reference [here](https://developers.facebook.com/docs/reference/dialogs/requests/).
-//
+///
+/// ###  Facebook.showUI
+///
+/// Shows the Facebook [UI](https://developers.facebook.com/docs/javascript/reference/FB.ui/) with the given settings, calling the running layer's `onSocialUIResponse` when finished.
+///
+/// Requests dialog reference [here](https://developers.facebook.com/docs/reference/dialogs/requests/).
+///
 			showUI: function(infoObj) {
 				if (module.checkForFB()) {
 					FB.ui(infoObj, function(response){
@@ -499,20 +497,20 @@ if (typeof plugin.Facebook === "undefined") {
 				}
 			},
 			
-//
-// ###  Facebook.setDebugMode
-//
-// Sets debug mode to the given value. In debug mode, messages are logged to the console.
-//
+///
+/// ###  Facebook.setDebugMode
+///
+/// Sets debug mode to the given value. In debug mode, messages are logged to the console.
+///
 			setDebugMode: function (debug) {
 				module.debug = (debug ? true : false);
 			},
 			
-//
-// ###  Facebook.getSDKVersion
-//
-// Returns the Facebook SDK version.
-//
+///
+/// ###  Facebook.getSDKVersion
+///
+/// Returns the Facebook SDK version.
+///
 			getSDKVersion: function () {
 				if (module.checkForFB() && FB.getSDKVersion) {
 					return FB.getSDKVersion();

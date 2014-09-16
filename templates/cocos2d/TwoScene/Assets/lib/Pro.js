@@ -1,19 +1,17 @@
-//
-//  Created using [RapidGame](http://wizardfu.com/rapidgame).
-//  See the `LICENSE` file for the license governing this code.
-//  Developed by Nat Weiss.
-//
+///
+/// > See the `LICENSE` file for the license governing this code.
+///
 
-//
-// Extend the Game object with Pro features.
-//
+///
+/// Extend the Game object with Pro features.
+///
 var Game = Game || {};
 
-//
-// ###  Game.initPro
-//
-// Initialize the Pro features.
-//
+///
+/// ###  Game.initPro
+///
+/// Initialize the Pro features.
+///
 Game.initPro = function() {
 	var onFinished = function() {
 		var initialLaunch = Game.isInitialLaunch();
@@ -81,11 +79,11 @@ Game.initPro = function() {
 	}
 };
 
-//
-// ###  Game.getResourceDir
-//
-// Return the resource directory (SD, HD or HDR) for this device's resolution.
-//
+///
+/// ###  Game.getResourceDir
+///
+/// Return the resource directory (SD, HD or HDR) for this device's resolution.
+///
 Game.getResourceDir = function() {
 	if (typeof this._resourceDir === "undefined") {
 		var self = this,
@@ -123,11 +121,11 @@ Game.getResourceDir = function() {
 	return this._resourceDir;
 };
 
-//
-// ###  Game.loadResources
-//
-// Setup and load resources.
-//
+///
+/// ###  Game.loadResources
+///
+/// Setup and load resources.
+///
 Game.loadResources = function() {
 	var sheets = Game.config["spritesheets"],
 		sheet,
@@ -157,11 +155,11 @@ Game.loadResources = function() {
 	}
 };
 
-//
-// ###  Game.isFullscreenAvailable
-//
-// Return true if fullscreen mode is available on this platform.
-//
+///
+/// ###  Game.isFullscreenAvailable
+///
+/// Return true if fullscreen mode is available on this platform.
+///
 Game.isFullscreenAvailable = function() {
 	return (this.isHtml5() ?
 		typeof screenfull !== "undefined" && screenfull.enabled :
@@ -169,11 +167,11 @@ Game.isFullscreenAvailable = function() {
 	);
 };
 
-//
-// ###  Game.isFullscreenEnabled
-//
-// Return true if fullscreen mode is enabled.
-//
+///
+/// ###  Game.isFullscreenEnabled
+///
+/// Return true if fullscreen mode is enabled.
+///
 Game.isFullscreenEnabled = function() {
 	return (this.isHtml5() ?
 		typeof screenfull !== "undefined" && screenfull.isFullscreen :
@@ -181,13 +179,13 @@ Game.isFullscreenEnabled = function() {
 	);
 };
 
-//
-// ###  Game.enableFullscreen
-//
-// Enable or disable fullscreen mode.
-//
-// See http://www.sitepoint.com/use-html5-full-screen-api/.
-//
+///
+/// ###  Game.enableFullscreen
+///
+/// Enable or disable fullscreen mode.
+///
+/// See http://www.sitepoint.com/use-html5-full-screen-api/.
+///
 Game.enableFullscreen = function(enabled) {
 	if (this.isFullscreenAvailable()) {
 		if (this.isHtml5()) {
@@ -205,11 +203,11 @@ Game.enableFullscreen = function(enabled) {
 	}
 };
 
-//
-// ###  Game.onWindowSizeChanged
-//
-// Called when the window size has changed.
-//
+///
+/// ###  Game.onWindowSizeChanged
+///
+/// Called when the window size has changed.
+///
 Game.onWindowSizeChanged = function() {
 	/*var size = (Game.isFullscreenEnabled() ?
 		cc.size(screen.width, screen.height) :
@@ -222,20 +220,20 @@ Game.onWindowSizeChanged = function() {
 	Game.callRunningLayer("onWindowSizeChanged");
 };
 
-//
-// ###  Game.toggleFullscreenEnabled
-//
-// Toggle whether fullscreen is enabled.
-//
+///
+/// ###  Game.toggleFullscreenEnabled
+///
+/// Toggle whether fullscreen is enabled.
+///
 Game.toggleFullscreenEnabled = function() {
 	this.enableFullscreen(!this.isFullscreenEnabled());
 };
 
-//
-// ###  Game.getAnalyticsPlugin
-//
-// Get the analytics plugin. The first time this is called, the plugin is loaded and configured.
-//
+///
+/// ###  Game.getAnalyticsPlugin
+///
+/// Get the analytics plugin. The first time this is called, the plugin is loaded and configured.
+///
 Game.getAnalyticsPlugin = function() {
 	var config, name;
 	if (typeof this.analyticsPlugin === "undefined" && typeof plugin !== "undefined") {
@@ -292,11 +290,11 @@ Game.getAnalyticsPlugin = function() {
 	return this.analyticsPlugin;
 };
 
-//
-// ###  Game.getAdsPlugin
-//
-// Get the advertisements plugin. The first time this is called, the plugin is loaded and configured.
-//
+///
+/// ###  Game.getAdsPlugin
+///
+/// Get the advertisements plugin. The first time this is called, the plugin is loaded and configured.
+///
 Game.getAdsPlugin = function() {
 	if (typeof this.adsPlugin === "undefined" && typeof plugin !== "undefined") {
 		var name = Game.config["ads-plugin"]["name"];
@@ -321,11 +319,11 @@ Game.getAdsPlugin = function() {
 	return this.adsPlugin;
 };
 
-//
-// ###  Game.getSocialPlugin
-//
-// Get the social networking plugin. The first time this is called, the plugin is loaded and configured.
-//
+///
+/// ###  Game.getSocialPlugin
+///
+/// Get the social networking plugin. The first time this is called, the plugin is loaded and configured.
+///
 Game.getSocialPlugin = function() {
 	var name;
 	
@@ -346,11 +344,11 @@ Game.getSocialPlugin = function() {
 	return this.socialPlugin;
 };
 
-//
-// ###  Game.getEconomyPlugin
-//
-// Get the virtual economy plugin. The first time this is called, the plugin is loaded and configured.
-//
+///
+/// ###  Game.getEconomyPlugin
+///
+/// Get the virtual economy plugin. The first time this is called, the plugin is loaded and configured.
+///
 Game.getEconomyPlugin = function() {
 	if (typeof this.economyPlugin === "undefined" && typeof Soomla !== "undefined") {
 		var storeConfig = {
@@ -402,11 +400,11 @@ Game.getEconomyPlugin = function() {
 	return this.economyPlugin;
 };
 
-//
-// ###  Game.getStoreAssets
-//
-// Returns the store assets object. Configured in `Game.config["economy-plugin"]`.
-//
+///
+/// ###  Game.getStoreAssets
+///
+/// Returns the store assets object. Configured in `Game.config["economy-plugin"]`.
+///
 Game.getStoreAssets = function() {
 	var i,
 		a,
@@ -537,11 +535,11 @@ Game.getStoreAssets = function() {
 	return Soomla.IStoreAssets.create(assets);
 };
 
-//
-// ###  Game.giveItem
-//
-// Give the player a certain amount of an item ID. Use a negative amount to take away.
-//
+///
+/// ###  Game.giveItem
+///
+/// Give the player a certain amount of an item ID. Use a negative amount to take away.
+///
 Game.giveItem = function(itemId, amount) {
 	if (amount < 0) {
 		Soomla.storeInventory.takeItem(itemId, Math.abs(amount));
@@ -550,11 +548,11 @@ Game.giveItem = function(itemId, amount) {
 	}
 };
 
-//
-// ###  Game.logCurrencyBalances
-//
-// Logs the balances of all currencies.
-//
+///
+/// ###  Game.logCurrencyBalances
+///
+/// Logs the balances of all currencies.
+///
 Game.logCurrencyBalances = function() {
 	var currencies, len, i, itemId, balance;
 
@@ -571,13 +569,13 @@ Game.logCurrencyBalances = function() {
 	}
 };
 
-//
-// ###   Game.isInitialLaunch
-//
-// Returns true if this is the first time the game is being launched. It determines this based on whether the `uuid` key exists within local storage. Deleting this key will essentially reset the game into thinking it's the first run.
-//
-// Must be called before `Game.getUUID()`, which creates the `uuid` key.
-//
+///
+/// ###   Game.isInitialLaunch
+///
+/// Returns true if this is the first time the game is being launched. It determines this based on whether the `uuid` key exists within local storage. Deleting this key will essentially reset the game into thinking it's the first run.
+///
+/// Must be called before `Game.getUUID()`, which creates the `uuid` key.
+///
 Game.isInitialLaunch = function() {
 	var v, key;
 	
@@ -600,11 +598,11 @@ Game.isInitialLaunch = function() {
 	return (typeof v === "undefined" || v === null || v === "");
 };
 
-//
-// ###  Game.onInitialLaunch
-//
-// Called on the Game's first launch. Used to set initial balances of virtual economy currencies.
-//
+///
+/// ###  Game.onInitialLaunch
+///
+/// Called on the Game's first launch. Used to set initial balances of virtual economy currencies.
+///
 Game.onInitialLaunch = function() {
 	var i,
 		itemId,
@@ -615,7 +613,7 @@ Game.onInitialLaunch = function() {
 		allZero = true;
 	
 	/* Get the currencies. */
-	if (Soomla && Soomla.storeInfo) {
+	if (typeof Soomla !== "undefined" && Soomla && Soomla.storeInfo) {
 		currencies = Soomla.storeInfo.getVirtualCurrencies();
 		len = currencies.length || 0;
 	}
@@ -642,11 +640,11 @@ Game.onInitialLaunch = function() {
 	}
 };
 
-//
-// ###  Game.getUUID
-//
-// Gets or creates a unique identifier for the current device.
-//
+///
+/// ###  Game.getUUID
+///
+/// Gets or creates a unique identifier for the current device.
+///
 Game.getUUID = function(length) {
 	if (typeof this._uuid === "undefined") {
 		this._uuid = cc.sys.localStorage.getItem("uuid") || "";
@@ -665,11 +663,11 @@ Game.getUUID = function(length) {
 	return this._uuid;
 };
 
-//
-// ###  Game.getHttpQueryParams
-//
-// Return the HTTP query's GET parameters.
-//
+///
+/// ###  Game.getHttpQueryParams
+///
+/// Return the HTTP query's GET parameters.
+///
 Game.getHttpQueryParams = function() {
 	var loc,
 		i,
@@ -695,13 +693,13 @@ Game.getHttpQueryParams = function() {
 	return this._GET;
 };
 
-//
-// ###  Game.requestUrl
-//
-// Load the given URL and call the callback when finished. If the third parameter `binary` is truthy, then use binary transfer mode.
-//
-// Uses `XMLHttpRequest` (implemented natively on native platforms).
-//
+///
+/// ###  Game.requestUrl
+///
+/// Load the given URL and call the callback when finished. If the third parameter `binary` is truthy, then use binary transfer mode.
+///
+/// Uses `XMLHttpRequest` (implemented natively on native platforms).
+///
 Game.requestUrl = function(url, callback, binary) {
 	var x,
 		loc,
@@ -750,11 +748,11 @@ Game.requestUrl = function(url, callback, binary) {
 	}
 };
 
-//
-// ###  Game.between
-//
-// Return the substring of `string` between `prefix` and `suffix`.
-//
+///
+/// ###  Game.between
+///
+/// Return the substring of `string` between `prefix` and `suffix`.
+///
 Game.between = function(string, prefix, suffix, start) {
 	var startPos = string.indexOf(prefix, start || 0),
 		endPos = string.indexOf(suffix, startPos + prefix.length);
@@ -765,11 +763,11 @@ Game.between = function(string, prefix, suffix, start) {
 	return "";
 };
 
-//
-// ###  Game.insert
-//
-// Return the given `string` with `insert` inserted after `after`.
-//
+///
+/// ###  Game.insert
+///
+/// Return the given `string` with `insert` inserted after `after`.
+///
 Game.insert = function(string, after, insert) {
 	var pos = string.indexOf(after) + after.length;
 	if (pos > 0) {
@@ -778,11 +776,11 @@ Game.insert = function(string, after, insert) {
 	return string;
 };
 
-//
-// ###  Game.encodeURIComponents
-//
-// Return a URI string with components encoded given an object of associated key value pairs to encode.
-//
+///
+/// ###  Game.encodeURIComponents
+///
+/// Return a URI string with components encoded given an object of associated key value pairs to encode.
+///
 Game.encodeURIComponents = function(o) {
 	var ret = "",
 		count = 0;
@@ -796,11 +794,11 @@ Game.encodeURIComponents = function(o) {
 	return ret;
 };
 
-//
-// ###  Game.loadImage
-//
-// Loads an image asynchronously from the given URL, calling the callback when finished. Different for HTML5 versus native.
-//
+///
+/// ###  Game.loadImage
+///
+/// Loads an image asynchronously from the given URL, calling the callback when finished. Different for HTML5 versus native.
+///
 Game.loadImage = function(url, callback) {
 	if (url.indexOf("://") == 0) {
 		cc.log("Not a URL: " + url);

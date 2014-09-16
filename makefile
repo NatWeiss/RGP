@@ -3,6 +3,7 @@
 #release: latest=0.8.9
 release: dest=../releases/RapidGamePro/
 release:
+	make docco
 	find . -name .DS_Store -delete
 	if [ -d ${dest} ]; then rm -r ${dest}; fi
 	mkdir ${dest}
@@ -15,8 +16,11 @@ release:
 	cp -a docs ${dest}
 	cp docs.html ${dest}
 	#cp -r ${latest}/frameworks ${dest}${latest}/
-	cd LemonadeExchange/proj.android && make clean
-	cp -a LemonadeExchange ${dest}
+	cd LemonadeExchange/Projects/android && make clean
+	mv LemonadeExchange/lib /tmp
+	cp -r LemonadeExchange ${dest}
+	mv /tmp/lib LemonadeExchange
+	cd ${dest}LemonadeExchange && ln -s ../latest lib
 	cp LICENSE-pro ${dest}LICENSE
 	cp package.json ${dest}
 	#cp prebuild.sh ${dest}
@@ -64,18 +68,18 @@ release:
 	@rez/delete-text "# end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/jni/Android.mk --newlines
 	@rez/delete-text "# begin pro" ${dest}templates/cocos2d/TwoScene/Projects/android/project.properties --newlines
 	@rez/delete-text "# end pro" ${dest}templates/cocos2d/TwoScene/Projects/android/project.properties --newlines
-	@rez/delete-text "<!-- begin pro -->" ${dest}LemonadeExchange/proj.android/AndroidManifest.xml --newlines
-	@rez/delete-text "<!-- end pro -->" ${dest}LemonadeExchange/proj.android/AndroidManifest.xml --newlines
-	@rez/delete-text "# begin pro" ${dest}LemonadeExchange/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "# end pro" ${dest}LemonadeExchange/proj.android/jni/Android.mk --newlines
-	@rez/delete-text "# begin pro" ${dest}LemonadeExchange/proj.android/project.properties --newlines
-	@rez/delete-text "# end pro" ${dest}LemonadeExchange/proj.android/project.properties --newlines
-	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// end pro" ${dest}LemonadeExchange/src/AppDelegate.cpp --newlines
-	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "// end pro" ${dest}LemonadeExchange/proj.android/src/org/cocos2dx/javascript/AppActivity.java --newlines
-	@rez/delete-text "<!-- begin pro -->" ${dest}LemonadeExchange/proj.html5/index.html --newlines
-	@rez/delete-text "<!-- end pro -->" ${dest}LemonadeExchange/proj.html5/index.html --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}LemonadeExchange/Projects/android/AndroidManifest.xml --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}LemonadeExchange/Projects/android/AndroidManifest.xml --newlines
+	@rez/delete-text "# begin pro" ${dest}LemonadeExchange/Projects/android/jni/Android.mk --newlines
+	@rez/delete-text "# end pro" ${dest}LemonadeExchange/Projects/android/jni/Android.mk --newlines
+	@rez/delete-text "# begin pro" ${dest}LemonadeExchange/Projects/android/project.properties --newlines
+	@rez/delete-text "# end pro" ${dest}LemonadeExchange/Projects/android/project.properties --newlines
+	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/Projects/AppDelegate.cpp --newlines
+	@rez/delete-text "// end pro" ${dest}LemonadeExchange/Projects/AppDelegate.cpp --newlines
+	@rez/delete-text "// begin pro" ${dest}LemonadeExchange/Projects/android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "// end pro" ${dest}LemonadeExchange/Projects/android/src/org/cocos2dx/javascript/AppActivity.java --newlines
+	@rez/delete-text "<!-- begin pro -->" ${dest}LemonadeExchange/Projects/html/index.html --newlines
+	@rez/delete-text "<!-- end pro -->" ${dest}LemonadeExchange/Projects/html/index.html --newlines
 	open ../releases
 	open -a /Applications/YemuZip.app/
 
@@ -153,7 +157,8 @@ rg:
 	rm ${dest}templates/cocos2d/TwoScene/Assets/lib/underscore.js
 	rm ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/AdsMobFox.java
 	rm ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/Facebook.java
-	docco -o ${dest}docs -l linear ${dest}README.md ${dest}templates/cocos2d/TwoScene/Assets/lib/Game.js ${dest}templates/cocos2d/TwoScene/Assets/*.js ${dest}templates/cocos2d/TwoScene/Server/server.js #*/
+	docco -o ${dest}docs -c rez/docco/docco.css -t rez/docco/docco.jst -l linear ${dest}README.md ${dest}templates/cocos2d/TwoScene/Assets/lib/Game.js ${dest}templates/cocos2d/TwoScene/Assets/*.js ${dest}templates/cocos2d/TwoScene/Server/server.js #*/
+	cp -r rez/docco/public ${dest}docs/
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Game.html
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/GameScene.html
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/MenuScene.html
@@ -164,26 +169,22 @@ rg:
 
 docco:
 	if [ -d docs ]; then rm -r docs; fi
-	cp README.md README.litcoffee
-	#cp templates/cocos2d/TwoScene/Assets/lib/Game.js templates/cocos2d/TwoScene/Assets/lib/Game.js.bak
-	cp templates/cocos2d/TwoScene/Assets/Config.js templates/cocos2d/TwoScene/Assets/Config.js.bak
-	@rez/delete-text "# begin pro" README.litcoffee --newlines
-	@rez/delete-text "# end pro" README.litcoffee --newlines
-	@rez/delete-text "/* begin pro */" README.litcoffee
-	@rez/delete-text "/* end pro */" README.litcoffee
-	@rez/delete-text "// begin pro" templates/cocos2d/TwoScene/Assets/Config.js --newlines
-	@rez/delete-text "// end pro" templates/cocos2d/TwoScene/Assets/Config.js --newlines
-	#@rez/delete-text "// begin pro" templates/cocos2d/TwoScene/Assets/lib/Game.js --newlines
-	#@rez/delete-text "// end pro" templates/cocos2d/TwoScene/Assets/lib.Game.js --newlines
-	docco -l linear README.litcoffee templates/cocos2d/TwoScene/Server/Server.js templates/cocos2d/TwoScene/Assets/*.js templates/cocos2d/TwoScene/Assets/lib/AdsMobFox.js templates/cocos2d/TwoScene/Assets/lib/Facebook.js
+	#cp README.md README.litcoffee
+	#@rez/delete-text "# begin pro" README.litcoffee --newlines
+	#@rez/delete-text "# end pro" README.litcoffee --newlines
+	#@rez/delete-text "/* begin pro */" README.litcoffee
+	#@rez/delete-text "/* end pro */" README.litcoffee
+	#docco -l linear -c rez/docco/docco.css -t rez/docco/docco.jst README.litcoffee templates/cocos2d/TwoScene/Server/Server.js templates/cocos2d/TwoScene/Assets/*.js templates/cocos2d/TwoScene/Assets/lib/AdsMobFox.js templates/cocos2d/TwoScene/Assets/lib/Facebook.js
+	#cp -r rez/docco/public docs/
+	#sed -i "" 's/README.litcoffee/README.md/g' docs/*.html
+	#rm README.litcoffee
+	#if [ -d LemonadeExchange/docs ]; then rm -r LemonadeExchange/docs; fi
+	cp README-pro.md README.litcoffee
+	docco -o docs -l linear -c rez/docco/docco.css -t rez/docco/docco.jst README.litcoffee LemonadeExchange/Server/server.js LemonadeExchange/Assets/*.js LemonadeExchange/Assets/lib/Game.js LemonadeExchange/Assets/lib/Pro.js LemonadeExchange/Assets/lib/Loader.js LemonadeExchange/Assets/lib/AdsMobFox.js LemonadeExchange/Assets/lib/Facebook.js
+	cp -r rez/docco/public docs/
 	sed -i "" 's/README.litcoffee/README.md/g' docs/*.html
 	rm README.litcoffee
-	#mv templates/cocos2d/TwoScene/Assets/lib/Game.js.bak templates/cocos2d/TwoScene/Assets/lib/Game.js
-	mv templates/cocos2d/TwoScene/Assets/Config.js.bak templates/cocos2d/TwoScene/Assets/Config.js
-	if [ -d LemonadeExchange/docs ]; then rm -r LemonadeExchange/docs; fi
-	# todo: remove begin/end pro from App.js
-	docco -o LemonadeExchange/docs -l linear LemonadeExchange/server/Server.js LemonadeExchange/js/*.js LemonadeExchange/js/lib/AdsMobFox.js LemonadeExchange/js/lib/Facebook.js
-	docco -o rez/docs -l linear rez/README-demo.md
+	docco -o rez/docs -l linear -c rez/docco/docco.css -t rez/docco/docco.jst rez/README-demo.md
 	mv rez/docs/README-demo.html rez/
 	rm -r rez/docs
 
@@ -197,15 +198,15 @@ icons:
 	cp rez/KandleIcon-misc/KandleIcon-round.ico templates/cocos2d/TwoScene/Projects/windows/res/game.ico
 	cp rez/KandleIcon-misc/favicon_32x32.ico templates/cocos2d/TwoScene/Projects/html/favicon.ico
 	#cp rez/KandleIcon-misc/KandleIcon-round_512x512x32.png templates/cocos2d/TwoScene/Projects/linux/Icon-512.png
-	cp rez/LE-Icon-iOS/Icon*.png LemonadeExchange/proj.ios_mac/ios
-	cp rez/LE-Icon-Android/36.png LemonadeExchange/proj.android/res/drawable-ldpi/icon.png
-	cp rez/LE-Icon-Android/48.png LemonadeExchange/proj.android/res/drawable-mdpi/icon.png
-	cp rez/LE-Icon-Android/72.png LemonadeExchange/proj.android/res/drawable-hdpi/icon.png
-	cp rez/LE-Icon-Android/96.png LemonadeExchange/proj.android/res/drawable-xhdpi/icon.png
-	cp rez/LE-Icon-misc/LE-Icon-Rounded.icns LemonadeExchange/proj.ios_mac/mac/Icon.icns
-	cp rez/LE-Icon-misc/LE-Icon-Rounded.ico LemonadeExchange/proj.win32/res/game.ico
-	cp rez/LE-Icon-misc/favicon-32.ico LemonadeExchange/proj.html5/favicon.ico
-	cp rez/LE-Icon-misc/LE-Icon-Rounded_512x512x32.png LemonadeExchange/proj.linux/Icon-512.png
+	cp rez/LE-Icon-iOS/Icon*.png LemonadeExchange/Projects/ios
+	cp rez/LE-Icon-Android/36.png LemonadeExchange/Projects/android/res/drawable-ldpi/icon.png
+	cp rez/LE-Icon-Android/48.png LemonadeExchange/Projects/android/res/drawable-mdpi/icon.png
+	cp rez/LE-Icon-Android/72.png LemonadeExchange/Projects/android/res/drawable-hdpi/icon.png
+	cp rez/LE-Icon-Android/96.png LemonadeExchange/Projects/android/res/drawable-xhdpi/icon.png
+	cp rez/LE-Icon-misc/LE-Icon-Rounded.icns LemonadeExchange/Projects/mac/Icon.icns
+	cp rez/LE-Icon-misc/LE-Icon-Rounded.ico LemonadeExchange/Projects/windows/res/game.ico
+	cp rez/LE-Icon-misc/favicon-32.ico LemonadeExchange/Projects/html/favicon.ico
+	cp rez/LE-Icon-misc/LE-Icon-Rounded_512x512x32.png LemonadeExchange/Projects/linux/Icon-512.png
 
 #lemonadex: dest=.
 #lemonadex: name=LemonadeExchange

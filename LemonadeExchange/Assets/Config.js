@@ -1,15 +1,18 @@
+///
+/// > See the `LICENSE` file for the license governing this code.
+///
 
-//
-// The game client's config file. Used to localize the game, configure plugins and provide other settings and preferences.
-//
+///
+/// The game client's config file. Used to localize the game, configure plugins and provide other settings and preferences.
+///
 var Game = Game || {};
 
 Game.config = {
-//
-// ###  strings
-//
-// Localize your app by providing strings grouped by language code. If a string is not found for the current language code, the default `en` will be used.
-//
+///
+/// ###  strings
+///
+/// Localize your app by providing strings grouped by language code. If a string is not found for the current language code, the default `en` will be used.
+///
 	"strings": {
 		"en": {
 			"hello-world": "Hello World!",
@@ -17,19 +20,19 @@ Game.config = {
 		}
 	},
 	
-//
-// ###  font
-//
-// The font to be used.
-//
+///
+/// ###  font
+///
+/// The font to be used.
+///
 	"font": "Molle",
 	"font-shadow-color": cc.color(35, 168, 20),
 
-//
-// ###  click-sounds
-//
-// An array of click sounds to be used when tapping the Hello World layer.
-//
+///
+/// ###  click-sounds
+///
+/// An array of click sounds to be used when tapping the Hello World layer.
+///
 	"click-sounds": [
 		"Assets/Drop1.wav",
 		"Assets/Drop2.wav",
@@ -78,26 +81,26 @@ Game.config = {
 	"total-drinking-streaks": 25,
 	"total-glass-breaking-sounds": 3,
 	
-//
-// ###  analytics-plugin
-//
-// Settings for the analytics plugin. Insert your API key.
-//
+///
+/// ###  analytics-plugin
+///
+/// Settings for the analytics plugin. Insert your API key.
+///
 	"analytics-plugin": {
 		"name": "AnalyticsFlurry",
 		"debug": false,
 		"api-key": "PBSGR7SV59JZN2RQQW96"
 	},
 	
-//
-// ###  social-plugin
-//
-// Settings for the social plugin. Insert your app ID. Add [login permissions](https://developers.facebook.com/docs/facebook-login/permissions) as needed or leave empty to use only `basic_info`.
-//
-// iOS apps require the app ID to be in the `Info.plist` under the `FacebookAppID` key and a part of the URL scheme. See LemonadeExchange's `Info.plist` for an example. Reference Facebook's [iOS Documentation](https://developers.facebook.com/docs/ios/getting-started/#configure).
-//
-// Android apps require the app ID to be a string in `strings.xml` and referenced from `AndroidManifest.xml` as metadata. See LemonadeExchange's Android project for an example. Reference Facebook's [Android Documentation](https://developers.facebook.com/docs/android/getting-started/#login).
-//
+///
+/// ###  social-plugin
+///
+/// Settings for the social plugin. Insert your app ID. Add [login permissions](https://developers.facebook.com/docs/facebook-login/permissions) as needed or leave empty to use only `basic_info`.
+///
+/// iOS apps require the app ID to be in the `Info.plist` under the `FacebookAppID` key and a part of the URL scheme. See LemonadeExchange's `Info.plist` for an example. Reference Facebook's [iOS Documentation](https://developers.facebook.com/docs/ios/getting-started/#configure).
+///
+/// Android apps require the app ID to be a string in `strings.xml` and referenced from `AndroidManifest.xml` as metadata. See LemonadeExchange's Android project for an example. Reference Facebook's [Android Documentation](https://developers.facebook.com/docs/android/getting-started/#login).
+///
 	"social-plugin": {
 		"name": "Facebook",
 		"debug": false,
@@ -106,11 +109,11 @@ Game.config = {
 		"profile-image-width": 150
 	},
 
-//
-// ###  ads-plugin
-//
-// Settings for the advertisements plugin. Insert your API key. Mode can be `test` or `live`.
-//
+///
+/// ###  ads-plugin
+///
+/// Settings for the advertisements plugin. Insert your API key. Mode can be `test` or `live`.
+///
 	"ads-plugin": {
 		"name": "AdsMobFox",
 		"debug": false,
@@ -118,11 +121,11 @@ Game.config = {
 		"mode": "live"
 	},
 
-//
-// ###  economy-plugin
-//
-// Settings for the virtual economy plugin. Generate random 32-character strings for `secret1` and `secret2`. Insert your Android public key obtained from your Google Play Developer Console (optional).
-//
+///
+/// ###  economy-plugin
+///
+/// Settings for the virtual economy plugin. Generate random 32-character strings for `secret1` and `secret2`. Insert your Android public key obtained from your Google Play Developer Console (optional).
+///
 	"economy-plugin": {
 		"name": "Soomla",
 		"debug": false,

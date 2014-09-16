@@ -1,31 +1,34 @@
+///
+/// > See the `LICENSE` file for the license governing this code.
+///
 
-//
-// The main scene for LemonadeExchange. Provides a consistent background layer for the foreground layers [LayerMenu](LayerMenu.html) and [LayerGame](LayerGame.html).
-//
+///
+/// The main scene for LemonadeExchange. Provides a consistent background layer for the foreground layers [LayerMenu](LayerMenu.html) and [LayerGame](LayerGame.html).
+///
 
-//
-// ###  SceneMain
-//
-// Uses the module pattern to define some private variables. Returns a constructor.
-//
+///
+/// ###  SceneMain
+///
+/// Uses the module pattern to define some private variables. Returns a constructor.
+///
 var SceneMain = (function() {
 	var EFFECT_ORBIT_RADIUS = 8.0;
 
-//
-// ###  Public
-//
-// Here begins the public `SceneMain` class.
-//
+///
+/// ###  Public
+///
+/// Here begins the public `SceneMain` class.
+///
 	return cc.Scene.extend({
 		layer: null,
 		bg: null,
 		runTime: 0,
 		
-//
-// ###  SceneMain.init
-//
-// Setup the background layer and start the animation. Create the initial foreground layer.
-//
+///
+/// ###  SceneMain.init
+///
+/// Setup the background layer and start the animation. Create the initial foreground layer.
+///
 		init: function() {
 			var winSize = Game.getWinSize();
 			this._super();
@@ -48,11 +51,11 @@ var SceneMain = (function() {
 			this.scheduleUpdate();
 		},
 
-//
-// ###  SceneMain.createLayer
-//
-// Creates a new foreground layer. Destroys any existing foreground layer.
-//
+///
+/// ###  SceneMain.createLayer
+///
+/// Creates a new foreground layer. Destroys any existing foreground layer.
+///
 		createLayer: function(LayerClass, canResume) {
 			if (this.layer) {
 				this.layer.removeFromParent();
@@ -64,11 +67,11 @@ var SceneMain = (function() {
 			this.addChild(this.layer);
 		},
 		
-//
-// ###  SceneMain.update
-//
-// Makes the background look sort of like it is swirling by updating it's position. Called continously.
-//
+///
+/// ###  SceneMain.update
+///
+/// Makes the background look sort of like it is swirling by updating it's position. Called continously.
+///
 		update: function(dt) {
 			var percent,
 				yScale = 0.5;

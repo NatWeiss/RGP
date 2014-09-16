@@ -1,13 +1,16 @@
+///
+/// > See the `LICENSE` file for the license governing this code.
+///
 
-//
-// The layer which runs the game mechanics. Displays player details, current exchange rate and options to drink, give, buy, sell, earn or purchase lemonades and/or bux. Communicates with the server using the server's [API](Server.html).
-//
+///
+/// The layer which runs the game mechanics. Displays player details, current exchange rate and options to drink, give, buy, sell, earn or purchase lemonades and/or bux. Communicates with the server using the server's [API](Server.html).
+///
 
-//
-// ###  LayerGame
-//
-// Uses the module pattern to define some private variables. Returns a constructor.
-//
+///
+/// ###  LayerGame
+///
+/// Uses the module pattern to define some private variables. Returns a constructor.
+///
 var LayerGame = (function(){
 	var TAG_PAUSE = 0,
 		TAG_DRINK_LEMONADE = 1,
@@ -20,11 +23,11 @@ var LayerGame = (function(){
 		TAG_MEDIUM_BUX_PACK = 8,
 		TAG_LEMONADE = 9;
 
-//
-// ###  Public
-//
-// Here begins the public `LayerGame` class.
-//
+///
+/// ###  Public
+///
+/// Here begins the public `LayerGame` class.
+///
 	return cc.Layer.extend( {
 		menu: null,
 		playerNameLabel: null,
@@ -45,11 +48,11 @@ var LayerGame = (function(){
 		animateBuxIncrement: 5,
 		animateCurrencyAmountRate: 400,
 
-//
-// ###  LayerGame.init
-//
-// Setup the labels, sprites, etc. Start animations. Register for events.
-//
+///
+/// ###  LayerGame.init
+///
+/// Setup the labels, sprites, etc. Start animations. Register for events.
+///
 		init: function() {
 			var self = this,
 				winSize = Game.getWinSize();
@@ -89,11 +92,11 @@ var LayerGame = (function(){
 			return true;
 		},
 		
-//
-// ###  LayerGame.createBg
-//
-// Create the background layer.
-//
+///
+/// ###  LayerGame.createBg
+///
+/// Create the background layer.
+///
 		createBg: function() {
 			var sprite,
 				layer,
@@ -126,11 +129,11 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.createExchangeRate
-//
-// Create the exchange rate labels and sprites.
-//
+///
+/// ###  LayerGame.createExchangeRate
+///
+/// Create the exchange rate labels and sprites.
+///
 		createExchangeRate: function() {
 			var pos = Game.centralize(-70, 220),
 				font = Game.config["font"],
@@ -164,11 +167,11 @@ var LayerGame = (function(){
 			this.addChild(this.rateIcon, 1);
 		},
 
-//
-// ###  LayerGame.createPlayerImage
-//
-// Create the player image.
-//
+///
+/// ###  LayerGame.createPlayerImage
+///
+/// Create the player image.
+///
 		createPlayerImage: function(url) {
 			var image = null,
 				stencil = cc.Sprite.create("#MaskCircle.png");
@@ -199,11 +202,11 @@ var LayerGame = (function(){
 			this.addChild(this.playerImage, 2);
 		},
 		
-//
-// ###  LayerGame.createFriendImage
-//
-// Create a friend image.
-//
+///
+/// ###  LayerGame.createFriendImage
+///
+/// Create a friend image.
+///
 		createFriendImage: function(url) {
 			if (!url || !this.exchangeLayer) {
 				return;
@@ -218,11 +221,11 @@ var LayerGame = (function(){
 			}
 		},
 
-//
-// ###  LayerGame.createPlayerDetails
-//
-// Create the player detail labels and sprites.
-//
+///
+/// ###  LayerGame.createPlayerDetails
+///
+/// Create the player detail labels and sprites.
+///
 		createPlayerDetails: function() {
 			var name = Game.getSocialPlugin().getPlayerFirstName(),
 				playerImageUrl = Game.getSocialPlugin().getPlayerImageUrl(),
@@ -285,11 +288,11 @@ var LayerGame = (function(){
 			this.addChild(this.buxLabel, 2);
 		},
 		
-//
-// ###  LayerGame.createActionButtons
-//
-// Create the buttons for drink, give, buy, sell, etc.
-//
+///
+/// ###  LayerGame.createActionButtons
+///
+/// Create the buttons for drink, give, buy, sell, etc.
+///
 		createActionButtons: function() {
 			var pos = Game.centralize(-120, 70),
 				ySpacing = Game.scale(115),
@@ -320,11 +323,11 @@ var LayerGame = (function(){
 			this.enableActionButtons();
 		},
 
-//
-// ###  LayerGame.createPurchaseButtons
-//
-// Create the buttons for purchasing more bux.
-//
+///
+/// ###  LayerGame.createPurchaseButtons
+///
+/// Create the buttons for purchasing more bux.
+///
 		createPurchaseButtons: function() {
 			var pos = Game.centralize(-130, -30),
 				item,
@@ -350,11 +353,11 @@ var LayerGame = (function(){
 				"medium_bux_pack.png");
 		},
 		
-//
-// ###  LayerGame.createExchangeItems
-//
-// Create the labels and sprites for an exchange.
-//
+///
+/// ###  LayerGame.createExchangeItems
+///
+/// Create the labels and sprites for an exchange.
+///
 		createExchangeItems: function(verb) {
 			var self = this,
 				label,
@@ -439,11 +442,11 @@ var LayerGame = (function(){
 			this.schedule(function(){self.finishExchange();}, 5.0, 0);
 		},
 		
-//
-// ###  LayerGame.createLemonadeGiver
-//
-// Create the UI for giving lemonade to a friend.
-//
+///
+/// ###  LayerGame.createLemonadeGiver
+///
+/// Create the UI for giving lemonade to a friend.
+///
 		createLemonadeGiver: function() {
 			Game.getSocialPlugin().showUI({
 				method: "apprequests",
@@ -453,11 +456,11 @@ var LayerGame = (function(){
 			});
 		},
 		
-//
-// ###  LayerGame.finishExchange
-//
-// Finish the exchange.
-//
+///
+/// ###  LayerGame.finishExchange
+///
+/// Finish the exchange.
+///
 		finishExchange: function() {
 			var self = this;
 			
@@ -485,11 +488,11 @@ var LayerGame = (function(){
 			}, 4.0, 0);
 		},
 		
-//
-// ###  LayerGame.startDrinkingLemonade
-//
-// Start drinking a lemonade.
-//
+///
+/// ###  LayerGame.startDrinkingLemonade
+///
+/// Start drinking a lemonade.
+///
 		startDrinkingLemonade: function() {
 			var lemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
 			if (lemonades <= 0) {
@@ -500,11 +503,11 @@ var LayerGame = (function(){
 			this.slideGlass();
 		},
 		
-//
-// ###  LayerGame.slideGlass
-//
-// Slide the lemonade glass into the scene.
-//
+///
+/// ###  LayerGame.slideGlass
+///
+/// Slide the lemonade glass into the scene.
+///
 		slideGlass: function() {
 			var self = this,
 				glassSize,
@@ -541,11 +544,11 @@ var LayerGame = (function(){
 			this.schedule(function(){self.drinkLemonade();}, 1.0, 0);
 		},
 		
-//
-// ###  LayerGame.slideIn
-//
-// Run the actions to make a node look like it is sliding into the scene.
-//
+///
+/// ###  LayerGame.slideIn
+///
+/// Run the actions to make a node look like it is sliding into the scene.
+///
 		slideIn: function(node) {
 			var winSize = Game.getWinSize(),
 				movement = cc.p(-winSize.width, 0);
@@ -558,11 +561,11 @@ var LayerGame = (function(){
 			));
 		},
 		
-//
-// ###  LayerGame.drinkLemonade
-//
-// Drink the lemonade.
-//
+///
+/// ###  LayerGame.drinkLemonade
+///
+/// Drink the lemonade.
+///
 		drinkLemonade: function() {
 			var self = this,
 				winSize = Game.getWinSize();
@@ -577,11 +580,11 @@ var LayerGame = (function(){
 			this.schedule(function(){self.drinkingLemonade();}, 1.0, 0);
 		},
 		
-//
-// ###  LayerGame.drinkingLemonade
-//
-// Continue drinking the lemonade.
-//
+///
+/// ###  LayerGame.drinkingLemonade
+///
+/// Continue drinking the lemonade.
+///
 		drinkingLemonade: function() {
 			var self = this,
 				winSize = Game.getWinSize(),
@@ -625,11 +628,11 @@ var LayerGame = (function(){
 			this.drinkCount += 1;
 		},
 		
-//
-// ###  LayerGame.smashGlass
-//
-// Smash the empty lemonade glass.
-//
+///
+/// ###  LayerGame.smashGlass
+///
+/// Smash the empty lemonade glass.
+///
 		smashGlass: function() {
 			var self = this,
 				total = Game.config["total-glass-breaking-sounds"];
@@ -646,11 +649,11 @@ var LayerGame = (function(){
 			this.breakCount = (this.breakCount + 1) % total;
 		},
 		
-//
-// ###  LayerGame.viewAdvertisement
-//
-// View an advertisement.
-//
+///
+/// ###  LayerGame.viewAdvertisement
+///
+/// View an advertisement.
+///
 		viewAdvertisement: function() {
 			Game.getAdsPlugin().showAds({
 				type: plugin.AdsType.FullScreenAd,
@@ -659,11 +662,11 @@ var LayerGame = (function(){
 			});
 		},
 		
-//
-// ###  LayerGame.animateDrink
-//
-// Animate drinking the lemonade. The glass will go from full to empty.
-//
+///
+/// ###  LayerGame.animateDrink
+///
+/// Animate drinking the lemonade. The glass will go from full to empty.
+///
 		animateDrink: function(delta) {
 			var originalRect = this._originalLemonadeRect,
 				originalPos = this._originalLemonadePos,
@@ -697,11 +700,11 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.animateCurrencies
-//
-// Animate adding or subtracting currencies.
-//
+///
+/// ###  LayerGame.animateCurrencies
+///
+/// Animate adding or subtracting currencies.
+///
 		animateCurrencies: function() {
 			var sprite,
 				bux = parseInt(this.buxLabel.getString()),
@@ -735,11 +738,11 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.animateCurrencyAdd
-//
-// Animate adding an amount to a certain currency.
-//
+///
+/// ###  LayerGame.animateCurrencyAdd
+///
+/// Animate adding an amount to a certain currency.
+///
 		animateCurrencyAdd: function(destNode, filename) {
 			var angle = cc.degreesToRadians(Game.rand(180)),
 				radius = Game.scale(300),
@@ -765,11 +768,11 @@ var LayerGame = (function(){
 			this.addChild(sprite, 10);
 		},
 		
-//
-// ###  LayerGame.showTouchArea
-//
-// Animate the given position as if being clicked or tapped.
-//
+///
+/// ###  LayerGame.showTouchArea
+///
+/// Animate the given position as if being clicked or tapped.
+///
 		showTouchArea: function(pos) {
 			var circle;
 			
@@ -795,11 +798,11 @@ var LayerGame = (function(){
 			this.addChild(circle, 10);
 		},
 		
-//
-// ###  LayerGame.addCurrencies
-//
-// Add the given currency amount to the player's inventory.
-//
+///
+/// ###  LayerGame.addCurrencies
+///
+/// Add the given currency amount to the player's inventory.
+///
 		addCurrencies: function(lemonades, bux) {
 			lemonades = parseInt(lemonades);
 			bux = parseInt(bux);
@@ -815,11 +818,11 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.getFriendName
-//
-// Return a random friend's name.
-//
+///
+/// ###  LayerGame.getFriendName
+///
+/// Return a random friend's name.
+///
 		getFriendName: function(id) {
 			var friends;
 			if (id && id > 0) {
@@ -833,21 +836,21 @@ var LayerGame = (function(){
 			return "Bruce Lee";
 		},
 		
-//
-// ###  LayerGame.setRateIconPos
-//
-// Set the position of the exchange rate icon.
-//
+///
+/// ###  LayerGame.setRateIconPos
+///
+/// Set the position of the exchange rate icon.
+///
 		setRateIconPos: function() {
 			this.rateIcon.x = this.rateLabel.x + this.rateLabel.width +
 				Game.scale(-5);
 		},
 		
-//
-// ###  LayerGame.menuButtonCallback
-//
-// Callback for when a button is clicked. Determines which button was clicked by tag.
-//
+///
+/// ###  LayerGame.menuButtonCallback
+///
+/// Callback for when a button is clicked. Determines which button was clicked by tag.
+///
 		menuButtonCallback: function(sender) {
 			var button,
 				self = this,
@@ -907,21 +910,21 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.onEnter
-//
-// Called when the layer enters the scene. Updates the exchange rate.
-//
+///
+/// ###  LayerGame.onEnter
+///
+/// Called when the layer enters the scene. Updates the exchange rate.
+///
 		onEnter: function() {
 			this._super();
 			Game.requestUrl("api/exchange-rate", this.onGetExchangeRate);
 		},
 		
-//
-// ###  LayerGame.onGetExchangeRate
-//
-// Called when the exchange rate is updated.
-//
+///
+/// ###  LayerGame.onGetExchangeRate
+///
+/// Called when the exchange rate is updated.
+///
 		onGetExchangeRate: function(response) {
 			var scene = cc.director.getRunningScene(),
 				multiplier = 100,
@@ -952,21 +955,21 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.onPaymentComplete
-//
-// Called when a payment is completed.
-//
+///
+/// ###  LayerGame.onPaymentComplete
+///
+/// Called when a payment is completed.
+///
 		onPaymentComplete: function() {
 			this.removePurchaseButtons();
 			this.createActionButtons();
 		},
 
-//
-// ###  LayerGame.onAdDismissed
-//
-// Called when the advertisement is dismissed.
-//
+///
+/// ###  LayerGame.onAdDismissed
+///
+/// Called when the advertisement is dismissed.
+///
 		onAdDismissed: function(success){
 			if (typeof success === "undefined" || success === true) {
 				this.addCurrencies(0, parseInt(this.exchangeRate * .5));
@@ -975,20 +978,20 @@ var LayerGame = (function(){
 			}
 		},
 
-//
-// ###  LayerGame.onGetMyPlayerName
-//
-// Called when the player's name is retrieved.
-//
+///
+/// ###  LayerGame.onGetMyPlayerName
+///
+/// Called when the player's name is retrieved.
+///
 		onGetMyPlayerName: function(name) {
 			this.playerNameLabel.setString(name + " ");
 		},
 		
-//
-// ###  LayerGame.onCurrencyUpdate
-//
-// Called when a currency amount is updated.
-//
+///
+/// ###  LayerGame.onCurrencyUpdate
+///
+/// Called when a currency amount is updated.
+///
 		onCurrencyUpdate: function() {
 			var self = this,
 				numAnimations,
@@ -1028,11 +1031,11 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.onSocialUIResponse
-//
-// Called when the social UI has completed.
-//
+///
+/// ###  LayerGame.onSocialUIResponse
+///
+/// Called when the social UI has completed.
+///
 		onSocialUIResponse: function(response) {
 			var i,
 				len;
@@ -1051,11 +1054,11 @@ var LayerGame = (function(){
 			this.enableActionButtons();
 		},
 
-//
-// ###  LayerGame.onPlayerImageLoaded
-//
-// Called when the player image has finished loading.
-//
+///
+/// ###  LayerGame.onPlayerImageLoaded
+///
+/// Called when the player image has finished loading.
+///
 		onPlayerImageLoaded: function(id, url) {
 			var sprite;
 			if (id === "me") {
@@ -1065,11 +1068,11 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.enableButton
-//
-// Enables or disables a button by the given tag.
-//
+///
+/// ###  LayerGame.enableButton
+///
+/// Enables or disables a button by the given tag.
+///
 		enableButton: function(tag, enabled) {
 			var button = this.menu.getChildByTag(tag);
 			if (button) {
@@ -1077,11 +1080,11 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.enableActionButtons
-//
-// Automatically enables or disables all action buttons.
-//
+///
+/// ###  LayerGame.enableActionButtons
+///
+/// Automatically enables or disables all action buttons.
+///
 		enableActionButtons: function() {
 			var numBux = Soomla.storeInventory.getItemBalance("currency_bux"),
 				numLemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
@@ -1094,11 +1097,11 @@ var LayerGame = (function(){
 			this.enableButton(TAG_PURCHASE_BUX, true);
 		},
 		
-//
-// ###  LayerGame.removeButtons
-//
-// Remove buttons with the given tags. `tags` is an array.
-//
+///
+/// ###  LayerGame.removeButtons
+///
+/// Remove buttons with the given tags. `tags` is an array.
+///
 		removeButtons: function(tags) {
 			var i,
 				button;
@@ -1110,11 +1113,11 @@ var LayerGame = (function(){
 			}
 		},
 		
-//
-// ###  LayerGame.removeActionButtons
-//
-// Remove the game menu items.
-//
+///
+/// ###  LayerGame.removeActionButtons
+///
+/// Remove the game menu items.
+///
 		removeActionButtons: function() {
 			this.removeButtons([
 				TAG_DRINK_LEMONADE,
@@ -1126,11 +1129,11 @@ var LayerGame = (function(){
 			]);
 		},
 		
-//
-// ###  LayerGame.removePurchaseButtons
-//
-// Remove the purchase menu items.
-//
+///
+/// ###  LayerGame.removePurchaseButtons
+///
+/// Remove the purchase menu items.
+///
 		removePurchaseButtons: function() {
 			this.removeButtons([
 				TAG_SMALL_BUX_PACK,

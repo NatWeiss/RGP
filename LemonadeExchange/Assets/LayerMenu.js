@@ -1,13 +1,16 @@
+///
+/// > See the `LICENSE` file for the license governing this code.
+///
 
-//
-// The layer which runs the main menu. Provides buttons to play, login or logout, enable or disable sound and enable or disable fullscreen.
-//
+///
+/// The layer which runs the main menu. Provides buttons to play, login or logout, enable or disable sound and enable or disable fullscreen.
+///
 
-//
-// ###  LayerMenu
-//
-// Uses the module pattern to define some private variables. Returns a constructor.
-//
+///
+/// ###  LayerMenu
+///
+/// Uses the module pattern to define some private variables. Returns a constructor.
+///
 var LayerMenu = (function(){
 
 	var TAG_PLAY_RESUME = 0,
@@ -16,11 +19,11 @@ var LayerMenu = (function(){
 		TAG_TOGGLE_FULLSCREEN = 3,
 		TAG_INFO = 4;
 
-//
-// ###  Public
-//
-// Here begins the public `LayerMenu` class.
-//
+///
+/// ###  Public
+///
+/// Here begins the public `LayerMenu` class.
+///
 	return cc.Layer.extend({
 		songNumber: 0,
 		logo: null,
@@ -32,11 +35,11 @@ var LayerMenu = (function(){
 		buttonFullscreen: null,
 		buttonMinimize: null,
 
-//
-// ###  LayerMenu.init
-//
-// Setup the sprites, buttons, etc. Start animations. Register for events.
-//
+///
+/// ###  LayerMenu.init
+///
+/// Setup the sprites, buttons, etc. Start animations. Register for events.
+///
 		init: function(canResume) {
 			var self = this,
 				winSize = Game.getWinSize(),
@@ -160,11 +163,11 @@ var LayerMenu = (function(){
 			return true;
 		},
 		
-//
-// ###  LayerMenu.menuButtonCallback
-//
-// Callback for when a button is clicked. Determines which button was clicked by tag.
-//
+///
+/// ###  LayerMenu.menuButtonCallback
+///
+/// Callback for when a button is clicked. Determines which button was clicked by tag.
+///
 		menuButtonCallback: function(sender) {
 			var self = this,
 				tag = sender.getTag(),
@@ -204,11 +207,11 @@ var LayerMenu = (function(){
 			}
 		},
 
-//
-// ###  LayerMenu.onGetLoginStatus
-//
-// Called when the login status is obtained. Sets the visibility of login and logout buttons.
-//
+///
+/// ###  LayerMenu.onGetLoginStatus
+///
+/// Called when the login status is obtained. Sets the visibility of login and logout buttons.
+///
 		onGetLoginStatus: function(loggedIn) {
 			this.buttonLogin.setVisible(!loggedIn);
 			this.buttonLogout.setVisible(loggedIn);
@@ -216,11 +219,11 @@ var LayerMenu = (function(){
 			this.buttonLogout.setEnabled(true);
 		},
 
-//
-// ###  LayerMenu.onWindowSizeChanged
-//
-// Called when the window size changes or fullscreen mode is enabled / disabled.
-//
+///
+/// ###  LayerMenu.onWindowSizeChanged
+///
+/// Called when the window size changes or fullscreen mode is enabled / disabled.
+///
 		onWindowSizeChanged: function() {
 			this.buttonFullscreen.setVisible(!Game.isFullscreenEnabled());
 			this.buttonMinimize.setVisible(Game.isFullscreenEnabled());

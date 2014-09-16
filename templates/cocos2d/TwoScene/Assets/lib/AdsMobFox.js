@@ -1,33 +1,31 @@
-//
-//  Created using [RapidGame](http://wizardfu.com/rapidgame).
-//  See the `LICENSE` file for the license governing this code.
-//  Developed by Nat Weiss.
-//
+///
+/// > See the `LICENSE` file for the license governing this code.
+///
 
-//
-// Implements the MobFox advertisements plugin for HTML5 clients. Native clients will supercede this by having already defined `plugin.AdsMobFox` (see `src/mobfox`).
-//
-// Conforms to the `InterfaceAds` protocol. Loaded by `pluginx`.
-//
-// Uses the module pattern. The object `module` will contain all private variables used by the plugin. Public methods will be returned by the module and accessible via the `plugin.AdsMobFox` constructor.
-//
+///
+/// Implements the MobFox advertisements plugin for HTML5 clients. Native clients will supercede this by having already defined `plugin.AdsMobFox` (see `src/mobfox`).
+///
+/// Conforms to the `InterfaceAds` protocol. Loaded by `pluginx`.
+///
+/// Uses the module pattern. The object `module` will contain all private variables used by the plugin. Public methods will be returned by the module and accessible via the `plugin.AdsMobFox` constructor.
+///
 var plugin = plugin || {};
 
-//
-// ###  AdsType
-//
-// Types of advertisements to be dislayed.
-//
+///
+/// ###  AdsType
+///
+/// Types of advertisements to be dislayed.
+///
 plugin.AdsType = {
 	BannerAd: 0,
 	FullScreenAd: 1
 };
 
-//
-// ###  AdsPos
-//
-// Positions for advertisements to be dislayed.
-//
+///
+/// ###  AdsPos
+///
+/// Positions for advertisements to be dislayed.
+///
 plugin.AdsPos = {
 	Center: 0,
 	Top: 1,
@@ -38,11 +36,11 @@ plugin.AdsPos = {
 	BottomRight: 6
 };
 
-//
-// ###  module
-//
-// Begin the module pattern.
-//
+///
+/// ###  module
+///
+/// Begin the module pattern.
+///
 if (typeof plugin.AdsMobFox === "undefined") {
 
 	plugin.AdsMobFox = (function(){
@@ -56,22 +54,22 @@ if (typeof plugin.AdsMobFox === "undefined") {
 				doShowAds: null
 			};
 
-//
-// ###  module.log
-//
-// Logs the given message to the console if the module has debug mode enabled. Log messages are prefixed with the module's `logPrefix`.
-//
+///
+/// ###  module.log
+///
+/// Logs the given message to the console if the module has debug mode enabled. Log messages are prefixed with the module's `logPrefix`.
+///
 		module.log = function(msg) {
 			if (module.debug) {
 				cc.log(logPrefix + msg);
 			}
 		};
 		
-//
-// ###  module.getIPAddress
-//
-// Requests and stores the client's IP address and geo data.
-//
+///
+/// ###  module.getIPAddress
+///
+/// Requests and stores the client's IP address and geo data.
+///
 		module.getIPAddress = function() {
 			Game.requestUrl("//api.hostip.info/get_json.php?position=true",
 				function(response, status){
@@ -92,11 +90,11 @@ if (typeof plugin.AdsMobFox === "undefined") {
 			);
 		};
 
-//
-// ###  module.showAds
-//
-// Shows an advertisement given the info object. Uses [corsproxy.com](http://www.cocos2d-x.org/forums/19/topics/38739) to prevent browser warnings.
-//
+///
+/// ###  module.showAds
+///
+/// Shows an advertisement given the info object. Uses [corsproxy.com](http://www.cocos2d-x.org/forums/19/topics/38739) to prevent browser warnings.
+///
 		module.showAds = function(infoObj) {
 			var i,
 				tries = 0,
@@ -253,11 +251,11 @@ if (typeof plugin.AdsMobFox === "undefined") {
 			requestUrl();
 		};
 
-//
-// ###  module.showImage
-//
-// Displays the given advertisement image URL with given parameters.
-//
+///
+/// ###  module.showImage
+///
+/// Displays the given advertisement image URL with given parameters.
+///
 		module.showImage = function(imageUrl, typeEnum, sizeEnum, posEnum) {
 			var texture,
 				sprite,
@@ -381,11 +379,11 @@ if (typeof plugin.AdsMobFox === "undefined") {
 			}
 		};
 
-//
-// ###  module.hideAds
-//
-// Hides the current advertisement. Safe to be called if there is no advertisement.
-//
+///
+/// ###  module.hideAds
+///
+/// Hides the current advertisement. Safe to be called if there is no advertisement.
+///
 		module.hideAds = function() {
 			if (module.layer) {
 				module.log("Hiding ads, layer: " + module.layer);
@@ -401,11 +399,11 @@ if (typeof plugin.AdsMobFox === "undefined") {
 			}
 		};
 
-//
-// ###  module.clickAdCallback
-//
-// Callback used when the advertisement is clicked.
-//
+///
+/// ###  module.clickAdCallback
+///
+/// Callback used when the advertisement is clicked.
+///
 		module.clickAdCallback = function(menuItem) {
 			module.log("Clicked ad, visiting: " + module.adUrl);
 			if (Game.isFullscreenEnabled()) {
@@ -417,96 +415,96 @@ if (typeof plugin.AdsMobFox === "undefined") {
 			module.closeAdCallback();
 		};
 		
-//
-// ###  module.closeAdCallback
-//
-// Callback used when the advertisement is closed.
-//
+///
+/// ###  module.closeAdCallback
+///
+/// Callback used when the advertisement is closed.
+///
 		module.closeAdCallback = function(menuItem) {
 			module.hideAds();
 			Game.callRunningLayer("onAdDismissed");
 		};
 		
-//
-// ###  Public Methods
-//
-// Here begins the public methods accessible via creating a new `plugin.AdsMobFox`.
-//
+///
+/// ###  Public Methods
+///
+/// Here begins the public methods accessible via creating a new `plugin.AdsMobFox`.
+///
 		return cc.Class.extend({
 		
 			init: function(){
 			},
 
-//
-// ###  AdsMobFox.configDeveloperInfo
-//
-// Configures the plugin with the given developer info object.
-//
+///
+/// ###  AdsMobFox.configDeveloperInfo
+///
+/// Configures the plugin with the given developer info object.
+///
 			configDeveloperInfo: function(devInfo) {
 				module.devInfo = devInfo;
 				module.getIPAddress();
 				module.log("Set API key to: " + module.devInfo.apiKey);
 			},
 			
-//
-// ###  AdsMobFox.showAds
-//
-// Shows an advertisement given the info object. Properties of the info object are `type`, `size` and `position` which are all enums. See `plugin.AdsType` and `plugin.AdsPos`.
-//
+///
+/// ###  AdsMobFox.showAds
+///
+/// Shows an advertisement given the info object. Properties of the info object are `type`, `size` and `position` which are all enums. See `plugin.AdsType` and `plugin.AdsPos`.
+///
 			showAds: function(infoObj) {
 				module.showAds(infoObj);
 			},
 
-//
-// ###  AdsMobFox.hideAds
-//
-// Hides the current advertisement. Safe to be called even if there is no advertisement.
-//
+///
+/// ###  AdsMobFox.hideAds
+///
+/// Hides the current advertisement. Safe to be called even if there is no advertisement.
+///
 			hideAds: function(infoObj) {
 				module.hideAds();
 			},
 
-//
-// ###  AdsMobFox.queryPoints
-//
-// Unused.
-//
+///
+/// ###  AdsMobFox.queryPoints
+///
+/// Unused.
+///
 			queryPoints: function() {
 				module.log("Has no points API");
 			},
 
-//
-// ###  AdsMobFox.spendPoints
-//
-// Unused.
-//
+///
+/// ###  AdsMobFox.spendPoints
+///
+/// Unused.
+///
 			spendPoints: function(points) {
 				module.log("Has no points API");
 			},
 
-//
-// ###  AdsMobFox.setDebugMode
-//
-// Enables or disables debug mode. In debug mode, messages are logged to the console.
-//
+///
+/// ###  AdsMobFox.setDebugMode
+///
+/// Enables or disables debug mode. In debug mode, messages are logged to the console.
+///
 			setDebugMode: function(debug) {
 				module.debug = (debug ? true : false);
 			},
 			
-//
-// ###  AdsMobFox.getSDKVersion
-//
-// Returns the SDK version.
-//
+///
+/// ###  AdsMobFox.getSDKVersion
+///
+/// Returns the SDK version.
+///
 			getSDKVersion: function() {
 				return "unknown";
 			},
 
-//
-// ###  AdsMobFox.getPluginVersion
-//
-// Returns the plugin version.
-//
+///
+/// ###  AdsMobFox.getPluginVersion
+///
+/// Returns the plugin version.
+///
 			getPluginVersion: function() {
 				return plugin.Version;
 			}
