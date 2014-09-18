@@ -118,8 +118,7 @@ rg:
 	cd templates/unity/TwoScene && make clean
 	cd templates/titanium/TwoScene && make clean
 	rm -f ${dest}templates/cocos2d/TwoScene/lib
-	#rm -f ${dest}templates/cocos2d/HelloWorld/lib
-	rm -f ${dest}templates/cocos2d/BrickBreaker/lib
+	rm -rf ${dest}templates
 	cp -R -P templates ${dest}
 	#rm -rf ${dest}templates/cocos2d/HelloWorld
 	rm -f ${dest}templates/cocos2d/*/lib #*/
@@ -155,9 +154,12 @@ rg:
 	rm ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/AdsMobFox.java
 	rm ${dest}templates/cocos2d/TwoScene/Projects/android/src/org/cocos2dx/javascript/Facebook.java
 	cp README.md README.litcoffee
-	mv ${dest}templates/cocos2d/TwoScene/Server/server.js ${dest}templates/cocos2d/TwoScene/Server/Server.js
+	rm -rf ${dest}docs
+	#mv ${dest}templates/cocos2d/TwoScene/Server/server.js ${dest}templates/cocos2d/TwoScene/Server/Server.js
 	docco -o ${dest}docs -c rez/docco/docco.css -t rez/docco/docco.jst -l linear README.litcoffee ${dest}templates/cocos2d/TwoScene/Assets/lib/Game.js ${dest}templates/cocos2d/TwoScene/Assets/*.js ${dest}templates/cocos2d/TwoScene/Server/Server.js #*/
-	mv ${dest}templates/cocos2d/TwoScene/Server/Server.js ${dest}templates/cocos2d/TwoScene/Server/server.js
+	sed -i "" 's/README.litcoffee/README.md/g' ${dest}docs/*.html
+	#mv ${dest}templates/cocos2d/TwoScene/Server/Server.js ${dest}templates/cocos2d/TwoScene/Server/server.js
+	mv ${dest}docs/server.html ${dest}docs/Server.html
 	cp -r rez/docco/public ${dest}docs/
 	cp -r rez/docco/index.html ${dest}docs/
 	rm README.litcoffee
@@ -186,6 +188,7 @@ docco:
 	docco -o docs -l linear -c rez/docco/docco.css -t rez/docco/docco.jst README.litcoffee LemonadeExchange/Server/server.js LemonadeExchange/Assets/*.js LemonadeExchange/Assets/lib/Game.js LemonadeExchange/Assets/lib/Pro.js LemonadeExchange/Assets/lib/Loader.js LemonadeExchange/Assets/lib/AdsMobFox.js LemonadeExchange/Assets/lib/Facebook.js
 	cp -r rez/docco/public docs/
 	sed -i "" 's/README.litcoffee/README.md/g' docs/*.html
+	mv docs/server.html docs/Server.html
 	rm README.litcoffee
 	docco -o rez/docs -l linear -c rez/docco/docco.css -t rez/docco/docco.jst rez/README-demo.md
 	mv rez/docs/README-demo.html rez/
