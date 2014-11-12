@@ -22,24 +22,30 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+var PBP;
+if(CSParseBinary && window["dcodeIO"] && window["dcodeIO"]["ProtoBuf"]){
+    PBP = dcodeIO["ProtoBuf"]["loadProto"](CSParseBinary)["build"]()["protocolbuffers"];
+}else{
+    PBP = null;
+}
 
 (function(){
     var factoryCreate = ccs.objectFactory;
 
-    factoryCreate.registerType({_className:"ButtonReader", _fun: ccs.ButtonReader});
-    factoryCreate.registerType({_className: "CheckBoxReader", _fun: ccs.CheckBoxReader});
-    factoryCreate.registerType({_className: "SliderReader", _fun: ccs.SliderReader});
-    factoryCreate.registerType({_className: "ImageViewReader", _fun: ccs.ImageViewReader});
-    factoryCreate.registerType({_className: "LoadingBarReader", _fun: ccs.LoadingBarReader});
-    factoryCreate.registerType({_className: "TextAtlasReader", _fun: ccs.LabelAtlasReader});
-    factoryCreate.registerType({_className: "TextReader", _fun: ccs.LabelReader});
-    factoryCreate.registerType({_className: "TextBMFontReader", _fun: ccs.LabelBMFontReader});
-    factoryCreate.registerType({_className: "TextFieldReader", _fun: ccs.TextFieldReader});
-    factoryCreate.registerType({_className: "LayoutReader", _fun: ccs.LayoutReader});
-    factoryCreate.registerType({_className: "PageViewReader", _fun: ccs.PageViewReader});
-    factoryCreate.registerType({_className: "ScrollViewReader", _fun: ccs.ScrollViewReader});
-    factoryCreate.registerType({_className: "ListViewReader", _fun: ccs.ListViewReader});
-    factoryCreate.registerType({_className: "WidgetReader", _fun: ccs.WidgetReader});
+    factoryCreate.registerType({_className:"ButtonReader", _fun: ccs.buttonReader});
+    factoryCreate.registerType({_className: "CheckBoxReader", _fun: ccs.checkBoxReader});
+    factoryCreate.registerType({_className: "SliderReader", _fun: ccs.sliderReader});
+    factoryCreate.registerType({_className: "ImageViewReader", _fun: ccs.imageViewReader});
+    factoryCreate.registerType({_className: "LoadingBarReader", _fun: ccs.loadingBarReader});
+    factoryCreate.registerType({_className: "TextAtlasReader", _fun: ccs.labelAtlasReader});
+    factoryCreate.registerType({_className: "TextReader", _fun: ccs.labelReader});
+    factoryCreate.registerType({_className: "TextBMFontReader", _fun: ccs.labelBMFontReader});
+    factoryCreate.registerType({_className: "TextFieldReader", _fun: ccs.textFieldReader});
+    factoryCreate.registerType({_className: "LayoutReader", _fun: ccs.layoutReader});
+    factoryCreate.registerType({_className: "PageViewReader", _fun: ccs.pageViewReader});
+    factoryCreate.registerType({_className: "ScrollViewReader", _fun: ccs.scrollViewReader});
+    factoryCreate.registerType({_className: "ListViewReader", _fun: ccs.listViewReader});
+    factoryCreate.registerType({_className: "WidgetReader", _fun: ccs.widgetReader});
 
     factoryCreate.registerType({_className: "Button", _fun: ccui.Button});
     factoryCreate.registerType({_className: "CheckBox", _fun: ccui.CheckBox});
@@ -58,8 +64,8 @@
 })();
 
 /**
- * Base object for ccs.uiReader
- * @namespace
+ * ccs.uiReader is a singleton object which is the reader for Cocos Studio ui.
+ * @class
  * @name ccs.uiReader
  */
 ccs.uiReader = /** @lends ccs.uiReader# */{
@@ -70,8 +76,8 @@ ccs.uiReader = /** @lends ccs.uiReader# */{
     _mapParseSelector: {},
 
     /**
-     * get version
-     * @param {String} str
+     * Gets the version number by version string.
+     * @param {String} str version string.
      * @returns {Number}
      */
     getVersionInteger: function (str) {
@@ -95,12 +101,7 @@ ccs.uiReader = /** @lends ccs.uiReader# */{
         strVersion = strVersion.substr(pos + 1, versionLength - 1);
 
         pos = strVersion.indexOf(".");
-        var s;
-        if (pos == -1) {
-            s = strVersion;
-        } else {
-            s = strVersion.substr(0, pos);
-        }
+        var s = (pos == -1) ? strVersion : strVersion.substr(0, pos);
 
         var it = parseInt(t);
         var ih = parseInt(h);
@@ -111,7 +112,7 @@ ccs.uiReader = /** @lends ccs.uiReader# */{
     },
 
     /**
-     * store file designSize
+     * stores the designSize of UI file.
      * @param {String} fileName
      * @param {cc.Size} size
      */
@@ -120,7 +121,7 @@ ccs.uiReader = /** @lends ccs.uiReader# */{
     },
 
     /**
-     *
+     * Gets the design size by filename.
      * @param {String} fileName
      * @returns {cc.Size}
      */
@@ -129,7 +130,7 @@ ccs.uiReader = /** @lends ccs.uiReader# */{
     },
 
     /**
-     *  create uiWidget from a josn file that exported by cocostudio UI editor
+     * Creates uiWidget from a json file that exported by cocostudio UI editor
      * @param {String} fileName
      * @returns {ccui.Widget}
      */
@@ -164,48 +165,91 @@ ccs.uiReader = /** @lends ccs.uiReader# */{
     },
 
     /**
-     * Clear data: Release all actions.
+     * Resets the states and clear the file design sizes.
      */
     clear: function () {
         this._filePath = "";
         this._olderVersion = false;
         this._fileDesignSizes = {};
     },
+
+    /**
+     * Registers class type and callback.
+     * @param {String} classType
+     * @param {ccs.objectFactory} ins
+     * @param {Object} object
+     * @param {function} callback
+     */
     registerTypeAndCallBack: function(classType, ins, object, callback){
         var factoryCreate = ccs.objectFactory;
         var t = new ccs.TInfo(classType, ins);
         factoryCreate.registerType(t);
 
-        if(object){
+        if(object)
             this._mapObject[classType] = object;
-        }
-        if(callback){
+        if(callback)
             this._mapParseSelector[classType] = callback;
-        }
     },
+
+    /**
+     * Returns the file path
+     * @returns {string}
+     */
     getFilePath: function(){
         return this._filePath;
     },
+
+    setFilePath: function(path){
+        this._filePath = path;
+    },
+
+    /**
+     * Returns the parsed object map.
+     * @returns {Object}
+     */
     getParseObjectMap: function(){
         return this._mapObject;
     },
+
+    /**
+     * Returns the parsed callback map.
+     * @returns {*}
+     */
     getParseCallBackMap: function(){
         return this._mapParseSelector;
     }
 };
 
-
-ccs.WidgetPropertiesReader = ccs.Class.extend({
+/**
+ * The base class of widget properties reader. It parse the foundation properties of widget.
+ * @class
+ * @extends ccs.Class
+ */
+ccs.WidgetPropertiesReader = ccs.Class.extend(/** @lends ccs.WidgetPropertiesReader# */{
     _filePath: "",
+
+    /**
+     * Create a widget object by json object.
+     * @param {Object} jsonDict
+     * @param {String} fullPath
+     * @param {String} fileName
+     */
     createWidget: function (jsonDict, fullPath, fileName) {
     },
+
+    /**
+     * Parses the widget properties.
+     * @param {Object} data
+     */
     widgetFromJsonDictionary: function (data) {
     },
-    createGUI: function(classname){
-        var name = this.getGUIClassName(classname);
+
+    _createGUI: function(className){
+        var name = this._getGUIClassName(className);
         return ccs.objectFactory.createObject(name);
     },
-    getGUIClassName: function(name){
+
+    _getGUIClassName: function(name){
         var convertedClassName = name;
         if (name == "Panel")
             convertedClassName = "Layout";
@@ -219,11 +263,14 @@ ccs.WidgetPropertiesReader = ccs.Class.extend({
             convertedClassName = "TextAtlas";
         else if (name == "LabelBMFont")
             convertedClassName = "TextBMFont";
+        else if (name == "Node")
+            convertedClassName = "Layout";
         return convertedClassName;
     },
-    getWidgetReaderClassName: function(classname){
+
+    _getWidgetReaderClassName: function(className){
         // create widget reader to parse properties of widget
-        var readerName = classname;
+        var readerName = className;
         if (readerName == "Panel")
             readerName = "Layout";
         else if (readerName == "TextArea")
@@ -239,9 +286,9 @@ ccs.WidgetPropertiesReader = ccs.Class.extend({
         readerName += "Reader";
         return readerName;
     },
-    getWidgetReaderClassNameFromWidget: function(widget){
-        var readerName;
 
+    _getWidgetReaderClassNameFromWidget: function(widget){
+        var readerName = "";
         // 1st., custom widget parse properties of parent widget with parent widget reader
         if (widget instanceof ccui.Button)
             readerName = "ButtonReader";
@@ -274,11 +321,25 @@ ccs.WidgetPropertiesReader = ccs.Class.extend({
 
         return readerName;
     },
-    createWidgetReaderProtocol: function(classname){
-        return ccs.objectFactory.createObject(classname);
+
+    _createWidgetReaderProtocol: function(className){
+        return ccs.objectFactory.createObject(className);
     }
 });
-ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
+
+/**
+ * The widget properties reader to parse Cocostudio exported file v0.3 -- v1.0
+ * @class
+ * @extends ccs.WidgetPropertiesReader
+ */
+ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend(/** @lends ccs.WidgetPropertiesReader0250# */{
+    /**
+     * Creates a widget by json object.
+     * @param {Object} jsonDict
+     * @param {string} fullPath
+     * @param {string} fileName
+     * @returns {*}
+     */
     createWidget: function (jsonDict, fullPath, fileName) {
         this._filePath = fullPath == "" ? fullPath : cc.path.join(fullPath, "/");
         var textures = jsonDict["textures"];
@@ -294,104 +355,94 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
             cc.log("Read design size error!");
             var winSize = cc.director.getWinSize();
             ccs.uiReader.storeFileDesignSize(fileName, winSize);
-        }
-        else {
+        } else
             ccs.uiReader.storeFileDesignSize(fileName, cc.size(fileDesignWidth, fileDesignHeight));
-        }
         var widgetTree = jsonDict["widgetTree"];
         var widget = this.widgetFromJsonDictionary(widgetTree);
 
         var size = widget.getContentSize();
-        if (size.width == 0 && size.height == 0) {
+        if (size.width == 0 && size.height == 0)
             widget.setSize(cc.size(fileDesignWidth, fileDesignHeight));
-        }
 
         var actions = jsonDict["animation"];
-        var rootWidget = widget;
-        ccs.actionManager.initWithDictionary(fileName, actions, rootWidget);
-
+        ccs.actionManager.initWithDictionary(fileName, actions, widget);
         widgetTree = null;
         actions = null;
         return widget;
     },
+
+    /**
+     * Creates a widget by json dictionary.
+     * @param {Object} data
+     * @returns {ccui.Widget}
+     */
     widgetFromJsonDictionary: function (data) {
         var widget = null;
         var classname = data["classname"];
         var uiOptions = data["options"];
         if (classname == "Button") {
-            widget = ccui.Button.create();
+            widget = new ccui.Button();
             this.setPropsForButtonFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "CheckBox") {
-            widget = ccui.CheckBox.create();
+        } else if (classname == "CheckBox") {
+            widget = new ccui.CheckBox();
             this.setPropsForCheckBoxFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "Label") {
-            widget = ccui.Text.create();
+        } else if (classname == "Label") {
+            widget = new ccui.Text();
             this.setPropsForLabelFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "LabelAtlas") {
-            widget = ccui.TextAtlas.create();
+        } else if (classname == "LabelAtlas") {
+            widget = new ccui.TextAtlas();
             this.setPropsForLabelAtlasFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "LoadingBar") {
-            widget = ccui.LoadingBar.create();
+        } else if (classname == "LoadingBar") {
+            widget = new ccui.LoadingBar();
             this.setPropsForLoadingBarFromJsonDictionary(widget, uiOptions);
         } else if (classname == "ScrollView") {
-            widget = ccui.ScrollView.create();
+            widget = new ccui.ScrollView();
             this.setPropsForScrollViewFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "TextArea") {
-            widget = ccui.Text.create();
+        } else if (classname == "TextArea") {
+            widget = new ccui.Text();
             this.setPropsForLabelFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "TextButton") {
-            widget = ccui.Button.create();
+        } else if (classname == "TextButton") {
+            widget = new ccui.Button();
             this.setPropsForButtonFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "TextField") {
-            widget = ccui.TextField.create();
+        } else if (classname == "TextField") {
+            widget = new ccui.TextField();
             this.setPropsForTextFieldFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "ImageView") {
-            widget = ccui.ImageView.create();
+        } else if (classname == "ImageView") {
+            widget = new ccui.ImageView();
             this.setPropsForImageViewFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "Panel") {
-            widget = ccui.Layout.create();
+        } else if (classname == "Panel") {
+            widget = new ccui.Layout();
             this.setPropsForLayoutFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "Slider") {
-            widget = ccui.Slider.create();
+        } else if (classname == "Slider") {
+            widget = new ccui.Slider();
             this.setPropsForSliderFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "LabelBMFont") {
-            widget = ccui.TextBMFont.create();
+        } else if (classname == "LabelBMFont") {
+            widget = new ccui.TextBMFont();
             this.setPropsForLabelBMFontFromJsonDictionary(widget, uiOptions);
-        }
-        else if (classname == "DragPanel") {
-            widget = ccui.ScrollView.create();
+        } else if (classname == "DragPanel") {
+            widget = new ccui.ScrollView();
             this.setPropsForScrollViewFromJsonDictionary(widget, uiOptions);
         }
         var children = data["children"];
         for (var i = 0; i < children.length; i++) {
             var subData = children[i];
             var child = this.widgetFromJsonDictionary(subData);
-            if (child) {
+            if (child)
                 widget.addChild(child);
-            }
             subData = null;
         }
-
         uiOptions = null;
         return widget;
     },
 
-
+    /**
+     * Sets widget's properties from json dictionary.
+     * @param {ccui.Widget} widget
+     * @param {Object} options the json dictionary.
+     */
     setPropsForWidgetFromJsonDictionary: function (widget, options) {
-        if (options["ignoreSize"] !== undefined) {
+        if (options["ignoreSize"] !== undefined)
             widget.ignoreContentAdaptWithSize(options["ignoreSize"]);
-        }
 
         var w = options["width"];
         var h = options["height"];
@@ -422,9 +473,22 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         var z = options["ZOrder"];
         widget.setLocalZOrder(z);
     },
+
+    /**
+     * Sets all widgets' properties from json dictionary.
+     */
     setPropsForAllWidgetFromJsonDictionary: function(){},
+
+    /**
+     * Sets all custom widget's properties from json dictionary.
+     */
     setPropsForAllCustomWidgetFromJsonDictionary: function(){},
 
+    /**
+     * Sets widget's color, anchor point, flipped properties from json object.
+     * @param {ccui.Widget} widget
+     * @param {Object} options json object.
+     */
     setColorPropsForWidgetFromJsonDictionary: function (widget, options) {
         if (options["opacity"] !== undefined) {
             widget.setOpacity(options["opacity"]);
@@ -442,6 +506,11 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         widget.setFlippedY(flipY);
     },
 
+    /**
+     * Sets ccui.Button's properties from json object.
+     * @param {ccui.Button} widget
+     * @param {Object} options
+     */
     setPropsForButtonFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var button = widget;
@@ -462,26 +531,21 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
             var cw = options["capInsetsWidth"];
             var ch = options["capInsetsHeight"];
 
-            if (useMergedTexture) {
+            if (useMergedTexture)
                 button.loadTextures(normalFileName, pressedFileName, disabledFileName, ccui.Widget.PLIST_TEXTURE);
-            }
-            else {
+            else
                 button.loadTextures(normalFileName_tp, pressedFileName_tp, disabledFileName_tp);
-            }
             //button.setCapInsets(cc.rect(cx, cy, cw, ch));
             if (options["scale9Width"] !== undefined && options["scale9Height"] !== undefined) {
                 var swf = options["scale9Width"];
                 var shf = options["scale9Height"];
                 button.setSize(cc.size(swf, shf));
             }
-        }
-        else {
-            if (useMergedTexture) {
+        } else {
+            if (useMergedTexture)
                 button.loadTextures(normalFileName, pressedFileName, disabledFileName, ccui.Widget.PLIST_TEXTURE);
-            }
-            else {
+            else
                 button.loadTextures(normalFileName_tp, pressedFileName_tp, disabledFileName_tp);
-            }
         }
         if (options["text"] !== undefined) {
             var text = options["text"] || "";
@@ -502,6 +566,11 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.CheckBox's properties from json object.
+     * @param {ccui.CheckBox} widget
+     * @param {Object} options
+     */
     setPropsForCheckBoxFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var checkBox = widget;
@@ -527,10 +596,15 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
             checkBox.loadTextures(backGroundFileName_tp, backGroundSelectedFileName_tp, frontCrossFileName_tp, backGroundDisabledFileName_tp, frontCrossDisabledFileName_tp);
         }
 
-        checkBox.setSelectedState(options["selectedState"] || false);
+        checkBox.setSelected(options["selectedState"] || false);
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.ImageView's properties from json object.
+     * @param {ccui.ImageView} widget
+     * @param {Object} options
+     */
     setPropsForImageViewFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
 
@@ -541,9 +615,8 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
 
         var tp_i = this._filePath;
         var imageFileName_tp = null;
-        if (imageFileName) {
+        if (imageFileName)
             imageFileName_tp = tp_i + imageFileName;
-        }
 
         var useMergedTexture = options["useMergedTexture"];
         if (scale9Enable) {
@@ -578,6 +651,11 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.Text's properties from json object.
+     * @param {ccui.Text} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForLabelFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var label = widget;
@@ -604,23 +682,34 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.TextAtlas' properties from json object.
+     * @param {ccui.TextAtlas} widget
+     * @param {Object} options
+     */
     setPropsForLabelAtlasFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var labelAtlas = widget;
-        var sv = (options["stringValue"] !== undefined);
-        var cmf = (options["charMapFile"] !== undefined);
-        var iw = (options["itemWidth"] !== undefined);
-        var ih = (options["itemHeight"] !== undefined);
-        var scm = (options["startCharMap"] !== undefined);
-        if (sv && cmf && iw && ih && scm && options["charMapFile"]) {
-            var cmft = options["charMapFile"];
-            var cmf_tp = this._filePath + cmft;
 
-            labelAtlas.setProperty(options["stringValue"], cmf_tp, options["itemWidth"], options["itemHeight"], options["startCharMap"]);
+        var cmft = options["charMapFileData"], svValue = options["stringValue"], iwValue = options["itemWidth"];
+        var ihValue = options["itemHeight"], scmValue = options["startCharMap"];
+        var sv = (svValue !== undefined);
+        var cmf = (cmft !== undefined);
+        var iw = (iwValue !== undefined);
+        var ih = (ihValue !== undefined);
+        var scm = (scmValue !== undefined);
+        if (sv && cmf && iw && ih && scm && cmft) {
+            var cmf_tp = this._filePath + cmft;
+            labelAtlas.setProperty(svValue, cmf_tp, iwValue, ihValue, scmValue);
         }
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.Layout's properties from json object.
+     * @param {ccui.Layout} widget
+     * @param {Object} options
+     */
     setPropsForLayoutFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var containerWidget = widget;
@@ -673,7 +762,11 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
-
+    /**
+     * Sets ccui.ScrollView's properties from json dictionary.
+     * @param {ccui.ScrollView} widget
+     * @param {Object} options json dictionary.
+     */
     setPropsForScrollViewFromJsonDictionary: function (widget, options) {
         this.setPropsForLayoutFromJsonDictionary(widget, options);
         var scrollView = widget;
@@ -686,6 +779,11 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets the container's properties from json dictionary.
+     * @param {ccui.Widget} widget
+     * @param {Object} options json dictionary.
+     */
     setPropsForContainerWidgetFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var containerWidget = widget;
@@ -696,8 +794,12 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.Slider's properties from json dictionary.
+     * @param {ccui.Slider} widget
+     * @param {Object} options json dictionary.
+     */
     setPropsForSliderFromJsonDictionary: function (widget, options) {
-
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var slider = widget;
 
@@ -712,19 +814,16 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
                 var imageFileName_tp = imageFileName ? this._filePath + imageFileName : null;
                 if (useMergedTexture) {
                     slider.loadBarTexture(imageFileName, ccui.Widget.PLIST_TEXTURE);
-                }
-                else {
+                } else {
                     slider.loadBarTexture(imageFileName_tp);
                 }
                 slider.setSize(cc.size(barLength, slider.getContentSize().height));
-            }
-            else {
+            } else {
                 var imageFileName = options["barFileName"];
                 var imageFileName_tp = imageFileName ? this._filePath + imageFileName : null;
                 if (useMergedTexture) {
                     slider.loadBarTexture(imageFileName, ccui.Widget.PLIST_TEXTURE);
-                }
-                else {
+                } else {
                     slider.loadBarTexture(imageFileName_tp);
                 }
             }
@@ -739,8 +838,7 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         var disabledFileName_tp = disabledFileName ? this._filePath + disabledFileName : null;
         if (useMergedTexture) {
             slider.loadSlidBallTextures(normalFileName, pressedFileName, disabledFileName, ccui.Widget.PLIST_TEXTURE);
-        }
-        else {
+        } else {
             slider.loadSlidBallTextures(normalFileName_tp, pressedFileName_tp, disabledFileName_tp);
         }
         slider.setPercent(options["percent"]);
@@ -749,13 +847,17 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         var imageFileName_tp = imageFileName ? this._filePath + imageFileName : null;
         if (useMergedTexture) {
             slider.loadProgressBarTexture(imageFileName, ccui.Widget.PLIST_TEXTURE);
-        }
-        else {
+        } else {
             slider.loadProgressBarTexture(imageFileName_tp);
         }
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.TextField's properties from json object.
+     * @param {ccui.TextField} widget
+     * @param {Object} options
+     */
     setPropsForTextAreaFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var textArea = widget;
@@ -781,6 +883,11 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.Button's text properties from json dictionary.
+     * @param {ccui.Button} widget
+     * @param {Object} options
+     */
     setPropsForTextButtonFromJsonDictionary: function (widget, options) {
         this.setPropsForButtonFromJsonDictionary(widget, options);
 
@@ -790,15 +897,18 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         var cgi = options["textColorG"] !== undefined ? options["textColorG"] : 255;
         var cbi = options["textColorB"] !== undefined ? options["textColorB"] : 255;
         textButton.setTitleColor(cc.color(cri, cgi, cbi));
-        if (options["fontSize"] !== undefined) {
+        if (options["fontSize"] !== undefined)
             textButton.setTitleFontSize(options["fontSize"]);
-        }
-        if (options["fontName"] !== undefined) {
+        if (options["fontName"] !== undefined)
             textButton.setTitleFontName(options["fontName"]);
-        }
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.TextField's properties from json dictionary.
+     * @param {ccui.TextField} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForTextFieldFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var textField = widget;
@@ -836,8 +946,12 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.LoadingBar's properties from json dictionary.
+     * @param {ccui.LoadingBar} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForLoadingBarFromJsonDictionary: function (widget, options) {
-
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var loadingBar = widget;
         var useMergedTexture = options["useMergedTexture"];
@@ -845,8 +959,7 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         var imageFileName_tp = imageFileName ? this._filePath + imageFileName : null;
         if (useMergedTexture) {
             loadingBar.loadTexture(imageFileName, ccui.Widget.PLIST_TEXTURE);
-        }
-        else {
+        } else {
             loadingBar.loadTexture(imageFileName_tp);
         }
         loadingBar.setDirection(options["direction"]);
@@ -854,14 +967,29 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.ListView's properties from json dictionary.
+     * @param {ccui.ListView} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForListViewFromJsonDictionary: function (widget, options) {
         this.setPropsForLayoutFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.PageView's properties from json dictionary.
+     * @param {ccui.PageView} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForPageViewFromJsonDictionary: function (widget, options) {
         this.setPropsForLayoutFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.TextBMFont's properties from json dictionary.
+     * @param {ccui.TextBMFont} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForLabelBMFontFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var labelBMFont = widget;
@@ -874,7 +1002,19 @@ ccs.WidgetPropertiesReader0250 = ccs.WidgetPropertiesReader.extend({
     }
 });
 
-ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
+/**
+ * The widget properties reader to parse Cocostudio exported file v1.0 higher.
+ * @class
+ * @extends ccs.WidgetPropertiesReader
+ */
+ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend(/** @lends ccs.WidgetPropertiesReader0300# */{
+    /**
+     * Creates widget by json object.
+     * @param {Object} jsonDict json dictionary
+     * @param {String} fullPath
+     * @param {String} fileName
+     * @returns {ccui.Widget}
+     */
     createWidget: function (jsonDict, fullPath, fileName) {
         this._filePath = fullPath == "" ? fullPath : cc.path.join(fullPath, "/");
         var textures = jsonDict["textures"];
@@ -906,13 +1046,26 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         actions = null;
         return widget;
     },
+
+    /**
+     * Sets widget's foundation properties from json dictionary.
+     * @param {Object} reader widget reader
+     * @param {ccui.Widget} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForAllWidgetFromJsonDictionary: function(reader, widget, options){
         if(reader && reader.setPropsFromJsonDictionary)
             reader.setPropsFromJsonDictionary(widget, options);
     },
+
+    /**
+     * Sets widget's custom properties from json dictionary
+     * @param {String} classType class type
+     * @param {ccui.Widget} widget
+     * @param {Object} customOptions
+     */
     setPropsForAllCustomWidgetFromJsonDictionary: function(classType, widget, customOptions){
         var guiReader = ccs.uiReader;
-
         var object_map = guiReader.getParseObjectMap();
         var object = object_map[classType];
 
@@ -920,29 +1073,27 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         var selector = selector_map[classType];
 
         if (object && selector)
-        {
-            selector(classType, widget, customOptions);
-        }
-
+            selector.call(object, classType, widget, customOptions);
     },
-    widgetFromJsonDictionary: function (data) {
 
+    /**
+     * Creates a widget from json dictionary.
+     * @param {Object} data json data
+     * @returns {ccui.Widget}
+     */
+    widgetFromJsonDictionary: function (data) {
         var classname = data["classname"];
         var uiOptions = data["options"];
-        var widget = this.createGUI(classname);
+        var widget = this._createGUI(classname);
 
-        var readerName = this.getWidgetReaderClassName(classname);
+        var readerName = this._getWidgetReaderClassName(classname);
+        var reader = this._createWidgetReaderProtocol(readerName);
 
-        var reader = this.createWidgetReaderProtocol(readerName);
-
-        if (reader)
-        {
+        if (reader){
             // widget parse with widget reader
             this.setPropsForAllWidgetFromJsonDictionary(reader, widget, uiOptions);
-        }
-        else
-        {
-            readerName = this.getWidgetReaderClassNameFromWidget(widget);
+        } else {
+            readerName = this._getWidgetReaderClassNameFromWidget(widget);
 
             reader = ccs.objectFactory.createObject(readerName);
 
@@ -964,21 +1115,13 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
             var child = this.widgetFromJsonDictionary(childrenItem[i]);
             if(child){
                 if(widget instanceof ccui.PageView)
-                {
                     widget.addPage(child);
-                }
-                else
-                {
-                    if(widget instanceof ccui.ListView)
-                    {
+                else {
+                    if(widget instanceof ccui.ListView){
                         widget.pushBackCustomItem(child);
-                    }
-                    else
-                    {
-                        if(!(widget instanceof ccui.Layout))
-                        {
-                            if(child.getPositionType() == ccui.Widget.POSITION_PERCENT)
-                            {
+                    } else {
+                        if(!(widget instanceof ccui.Layout)) {
+                            if(child.getPositionType() == ccui.Widget.POSITION_PERCENT) {
                                 var position = child.getPositionPercent();
                                 var anchor = widget.getAnchorPoint();
                                 child.setPositionPercent(cc.p(position.x + anchor.x, position.y + anchor.y));
@@ -994,15 +1137,19 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         return widget;
     },
 
-
+    /**
+     * Sets widget's foundation properties from json dictionary.
+     * @param {ccui.Widget} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForWidgetFromJsonDictionary: function (widget, options) {
         var name = options["name"];
         var widgetName = name ? name : "default";
         widget.setName(widgetName);
 
-        if (options["ignoreSize"] !== undefined) {
+        if (options["ignoreSize"] !== undefined)
             widget.ignoreContentAdaptWithSize(options["ignoreSize"]);
-        }
+
         widget.setSizeType(options["sizeType"]);
         widget.setPositionType(options["positionType"]);
 
@@ -1021,18 +1168,14 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         var y = options["y"];
         widget.setPosition(cc.p(x, y));
 
-        if (options["scaleX"] !== undefined) {
+        if (options["scaleX"] !== undefined)
             widget.setScaleX(options["scaleX"]);
-        }
-        if (options["scaleY"] !== undefined) {
+        if (options["scaleY"] !== undefined)
             widget.setScaleY(options["scaleY"]);
-        }
-        if (options["rotation"] !== undefined) {
+        if (options["rotation"] !== undefined)
             widget.setRotation(options["rotation"]);
-        }
-        if (options["visible"] !== undefined) {
+        if (options["visible"] !== undefined)
             widget.setVisible(options["visible"]);
-        }
 
         widget.setLocalZOrder(options["ZOrder"]);
         var layoutParameterDic = options["layoutParameter"];
@@ -1043,12 +1186,12 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
                 case 0:
                     break;
                 case 1:
-                    parameter = ccui.LinearLayoutParameter.create();
+                    parameter = new ccui.LinearLayoutParameter();
                     var gravity = layoutParameterDic["gravity"];
                     parameter.setGravity(gravity);
                     break;
                 case 2:
-                    parameter = ccui.RelativeLayoutParameter.create();
+                    parameter = new ccui.RelativeLayoutParameter();
                     var relativeName = layoutParameterDic["relativeName"];
                     parameter.setRelativeName(relativeName);
                     var relativeToName = layoutParameterDic["relativeToName"];
@@ -1067,6 +1210,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         }
     },
 
+    /**
+     * Sets widget's color, anchor point, flipped properties from json dictionary.
+     * @param {ccui.Widget} widget
+     * @param {Object} options json dictionary
+     */
     setColorPropsForWidgetFromJsonDictionary: function (widget, options) {
         if (options["opacity"] !== undefined) {
             widget.setOpacity(options["opacity"]);
@@ -1084,6 +1232,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         widget.setFlippedY(flipY);
     },
 
+    /**
+     * Sets ccui.Button's properties from json dictionary.
+     * @param {ccui.Button} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForButtonFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var button = widget;
@@ -1170,6 +1323,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.CheckBox's properties from json dictionary.
+     * @param {ccui.CheckBox} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForCheckBoxFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var checkBox = widget;
@@ -1263,6 +1421,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.ImageView's properties from json dictionary.
+     * @param {ccui.ImageView} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForImageViewFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
 
@@ -1310,6 +1473,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.Text's properties from json dictionary.
+     * @param {ccui.Text} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForLabelFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var label = widget;
@@ -1337,6 +1505,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.TextAtlas's properties from json dictionary.
+     * @param {ccui.TextAtlas} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForLabelAtlasFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var labelAtlas = widget;
@@ -1366,6 +1539,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.Layout's properties from json dictionary.
+     * @param {ccui.Layout} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForLayoutFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var panel = widget;
@@ -1427,7 +1605,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
-
+    /**
+     * Sets ccui.ScrollView's properties from json dictionary.
+     * @param {ccui.ScrollView} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForScrollViewFromJsonDictionary: function (widget, options) {
         this.setPropsForLayoutFromJsonDictionary(widget, options);
         var scrollView = widget;
@@ -1440,6 +1622,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.Slider's properties from json dictionary.
+     * @param {ccui.Slider} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForSliderFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var slider = widget;
@@ -1560,6 +1747,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         slider.setPercent(options["percent"]);
     },
 
+    /**
+     * Sets ccui.TextField's properties from json dictionary.
+     * @param {ccui.TextField} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForTextAreaFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var textArea = widget;
@@ -1582,6 +1774,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.Button's text properties from json dictionary.
+     * @param {ccui.Button} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForTextButtonFromJsonDictionary: function (widget, options) {
         this.setPropsForButtonFromJsonDictionary(widget, options);
 
@@ -1591,15 +1788,18 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         var cgi = options["textColorG"] !== undefined ? options["textColorG"] : 255;
         var cbi = options["textColorB"] !== undefined ? options["textColorB"] : 255;
         textButton.setTitleColor(cc.color(cri, cgi, cbi));
-        if (options["fontSize"] !== undefined) {
+        if (options["fontSize"] !== undefined)
             textButton.setTitleFontSize(options["fontSize"]);
-        }
-        if (options["fontName"] !== undefined) {
+        if (options["fontName"] !== undefined)
             textButton.setTitleFontName(options["fontName"]);
-        }
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.TextField's text properties from json dictionary.
+     * @param {ccui.TextField} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForTextFieldFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var textField = widget;
@@ -1637,6 +1837,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.LoadingBar's properties from json dictionary.
+     * @param {ccui.LoadingBar} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForLoadingBarFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
         var loadingBar = widget;
@@ -1684,6 +1889,11 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
 
     },
 
+    /**
+     * Sets ccui.ListView's properties from json dictionary.
+     * @param {ccui.ListView} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForListViewFromJsonDictionary: function (widget, options) {
         this.setPropsForLayoutFromJsonDictionary(widget, options);
         var innerWidth = options["innerWidth"] || 0;
@@ -1694,10 +1904,20 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         widget.setItemsMargin(options["itemMargin"] || 0);
     },
 
+    /**
+     * Sets ccui.PageView's properties from json dictionary.
+     * @param {ccui.PageView} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForPageViewFromJsonDictionary: function (widget, options) {
         this.setPropsForLayoutFromJsonDictionary(widget, options);
     },
 
+    /**
+     * Sets ccui.TextBMFont's properties from json dictionary.
+     * @param {ccui.TextBMFont} widget
+     * @param {Object} options json dictionary
+     */
     setPropsForLabelBMFontFromJsonDictionary: function (widget, options) {
         this.setPropsForWidgetFromJsonDictionary(widget, options);
 
@@ -1723,5 +1943,243 @@ ccs.WidgetPropertiesReader0300 = ccs.WidgetPropertiesReader.extend({
         labelBMFont.setString(text);
 
         this.setColorPropsForWidgetFromJsonDictionary(widget, options);
+    },
+
+    widgetFromProtocolBuffers: function(nodetree){
+
+
+        var classname = nodetree.classname;
+        //cc.log("classname = %s", classname);
+
+        var widget = this._createGUI(classname);
+        var readerName = this._getWidgetReaderClassName(classname);
+
+        var reader = this._createWidgetReaderProtocol(readerName);
+
+        if (reader)
+        {
+            // widget parse with widget reader
+            this.setPropsForAllWidgetFromProtocolBuffers(reader, widget, nodetree);
+        }
+        else
+        {
+            //
+            // 1st., custom widget parse properties of parent widget with parent widget reader
+            readerName = this._getWidgetReaderClassNameFromWidget(widget);
+            reader =  this._createWidgetReaderProtocol(readerName);
+            if (reader && widget)
+            {
+                this.setPropsForAllWidgetFromProtocolBuffers(reader, widget, nodetree);
+
+                // 2nd., custom widget parse with custom reader
+                var widgetOptions = nodetree.widgetOptions;
+                var customJsonDict = widgetOptions.componentOptions;
+//                var customJsonDict;
+//                customJsonDict.Parse(customProperty);
+//                if (customJsonDict.HasParseError())
+//                {
+//                    cc.log("GetParseError %s\n", customJsonDict.GetParseError());
+//                }
+                this.setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
+            }
+            else
+            {
+                cc.log("Widget or WidgetReader doesn't exists!!!  Please check your json file.");
+            }
+            //
+        }
+
+        var size = nodetree.children.length;
+        //cc.log("widget children size = %d", size);
+        for (var i = 0; i < size; ++i)
+        {
+            var subNodeTree = nodetree.children[i];
+            var child = this.widgetFromProtocolBuffers(subNodeTree);
+            //cc.log("widget child = %p", child);
+            if (child)
+            {
+                var pageView = widget;
+                if (pageView instanceof ccui.PageView)
+                {
+                    pageView.addPage(child);
+                }
+                else
+                {
+                    var listView = widget;
+                    if (listView instanceof ccui.ListView)
+                    {
+                        listView.pushBackCustomItem(child);
+                    }
+                    else
+                    {
+                        widget.addChild(child);
+                    }
+                }
+            }
+        }
+
+        //cc.log("widget = %p", widget);
+
+        return widget;
+    },
+
+    setPropsForAllWidgetFromProtocolBuffers: function(reader, widget, nodetree){
+        reader.setPropsFromProtocolBuffers(widget, nodetree);
+    },
+
+    widgetFromXML: function(objectData, classType){
+        var classname = classType.substr(0, classType.find("ObjectData"));
+        //cc.log("classname = %s", classname);
+
+        var widget = this.createGUI(classname);
+        var readerName = this.getWidgetReaderClassName(classname);
+
+        var reader = this.createWidgetReaderProtocol(readerName);
+
+        if (reader)
+        {
+            // widget parse with widget reader
+            this.setPropsForAllWidgetFromXML(reader, widget, objectData);
+        }
+        else
+        {
+            //
+            // 1st., custom widget parse properties of parent widget with parent widget reader
+            readerName = this.getWidgetReaderClassName(widget);
+            reader =  this.createWidgetReaderProtocol(readerName);
+            if (reader && widget)
+            {
+                this.setPropsForAllWidgetFromXML(reader, widget, objectData);
+
+                // 2nd., custom widget parse with custom reader
+                //                const protocolbuffers::WidgetOptions& widgetOptions = nodetree.widgetoptions();
+                //                const char* customProperty = widgetOptions.customproperty().c_str();
+                var customProperty = "";
+                var customJsonDict;
+                customJsonDict.Parse(customProperty);
+                if (customJsonDict.HasParseError())
+                {
+                    cc.log("GetParseError %s\n", customJsonDict.GetParseError());
+                }
+                this.setPropsForAllCustomWidgetFromJsonDictionary(classname, widget, customJsonDict);
+            }
+            else
+            {
+                cc.log("Widget or WidgetReader doesn't exists!!!  Please check your json file.");
+            }
+            //
+        }
+
+
+
+
+
+        // children
+        var containChildrenElement = false;
+        objectData = objectData.FirstChildElement();
+
+        while (objectData)
+        {
+            //cc.log("objectData name = %s", objectData.Name());
+
+            if ("Children" !== objectData.Name())
+            {
+                containChildrenElement = true;
+                break;
+            }
+
+            objectData = objectData.NextSiblingElement();
+        }
+
+        if (containChildrenElement)
+        {
+            objectData = objectData.FirstChildElement();
+            //cc.log("objectData name = %s", objectData.Name());
+
+            while (objectData)
+            {
+                var attribute = objectData.FirstAttribute();
+                while (attribute)
+                {
+                    var name = attribute.Name();
+                    var value = attribute.Value();
+
+                    if (name == "ctype")
+                    {
+                        var child = this.widgetFromXML(objectData, value);
+                        //cc.log("child = %p", child);
+                        if (child)
+                        {
+                            var pageView = widget;
+                            var listView = widget;
+                            if (pageView instanceof ccui.PageView)
+                            {
+                                var layout = child;
+                                if (layout instanceof ccui.Layout)
+                                {
+                                    pageView.addPage(layout);
+                                }
+                            }
+                            else if (listView)
+                            {
+                                var widgetChild = child;
+                                if (widgetChild instanceof ccui.Widget)
+                                {
+                                    listView.pushBackCustomItem(widgetChild);
+                                }
+                            }
+                            else
+                            {
+                                widget.addChild(child);
+                            }
+                        }
+
+                        break;
+                    }
+
+                    attribute = attribute.Next();
+                }
+
+                //            Node* child = nodeFromXML(objectData, value);
+                //            CCLOG("child = %p", child);
+                //            if (child)
+                //            {
+                //                PageView* pageView = dynamic_cast<PageView*>(node);
+                //                ListView* listView = dynamic_cast<ListView*>(node);
+                //                if (pageView)
+                //                {
+                //                    Layout* layout = dynamic_cast<Layout*>(child);
+                //                    if (layout)
+                //                    {
+                //                        pageView.addPage(layout);
+                //                    }
+                //                }
+                //                else if (listView)
+                //                {
+                //                    Widget* widget = dynamic_cast<Widget*>(child);
+                //                    if (widget)
+                //                    {
+                //                        listView.pushBackCustomItem(widget);
+                //                    }
+                //                }
+                //                else
+                //                {
+                //                    node.addChild(child);
+                //                }
+                //            }
+
+                objectData = objectData.NextSiblingElement();
+            }
+        }
+        //
+
+        //cc.log("widget = %p", widget);
+
+        return widget;
+    },
+
+    setPropsForAllWidgetFromXML: function(reader, widget, objectData){
+        reader.setPropsFromXML(widget, objectData);
     }
+
 });

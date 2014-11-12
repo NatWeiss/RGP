@@ -23,93 +23,77 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-ccs.ButtonReader = {
+/**
+ * The ccui.Button's properties reader for GUIReader.
+ * @class
+ * @name ccs.ButtonReader
+ **/
+ccs.buttonReader = /** @lends ccs.buttonReader# */{
 
-    getInstance: function(){
-        return ccs.ButtonReader;
-    },
-
+    /**
+     * Sets ccui.Button's properties from json dictionary.
+     * @param {ccui.Button} widget
+     * @param {Object} options
+     */
     setPropsFromJsonDictionary: function(widget, options){
-
-        ccs.WidgetReader.setPropsFromJsonDictionary.call(this, widget, options);
-
+        ccs.widgetReader.setPropsFromJsonDictionary.call(this, widget, options);
         var jsonPath = ccs.uiReader.getFilePath();
 
         var button = widget;
         var scale9Enable = options["scale9Enable"];
         button.setScale9Enabled(scale9Enable);
     
-        var normalDic = options["normalData"];
-        var normalType = normalDic["resourceType"];
-        switch (normalType)
-        {
+        var normalDic = options["normalData"], normalType = normalDic["resourceType"];
+        switch (normalType) {
             case 0:
-            {
                 var tp_n = jsonPath;
                 var normalFileName = normalDic["path"];
                 var normalFileName_tp = (normalFileName && normalFileName !== "") ?
-                    tp_n + normalFileName :
-                    null;
+                    tp_n + normalFileName : null;
                 button.loadTextureNormal(normalFileName_tp);
                 break;
-            }
             case 1:
-            {
                 var normalFileName = normalDic["path"];
-                button.loadTextureNormal(normalFileName, 1/*ui::UI_TEX_TYPE_PLIST*/);
+                button.loadTextureNormal(normalFileName, 1/*ui.UI_TEX_TYPE_PLIST*/);
                 break;
-            }
             default:
                 break;
         }
         var pressedDic = options["pressedData"];
         var pressedType = pressedDic["resourceType"];
-        switch (pressedType)
-        {
+        switch (pressedType) {
             case 0:
-            {
                 var tp_p = jsonPath;
                 var pressedFileName = pressedDic["path"];
                 var pressedFileName_tp = (pressedFileName && pressedFileName !== "") ?
-                    tp_p + pressedFileName :
-                    null;;
+                    tp_p + pressedFileName : null;
                 button.loadTexturePressed(pressedFileName_tp);
                 break;
-            }
             case 1:
-            {
                 var pressedFileName = pressedDic["path"];
-                button.loadTexturePressed(pressedFileName, 1/*ui::UI_TEX_TYPE_PLIST*/);
+                button.loadTexturePressed(pressedFileName, 1/*ui.UI_TEX_TYPE_PLIST*/);
                 break;
-            }
             default:
                 break;
         }
         var disabledDic = options["disabledData"];
         var disabledType = disabledDic["resourceType"];
-        switch (disabledType)
-        {
+        switch (disabledType){
             case 0:
-            {
                 var tp_d = jsonPath;
                 var disabledFileName = disabledDic["path"];
                 var disabledFileName_tp = (disabledFileName && disabledFileName !== "") ?
-                    tp_d + disabledFileName :
-                    null;
+                    tp_d + disabledFileName : null;
                 button.loadTextureDisabled(disabledFileName_tp);
                 break;
-            }
             case 1:
-            {
                 var disabledFileName = disabledDic["path"];
-                button.loadTextureDisabled(disabledFileName, 1/*ui::UI_TEX_TYPE_PLIST*/);
+                button.loadTextureDisabled(disabledFileName, 1/*ui.UI_TEX_TYPE_PLIST*/);
                 break;
-            }
             default:
                 break;
         }
-        if (scale9Enable)
-        {
+        if (scale9Enable) {
             var cx = options["capInsetsX"];
             var cy = options["capInsetsY"];
             var cw = options["capInsetsWidth"];
@@ -119,34 +103,117 @@ ccs.ButtonReader = {
             var sw = options["scale9Width"];
             var sh = options["scale9Height"];
             if (sw != null && sh != null)
-            {
                 button.setSize(cc.size(sw, sh));
-            }
         }
         var text = options["text"];
         if (text != null)
-        {
             button.setTitleText(text);
-        }
     
         var cr = options["textColorR"];
         var cg = options["textColorG"];
         var cb = options["textColorB"];
-        var cri = cr?options["textColorR"]:255;
-        var cgi = cg?options["textColorG"]:255;
-        var cbi = cb?options["textColorB"]:255;
+        var cri = cr!==null?options["textColorR"]:255;
+        var cgi = cg!==null?options["textColorG"]:255;
+        var cbi = cb!==null?options["textColorB"]:255;
     
         button.setTitleColor(cc.color(cri,cgi,cbi));
         var fs = options["fontSize"];
         if (fs != null)
-        {
             button.setTitleFontSize(options["fontSize"]);
-        }
         var fn = options["fontName"];
         if (fn)
-        {
             button.setTitleFontName(options["fontName"]);
-        }
-        ccs.WidgetReader.setColorPropsFromJsonDictionary.call(this, widget, options);
+        ccs.widgetReader.setColorPropsFromJsonDictionary.call(this, widget, options);
+    },
+
+    setPropsFromProtocolBuffers: function(widget, nodeTree){
+            ccs.widgetReader.setPropsFromProtocolBuffers.call(this, widget, nodeTree);
+    
+            var button = widget;
+            var options = nodeTree["buttonOptions"];
+    
+            var protocolBuffersPath = ccs.uiReader.getFilePath();
+    
+            var scale9Enable = options["scale9Enable"];
+            button.setScale9Enabled(scale9Enable);
+    
+    
+    		var normalDic = options["normalData"];
+            var normalType = normalDic["resourceType"];
+
+            var normalTexturePath = ccs.widgetReader.getResourcePath(normalDic["path"], normalType);
+            button.loadTextureNormal(normalTexturePath, normalType);
+    
+    
+            var pressedDic = options["pressedData"];
+            var pressedType = pressedDic["resourceType"];
+
+            var pressedTexturePath = ccs.widgetReader.getResourcePath(pressedDic["path"], pressedType);
+            button.loadTexturePressed(pressedTexturePath, pressedType);
+    
+    
+            var disabledDic = options["disabledData"];
+            var disabledType = disabledDic["resourceType"];
+
+            var disabledTexturePath = ccs.widgetReader.getResourcePath(disabledDic["path"], disabledType);
+            button.loadTextureDisabled(disabledTexturePath, disabledType);
+    
+            if (scale9Enable)
+            {
+                button.setUnifySizeEnabled(false);
+                button.ignoreContentAdaptWithSize(false);
+    
+                var cx = options["capInsetsX"];
+                var cy = options["capInsetsY"];
+                var cw = options["capInsetsWidth"];
+                var ch = options["capInsetsHeight"];
+    
+                button.setCapInsets(cc.rect(cx, cy, cw, ch));
+                var sw = options["scale9Width"];
+                var sh = options["scale9Height"];
+                if (sw && sh)
+                {
+                    button.setContentSize(cc.size(sw, sh));
+                }
+            }
+            var tt = options["text"];
+            if (tt)
+            {
+                button.setTitleText(tt);
+            }
+    
+    
+            var cri = options["textColorR"]!==null ? options["textColorR"] : 255;
+            var cgi = options["textColorG"]!==null ? options["textColorG"] : 255;
+            var cbi = options["textColorB"]!==null ? options["textColorB"] : 255;
+            button.setTitleColor(cc.color(cri,cgi,cbi));
+    
+    
+            var fontSize = options["fontSize"]!==null ? options["fontSize"] : 14;
+            button.setTitleFontSize(fontSize);
+    
+    		var displaystate = true;
+    		if(options["displaystate"]!==null)
+    		{
+    			displaystate = options["displaystate"];
+    		}
+    		button.setBright(displaystate);
+    
+            var fontName = options["fontName"]!==null ? options["fontName"] : "微软雅黑";
+            button.setTitleFontName(fontName);
+    
+            if (options["fontResource"])
+    		{
+    			var resourceData = options["fontResource"];
+    		    button.setTitleFontName(protocolBuffersPath + resourceData["path"]);
+    		}
+    
+            var widgetOption = nodeTree["widgetOptions"];
+            button.setColor(cc.color(widgetOption["colorR"], widgetOption["colorG"], widgetOption["colorB"]));
+            button.setOpacity(widgetOption["Alpha"]!==null ? widgetOption["Alpha"] : 255);
+    
+    
+            // other commonly protperties
+            ccs.widgetReader.setColorPropsFromProtocolBuffers.call(this, widget, nodeTree);
     }
 };

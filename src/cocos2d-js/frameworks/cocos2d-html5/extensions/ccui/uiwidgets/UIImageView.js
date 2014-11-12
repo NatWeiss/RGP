@@ -40,9 +40,10 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     _imageRendererAdaptDirty: true,
 
     /**
-     * allocates and initializes a UIImageView.
-     * Constructor of ccui.ImageView
-     * @constructor
+     * allocates and initializes a ccui.ImageView.
+     * Constructor of ccui.ImageView, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
+     * @param {String} imageFileName
+     * @param {Number} [texType==ccui.Widget.LOCAL_TEXTURE]
      * @example
      * // example
      * var uiImageView = new ccui.ImageView;
@@ -52,9 +53,15 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
         this._imageTextureSize = cc.size(this._capInsets.width, this._capInsets.height);
         ccui.Widget.prototype.ctor.call(this);
 
-        texType && this.init(imageFileName, texType);
+        texType !== undefined && this.init(imageFileName, texType);
     },
 
+    /**
+     * Initializes an imageView. please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
+     * @param {String} imageFileName
+     * @param {Number} [texType==ccui.Widget.LOCAL_TEXTURE]
+     * @returns {boolean}
+     */
     init: function(imageFileName, texType){
         if(ccui.Widget.prototype.init.call(this)){
             if(imageFileName === undefined)
@@ -67,12 +74,12 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     _initRenderer: function () {
-        this._imageRenderer = cc.Sprite.create();
+        this._imageRenderer = new cc.Sprite();
         this.addProtectedChild(this._imageRenderer, ccui.ImageView.RENDERER_ZORDER, -1);
     },
 
     /**
-     * Load textures for button.
+     * Loads textures for button.
      * @param {String} fileName
      * @param {ccui.Widget.LOCAL_TEXTURE|ccui.Widget.PLIST_TEXTURE} texType
      */
@@ -110,7 +117,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
         }
 
         if(!imageRenderer.texture || !imageRenderer.texture.isLoaded()){
-            imageRenderer.addLoadedEventListener(function(){
+            imageRenderer.addEventListener("load", function(){
                 self._findLayout();
 
                 self._imageTextureSize = imageRenderer.getContentSize();
@@ -135,7 +142,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     /**
-     * set texture rect
+     * Sets texture rect
      * @param {cc.Rect} rect
      */
     setTextureRect: function (rect) {
@@ -169,9 +176,9 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
         this.removeProtectedChild(this._imageRenderer);
         this._imageRenderer = null;
         if (this._scale9Enabled) {
-            this._imageRenderer = cc.Scale9Sprite.create();
+            this._imageRenderer = new ccui.Scale9Sprite();
         } else {
-            this._imageRenderer = cc.Sprite.create();
+            this._imageRenderer = new cc.Sprite();
         }
         this.loadTexture(this._textureFile, this._imageTexType);
         this.addProtectedChild(this._imageRenderer, ccui.ImageView.RENDERER_ZORDER, -1);
@@ -185,7 +192,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     /**
-     * Get button is using scale9 renderer or not.
+     * Returns ImageView is using scale9 renderer or not.
      * @returns {Boolean}
      */
     isScale9Enabled:function(){
@@ -193,7 +200,8 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     /**
-     * ignoreContentAdaptWithSize
+     * Ignore the imageView's custom size, true that imageView will ignore it's custom size, use renderer's content size, false otherwise.
+     * @override
      * @param {Boolean} ignore
      */
     ignoreContentAdaptWithSize: function (ignore) {
@@ -208,18 +216,25 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
      * @param {cc.Rect} capInsets
      */
     setCapInsets: function (capInsets) {
-        this._capInsets = capInsets;
+        if(!capInsets)
+            return;
+        var locInsets = this._capInsets;
+        locInsets.x = capInsets.x;
+        locInsets.y = capInsets.y;
+        locInsets.width = capInsets.width;
+        locInsets.height = capInsets.height;
+
         if (!this._scale9Enabled)
             return;
         this._imageRenderer.setCapInsets(capInsets);
     },
 
     /**
-     * Get cap insets.
+     * Returns cap insets of ccui.ImageView.
      * @returns {cc.Rect}
      */
     getCapInsets:function(){
-        return this._capInsets;
+        return cc.rect(this._capInsets);
     },
 
     _onSizeChanged: function () {
@@ -234,12 +249,17 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
         }
     },
 
+    /**
+     * Returns the image's texture size.
+     * @returns {cc.Size}
+     */
     getVirtualRendererSize: function(){
         return cc.size(this._imageTextureSize);
     },
 
     /**
-     * override "getVirtualRenderer" method of widget.
+     * Returns the renderer of ccui.ImageView
+     * @override
      * @returns {cc.Node}
      */
     getVirtualRenderer: function () {
@@ -267,7 +287,8 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     /**
-     * Returns the "class name" of widget.
+     * Returns the "class name" of ccui.ImageView.
+     * @override
      * @returns {string}
      */
     getDescription: function () {
@@ -275,7 +296,7 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
     },
 
     _createCloneInstance:function(){
-        return ccui.ImageView.create();
+        return new ccui.ImageView();
     },
 
     _copySpecialProperties: function (imageView) {
@@ -290,18 +311,20 @@ ccui.ImageView = ccui.Widget.extend(/** @lends ccui.ImageView# */{
 });
 
 /**
- * allocates and initializes a UIImageView.
- * @deprecated
+ * Allocates and initializes a UIImageView.
+ * @deprecated since v3.0, please use new ccui.ImageView() instead.
  * @param {string} imageFileName
  * @param {Number} texType
  * @return {ccui.ImageView}
- * @example
- * // example
- * var uiImageView = ccui.ImageView.create();
  */
 ccui.ImageView.create = function (imageFileName, texType) {
     return new ccui.ImageView(imageFileName, texType);
 };
 
 // Constants
+/**
+ * The zOrder value of ccui.ImageView's renderer.
+ * @constant
+ * @type {number}
+ */
 ccui.ImageView.RENDERER_ZORDER = -1;

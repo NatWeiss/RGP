@@ -40,24 +40,20 @@ NSString *_accessToken = @"";
 - (void) configDeveloperInfo : (NSMutableDictionary*) cpInfo{
 }
 - (void) login{
-    if (FBSession.activeSession.state == FBSessionStateOpen || FBSession.activeSession.state == FBSessionStateOpenTokenExtended) {
-        [FBSession openActiveSessionWithReadPermissions:@[@"public_profile"]
-                                           allowLoginUI:NO
-                                      completionHandler:
-         ^(FBSession *session, FBSessionState state, NSError *error) {
-             [self sessionStateChanged:session state:state error:error];
-             // Retrieve the app delegate
-         }];
-
-    } else {
-        [FBSession openActiveSessionWithReadPermissions:@[@"public_profile"]
+    [self _loginWithPermission:@[@"public_profile"]];
+}
+-(void) loginWithPermission:(NSString *)permissions{
+    NSArray *permission = [permissions componentsSeparatedByString:@","];
+    [self _loginWithPermission:permission];
+}
+-(void)_loginWithPermission:(NSArray *) permission{
+        [FBSession openActiveSessionWithReadPermissions:permission
                                            allowLoginUI:YES
                                       completionHandler:
          ^(FBSession *session, FBSessionState state, NSError *error) {
              [self sessionStateChanged:session state:state error:error];
              // Retrieve the app delegate
          }];
-    }
 }
 - (void) logout{
     if (FBSession.activeSession.state == FBSessionStateOpen
@@ -73,22 +69,22 @@ NSString *_accessToken = @"";
 - (BOOL) isLogined{
     return _isLogin;
 }
-- (NSNumber *) isLoggedIn{
-    return [NSNumber  numberWithBool:_isLogin];
-}
-- (NSString *)getUserId{
+-(NSString *)getUserID{
     return _userId;
-    [FBRequestConnection startWithGraphPath:@"me/events?fields=cover,name,start_time"
-                          completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-                              if (!error) {
-                                  // Sucess! Include your code to handle the results here
-                                  NSLog(@"user events: %@", result);
-                              } else {
-                                  // An error occurred, we need to handle the error
-                                  // See: https://developers.facebook.com/docs/ios/errors   
-                              }
-                          }];
-    
+}
+- (BOOL) isLoggedIn{
+    return _isLogin;
+}
+
+-(NSString *) getPermissionList{
+    NSString *msg;
+    if(FBSession.activeSession.state != FBSessionStateOpen && FBSession.activeSession.state != FBSessionStateOpenTokenExtended){
+        msg =[ParseUtils MakeJsonStringWithObject:@"session closed please login first" andKey:@"error_message"];
+    }else{
+        NSArray *permissionList =  [FBSession.activeSession permissions];
+        msg = [ParseUtils MakeJsonStringWithObject:permissionList andKey:@"permissions"];
+    }
+    return msg;
 }
 -(NSString *)getAccessToken{
     return _accessToken;
@@ -105,17 +101,53 @@ NSString *_accessToken = @"";
 - (NSString*) getPluginVersion{
     return @"";
 }
+-(void)activateApp{
+    [FBAppEvents activateApp];
+}
+-(void)logEventWithName:(NSString*) eventName{
+    [FBAppEvents logEvent:eventName];
+}
+-(void)logEvent:(NSMutableDictionary*) logInfo{
+    if(logInfo.count == 2){
+        NSString *eventName = [logInfo objectForKey:@"Param1"];
+        id  param2 = [logInfo objectForKey:@"Param2"];
+        if([param2 isKindOfClass:[NSDictionary class]]){
+            NSDictionary *dic = (NSDictionary *)param2;
+            [FBAppEvents logEvent:eventName parameters:dic];
+        }else{
+            double floatval = [[logInfo objectForKey:@"Param2"] floatValue];
+            [FBAppEvents logEvent:eventName valueToSum:floatval];
+        }
+    }else if(logInfo.count == 3){
+        NSString *eventName = [logInfo objectForKey:@"Param1"];
+        double floatval = [[logInfo objectForKey:@"Param2"] floatValue];
+        NSDictionary *para = [logInfo objectForKey:@"Param3"];
+        [FBAppEvents logEvent:eventName valueToSum:floatval parameters:para];
+    }
+}
 -(void)sessionStateChanged:(FBSession *)session state:(FBSessionState) state error:(NSError *)error{
     // If the session was opened successfully
     if (!error && state == FBSessionStateOpen){
         _accessToken = session.accessTokenData.accessToken;
-        _isLogin = true;
         OUTPUT_LOG(@"Session opened");
-        NSString *msg = @"loginSuccess";
-        [UserWrapper onActionResult:self withRet:kLoginSucceed withMsg:msg];
+        
+        [FBRequestConnection startForMeWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+            if (!error) {
+                NSDictionary *dic = (NSDictionary *)result;
+                _userId = [dic objectForKey:@"id"];
+                _isLogin = true;
+                NSMutableDictionary *result = [NSMutableDictionary dictionaryWithObjectsAndKeys:[FBSession.activeSession permissions],@"permissions",session.accessTokenData.accessToken,@"accessToken", nil];
+                NSString *msg = [ParseUtils NSDictionaryToNSString:result];
+                [UserWrapper onActionResult:self withRet:kLoginSucceed withMsg:msg];
+            } else {
+                NSString *msg = [ParseUtils MakeJsonStringWithObject:@"loginFailed" andKey:@"error_message"];
+                [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:msg];
+            }
+        }];
+        
     }
     if (state == FBSessionStateClosed || state == FBSessionStateClosedLoginFailed){
-        NSString *msg = @"loginFail Session closed";
+        NSString *msg = [ParseUtils MakeJsonStringWithObject:@"loginFail Session closed" andKey:@"error_message"];
         if(!_isLogin){
             [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:msg];
         }
@@ -139,6 +171,7 @@ NSString *_accessToken = @"";
                 errorText = [NSString stringWithFormat:@"Please retry. \n\n If the problem persists contact us and mention this error code: %@", [errorInformation objectForKey:@"message"]];
             }
         }
+        errorText = [ParseUtils MakeJsonStringWithObject:errorText andKey:@"error_message"];
         [UserWrapper onActionResult:self withRet:kLoginFailed withMsg:errorText];
         OUTPUT_LOG(errorText);
         [FBSession.activeSession closeAndClearTokenInformation];
@@ -146,7 +179,7 @@ NSString *_accessToken = @"";
 }
 -(void)requestPermissions:(NSString *)permision{
     if(FBSession.activeSession.state != FBSessionStateOpen && FBSession.activeSession.state != FBSessionStateOpenTokenExtended){
-        NSString *msg = @"Session closed please login first";
+        NSString *msg = [ParseUtils MakeJsonStringWithObject:@"Session closed please login first" andKey:@"error_message"];
         [UserWrapper onPermissionsResult:self withRet:kPermissionFailed withMsg:msg];
         return;
     }
@@ -156,25 +189,25 @@ NSString *_accessToken = @"";
                                          if (!error) {
                                              // Permission granted
                                              OUTPUT_LOG(@"new permissions %@", [FBSession.activeSession permissions]);
-                                             NSString *msg = [ParseUtils NSDictionaryToNSString:[FBSession.activeSession permissions]];
+                                             NSString *msg =[ParseUtils MakeJsonStringWithObject:[FBSession.activeSession permissions] andKey:@"permissions"];
                                              if(msg!=nil){
                                                  [UserWrapper onPermissionsResult:self withRet:kPermissionSucceed withMsg:msg];
                                              }else{
-                                                 msg = @"parse permission data fail";
+                                                 msg = [ParseUtils MakeJsonStringWithObject:@"parse permission data fail" andKey:@"error_message"];
                                                  [UserWrapper onPermissionsResult:self withRet:kPermissionFailed withMsg:msg];
                                              }
                                              // We can request the user information
                                          } else {
                                              // An error occurred, we need to handle the error
                                              // Check out our error handling guide: https://developers.facebook.com/docs/ios/errors/
-                                             NSString *msg = error.description;
-                                             [UserWrapper onPermissionsResult:self withRet:kPermissionFailed withMsg:msg];
+                                              NSString *msg = [ParseUtils MakeJsonStringWithObject:error.description andKey:@"error_message"];
+                                             [UserWrapper onPermissionsResult:self withRet:(int)error.code withMsg:msg];
                                              OUTPUT_LOG(@"error %@", msg);
                                          }
                                      }];
 }
 
--(void)request:(NSMutableDictionary *)params{
+-(void)api:(NSMutableDictionary *)params{
     NSString *graphPath = [params objectForKey:@"Param1"];
     int methodID = [[params objectForKey:@"Param2"] intValue];
     NSString * method = methodID == 0? @"GET":methodID == 1?@"POST":@"DELETE";
@@ -184,20 +217,32 @@ NSString *_accessToken = @"";
                                  parameters:param HTTPMethod:method
                           completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
                               if(!error){
-                                  OUTPUT_LOG(@"success");
                                   NSString *msg = [ParseUtils NSDictionaryToNSString:(NSDictionary *)result];
                                   if(nil == msg){
-                                      msg = @"parse fail";
+                                       NSString *msg = [ParseUtils MakeJsonStringWithObject:@"parse result failed" andKey:@"error_message"];
                                       [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
                                   }else{
+                                      OUTPUT_LOG(@"success");
                                       [UserWrapper onGraphResult:self withRet:kGraphResultSuccess withMsg:msg withCallback:cbId];
                                   }
                               }else{
-                                  NSString *msg = error.description;
-                                  [UserWrapper onGraphResult:self withRet:kGraphResultFail withMsg:msg withCallback:cbId];
+                                   NSString *msg = [ParseUtils MakeJsonStringWithObject:error.description andKey:@"error_message"];
+                                  [UserWrapper onGraphResult:self withRet:(int)error.code withMsg:msg withCallback:cbId];
                                   OUTPUT_LOG(@"error %@", error.description);
                               }
                               
                           }];
+}
+-(void)logPurchase:(NSMutableDictionary *)purchaseInfo{
+    if(purchaseInfo.count == 2){
+        NSNumber *count = [purchaseInfo objectForKey:@"Param1"];
+        NSString *currency = [purchaseInfo objectForKey:@"Param2"];
+        [FBAppEvents logPurchase:[count floatValue] currency:currency];
+    }else if(purchaseInfo.count == 3){
+        NSNumber *count = [purchaseInfo objectForKey:@"Param1"];
+        NSString *currency = [purchaseInfo objectForKey:@"Param2"];
+        NSDictionary *dict = [purchaseInfo objectForKey:@"Param3"];
+        [FBAppEvents logPurchase:[count floatValue] currency:currency parameters:dict];
+    }
 }
 @end

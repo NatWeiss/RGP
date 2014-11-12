@@ -29,7 +29,7 @@
 /**
  * CCControlSwitch: Switch control ui component
  * @class
- * @extend cc.Control
+ * @extends cc.Control
  */
 cc.ControlSwitch = cc.Control.extend(/** @lends cc.ControlSwitch# */{
     /** Sprite which represents the view. */
@@ -77,7 +77,7 @@ cc.ControlSwitch = cc.Control.extend(/** @lends cc.ControlSwitch# */{
         this._on = isOn;
         var xPosition = (this._on) ? this._switchSprite.getOnPosition() : this._switchSprite.getOffPosition();
         if(animated){
-            this._switchSprite.runAction(cc.ActionTween.create(0.2, "sliderXPosition", this._switchSprite.getSliderXPosition(),xPosition));
+            this._switchSprite.runAction(new cc.ActionTween(0.2, "sliderXPosition", this._switchSprite.getSliderXPosition(),xPosition));
         }else{
             this._switchSprite.setSliderXPosition(xPosition);
         }
@@ -166,7 +166,7 @@ cc.ControlSwitch.create = function (maskSprite, onSprite, offSprite, thumbSprite
 /**
  * ControlSwitchSprite: Sprite switch control ui component
  * @class
- * @extend cc.Sprite
+ * @extends cc.Sprite
  *
  * @property {Number}           sliderX         - Slider's x position
  * @property {cc.Point}         onPos           - The position of slider when switch is on
@@ -233,7 +233,7 @@ cc.ControlSwitchSprite = cc.Sprite.extend({
             this._stencil.setPosition(0, 0);
 
             // Init clipper for mask
-            this._clipper = cc.ClippingNode.create();
+            this._clipper = new cc.ClippingNode();
             this._clipper.setAnchorPoint(0.5, 0.5);
             this._clipper.setPosition(maskSize.width / 2, maskSize.height / 2);
             this._clipper.setStencil(this._stencil);

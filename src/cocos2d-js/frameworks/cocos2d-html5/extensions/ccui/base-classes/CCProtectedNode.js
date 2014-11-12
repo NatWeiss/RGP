@@ -37,14 +37,20 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
         child._setLocalZOrder(z);
     },
 
+    /**
+     * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
+     * @function
+     */
     ctor: function(){
         cc.Node.prototype.ctor.call(this);
-       this._protectedChildren = [];
+        this._protectedChildren = [];
     },
 
     /**
-     *  Adds a child to the container with z order and tag
-     *  If the child is added to a 'running' node, then 'onEnter' and 'onEnterTransitionDidFinish' will be called immediately.
+     * <p>
+     *  Adds a child to the container with z order and tag                                                                         <br/>
+     *  If the child is added to a 'running' node, then 'onEnter' and 'onEnterTransitionDidFinish' will be called immediately.     <br/>
+     *  </p>
      * @param {cc.Node} child  A child node
      * @param {Number} [localZOrder]  Z order for drawing priority. Please refer to `setLocalZOrder(int)`
      * @param {Number} [tag]  An integer to identify the node easily. Please refer to `setTag(int)`
@@ -119,7 +125,8 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
     },
 
     /**
-     * Removes a child from the container by tag value. It will also cleanup all running actions depending on the cleanup parameter
+     * Removes a child from the container by tag value.                                    <br/>
+     * It will also cleanup all running actions depending on the cleanup parameter
      * @param {Number} tag
      * @param {Boolean} [cleanup=true]
      */
@@ -139,7 +146,7 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
 
     /**
      * Removes all children from the container with a cleanup.
-     *  @see `removeAllChildrenWithCleanup(bool)`
+     * @see cc.ProtectedNode#removeAllProtectedChildrenWithCleanup
      */
     removeAllProtectedChildren: function(){
         this.removeAllProtectedChildrenWithCleanup(true);
@@ -220,6 +227,12 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
         }
     },
 
+    /**
+     * transforms and draws itself, and visit its children and protected children.
+     * @override
+     * @function
+     * @param {CanvasRenderingContext2D|WebGLRenderingContext} ctx context of renderer
+     */
     visit: null,
 
     _visitForCanvas: function(ctx){
@@ -233,7 +246,7 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
         var children = _t._children, child;
         var locChildren = _t._children, locProtectedChildren = this._protectedChildren;
         var childLen = locChildren.length, pLen = locProtectedChildren.length;
-        context.save();
+//        context.save();
         _t.transform(context);
 
         _t.sortAllChildren();
@@ -255,18 +268,17 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
                 break;
         }
 
-        _t.draw(context);
+//        _t.draw(context);
+        if(this._rendererCmd)
+            cc.renderer.pushRenderCommand(this._rendererCmd);
 
-        for (; i < childLen; i++) {
+        for (; i < childLen; i++)
             children[i] && children[i].visit(context);
-        }
-        for (; j < pLen; j++) {
+        for (; j < pLen; j++)
             locProtectedChildren[j] && locProtectedChildren[j].visit(context);
-        }
 
         this._cacheDirty = false;
-        _t.arrivalOrder = 0;
-        context.restore();
+//        context.restore();
     },
 
     _visitForWebGL: function(){
@@ -305,7 +317,10 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
             else
                 break;
         }
-        _t.draw(context);
+//        _t.draw(context);
+        if(this._rendererCmd)
+            cc.renderer.pushRenderCommand(this._rendererCmd);
+
         // draw children zOrder >= 0
         for (; i < childLen; i++) {
             locChildren[i] && locChildren[i].visit();
@@ -314,7 +329,6 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
             locProtectedChildren[j] && locProtectedChildren[j].visit();
         }
 
-        _t.arrivalOrder = 0;
         if (locGrid && locGrid._active)
             locGrid.afterDraw(_t);
 
@@ -322,6 +336,10 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
         currentStack.top = currentStack.stack.pop();
     },
 
+    /**
+     * Stops itself and its children and protected children's all running actions and schedulers
+     * @override
+     */
     cleanup: function(){
        cc.Node.prototype.cleanup.call(this);
        var locChildren = this._protectedChildren;
@@ -329,6 +347,10 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
             locChildren[i].cleanup();
     },
 
+    /**
+     * Calls its parent's onEnter and calls its protected children's onEnter
+     * @override
+     */
     onEnter: function(){
         cc.Node.prototype.onEnter.call(this);
         var locChildren = this._protectedChildren;
@@ -342,6 +364,7 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
      *     If the Node enters the 'stage' with a transition, this event is called when the transition finishes.         <br/>
      *     If you override onEnterTransitionDidFinish, you shall call its parent's one, e.g. Node::onEnterTransitionDidFinish()
      *  </p>
+     *  @override
      */
     onEnterTransitionDidFinish: function(){
         cc.Node.prototype.onEnterTransitionDidFinish.call(this);
@@ -350,6 +373,10 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
             locChildren[i].onEnterTransitionDidFinish();
     },
 
+    /**
+     * Calls its parent's onExit and calls its protected children's onExit
+     * @override
+     */
     onExit:function(){
         cc.Node.prototype.onExit.call(this);
         var locChildren = this._protectedChildren;
@@ -370,6 +397,11 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
             locChildren[i].onExitTransitionDidStart();
     },
 
+    /**
+     * Updates itself and its protected children displayed opacity, if opacity cascade is enable, its children also update.
+     * @param {Number} parentOpacity
+     * @override
+     */
     updateDisplayedOpacity: function(parentOpacity){
         this._displayedOpacity = this._realOpacity * parentOpacity/255.0;
         this._updateColor();
@@ -389,6 +421,11 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
         }
     },
 
+    /**
+     * Updates itself and its protected children displayed color, if opacity cascade is enable, its children also update.
+     * @param {cc.Color} parentColor
+     * @override
+     */
     updateDisplayedColor: function(parentColor){
         var displayedColor = this._displayedColor, realColor = this._realColor;
         displayedColor.r = realColor.r * parentColor.r/255.0;
@@ -412,7 +449,25 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
         }
     },
 
-    disableCascadeColor: function(){
+    _disableCascadeOpacity: function () {
+        this._displayedOpacity = this._realOpacity;
+
+        var selChildren = this._children, i, item;
+        for (i = 0; i < selChildren.length; i++) {
+            item = selChildren[i];
+            if (item)
+                item.updateDisplayedOpacity(255);
+        }
+
+        selChildren = this._protectedChildren;
+        for (i = 0; i < selChildren.length; i++) {
+            item = selChildren[i];
+            if (item)
+                item.updateDisplayedOpacity(255);
+        }
+    },
+
+    _disableCascadeColor: function(){
         var white = cc.color.WHITE;
         var i, len, locChildren = this._children;
         for(i = 0, len = locChildren.length; i < len; i++)
@@ -426,13 +481,79 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
 
 if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
     cc.ProtectedNode.prototype.visit =  cc.ProtectedNode.prototype._visitForCanvas;
+    cc.ProtectedNode.prototype._transformForRenderer = function () {
+        var t = this.nodeToParentTransform(), worldT = this._transformWorld;
+        if(this._parent){
+            var pt = this._parent._transformWorld;
+            //worldT = cc.AffineTransformConcat(t, pt);
+            worldT.a = t.a * pt.a + t.b * pt.c;                               //a
+            worldT.b = t.a * pt.b + t.b * pt.d;                               //b
+            worldT.c = t.c * pt.a + t.d * pt.c;                               //c
+            worldT.d = t.c * pt.b + t.d * pt.d;                               //d
+            if(this._skewX || this._skewY){
+                var plt = this._parent._transform;
+                var xOffset = -(plt.b + plt.c) * t.ty ;
+                var yOffset = -(plt.b + plt.c) * t.tx;
+                worldT.tx = (t.tx * pt.a + t.ty * pt.c + pt.tx + xOffset);        //tx
+                worldT.ty = (t.tx * pt.b + t.ty * pt.d + pt.ty + yOffset);		  //ty
+            }else{
+                worldT.tx = (t.tx * pt.a + t.ty * pt.c + pt.tx);          //tx
+                worldT.ty = (t.tx * pt.b + t.ty * pt.d + pt.ty);		  //ty
+            }
+        } else {
+            worldT.a = t.a;
+            worldT.b = t.b;
+            worldT.c = t.c;
+            worldT.d = t.d;
+            worldT.tx = t.tx;
+            worldT.ty = t.ty;
+        }
+        this._renderCmdDiry = false;
+        var i, len, locChildren = this._children;
+        for(i = 0, len = locChildren.length; i< len; i++){
+            locChildren[i]._transformForRenderer();
+        }
+        locChildren = this._protectedChildren;
+        for( i = 0, len = locChildren.length; i< len; i++)
+            locChildren[i]._transformForRenderer();
+    };
 }else{
     cc.ProtectedNode.prototype.visit =  cc.ProtectedNode.prototype._visitForWebGL;
+    cc.ProtectedNode.prototype._transformForRenderer = function () {
+        var t4x4 = this._transform4x4, stackMatrix = this._stackMatrix,
+            parentMatrix = this._parent ? this._parent._stackMatrix : cc.current_stack.top;
+
+        // Convert 3x3 into 4x4 matrix
+        var trans = this.nodeToParentTransform();
+        var t4x4Mat = t4x4.mat;
+        t4x4Mat[0] = trans.a;
+        t4x4Mat[4] = trans.c;
+        t4x4Mat[12] = trans.tx;
+        t4x4Mat[1] = trans.b;
+        t4x4Mat[5] = trans.d;
+        t4x4Mat[13] = trans.ty;
+
+        // Update Z vertex manually
+        t4x4Mat[14] = this._vertexZ;
+
+        //optimize performance for Javascript
+        cc.kmMat4Multiply(stackMatrix, parentMatrix, t4x4);
+
+        this._renderCmdDiry = false;
+        var i, len, locChildren = this._children;
+        for(i = 0, len = locChildren.length; i< len; i++){
+            locChildren[i]._transformForRenderer();
+        }
+        locChildren = this._protectedChildren;
+        for( i = 0, len = locChildren.length; i< len; i++)
+            locChildren[i]._transformForRenderer();
+    };
 }
 
 /**
  * create a cc.ProtectedNode object;
- * @deprecated
+ * @deprecated since v3.0, please use new cc.ProtectedNode() instead.
+ * @return cc.ProtectedNode
  */
 cc.ProtectedNode.create = function(){
     return new cc.ProtectedNode();

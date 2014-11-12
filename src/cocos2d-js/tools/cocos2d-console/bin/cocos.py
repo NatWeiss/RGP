@@ -22,7 +22,7 @@ from contextlib import contextmanager
 import cocos_project
 import shutil
 
-COCOS2D_CONSOLE_VERSION = '0.7'
+COCOS2D_CONSOLE_VERSION = '1.2'
 
 
 class Logging:
@@ -99,6 +99,39 @@ class CMDRunner(object):
 
             raise CCPluginError(message)
 
+    @staticmethod
+    def convert_path_to_cmd(path):
+        """ Convert path which include space to correct style which bash(mac) and cmd(windows) can treat correctly.
+        
+            eg: on mac: convert '/usr/xxx/apache-ant 1.9.3' to '/usr/xxx/apache-ant\ 1.9.3'
+            eg: on windows: convert '"c:\apache-ant 1.9.3"\bin' to '"c:\apache-ant 1.9.3\bin"'
+        """
+        ret = path
+        if os_is_mac():
+            ret = path.replace("\ ", " ").replace(" ", "\ ")
+
+        if os_is_win32():
+            ret = "\"%s\"" % (path.replace("\"", ""))
+
+        # print("!!!!! Convert %s to %s\n" % (path, ret))
+        return ret
+   
+    @staticmethod
+    def convert_path_to_python(path):
+        """ COnvert path which include space to correct style which python can treat correctly.
+
+            eg: on mac: convert '/usr/xxx/apache-ant\ 1.9.3' to '/usr/xxx/apache-ant 1.9.3'
+            eg: on windows: convert '"c:\apache-ant 1.9.3"\bin' to 'c:\apache-ant 1.9.3\bin'
+        """
+        ret = path
+        if os_is_mac():
+            ret = path.replace("\ ", " ")
+
+        if os_is_win32():
+            ret = ret.replace("\"", "")
+
+        # print("!!!!! Convert %s to %s\n" % (path, ret))
+        return ret
 
 #
 # Plugins should be a sublass of CCPlugin
@@ -249,21 +282,26 @@ def check_environment_variable(var):
 
     return value
 
+def get_xcode_version():
+    commands = [
+        "xcodebuild",
+        "-version"
+    ]
+    child = subprocess.Popen(commands, stdout=subprocess.PIPE)
 
-def select_default_android_platform(min_api_level):
-    ''' selec a default android platform in SDK_ROOT, support platforms 10-19
-    '''
+    xcode = None
+    version = None
+    for line in child.stdout:
+        if 'Xcode' in line:
+            xcode, version = str.split(line, ' ')
 
-    sdk_root = check_environment_variable('ANDROID_SDK_ROOT')
-    platforms_dir = os.path.join(sdk_root, "platforms")
-    if os.path.isdir(platforms_dir):
-       for num in range (min_api_level, 19+1):
-           android_platform = 'android-%s' % num
-           if os.path.isdir(os.path.join(platforms_dir, android_platform)):
-               Logging.info('%s is found' % android_platform)
-               return num
-    return None
+    child.wait()
 
+    if xcode is None:
+        message = "Xcode wasn't installed"
+        raise CCPluginError(message)
+
+    return version
 
 def copy_files_in_dir(src, dst):
 
@@ -448,7 +486,6 @@ def help():
     print("\nExample:")
     print("\t%s new --help" % sys.argv[0])
     print("\t%s run --help" % sys.argv[0])
-    sys.exit(-1)
 
 def run_plugin(command, argv, plugins):
     run_directly = False
@@ -490,8 +527,9 @@ if __name__ == "__main__":
 
     if len(sys.argv) == 1 or sys.argv[1] in ('-h', '--help'):
         help()
+        exit(0)
 
-    if len(sys.argv) == 1 or sys.argv[1] in ('-v', '--version'):
+    if len(sys.argv) > 1 and sys.argv[1] in ('-v', '--version'):
         print("%s" % COCOS2D_CONSOLE_VERSION)
         exit(0)
 

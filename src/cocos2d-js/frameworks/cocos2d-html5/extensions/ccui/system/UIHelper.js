@@ -23,9 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+//todo maybe need change here
+
+
 /**
- * UI Helper
- * @namespace
+ * ccui.helper is the singleton object which is the Helper object contains some functions for seek widget
+ * @class
  * @name ccui.helper
  */
 ccui.helper = {
@@ -95,7 +98,12 @@ ccui.helper = {
 	    return null;
 	},
 
-	/*temp action*/
+    /**
+     * Finds a widget whose action tag equals to param name from root widget.
+     * @param {ccui.Widget} root
+     * @param {Number} tag
+     * @returns {ccui.Widget}
+     */
 	seekActionWidgetByActionTag: function (root, tag) {
 	    if (!root)
 	        return null;

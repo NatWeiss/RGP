@@ -23,21 +23,26 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-ccs.LabelAtlasReader = {
+/**
+ * The ccui.TextAtlas's properties reader for GUIReader.
+ * @class
+ * @name ccs.LabelAtlasReader
+ **/
+ccs.labelAtlasReader = /** @lends ccs.LabelAtlasReader# */{
 
-    getInstance: function(){
-        return ccs.LabelAtlasReader;
-    },
-
+    /**
+     * Sets ccui.TextAtlas's properties from json dictionary.
+     * @param {ccui.TextAtlas} widget
+     * @param {Object} options
+     */
     setPropsFromJsonDictionary: function(widget, options){
-
-        ccs.WidgetReader.setPropsFromJsonDictionary.call(this, widget, options);
+        ccs.widgetReader.setPropsFromJsonDictionary.call(this, widget, options);
 
         var jsonPath = ccs.uiReader.getFilePath();
     
         var labelAtlas = widget;
         var sv = options["stringValue"];
-        var cmf = options["charMapFileData"] || options["charMapFile"];
+        var cmf = options["charMapFileData"];   // || options["charMapFile"];
         var iw = options["itemWidth"];
         var ih = options["itemHeight"];
         var scm = options["startCharMap"];
@@ -49,13 +54,7 @@ ccs.LabelAtlasReader = {
                     var tp_c = jsonPath;
                     var cmfPath = cmftDic["path"];
                     var cmf_tp = tp_c + cmfPath;
-                    labelAtlas.setProperty(
-                        options["stringValue"],
-                        cmf_tp,
-                        options["itemWidth"],
-                        options["itemHeight"],
-                        options["startCharMap"]
-                    );
+                    labelAtlas.setProperty(sv, cmf_tp, iw, ih, scm);
                     break;
                 case 1:
                     cc.log("Wrong res type of LabelAtlas!");
@@ -64,7 +63,46 @@ ccs.LabelAtlasReader = {
                     break;
             }
         }
-        ccs.WidgetReader.setColorPropsFromJsonDictionary.call(this, widget, options);
+        ccs.widgetReader.setColorPropsFromJsonDictionary.call(this, widget, options);
 
+    },
+
+    setPropsFromProtocolBuffers: function(widget, nodeTree){
+        ccs.widgetReader.setPropsFromProtocolBuffers.call(this, widget, nodeTree);
+
+        var jsonPath = ccs.uiReader.getFilePath();
+
+        var labelAtlas = widget;
+        var options = nodeTree["textAtlasOptions"];
+
+        var cmftDic = options["charMapFileData"];
+        var cmfType = cmftDic["resourceType"];
+        switch (cmfType)
+        {
+            case 0:
+            {
+                var tp_c = jsonPath;
+                var cmfPath = cmftDic["path"];
+                var cmf_tp = tp_c += cmfPath;
+                var stringValue = options["stringValue"]!==null ? options["stringValue"] : "12345678";
+                var itemWidth = options["itemWidth"]!==null ? options["itemWidth"] : 24;
+                var itemHeight = options["itemHeight"]!==null ? options["itemHeight"] : 32;
+                labelAtlas.setProperty(stringValue,
+                                        cmf_tp,
+                                        itemWidth,
+                                        itemHeight,
+                                        options["startCharMap"]);
+                break;
+            }
+            case 1:
+                cc.log("Wrong res type of LabelAtlas!");
+                break;
+            default:
+                break;
+        }
+
+
+        // other commonly protperties
+        ccs.widgetReader.setColorPropsFromProtocolBuffers.call(this, widget, nodeTree);
     }
 };

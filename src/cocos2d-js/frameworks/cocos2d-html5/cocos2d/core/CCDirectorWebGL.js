@@ -92,6 +92,7 @@ cc._tmp.DirectorWebGL = function () {
         _t._projection = projection;
         cc.eventManager.dispatchEvent(_t._eventProjectionChanged);
         cc.setProjectionMatrixDirty();
+        cc.renderer.childrenOrderDirty = true;
     };
 
     _p.setDepthTest = function (on) {
@@ -219,9 +220,9 @@ cc._tmp.DirectorWebGL = function () {
         else
             fontSize = 0 | (_t._winSizeInPoints.width / 320 * 24);
 
-        _t._FPSLabel = cc.LabelTTF.create("000.0", "Arial", fontSize);
-        _t._SPFLabel = cc.LabelTTF.create("0.000", "Arial", fontSize);
-        _t._drawsLabel = cc.LabelTTF.create("0000", "Arial", fontSize);
+        _t._FPSLabel = new cc.LabelTTF("000.0", "Arial", fontSize);
+        _t._SPFLabel = new cc.LabelTTF("0.000", "Arial", fontSize);
+        _t._drawsLabel = new cc.LabelTTF("0000", "Arial", fontSize);
 
         var locStatsPosition = cc.DIRECTOR_STATS_POSITION;
         _t._drawsLabel.setPosition(_t._drawsLabel.width / 2 + locStatsPosition.x, _t._drawsLabel.height * 5 / 2 + locStatsPosition.y);
@@ -229,17 +230,6 @@ cc._tmp.DirectorWebGL = function () {
         _t._FPSLabel.setPosition(_t._FPSLabel.width / 2 + locStatsPosition.x, _t._FPSLabel.height / 2 + locStatsPosition.y);
     };
 
-
-    /**
-     * <p>
-     *     converts a UIKit coordinate to an OpenGL coordinate<br/>
-     *     Useful to convert (multi) touches coordinates to the current layout (portrait or landscape)
-     * </p>
-     * @param {cc.Point} uiPoint
-     * @return {cc.Point}
-     *
-     * convertToGL move to CCDirectorWebGL
-     */
     _p.convertToGL = function (uiPoint) {
         var transform = new cc.kmMat4();
         cc.GLToClipTransform(transform);
@@ -259,12 +249,6 @@ cc._tmp.DirectorWebGL = function () {
         return cc.p(glCoord.x, glCoord.y);
     };
 
-    /**
-     * <p>converts an OpenGL coordinate to a UIKit coordinate<br/>
-     * Useful to convert node points to window points for calls such as glScissor</p>
-     * @param {cc.Point} glPoint
-     * @return {cc.Point}
-     */
     _p.convertToUI = function (glPoint) {
         var transform = new cc.kmMat4();
         cc.GLToClipTransform(transform);
@@ -299,9 +283,6 @@ cc._tmp.DirectorWebGL = function () {
         return (this._winSizeInPoints.height / 1.1566 );
     };
 
-    /**
-     * Sets the glViewport
-     */
     _p.setViewport = function () {
         var view = this._openGLView;
         if (view) {
@@ -310,26 +291,14 @@ cc._tmp.DirectorWebGL = function () {
         }
     };
 
-    /**
-     *  Get the CCEGLView, where everything is rendered
-     * @return {*}
-     */
     _p.getOpenGLView = function () {
         return this._openGLView;
     };
 
-    /**
-     * Sets an OpenGL projection
-     * @return {Number}
-     */
     _p.getProjection = function () {
         return this._projection;
     };
 
-    /**
-     * enables/disables OpenGL alpha blending
-     * @param {Boolean} on
-     */
     _p.setAlphaBlending = function (on) {
         if (on)
             cc.glBlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
@@ -338,10 +307,6 @@ cc._tmp.DirectorWebGL = function () {
         //cc.checkGLErrorDebug();
     };
 
-
-    /**
-     * sets the OpenGL default values
-     */
     _p.setGLDefaultValues = function () {
         var _t = this;
         _t.setAlphaBlending(true);

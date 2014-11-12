@@ -70,6 +70,9 @@
             "cocos2d/core/event-manager/CCEventManager.js",
             "cocos2d/core/event-manager/CCEventExtension.js",
 
+            "cocos2d/core/renderer/RendererCanvas.js",
+            "cocos2d/core/renderer/RendererWebGL.js",
+
             "cocos2d/core/base-nodes/BaseNodesWebGL.js",
             "cocos2d/core/base-nodes/BaseNodesPropertyDefine.js",
             "cocos2d/core/base-nodes/CCNode.js",
@@ -232,8 +235,6 @@
             "text-input", "menus", "tilemap", "parallax", "audio"
         ],
 
-
-
         "ccbreader" : [
             "core", "audio", "gui", "menus", "particle", "actions", "labels",
 
@@ -256,15 +257,16 @@
             "extensions/editbox/CCEditBox.js"
         ],
         "ccpool" : [
-            "core", "gui",
+            "core",
 
             "extensions/ccpool/CCPool.js"
         ],
         "ccui" : [
-            "core", "gui", "actions", "labels", "text-input","clipping-nodes",
+            "core", "actions", "labels", "text-input","clipping-nodes",
             "extensions/ccui/base-classes/CCProtectedNode.js",
             "extensions/ccui/system/CocosGUI.js",
             "extensions/ccui/base-classes/UIWidget.js",
+            "extensions/ccui/base-classes/UIScale9Sprite.js",
             "extensions/ccui/layouts/UILayout.js",
             "extensions/ccui/layouts/UILayoutParameter.js",
             "extensions/ccui/layouts/UILayoutManager.js",
@@ -289,8 +291,14 @@
         "cocostudio" : [
             "core",  "tilemap", "particle", "shape-nodes", "ccui",
 
+            "external/protobuf/ByteBuffer.min.js",
+            "external/protobuf/Long.min.js",
+            "external/protobuf/ProtoBuf.min.js",
+            "extensions/cocostudio/reader/CSParseBinary.js",
+
             "extensions/cocostudio/components/CCComponent.js",
             "extensions/cocostudio/components/CCComponentContainer.js",
+            "extensions/ccui/layouts/UILayoutComponent.js",
             "extensions/cocostudio/CocoStudio.js",
 
             "extensions/cocostudio/armature/utils/CCArmatureDefine.js",
@@ -345,7 +353,13 @@
             "extensions/cocostudio/reader/widgetreader/WidgetReader.js",
 
             "extensions/cocostudio/reader/GUIReader.js",
-            "extensions/cocostudio/reader/SceneReader.js"
+            "extensions/cocostudio/reader/SceneReader.js",
+
+            "extensions/cocostudio/reader/timeline/ActionTimeline.js",
+            "extensions/cocostudio/reader/timeline/ActionTimelineCache.js",
+            "extensions/cocostudio/reader/timeline/Frame.js",
+            "extensions/cocostudio/reader/timeline/Timeline.js",
+            "extensions/cocostudio/reader/timeline/CSLoader.js"
         ],
         "gui" : [
             "core", "clipping-nodes", "render-texture", "actions", "progress-timer",

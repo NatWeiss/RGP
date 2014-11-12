@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 /**
- * Base class for ccui.Slider
+ * The Slider control of Cocos UI.
  * @class
  * @extends ccui.Widget
  *
@@ -60,9 +60,10 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     _className: "Slider",
     _barRendererAdaptDirty: true,
     _progressBarRendererDirty: true,
+
     /**
      * allocates and initializes a UISlider.
-     * Constructor of ccui.Slider
+     * Constructor of ccui.Slider. override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
      * @example
      * // example
      * var uiSlider = new ccui.Slider();
@@ -74,33 +75,38 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
         ccui.Widget.prototype.ctor.call(this);
     },
 
+    /**
+     * Initializes a ccui.Slider. Please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
+     * @returns {boolean}
+     * @override
+     */
     init: function () {
-        if (ccui.Widget.prototype.init.call(this)) {
-            return true;
-        }
-        return false;
+        return ccui.Widget.prototype.init.call(this);
     },
 
     _initRenderer: function () {
-        this._barRenderer = cc.Sprite.create();
-        this._progressBarRenderer = cc.Sprite.create();
+        this._barRenderer = new cc.Sprite();
+        this._progressBarRenderer = new cc.Sprite();
         this._progressBarRenderer.setAnchorPoint(0.0, 0.5);
         this.addProtectedChild(this._barRenderer, ccui.Slider.BASEBAR_RENDERER_ZORDER, -1);
         this.addProtectedChild(this._progressBarRenderer, ccui.Slider.PROGRESSBAR_RENDERER_ZORDER, -1);
-        this._slidBallNormalRenderer = cc.Sprite.create();
-        this._slidBallPressedRenderer = cc.Sprite.create();
+        this._slidBallNormalRenderer = new cc.Sprite();
+        this._slidBallPressedRenderer = new cc.Sprite();
         this._slidBallPressedRenderer.setVisible(false);
-        this._slidBallDisabledRenderer = cc.Sprite.create();
+        this._slidBallDisabledRenderer = new cc.Sprite();
         this._slidBallDisabledRenderer.setVisible(false);
-        this._slidBallRenderer = cc.Node.create();
+        this._slidBallRenderer = new cc.Node();
         this._slidBallRenderer.addChild(this._slidBallNormalRenderer);
         this._slidBallRenderer.addChild(this._slidBallPressedRenderer);
         this._slidBallRenderer.addChild(this._slidBallDisabledRenderer);
+        this._slidBallRenderer.setCascadeColorEnabled(true);
+        this._slidBallRenderer.setCascadeOpacityEnabled(true);
+
         this.addProtectedChild(this._slidBallRenderer, ccui.Slider.BALL_RENDERER_ZORDER, -1);
     },
 
     /**
-     * Load texture for slider bar.
+     * Loads texture for slider bar.
      * @param {String} fileName
      * @param {ccui.Widget.LOCAL_TEXTURE|ccui.Widget.PLIST_TEXTURE} texType
      */
@@ -115,8 +121,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
 
         var self = this;
         if(!barRenderer.texture || !barRenderer.texture.isLoaded()){
-            barRenderer.addLoadedEventListener(function(){
-
+            barRenderer.addEventListener("load", function(){
                 self._findLayout();
                 self._updateChildrenDisplayedRGBA();
 
@@ -146,7 +151,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     },
 
     /**
-     * Load dark state texture for slider progress bar.
+     * Loads dark state texture for slider progress bar.
      * @param {String} fileName
      * @param {ccui.Widget.LOCAL_TEXTURE|ccui.Widget.PLIST_TEXTURE} texType
      */
@@ -161,8 +166,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
 
         var self = this;
         if(!progressBarRenderer.texture || !progressBarRenderer.texture.isLoaded()){
-            progressBarRenderer.addLoadedEventListener(function(){
-
+            progressBarRenderer.addEventListener("load", function(){
                 self._findLayout();
                 self._updateChildrenDisplayedRGBA();
 
@@ -198,9 +202,8 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
      * @param {Boolean} able
      */
     setScale9Enabled: function (able) {
-        if (this._scale9Enabled == able) {
+        if (this._scale9Enabled == able)
             return;
-        }
 
         this._scale9Enabled = able;
         this.removeProtectedChild(this._barRenderer, true);
@@ -208,12 +211,11 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
         this._barRenderer = null;
         this._progressBarRenderer = null;
         if (this._scale9Enabled) {
-            this._barRenderer = cc.Scale9Sprite.create();
-            this._progressBarRenderer = cc.Scale9Sprite.create();
-        }
-        else {
-            this._barRenderer = cc.Sprite.create();
-            this._progressBarRenderer = cc.Sprite.create();
+            this._barRenderer = new ccui.Scale9Sprite();
+            this._progressBarRenderer = new ccui.Scale9Sprite();
+        } else {
+            this._barRenderer = new cc.Sprite();
+            this._progressBarRenderer = new cc.Sprite();
         }
         this.loadBarTexture(this._textureFile, this._barTexType);
         this.loadProgressBarTexture(this._progressBarTextureFile, this._progressBarTexType);
@@ -223,8 +225,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
             var ignoreBefore = this._ignoreSize;
             this.ignoreContentAdaptWithSize(false);
             this._prevIgnoreSize = ignoreBefore;
-        }
-        else {
+        } else {
             this.ignoreContentAdaptWithSize(this._prevIgnoreSize);
         }
         this.setCapInsetsBarRenderer(this._capInsetsBarRenderer);
@@ -232,7 +233,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     },
 
     /**
-     * Get  slider is using scale9 renderer or not.
+     * Returns slider is using scale9 renderer or not.
      * @returns {Boolean}
      */
     isScale9Enabled: function () {
@@ -260,56 +261,57 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     },
 
     /**
-     * Sets capinsets for slider, if slider is using scale9 renderer.
+     * Sets capinsets for slider's renderer, if slider is using scale9 renderer.
      * @param {cc.Rect} capInsets
      */
     setCapInsetsBarRenderer: function (capInsets) {
-        this._capInsetsBarRenderer = capInsets;
-        if (!this._scale9Enabled) {
+        if(!capInsets)
             return;
-        }
+        var locInsets = this._capInsetsBarRenderer;
+        locInsets.x = capInsets.x;
+        locInsets.y = capInsets.y;
+        locInsets.width = capInsets.width;
+        locInsets.height = capInsets.height;
+        if (!this._scale9Enabled)
+            return;
         this._barRenderer.setCapInsets(capInsets);
     },
 
     /**
-     * Get cap insets for slider.
+     * Returns cap insets for slider.
      * @returns {cc.Rect}
      */
     getCapInsetsBarRenderer: function () {
-        return this._capInsetsBarRenderer;
-    },
-
-    setCapInsetProgressBarRebderer: function(capInsets){
-        this._capInsetsProgressBarRenderer = capInsets;
-        if (!this._scale9Enabled)
-        {
-            return;
-        }
-        this._progressBarRenderer.setCapInsets(capInsets);
+        return cc.rect(this._capInsetsBarRenderer);
     },
 
     /**
-     * Sets capinsets for slider, if slider is using scale9 renderer.
+     * Sets capinsets of ProgressBar for slider, if slider is using scale9 renderer.
      * @param {cc.Rect} capInsets
      */
     setCapInsetProgressBarRenderer: function (capInsets) {
-        this._capInsetsProgressBarRenderer = capInsets;
-        if (!this._scale9Enabled) {
+        if(!capInsets)
             return;
-        }
+        var locInsets = this._capInsetsProgressBarRenderer;
+        locInsets.x = capInsets.x;
+        locInsets.y = capInsets.y;
+        locInsets.width = capInsets.width;
+        locInsets.height = capInsets.height;
+        if (!this._scale9Enabled)
+            return;
         this._progressBarRenderer.setCapInsets(capInsets);
     },
 
     /**
-     * Get cap insets for slider.
+     * Returns cap insets of ProgressBar for slider.
      * @returns {cc.Rect}
      */
-    getCapInsetsProgressBarRebderer: function () {
-        return this._capInsetsProgressBarRenderer;
+    getCapInsetsProgressBarRenderer: function () {
+        return cc.rect(this._capInsetsProgressBarRenderer);
     },
 
     /**
-     * Load textures for slider ball.
+     * Loads textures for slider ball.
      * @param {String} normal
      * @param {String} pressed
      * @param {String} disabled
@@ -322,7 +324,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     },
 
     /**
-     * Load normal state texture for slider ball.
+     * Loads normal state texture for slider ball.
      * @param {String} normal
      * @param {ccui.Widget.LOCAL_TEXTURE|ccui.Widget.PLIST_TEXTURE} texType
      */
@@ -336,8 +338,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
 
         var self = this;
         if(!this._slidBallNormalRenderer.texture || !this._slidBallNormalRenderer.texture.isLoaded()){
-            this._slidBallNormalRenderer.addLoadedEventListener(function(){
-
+            this._slidBallNormalRenderer.addEventListener("load", function(){
                 self._updateChildrenDisplayedRGBA();
             });
         }
@@ -358,7 +359,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     },
 
     /**
-     * Load selected state texture for slider ball.
+     * Loads selected state texture for slider ball.
      * @param {String} pressed
      * @param {ccui.Widget.LOCAL_TEXTURE|ccui.Widget.PLIST_TEXTURE} texType
      */
@@ -372,8 +373,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
 
         var self = this;
         if(!this._slidBallPressedRenderer.texture || !this._slidBallPressedRenderer.texture.isLoaded()){
-            this._slidBallPressedRenderer.addLoadedEventListener(function(){
-
+            this._slidBallPressedRenderer.addEventListener("load", function(){
                 self._updateChildrenDisplayedRGBA();
             });
         }
@@ -408,8 +408,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
 
         var self = this;
         if(!this._slidBallDisabledRenderer.texture || !this._slidBallDisabledRenderer.texture.isLoaded()){
-            this._slidBallDisabledRenderer.addLoadedEventListener(function(){
-
+            this._slidBallDisabledRenderer.addEventListener("load", function(){
                 self._updateChildrenDisplayedRGBA();
             });
         }
@@ -434,19 +433,16 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
      * @param {number} percent
      */
     setPercent: function (percent) {
-        if (percent > 100) {
+        if (percent > 100)
             percent = 100;
-        }
-        if (percent < 0) {
+        if (percent < 0)
             percent = 0;
-        }
         this._percent = percent;
         var res = percent / 100.0;
         var dis = this._barLength * res;
-        this._slidBallRenderer.setPosition(cc.p(dis, this._contentSize.height / 2));
-        if (this._scale9Enabled) {
+        this._slidBallRenderer.setPosition(dis, this._contentSize.height / 2);
+        if (this._scale9Enabled)
             this._progressBarRenderer.setPreferredSize(cc.size(dis, this._progressBarTextureSize.height));
-        }
         else {
             var spriteRenderer = this._progressBarRenderer;
             var rect = spriteRenderer.getTextureRect();
@@ -457,18 +453,21 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
         }
     },
 
+    /**
+     * test the point whether location in loadingBar's bounding box.
+     * @override
+     * @param {cc.Point} pt
+     * @returns {boolean}
+     */
     hitTest: function(pt){
         var nsp = this._slidBallNormalRenderer.convertToNodeSpace(pt);
         var ballSize = this._slidBallNormalRenderer.getContentSize();
         var ballRect = cc.rect(0,0, ballSize.width, ballSize.height);
 //        if (ballRect.containsPoint(nsp)) {
-        if (nsp.x >= ballRect.x &&
+        return (nsp.x >= ballRect.x &&
             nsp.x <= (ballRect.x + ballRect.width) &&
             nsp.y >= ballRect.y &&
-            nsp.y <= (ballRect.y +ballRect.height)) {
-            return true;
-        }
-        return false;
+            nsp.y <= (ballRect.y +ballRect.height));
     },
 
     onTouchBegan: function (touch, event) {
@@ -497,7 +496,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     },
 
     /**
-     * get percent with ballPos
+     * Returns percent with ball's position.
      * @param {cc.Point} px
      * @returns {number}
      */
@@ -508,25 +507,29 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     /**
      * add event listener
      * @param {Function} selector
-     * @param {Object} target
+     * @param {Object} [target=]
+     * @deprecated since v3.0, please use addEventListener instead.
      */
     addEventListenerSlider: function (selector, target) {
+        this.addEventListener(selector, target);
+    },
+
+    /**
+     * Adds a callback
+     * @param {Function} selector
+     * @param {Object} [target=]
+     */
+    addEventListener: function(selector, target){
         this._sliderEventSelector = selector;
         this._sliderEventListener = target;
     },
 
-    addEventListener: function(callback){
-        this._eventCallback = callback;
-    },
-
     _percentChangedEvent: function () {
-        if (this._sliderEventListener && this._sliderEventSelector) {
-            this._sliderEventSelector.call(this._sliderEventListener,
-                this,
-                ccui.Slider.EVENT_PERCENT_CHANGED);
-        }
-        if (this._eventCallback) {
-            this._eventCallback(ccui.Slider.EVENT_PERCENT_CHANGED);
+        if(this._sliderEventSelector){
+            if (this._sliderEventListener)
+                this._sliderEventSelector.call(this._sliderEventListener, this, ccui.Slider.EVENT_PERCENT_CHANGED);
+            else
+                this._sliderEventSelector(this, ccui.Slider.EVENT_PERCENT_CHANGED);
         }
     },
 
@@ -557,12 +560,16 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
         }
     },
 
+    /**
+     * Returns the content size of bar renderer.
+     * @returns {cc.Size}
+     */
     getVirtualRendererSize: function(){
         return this._barRenderer.getContentSize();
     },
 
     /**
-     * override "getContentSize" method of widget.
+     * Returns the bar renderer.
      * @returns {cc.Node}
      */
     getVirtualRenderer: function () {
@@ -645,7 +652,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     },
 
     /**
-     * Returns the "class name" of widget.
+     * Returns the "class name" of ccui.LoadingBar.
      * @returns {string}
      */
     getDescription: function () {
@@ -653,7 +660,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     },
 
     _createCloneInstance: function () {
-        return ccui.Slider.create();
+        return new ccui.Slider();
     },
 
     _copySpecialProperties: function (slider) {
@@ -667,7 +674,6 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
         this.setPercent(slider.getPercent());
         this._sliderEventListener = slider._sliderEventListener;
         this._sliderEventSelector = slider._sliderEventSelector;
-        this._eventCallback = slider._eventCallback;
 
     }
 });
@@ -683,11 +689,8 @@ _p = null;
 
 /**
  * allocates and initializes a UISlider.
- * @deprecated
+ * @deprecated since v3.0, please use new ccui.Slider() instead.
  * @return {ccui.Slider}
- * @example
- * // example
- * var uiSlider = ccui.Slider.create();
  */
 ccui.Slider.create = function () {
     return new ccui.Slider();
@@ -695,9 +698,29 @@ ccui.Slider.create = function () {
 
 // Constant
 //Slider event type
+/**
+ * The percent change event flag of ccui.Slider.
+ * @constant
+ * @type {number}
+ */
 ccui.Slider.EVENT_PERCENT_CHANGED = 0;
 
 //Render zorder
+/**
+ * The zOrder value of ccui.Slider's base bar renderer.
+ * @constant
+ * @type {number}
+ */
 ccui.Slider.BASEBAR_RENDERER_ZORDER = -3;
+/**
+ * The zOrder value of ccui.Slider's progress bar renderer.
+ * @constant
+ * @type {number}
+ */
 ccui.Slider.PROGRESSBAR_RENDERER_ZORDER = -2;
+/**
+ * The zOrder value of ccui.Slider's ball renderer.
+ * @constant
+ * @type {number}
+ */
 ccui.Slider.BALL_RENDERER_ZORDER = -1;

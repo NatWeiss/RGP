@@ -27,6 +27,7 @@
  * @ignore
  */
 ccs.PT_RATIO = 32;
+
 /**
  * Base class for ccs.ColliderFilter
  * @class
@@ -38,16 +39,17 @@ ccs.ColliderFilter = ccs.Class.extend(/** @lends ccs.ColliderFilter# */{
     _categoryBits: 0,
     _groupIndex: 0,
     _maskBits: 0,
+
     ctor: function (collisionType, group) {
         this._collisionType = collisionType || 0;
         this._group = group || 0;
     },
+
     updateShape: function (shape) {
         if(shape instanceof cp.Shape){
             shape.collision_type = this._collisionType;
             shape.group = this._group;
         }else if(shape instanceof Box2D.b2FilterData){
-
             var filter = new Box2D.b2FilterData();
             filter.categoryBits = this._categoryBits;
             filter.groupIndex = this._groupIndex;
@@ -57,6 +59,7 @@ ccs.ColliderFilter = ccs.Class.extend(/** @lends ccs.ColliderFilter# */{
         }
     }
 });
+
 /**
  * Base class for ccs.ColliderBody
  * @class
@@ -151,6 +154,8 @@ ccs.ColliderBody = ccs.Class.extend(/** @lends ccs.ColliderBody# */{
  * @class
  * @extends ccs.Class
  *
+ * @param {ccs.Bone} [bone]
+ *
  * @property {ccs.ColliderFilter}   colliderFilter  - The collider filter of the collider detector
  * @property {Boolean}              active          - Indicate whether the collider detector is active
  * @property {Object}               body            - The collider body
@@ -162,12 +167,15 @@ ccs.ColliderDetector = ccs.Class.extend(/** @lends ccs.ColliderDetector# */{
     _active: false,
     _filter: null,
     helpPoint: cc.p(0, 0),
-    ctor: function () {
+
+    ctor: function (bone) {
         this._colliderBodyList = [];
         this._bone = null;
         this._body = null;
         this._active = false;
         this._filter = null;
+
+        ccs.ColliderDetector.prototype.init.call(this, bone);
     },
     init: function (bone) {
         this._colliderBodyList.length = 0;
@@ -328,8 +336,10 @@ ccs.ColliderDetector = ccs.Class.extend(/** @lends ccs.ColliderDetector# */{
                     var b = shape.verts[(j + 1) % shape.verts.length];
                     var n = cp.v.normalize(cp.v.perp(cp.v.sub(b, shape.verts[j])));
 
-                    shape.axes[j].n = n;
-                    shape.axes[j].d = cp.v.dot(n, shape.verts[j]);
+                    if(shape.planes){
+                        shape.planes[j].n = n;
+                        shape.planes[j].d = cp.v.dot(n, shape.verts[j]);
+                    }
 //                    var b = shape.verts[(i + 1) % shape.numVerts];
 //                    var n = cp.v.normalize(cp.v.perp(cp.v.sub(b, shape.verts[i])));
 //
@@ -383,8 +393,5 @@ cc.defineGetterSetter(_p, "body", _p.getBody, _p.setBody);
 _p = null;
 
 ccs.ColliderDetector.create = function (bone) {
-    var colliderDetector = new ccs.ColliderDetector();
-    if (colliderDetector && colliderDetector.init(bone))
-        return colliderDetector;
-    return null;
+    return new ccs.ColliderDetector(bone);
 };

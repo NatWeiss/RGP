@@ -23,13 +23,20 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-ccs.LabelBMFontReader = {
-    getInstance: function(){
-        return ccs.LabelBMFontReader;
-    },
+/**
+ * The ccui.TextBMFont's properties reader for GUIReader.
+ * @class
+ * @name ccs.LabelBMFontReader
+ **/
+ccs.labelBMFontReader = /** @lends ccs.LabelBMFontReader# */{
 
+    /**
+     * Sets ccui.TextBMFont's properties from json dictionary.
+     * @param {ccui.TextBMFont} widget
+     * @param {Object} options
+     */
     setPropsFromJsonDictionary: function(widget, options){
-        ccs.WidgetReader.setPropsFromJsonDictionary.call(this, widget, options);
+        ccs.widgetReader.setPropsFromJsonDictionary.call(this, widget, options);
 
         var jsonPath = ccs.uiReader.getFilePath();
     
@@ -37,16 +44,13 @@ ccs.LabelBMFontReader = {
     
         var cmftDic = options["fileNameData"];
         var cmfType = cmftDic["resourceType"];
-        switch (cmfType)
-        {
+        switch (cmfType) {
             case 0:
-            {
                 var tp_c = jsonPath;
                 var cmfPath = cmftDic["path"];
                 var cmf_tp = tp_c + cmfPath;
                 labelBMFont.setFntFile(cmf_tp);
                 break;
-            }
             case 1:
                 cc.log("Wrong res type of LabelAtlas!");
                 break;
@@ -56,6 +60,44 @@ ccs.LabelBMFontReader = {
     
         var text = options["text"];
         labelBMFont.setString(text);
-        ccs.WidgetReader.setColorPropsFromJsonDictionary.call(this, widget, options);
+        ccs.widgetReader.setColorPropsFromJsonDictionary.call(this, widget, options);
+    },
+
+    setPropsFromProtocolBuffers: function(widget, nodeTree){
+        ccs.widgetReader.setPropsFromProtocolBuffers.call(this, widget, nodeTree);
+
+        var jsonPath = ccs.uiReader.getFilePath();
+
+        var labelBMFont = widget;
+        var options = nodeTree["textBMFontOptions"];
+
+
+        if(options){
+            var cmftDic = options["fileNameData"];
+            var cmfType = cmftDic["resourceType"];
+            switch (cmfType)
+            {
+                case 0:
+                {
+                    var tp_c = jsonPath;
+                    var cmfPath = cmftDic["path"];
+                    var cmf_tp = tp_c + cmfPath;
+                    labelBMFont.setFntFile(cmf_tp);
+                    break;
+                }
+                case 1:
+                    cc.log("Wrong res type of LabelAtlas!");
+                    break;
+                default:
+                    break;
+            }
+
+            var text = options["text"]!==null ? options["text"] : "Text Label";
+            labelBMFont.setString(text);
+        }
+
+
+        // other commonly protperties
+        ccs.widgetReader.setColorPropsFromProtocolBuffers.call(this, widget, nodeTree);
     }
 };

@@ -30,7 +30,7 @@
 
 NS_CC_BEGIN
 
-class EventListenerAcceleration : public EventListener
+class CC_DLL EventListenerAcceleration : public EventListener
 {
 public:
     static const std::string LISTENER_ID;
@@ -46,7 +46,7 @@ CC_CONSTRUCTOR_ACCESS:
     EventListenerAcceleration();
     
     bool init(const std::function<void(Acceleration*, Event* event)>& callback);
-
+    
 private:
     std::function<void(Acceleration*, Event*)> onAccelerationEvent;
     

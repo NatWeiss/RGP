@@ -65,13 +65,13 @@ cc.ControlSlider = cc.Control.extend(/** @lends cc.ControlSlider# */{
         cc.Control.prototype.ctor.call(this);
         if (thumbFile != undefined) {
             // Prepare background for slider
-            bgSprite = cc.Sprite.create(bgFile);
+            bgSprite = new cc.Sprite(bgFile);
 
             // Prepare progress for slider
-            progressSprite = cc.Sprite.create(progressFile);
+            progressSprite = new cc.Sprite(progressFile);
 
             // Prepare thumb (menuItem) for slider
-            thumbSprite = cc.Sprite.create(thumbFile);
+            thumbSprite = new cc.Sprite(thumbFile);
 
             this.initWithSprites(bgSprite, progressSprite, thumbSprite);
         }
@@ -300,7 +300,7 @@ _p = null;
  * Creates a slider with a given background sprite and a progress bar and a
  * thumb item.
  * @deprecated
- * @see initWithBackgroundSprite:progressSprite:thumbMenuItem:
+ * @see cc.ControlSlider
  */
 cc.ControlSlider.create = function (bgFile, progressFile, thumbFile) {
     return new cc.ControlSlider(bgFile, progressFile, thumbFile);

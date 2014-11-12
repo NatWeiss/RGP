@@ -23,8 +23,7 @@
  ****************************************************************************/
 
 #include "Downloader.h"
-#include "AssetsManager.h"
-
+#include "cocos2d.h"
 #include <curl/curl.h>
 #include <curl/easy.h>
 #include <cstdio>
@@ -366,7 +365,7 @@ void Downloader::downloadToBuffer(const std::string &srcUrl, const std::string &
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK)
     {
-        AssetsManager::removeFile(data.path + data.name + TEMP_EXT);
+        _fileUtils->removeFile(data.path + data.name + TEMP_EXT);
         std::string msg = StringUtils::format("Unable to download file: [curl error]%s", curl_easy_strerror(res));
         this->notifyError(msg, customId, res);
     }
@@ -436,7 +435,7 @@ void Downloader::download(const std::string &srcUrl, const std::string &customId
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK)
     {
-        AssetsManager::removeFile(data.path + data.name + TEMP_EXT);
+        _fileUtils->removeFile(data.path + data.name + TEMP_EXT);
         std::string msg = StringUtils::format("Unable to download file: [curl error]%s", curl_easy_strerror(res));
         this->notifyError(msg, customId, res);
     }
@@ -447,21 +446,21 @@ void Downloader::download(const std::string &srcUrl, const std::string &customId
     // This can only be done after fclose
     if (res == CURLE_OK)
     {
-        AssetsManager::renameFile(data.path, data.name + TEMP_EXT, data.name);
-    }
-    
-    Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]{
-        if (!ptr.expired())
-        {
-            std::shared_ptr<Downloader> downloader = ptr.lock();
-            
-            auto successCB = downloader->getSuccessCallback();
-            if (successCB != nullptr)
+        _fileUtils->renameFile(data.path, data.name + TEMP_EXT, data.name);
+        
+        Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]{
+            if (!ptr.expired())
             {
-                successCB(data.url, data.path + data.name, data.customId);
+                std::shared_ptr<Downloader> downloader = ptr.lock();
+                
+                auto successCB = downloader->getSuccessCallback();
+                if (successCB != nullptr)
+                {
+                    successCB(data.url, data.path + data.name, data.customId);
+                }
             }
-        }
-    });
+        });
+    }
 }
 
 void Downloader::batchDownloadAsync(const DownloadUnits &units, const std::string &batchId/* = ""*/)
@@ -564,7 +563,7 @@ void Downloader::groupBatchDownload(const DownloadUnits &units)
             if (_supportResuming && unit.resumeDownload)
             {
                 // Check already downloaded size for current download unit
-                long size = AssetsManager::getFileSize(storagePath + TEMP_EXT);
+                long size = _fileUtils->getFileSize(storagePath + TEMP_EXT);
                 if (size != -1)
                 {
                     curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, size);
@@ -671,7 +670,7 @@ void Downloader::groupBatchDownload(const DownloadUnits &units)
         }
         else
         {
-            AssetsManager::renameFile(data->path, data->name + TEMP_EXT, data->name);
+            _fileUtils->renameFile(data->path, data->name + TEMP_EXT, data->name);
         }
     }
     

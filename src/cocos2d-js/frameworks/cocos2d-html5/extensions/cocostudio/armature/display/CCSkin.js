@@ -28,6 +28,9 @@
  * @class
  * @extends ccs.Sprite
  *
+ * @param {String} [fileName]
+ * @param {cc.Rect} [rect]
+ *
  * @property {Object}   skinData    - The data of the skin
  * @property {ccs.Bone} bone        - The bone of the skin
  * @property {String}   displayName - <@readonly> The displayed name of skin
@@ -41,15 +44,30 @@ ccs.Skin = ccs.Sprite.extend(/** @lends ccs.Skin# */{
     _armature: null,
     _className: "Skin",
 
-    ctor: function () {
+    ctor: function (fileName, rect) {
         cc.Sprite.prototype.ctor.call(this);
         this._skinData = null;
         this.bone = null;
         this._displayName = "";
         this._skinTransform = cc.affineTransformIdentity();
         this._armature = null;
+
+        if (fileName == null || fileName == "") {
+            ccs.Skin.prototype.init.call(this);
+        } else {
+            if(fileName[0] == "#"){
+                ccs.Skin.prototype.initWithSpriteFrameName.call(this, fileName.substr(1));
+            } else {
+                ccs.Skin.prototype.initWithFile.call(this, fileName, rect);
+            }
+        }
     },
 
+    /**
+     * Initializes with sprite frame name
+     * @param {String} spriteFrameName
+     * @returns {Boolean}
+     */
     initWithSpriteFrameName: function (spriteFrameName) {
         if(spriteFrameName == "")
             return false;
@@ -65,12 +83,23 @@ ccs.Skin = ccs.Sprite.extend(/** @lends ccs.Skin# */{
         return ret;
     },
 
-    initWithFile: function (fileName) {
-        var ret = cc.Sprite.prototype.initWithFile.call(this, fileName);
+    /**
+     * Initializes with texture file name.
+     * @param {String} fileName
+     * @param {cc.Rect} rect
+     * @returns {Boolean}
+     */
+    initWithFile: function (fileName, rect) {
+        var ret = rect ? cc.Sprite.prototype.initWithFile.call(this, fileName, rect)
+                       : cc.Sprite.prototype.initWithFile.call(this, fileName);
         this._displayName = fileName;
         return ret;
     },
 
+    /**
+     * Sets skin data to ccs.Skin.
+     * @param {ccs.BaseData} skinData
+     */
     setSkinData: function (skinData) {
         this._skinData = skinData;
         this.setScaleX(skinData.scaleX);
@@ -90,10 +119,17 @@ ccs.Skin = ccs.Sprite.extend(/** @lends ccs.Skin# */{
         this.updateArmatureTransform();
     },
 
+    /**
+     * Returns skin date of ccs.Skin.
+     * @returns {ccs.BaseData}
+     */
     getSkinData: function () {
         return this._skinData;
     },
 
+    /**
+     * Updates armature skin's transform with skin transform and bone's transform.
+     */
     updateArmatureTransform: function () {
         this._transform = cc.affineTransformConcat(
             this._skinTransform,
@@ -168,6 +204,10 @@ ccs.Skin = ccs.Sprite.extend(/** @lends ccs.Skin# */{
             return __ARGS__;
     },
 
+    /**
+     * Returns skin's world transform.
+     * @returns {cc.AffineTransform}
+     */
     getNodeToWorldTransform: function(){
         return cc.affineTransformConcat(this._transform,this.bone.getArmature().getNodeToWorldTransform());
     },
@@ -180,6 +220,10 @@ ccs.Skin = ccs.Sprite.extend(/** @lends ccs.Skin# */{
         return cc.affineTransformConcat( displayTransform,this.bone.getArmature().nodeToWorldTransform());
     },
 
+    /**
+     * Sets the bone reference to ccs.Skin.
+     * @param bone
+     */
     setBone: function (bone) {
         this.bone = bone;
         var armature = this.bone.getArmature();
@@ -187,6 +231,10 @@ ccs.Skin = ccs.Sprite.extend(/** @lends ccs.Skin# */{
             this._armature = armature;
     },
 
+    /**
+     * Returns the bone reference of ccs.Skin.
+     * @returns {null}
+     */
     getBone: function () {
         return this.bone;
     },
@@ -224,40 +272,18 @@ _p = null;
  * @param {String} [fileName] fileName or sprite frame name
  * @param {cc.Rect} [rect]
  * @returns {ccs.Skin}
- * @example
- * // example
- * var skin = ccs.Skin.create("res/test.png",cc.rect(0,0,50,50));
- * var skin = ccs.Skin.create("#test.png");             //=> ccs.Skin.createWithSpriteFrameName("test.png");
+ * @deprecated since v3.1, please use new construction instead
  */
 ccs.Skin.create = function (fileName, rect) {
-    var argnum = arguments.length;
-    var skin = new ccs.Skin();
-    if (argnum === 0 || fileName == null || fileName == "") {
-        if (skin.init())
-            return skin;
-    } else {
-        if(fileName[0] == "#"){
-            if (skin && skin.initWithSpriteFrameName(fileName))
-                return skin;
-        }else{
-            if (skin && skin.initWithFile(fileName, rect))
-                return skin;
-        }
-    }
-    return null;
+    return new ccs.Skin(fileName, rect);
 };
 
 /**
  * allocates and initializes a skin.
  * @param {String} spriteFrameName
  * @returns {ccs.Skin}
- * @example
- * // example
- * var skin = ccs.Skin.createWithSpriteFrameName("test.png");
+ * @deprecated since v3.1, please use new construction instead
  */
 ccs.Skin.createWithSpriteFrameName = function (spriteFrameName) {
-    var skin = new ccs.Skin();
-    if (skin && skin.initWithSpriteFrameName(spriteFrameName))
-        return skin;
-    return null;
+    return new ccs.Skin("#" + spriteFrameName);
 };

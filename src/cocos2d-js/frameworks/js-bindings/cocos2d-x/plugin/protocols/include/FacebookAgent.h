@@ -59,6 +59,13 @@ public:
      */
 	void login(FBCallback cb);
 
+    /**
+     @brief log in with specific permissions
+     @param permissoins different permissions splited by ','
+     @param cb callback of login
+     */
+    void login(std::string& permissions, FBCallback cb);
+
 	/**
      @brief log out
      */
@@ -68,18 +75,19 @@ public:
      @brief Check whether the user logined or not
      */
 	bool isLoggedIn();
-
-	/**
-     @brief request new permissions
-     @param permissoins different permissions splited by ','
-     @param cb callback of requestPermissions
-     */
-	void requestPermissions(std::string permissions, FBCallback cb);
-	
+    /**
+     @brief get UserID
+     **/
+    std::string getUserID();
 	/**
      @brief get AccessToken
      */
 	std::string getAccessToken();
+
+    /**
+     @brief get permissoin list
+     */
+    std::string getPermissionList();
 
 	/**
      @brief share
@@ -87,14 +95,22 @@ public:
      @param cb callback of share
      */
 	void share(FBInfo &info, FBCallback cb);
-
 	/**
      @brief open a dialog of Facebook app
      @param info share information
      @param cb callback of dialog
      */
 	void dialog(FBInfo &info, FBCallback cb);
-	
+    bool canPresentDialogWithParams(FBInfo &info);
+    void webDialog(FBInfo &info,FBCallback cb);
+
+	/**
+     @brief open the app request dialog of Facebook app
+     @param info share information
+     @param cb callback of dialog
+     */
+    void appRequest(FBInfo &info, FBCallback cb);
+
 	/**
      @brief use Facebook Open Graph api
      @param path path of Open Graph api
@@ -102,7 +118,31 @@ public:
      @param params request parameters
      @param cb callback of request
      */
-	void request(std::string &path, int method, FBInfo &params, FBCallback cb);
+    void api(std::string &path, int method, FBInfo &params, FBCallback cb);
+
+    /**
+     @brief Notifies the events system that the app has launched & logs an activatedApp event. 
+    */
+    void activateApp();
+
+    /**
+     @brief Log an app event with the specified name, supplied value, and set of parameters.
+    */
+    void logEvent(std::string& eventName);
+    void logEvent(std::string& eventName, float valueToSum);
+    void logEvent(std::string& eventName, FBInfo& parameters);
+    void logEvent(std::string& eventName, float valueToSum, FBInfo& parameters);
+    
+    /*
+     @breif Log an app event for purchase.
+     */
+    void logPurchase(float mount,std::string currency);
+    void logPurchase(float mount,std::string currency,FBInfo &parmeters);
+    /*
+     @breif return the version of Facebook SDK for Cocos 
+     */
+    std::string getSDKVersion();
+	
 	FBCallback getRequestCallback(int index);
 private:
 	FacebookAgent();
