@@ -14,6 +14,7 @@ What it does:
 Updates
 -------
 
+* Nov 12, 2014: Prebuilder updated for Cocos2d JS 3.1 / Cocos2d-x 3.3 rc0.
 * Aug 14, 2014: Prebuilder updated for Cocos2d JS 3.0 rc2 / Cocos2d-x 3.2.
 
 
