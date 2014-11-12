@@ -187,7 +187,7 @@ var LayerMenu = (function(){
 				if (socialPlugin.isLoggedIn()) {
 					socialPlugin.logout();
 				} else {
-					socialPlugin.login(Game.config["social-plugin-login-permissions"]);
+					socialPlugin.login(Game.config["social-plugin"]["login-permissions"]);
 				}
 			}
 			else if (tag == TAG_TOGGLE_SOUND) {

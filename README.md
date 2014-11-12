@@ -104,6 +104,17 @@ The command to prebuild Cocos2D X static libraries used by Cocos2D JS on native 
 When the command is finished, you'll have a directory (`~/Library/Developer/RapidGame` on Macs) with include files, java files, make files, Javascript bindings and library files for iOS, Mac and Android in Debug and Release mode for all available architectures.
 
 
+Development Platforms
+---------------------
+
+RapidGame can be used on any platform that is capable of running Node.js.
+
+The Cocos2dx library prebuilder currently works on the following development platforms:
+
+* Mac
+* Windows
+
+
 Custom Cocos2D Projects
 -----------------------
 
