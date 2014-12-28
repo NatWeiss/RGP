@@ -7,7 +7,7 @@ RapidGame upgrade instructions:
 * Git add --all and commit.
 * Apply existing cocos2d.patch manually to new cocos2d-js folder.
 * Check in.
-* Upgrade package.json version and cocos2djs URL in rapidgamepro.js.
+* Upgrade package.json version and cocos2djs URL in rapidgamepro.js AND src/downloaded.txt.
 * Check in.
 * Verify rapidgamepro prebuild (npm link . to ~/code/RapidGamePro if needed).
 * Verify TwoScene iOS, Mac and Platformer iOS, Mac.
