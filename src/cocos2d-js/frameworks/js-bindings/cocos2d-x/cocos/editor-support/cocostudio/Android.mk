@@ -59,8 +59,7 @@ ActionTimeline/CCActionTimelineCache.cpp \
 ActionTimeline/CCFrame.cpp \
 ActionTimeline/CCTimeLine.cpp \
 ActionTimeline/CCActionTimeline.cpp \
-ActionTimeline/CSLoader.cpp \
-CSParseBinary.pb.cc 
+ActionTimeline/CSLoader.cpp
 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/..
