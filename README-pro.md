@@ -95,6 +95,44 @@ When the `prebuild` command is finished, the static libraries will reside in `Ra
 2. Each game project's folder can be copied or moved quickly and without disturbing the absolute symlink.
 
 
+What's the difference between a RapidGamePro project and a "normal" Cocos2d-JS project?
+---------------------------------------------------------------------------------------
+
+A project created by RapidGamePro uses exactly the same underlying API as Cocos2d-JS/X. One can still get the running scene, for example, like this `cc.director.getRunningScene()` (Javascript) or this `cocos2d::Director::getInstance()->getRunningScene()` (C++).
+
+RapidGamePro extends upon the Cocos2d-JS API with the [Game](Game.html) object. This object provides methods which are commonly used in game development, but were missing from Cocos2d-JS at the time of writing. `Game.rand(5)`, for example, returns a random integer between 0 and 5.
+
+While the underlying API stays the same, the file / folder structure of a project created by RapidGamePro is different than that of a "normal" Cocos2d-JS project. A normal project is created with the `cocos` command:
+
+	cocos new -p com.mycompany.mygame -l js -d MyGame
+
+This results in a project folder approximately 500 MB which contains all the files necessary to build Cocos2d-X from scratch. Subfolders include:
+
+	frameworks/ - All Cocos2d-html5 and Cocos2d-x source files, as well as project files for the game
+	res/ - Game assets
+	runtime/ - An executable which can run the iOS Simulator from the commandline
+	src/ - The Javascript files
+	tools/ - Miscellaneous tools
+
+By contrast, a RapidGamePro project is only 2 MB (because it symlinks to Cocos2d-html5 and the prebuilt Cocos2d-X libraries) and has a more organized folder structure:
+
+	Assets/ - The game assets and Javascript files
+	lib/ - A symlink to the prebuilt Cocos2d-X libraries and Cocos2d-html5
+	Projects/ - The project files for the game
+	Server/ - The server which provides an API and serves files for the HTML5 version of the game
+
+Inside the project files there are other differences. Take the Xcode project as an example. The normal Cocos2d-JS project is setup to build all of Cocos2d-X, depends on several sub-projects (Targets > Build Phases > Target Dependencies) and references several **User Header Search Paths** (example: `$(SRCROOT)/../../js-bindings/cocos2d-x`) within the `frameworks` folder.
+
+The RapidGamePro project is more efficient, relying on the symlinked `lib` folder. Instead of depending on sub-projects and rebuilding all of Cocos2d-X, it uses two **Other Linker Flags** to include the prebuilt Cocos2d-X libraries (`-lcocos2dx-prebuilt` and `-lcocos2dx-plugins`) and specifies an additional **Library Search Path** in which to find them: `$(SRCROOT)/../lib/cocos2d/x/lib/$(CONFIGURATION)-iOS/$(PLATFORM_NAME)`. **User Header Search Paths** also use the symlink, `$(SRCROOT)/../lib/cocos2d/x/include/cocos`, so that by simply swapping the `lib` folder one can upgrade to a newer prebuilt version of Cocos2d-JS/X.
+
+Another key difference between the projects is that with a normal Cocos2d-JS project, one must manually add plugins to the project. For example, if Facebook support is desired, one must add the sub-project file `PluginFacebook.xcodeproj` (found in `frameworks/js-bindings/cocos2d-x/plugin/plugins/facebook/proj.ios/`), add it as a target dependency and link the binary with the library. A similar process must be taken to integrate the Android plugin. And if there is a plugin written for HTML5 (at the time of this writing there is finally one written for Facebook only) then it must be incorporated by loading the Javascript files at runtime.
+
+By contrast, the RapidGamePro project already has plugin support because all the plugins are part of the prebuilt `libcocos2dx-plugins.a` in the case of the native project and Javascript files have been included in the case of the HTML5 project. Everything is already hooked up. The native project is ready to use the plugins and the HTML5 project has already loaded the plugin Javascript files. Nothing must be done to get the plugins working in a RapidGamePro project. It's all ready to go from the moment it is created.
+
+Those are the main differences between the two types of projects.
+
+
+
 iOS Notes
 ---------
 
