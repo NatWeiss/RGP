@@ -7,7 +7,7 @@
 #import "AppController.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
-#import "CCEAGLView.h"
+#import "CCEAGLView-ios.h"
 // begin pro
 #import <FacebookSDK/FacebookSDK.h>
 // end pro
@@ -33,7 +33,7 @@ void __openURL(const char* urlCstr)
 		window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 		CCEAGLView* eaglView = [CCEAGLView viewWithFrame: [window bounds]
 			pixelFormat: kEAGLColorFormatRGBA8
-			depthFormat: GL_DEPTH24_STENCIL8_OES // was GL_DEPTH_COMPONENT16
+			depthFormat: GL_DEPTH24_STENCIL8_OES
 			preserveBackbuffer: NO
 			sharegroup: nil
 			multiSampling: NO
@@ -48,7 +48,7 @@ void __openURL(const char* urlCstr)
 
 		// add root view controller to window
 		if( [[UIDevice currentDevice].systemVersion floatValue] < 6.0 )
-			[window addSubview: viewController.view];
+			[window addSubview:viewController.view];
 		else
 			[window setRootViewController:viewController];
 		[window makeKeyAndVisible];
@@ -56,7 +56,7 @@ void __openURL(const char* urlCstr)
 		[[UIApplication sharedApplication] setStatusBarHidden:YES];
 
 		// setting the GLView should be done after creating the RootViewController
-		GLView *glview = GLView::createWithEAGLView(eaglView);
+		GLView* glview = GLViewImpl::createWithEAGLView(eaglView);
 		Director::getInstance()->setOpenGLView(glview);
 
 		Application::getInstance()->run();

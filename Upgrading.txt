@@ -9,13 +9,13 @@ RapidGame upgrade instructions:
 * Check in.
 * Upgrade package.json version and cocos2djs URL in rapidgamepro.js AND src/downloaded.txt.
 * Check in.
-* Verify rapidgamepro prebuild (npm link . to ~/code/RapidGamePro if needed).
-* Verify TwoScene iOS, Mac and Platformer iOS, Mac.
+* Verify rapidgamepro prebuild (sudo npm unlink rapidgamepro -g; cd ~/code/RapidGamePro; sudo npm link .).
+* Verify TwoScene iOS, Mac, Android.
 * Check in any tweaks.
 * Build new patch file (see bottom of rapidgamepro.js).
 * Check in new patch file.
 * make rg, cd ../releases/RapidGame, sudo npm uninstall rapidgamepro -g, sudo npm uninstall rapidgame -g, sudo npm install . -g, rapidgame prebuild
-* Test on windows
+* Test on Windows
 * Update Changelog.
 * Check in any final edits to RapidGamePro and make rg.
 * Commit and push new RapidGame, create release on Github.
