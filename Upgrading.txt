@@ -14,7 +14,7 @@ RapidGame upgrade instructions:
 * Check in any tweaks.
 * Build new patch file (see bottom of rapidgamepro.js).
 * Check in new patch file.
-* make rg, cd ../releases/RapidGame, sudo npm uninstall rapidgamepro -g, sudo npm uninstall rapidgame -g, sudo npm install . -g, rapidgame prebuild
+* make rg && cd ../releases/RapidGame && sudo npm uninstall rapidgamepro -g; sudo npm uninstall rapidgame -g; sudo npm install . -g && rapidgame prebuild
 * Test on Windows
 * Update Changelog.
 * Check in any final edits to RapidGamePro and make rg.
