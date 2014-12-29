@@ -1445,6 +1445,7 @@ To make a Cocos2d patch:
 	cd /tmp
 	cp -r ~/path/to/cocos2d-js-latest .
 	cd cocos2d-js-latest
+	find . -name .gitignore -delete
 	git init .
 	git add *
 	git commit -a
