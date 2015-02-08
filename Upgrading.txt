@@ -3,7 +3,8 @@ RapidGame upgrade instructions:
 * Check in existing edits to RapidGamePro and RapidGame.
 * Move old cocos2d-js folder out.
 * Copy new cocos2d-js folder in.
-* Remove samples and other extraneous folders.
+* Remove samples, docs, templates, tools.
+* find src -name ".gitmodules" -delete
 * Git add --all and commit.
 * Apply existing cocos2d.patch manually to new cocos2d-js folder.
 * Check in.
