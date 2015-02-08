@@ -1,1 +1,1 @@
-http://www.cocos2d-x.org/filedown/cocos2d-js-v3.2-rc0.zip
+http://cdn.cocos2d-x.org/cocos2d-js-v3.2.zip
