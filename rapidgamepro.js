@@ -657,8 +657,8 @@ var runPrebuild = function(platform, config, arch, callback) {
 				callback();
 			});
 		} else {
-			prebuildMac("iOS", config, arch, function(){
-				prebuildMac("Mac", config, arch, function(){
+			prebuildMac("Mac", config, arch, function(){
+				prebuildMac("iOS", config, arch, function(){
 					prebuildAndroid(config, arch, function(){
 						callback();
 					});
