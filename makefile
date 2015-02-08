@@ -163,7 +163,7 @@ rg:
 	cp -r rez/docco/public ${dest}docs/
 	cp -r rez/docco/index.html ${dest}docs/
 	rm README.litcoffee
-	cp -r ${dest}docs/* ../wizardfu.com/docs/rapidgame/ #*/
+	cp -r ${dest}docs/* ../wizardfu.com/wordpress/docs/rapidgame/ #*/
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/Game.html
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/GameScene.html
 	@rez/delete-between "<p> Created using" "Nat Weiss.</p>" ${dest}docs/MenuScene.html
