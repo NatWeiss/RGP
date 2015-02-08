@@ -21,6 +21,7 @@ RapidGame upgrade instructions:
 * Commit and push new RapidGame, create release on Github.
 * Publish RapidGame using sudo npm publish .
 * Update docs (na rez/docco/docco.jst && scp -r ../releases/RapidGame/docs/* ssl.wizardfu.com:w/wizardfu.com/docs/rapidgame/)
+* Update SpriteDraggerX
 
 <script>
 var clicky_custom = clicky_custom || {};
