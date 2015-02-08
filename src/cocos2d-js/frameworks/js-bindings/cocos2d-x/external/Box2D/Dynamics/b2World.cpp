@@ -1145,6 +1145,11 @@ void b2World::DrawDebugData()
 	{
 		for (b2Body* b = m_bodyList; b; b = b->GetNext())
 		{
+			bool hasContacts = false;
+			for (b2ContactEdge* edge = b->GetContactList(); edge; edge = edge->next)
+				if (edge->contact->IsEnabled() && edge->contact->IsTouching())
+					{hasContacts = true; break;}
+
 			const b2Transform& xf = b->GetTransform();
 			for (b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
 			{
@@ -1154,7 +1159,7 @@ void b2World::DrawDebugData()
 				}
 				else if (b->GetType() == b2_staticBody)
 				{
-					DrawShape(f, xf, b2Color(0.5f, 0.9f, 0.5f));
+					DrawShape(f, xf, hasContacts ? b2Color(0.9f, 0.1f, 0.1f) : b2Color(0.5f, 0.9f, 0.5f));
 				}
 				else if (b->GetType() == b2_kinematicBody)
 				{
