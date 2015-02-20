@@ -86,6 +86,7 @@ rg:
 	mkdir -p ${dest}src
 	cp README.md ${dest}
 	cp CHANGELOG.txt ${dest}
+	cp RapidGame.jpg ${dest}
 	@rez/delete-between "# begin pro" "# end pro" ${dest}CHANGELOG.txt --newlines
 	cp LICENSE ${dest}
 	cp docs.html ${dest}
