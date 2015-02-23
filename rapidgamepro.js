@@ -17,7 +17,9 @@ var http = require("http"),
 	packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))),
 	cmdName = packageJson.name,
 	version = packageJson.version,
-	cocos2djsUrl = "http://cdn.cocos2d-x.org/cocos2d-js-v3.2.zip",
+	cocos2djsUrlMac = "http://cdn.cocos2d-x.org/cocos2d-js-v3.2.zip",
+	cocos2djsUrlWin = "http://cdn.cocos2d-x.org/cocos2d-js-v3.2.zip",
+	cocos2djsUrl = (process.platform === "darwin" ? cocos2djsUrlMac : cocos2djsUrlWin),
 	cocos2dDirGlob = "*ocos2d-js*",
 	category,
 	engines = [],
@@ -28,7 +30,7 @@ var http = require("http"),
 	copyCount = 0,
 	msBuildPath,
 	defaults = {
-		engine: "cocos2d",
+		engine: "cocos2dx",
 		template: "TwoScene",
 		package: "org.mycompany.mygame",
 		dest: process.cwd(),
@@ -55,7 +57,7 @@ var listDirectories = function() {
 // get engines and templates
 //
 engines = listDirectories(__dirname, "templates", "*");
-templates = listDirectories(__dirname, "templates", "cocos2d", "*");
+templates = listDirectories(__dirname, "templates", "cocos2dx", "*");
 
 //
 // Main run method.
@@ -82,7 +84,7 @@ var run = function(args) {
 
 	cmd
 		.command("prebuild [platform]")
-		.description("                            Prebuild Cocos2D X static libraries [platforms: " + platforms.join(", ") + "]")
+		.description("                            Prebuild cocos2d-x static libraries [platforms: " + platforms.join(", ") + "]")
 		.action(prebuild);
 	commands.push("prebuild");
 
@@ -165,7 +167,7 @@ var createProject = function(engine, name, package) {
 	
 	// Check engine and name
 	if (!cmd.engine || !name || !package) {
-		console.log("Engine, project name and package name are required, for example: " + cmdName + " cocos2d \"Heck Yeah\" com.mycompany.heckyeah");
+		console.log("Engine, project name and package name are required, for example: " + cmdName + " cocos2dx \"Heck Yeah\" com.mycompany.heckyeah");
 		usage();
 		return 1;
 	}
@@ -1264,7 +1266,7 @@ var usageExamples = function() {
 	console.log("  Examples:");
 	console.log("");
 	console.log("    $ " + cmdName + " create unity \"Zombie Matrix\" com.mycompany.zombiematrix");
-	console.log("    $ " + cmdName + " create cocos2d \"Heck Yeah\" com.mycompany.heckyeah");
+	console.log("    $ " + cmdName + " create cocos2dx \"Heck Yeah\" com.mycompany.heckyeah");
 	console.log("    $ " + cmdName + " prebuild");
 	console.log("");
 };

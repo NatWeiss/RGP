@@ -19,6 +19,7 @@ Prefer somebody explaining and showing it? Check out the [overview video](http:/
 Updates
 -------
 
+* Feb 24, 2015: Now has a separate cocos2d-x and cocos2d-js templates. Fixed a bug on Windows: "Unable to find MSBuild path."
 * Feb 19, 2015: Fixed a bug in Xcode projects (reference to script folder).
 * Feb 7, 2015: Prebuilder updated for cocos2d-js 3.2 final / cocos2d-x 3.3.
 * Dec 28, 2014: Prebuilder updated for cocos2d-js 3.2 rc0 / cocos2d-x 3.3.
@@ -34,23 +35,22 @@ There's no need to clone this repo, just install RapidGame:
 
 	sudo npm install rapidgame -g
 
-And, create a Unity game named "Zombie Matrix":
+Or, on Windows leave off the `sudo`:
+
+	npm install rapidgame -g
+
+And, create a cocos2d-x game named "Heck Yeah":
+
+	rapidgame create cocos2dx "Heck Yeah" org.myorg.heckyeah
+
+Or, a Unity game named "Zombie Matrix":
 
 	rapidgame create unity "Zombie Matrix" com.myompany.zombiematrix
 
-Or, a cocos2d-x / cocos2d-js game named "Heck Yeah":
-
-	rapidgame create cocos2d "Heck Yeah" org.myorg.heckyeah
 
 For usage instructions:
 
 	rapidgame --help
-
-
-Pro Version
------------
-
-If you need cross-platform monetization, in-app purchasing, virtual economies, social networking, async multiplayer, analytics and/or ads then get [RapidGamePro](http://www.binpress.com/app/rapidgame-pro-for-ios-android-facebook/1802). It has an example game called Lemonade Exchange written using the cocos2d-js engine which includes all of the previously mentioned features and works on Facebook, iOS, Mac and Android. Support for more platforms is planned.
 
 
 Eliminate Grunt Work
@@ -127,12 +127,6 @@ Inside the project files there are other differences. Take the Xcode project as 
 The RapidGame project is more efficient, relying on the symlinked `lib` folder. Instead of depending on sub-projects and rebuilding all of cocos2d-x, it uses two **Other Linker Flags** to include the prebuilt cocos2d-x libraries (`-lcocos2dx-prebuilt`) and specifies an additional **Library Search Path** in which to find them: `$(SRCROOT)/../lib/cocos2d/x/lib/$(CONFIGURATION)-iOS/$(PLATFORM_NAME)`. **User Header Search Paths** also use the symlink, `$(SRCROOT)/../lib/cocos2d/x/include/cocos`, so that by simply swapping the `lib` folder one can upgrade to a newer prebuilt version of cocos2d-js/x.
 
 
-Breakout Clones
----------------
-
-To test the validity of RapidGame, four Breakout clones were written for Unity, Corona, cocos2d-js and Titanium. I found that using RapidGame can save up to ~80% of development time for simple games. To read more about the findings, see [Selecting a Cross-platform Game Engine](http://www.binpress.com/blog/2014/05/14/selecting-cross-platform-game-engine/).
-
-
 More About Prebuilding
 ----------------------
 
@@ -156,8 +150,8 @@ The cocos2dx library prebuilder currently works on the following development pla
 Linux support is planned.
 
 
-Custom Cocos2D Projects
------------------------
+Custom cocos2d-x/js Projects
+----------------------------
 
 If you are just using cocos2d-x or you have your own custom project layout, you can still use the prebuilt libraries. Use this command to create a symlink to the libraries directory:
 
