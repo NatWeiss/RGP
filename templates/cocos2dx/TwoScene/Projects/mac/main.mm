@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 	if (fullscreen)
 		view = GLViewImpl::createWithFullScreen(name);
 	else
-		view = GLViewImpl::createWithRect(name, cocos2d::Rect(0, 0, 854, 641));
+		view = GLViewImpl::createWithRect(name, cocos2d::Rect(0, 0, 960, 641));
 	Director::getInstance()->setOpenGLView(view);
 	
 	// run the app

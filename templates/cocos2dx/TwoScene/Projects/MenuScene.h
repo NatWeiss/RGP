@@ -11,3 +11,5 @@ class MenuScene : public Scene
 	public:
 		virtual void onEnter();
 };
+
+

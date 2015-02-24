@@ -14,7 +14,7 @@
 		<string>http://natweiss.com/git/rapidgamepro.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>templates/cocos2d/TwoScene/Projects/TwoScene.xcodeproj</string>
+	<string>templates/cocos2djs/TwoScene/Projects/TwoScene.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>9252DB89B8CD4447051938D861165B1E866369E6</key>

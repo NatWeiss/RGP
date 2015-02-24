@@ -6,6 +6,7 @@
 
 #include "cocos2d.h"
 #include "SimpleAudioEngine.h"
+#include "chipmunk.h"
 
 using namespace cocos2d;
 using namespace CocosDenshion;

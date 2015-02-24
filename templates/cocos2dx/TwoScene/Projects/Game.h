@@ -8,13 +8,17 @@
 
 namespace Game
 {
-	/// Get the scale of one pixel.
+	/// Get / set the scale of one pixel.
 	float getPixelScale();
-	
-	/// Set the scale for one pixel.
 	void setPixelScale(float scale);
+
+	/// Get / set the content rect.
+	const Rect& getContentRect();
+	void setContentRect(const Rect& rect);
 	
 	/// Centralize and scale the given position.
 	Vec2 centralize(const Vec2& position);
 	Vec2 centralize(float x, float y);
+	
+	
 };

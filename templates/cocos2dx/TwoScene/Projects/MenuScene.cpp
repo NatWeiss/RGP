@@ -11,7 +11,7 @@ void MenuScene::onEnter()
 	Scene::onEnter();
 
 	string logoText = "TwoScene";
-	string font = "Dolce Vita";
+	string font = "DolceVita.ttf";
 	SimpleAudioEngine::getInstance()->playBackgroundMusic("Intro.mp3");
 
 	// Background
@@ -30,7 +30,7 @@ void MenuScene::onEnter()
 	)));
 	
 	// Title
-	auto logoLabel = LabelTTF::create(logoText.c_str(), font, 200);
+	auto logoLabel = Label::createWithTTF(logoText.c_str(), font, 200);
 	logoLabel->setColor(Color3B(128, 128, 128));
 	logoLabel->setPosition(Game::centralize(0, 228));
 	this->addChild(logoLabel, 1);
@@ -41,15 +41,14 @@ void MenuScene::onEnter()
 	this->addChild(menu, 1);
 	
 	// Buttons
-	auto playLabel = LabelTTF::create("Play", font, 120);
+	auto playLabel = Label::createWithTTF("Play", font, 120);
 	playLabel->setColor(Color3B(196, 196, 196));
 	
 	auto playButton = MenuItemLabel::create(playLabel, [] (Ref* ref)
 	{
-//		auto scene = new GameScene;
-//		Director::getInstance()->replaceScene(scene);
-//		scene->release();
-		
+		auto scene = new GameScene;
+		Director::getInstance()->replaceScene(scene);
+		scene->release();		
 	});
 	playButton->setPosition(Game::centralize(0, -400));
 	menu->addChild(playButton);

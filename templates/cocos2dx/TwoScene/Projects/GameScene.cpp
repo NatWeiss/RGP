@@ -2,142 +2,197 @@
 /// > Created using [RapidGame](http://wizardfu.com/rapidgame). See the `LICENSE` file for the license governing this code.
 ///
 
-/*
+#include "Game.h"
+#include "MenuScene.h"
+#include "GameScene.h"
 
+const double physicsStep = 1.0 / 240.0;
+const int collisionTypeBall = 1;
+const int collisionTypeWall = 2;
+const int ballSpeed = 1500;
+const int gravity = -2500;
+const int labelPadding = 60;
+const int wallThickness = 40;
+int GameScene::score = 0;
+Label* GameScene::scoreLabel = nullptr;
 
-var GameScene = cc.Scene.extend({
-	layer: null,
-	
-	onEnter: function() {
-		this._super();
-		this.layer = new GameLayer();
-		this.layer.init();
-		this.addChild(this.layer);
+GameScene::GameScene()
+{
+	ball = nullptr;
+	score = 0;
+	accumulator = 0.0;
+	space = nullptr;
+}
+
+GameScene::~GameScene()
+{
+}
+
+void GameScene::onEnter()
+{
+	Scene::onEnter();
+	auto& winSize = Director::getInstance()->getWinSize();
+	auto& contentRect = Game::getContentRect();
+	string fontName = "DolceVita.ttf";
+	int x1 = contentRect.origin.x + wallThickness;
+	int x2 = x1 + contentRect.size.width - wallThickness * 2;
+	int y1 = contentRect.origin.y + wallThickness;
+	int y2 = y1 + contentRect.size.height - wallThickness * 2;
+
+	// Music
+	SimpleAudioEngine::getInstance()->playBackgroundMusic("Song.mp3", true);
+
+	// Stretched big background
+	auto bg2 = LayerColor::create(Color4B(208, 204, 202, 255));
+	bg2->setScale(2);
+	this->addChild(bg2, -1);
+
+	// Actual background
+	auto bg = LayerColor::create(Color4B(218, 214, 212, 255), contentRect.size.width, contentRect.size.height);
+	bg->setPosition(contentRect.origin);
+	this->addChild(bg, 0);
+
+	// Labels
+	stringstream ss;
+	ss << "Score: " << score;
+	scoreLabel = Label::createWithTTF(ss.str().c_str(), fontName, 45);
+	scoreLabel->setAnchorPoint(Vec2(0, 1));
+	scoreLabel->setPosition(x1 + labelPadding, y2 - labelPadding);
+	scoreLabel->setColor(Color3B(128, 128, 128));
+	this->addChild(scoreLabel, 1);
+
+	auto sceneLabel = Label::createWithTTF("Game Scene", fontName, 200);
+	sceneLabel->setColor(Color3B(128, 128, 128));
+	sceneLabel->setPosition(Game::centralize(0, 228));
+	this->addChild(sceneLabel, 1);
+	sceneLabel->runAction(Sequence::create(
+		FadeOut::create(5),
+		RemoveSelf::create(),
+		nullptr
+	));
+
+	// Touch listners
+	auto dispatcher = Director::getInstance()->getEventDispatcher();
+	auto listener = EventListenerTouchAllAtOnce::create();
+	listener->onTouchesBegan = [this] (const vector<Touch*>& touches, Event* event) {this->touchHandler("began", touches, event);};
+	dispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+	// Start physics
+	space = cpSpaceNew();
+	space->gravity = cpv(0, gravity);
+
+	// Walls
+	createPhysicsBox(x1, y1, x2, contentRect.origin.y, 0.9, 0, collisionTypeWall); // bottom
+	createPhysicsBox(x1, y2, x2, y2 + wallThickness, 0.9, 0, collisionTypeWall); // top
+	createPhysicsBox(contentRect.origin.x, contentRect.origin.y, x1, y2 + wallThickness, 0.9, 0, collisionTypeWall); // left
+	createPhysicsBox(x2, contentRect.origin.y, x2 + wallThickness, y2 + wallThickness, 0.9, 0, collisionTypeWall); // right
+
+	// Ball
+	ball = Sprite::create("Ball.png");
+	createPhysicsSprite(ball, Vec2(winSize.width * 0.5f, winSize.height * 0.5f), 1.0f, 0.0f, collisionTypeBall);
+	this->addChild(ball, 1);
+
+	// Collision handler
+	cpSpaceAddCollisionHandler(space, collisionTypeBall, collisionTypeWall, nullptr, nullptr, nullptr, GameScene::onCollision, nullptr);
+
+	// Update
+	this->scheduleUpdate();
+}
+
+void GameScene::update(float delta)
+{
+	// Step physics
+	accumulator += delta;
+	while (accumulator > physicsStep)
+	{
+		cpSpaceStep(space, physicsStep);
+		accumulator -= physicsStep;
 	}
-});
+	
+	// Move ball sprite with body
+	if (ball)
+	{
+		auto v = static_cast<cpBody*>(ball->getUserData())->p;
+		ball->setPosition(v.x, v.y);
+	}
+}
 
-var GameLayer = cc.Layer.extend({
-	collisionTypeBall: 1,
-	collisionTypeWall: 2,
-	ballSpeed: 1500,
-	gravity: -2500,
-	labelPadding: 60,
-	wallThickness: 40,
-	bg: null,
-	bg2: null,
-	ball: null,
-	scoreLabel: null,
-	sceneLabel: null,
-	x1: 0,
-	x2: 0,
-	y1: 1,
-	y2: 1,
-	walls: [],
+void GameScene::onExit()
+{
+	Scene::onExit();
+	this->unscheduleUpdate();
 
-	init: function() {
-		var self = this, i, x, y, w, h;
-		this._super();
-		
-		Game.score = 0;
+	for (auto& shape : shapes)
+		cpShapeFree(shape);
+	shapes.clear();
 
-		this.x1 = Game.contentX + this.wallThickness;
-		this.x2 = this.x1 + Game.contentWidth - this.wallThickness * 2;
-		this.y1 = Game.contentY + this.wallThickness;
-		this.y2 = this.y1 + Game.contentHeight - this.wallThickness * 2;
+	cpSpaceRemoveCollisionHandler(space, collisionTypeBall, collisionTypeWall);
+	cpSpaceFree(space);
+}
 
-		// Stretched big background
-		this.bg2 = cc.LayerColor.create(cc.color(208, 204, 202, 255));
-		this.bg2.scale = 2;
-		this.addChild(this.bg2, -1);
+void GameScene::createPhysicsBox(int x1, int y1, int x2, int y2, float elasticity, float friction, int collisionType)
+{
+	cpShape* shape = nullptr;
+	int start = shapes.size();
 
-		// Actual background
-		this.bg = cc.LayerColor.create(cc.color(218, 214, 212, 255), Game.contentWidth, Game.contentHeight);
-		this.bg.attr({x: Game.contentX, y: Game.contentY});
-		this.addChild(this.bg, 0);
-		
-		// Labels
-		this.scoreLabel = cc.LabelTTF.create("Score: " + Game.score.toString(), Game.config["font"], 45);
-		this.scoreLabel.setAnchorPoint(0, 1);
-		this.scoreLabel.setPosition(this.x1 + this.labelPadding, this.y2 - this.labelPadding);
-		this.scoreLabel.setColor(cc.color(128, 128, 128));
-		this.addChild(this.scoreLabel, 1);
+	// create box as four segments
+	shapes.push_back(cpSegmentShapeNew(space->staticBody, cpv(x1, y1), cpv(x1, y2), 0.0f));
+	shapes.push_back(cpSegmentShapeNew(space->staticBody, cpv(x1, y2), cpv(x2, y2), 0.0f));
+	shapes.push_back(cpSegmentShapeNew(space->staticBody, cpv(x2, y2), cpv(x2, y1), 0.0f));
+	shapes.push_back(cpSegmentShapeNew(space->staticBody, cpv(x2, y1), cpv(x1, y1), 0.0f));
+	for (int i = 0; i < 4; i++)
+	{
+		shapes[start + i]->e = elasticity;
+		shapes[start + i]->u = friction;
+		shapes[start + i]->collision_type = collisionType;
+		cpSpaceAddStaticShape(space, shapes[start + i]);
+	}
+}
 
-		this.sceneLabel = cc.LabelTTF.create(
-			"Game Scene",
-			Game.config["font"],
-			200
+void GameScene::createPhysicsSprite(Sprite* sprite, Vec2 pos, float elasticity, float friction, int collisionType)
+{
+	auto& size = sprite->getContentSize();
+	float w = size.width * 0.5f;
+	float h = size.height * 0.5f;
+	cpVect verts[] = {cpv(-w, -h), cpv(-w, h), cpv(w, h), cpv(w, -h)};
+	const int n = sizeof(verts) / sizeof(verts[0]);
+
+	// body
+	auto body = cpBodyNew(1.0f, cpMomentForPoly(1.0f, n, verts, cpvzero));
+	body->p = cpv(pos.x, pos.y);
+	cpSpaceAddBody(space, body);
+
+	// shape
+	auto shape = cpCircleShapeNew(body, w, cpvzero);
+	shape->e = elasticity;
+	shape->u = friction;
+	shape->collision_type = collisionType;
+	cpSpaceAddShape(space, shape);
+	shapes.push_back(shape);
+
+	sprite->setUserData(body);
+}
+
+void GameScene::onCollision(cpArbiter* arb, cpSpace* space, void* data)
+{
+	score += 10;
+	stringstream ss;
+	ss << "Score: " << score;
+	scoreLabel->setString(ss.str());
+	SimpleAudioEngine::getInstance()->playEffect("Wall.mp3");
+}
+
+void GameScene::touchHandler(const string& type, const vector<Touch*>& touches, Event* event)
+{
+	if (type == "began")
+	{
+		auto& winSize = Director::getInstance()->getWinSize();
+		SimpleAudioEngine::getInstance()->playEffect("Intro.mp3");
+		static_cast<cpBody*>(ball->getUserData())->v = cpv(
+			touches[0]->getLocation().x < winSize.width * 0.5f ? -ballSpeed : ballSpeed,
+			ballSpeed
 		);
-		this.sceneLabel.setColor(cc.color(128, 128, 128));
-		this.sceneLabel.setPosition(Game.centralize(0, 228));
-		this.addChild(this.sceneLabel, 1);
-		this.sceneLabel.runAction(cc.Sequence.create(
-			cc.FadeOut.create(5),
-			cc.RemoveSelf.create()
-		));
-
-		if (Game.config.playMusic) {
-			Game.playMusic("Song.mp3");
-		}
-		
-		// Start physics
-		Game.startPhysics(cc.p(0, this.gravity));
-		
-		// Walls
-		walls = [
-			Game.createPhysicsBox(this.x1, this.y1, this.x2, Game.contentY, 0.9, 0, this.collisionTypeWall), // bottom
-			Game.createPhysicsBox(this.x1, this.y2, this.x2, this.y2 + this.wallThickness, 0.9, 0, this.collisionTypeWall), // top
-			Game.createPhysicsBox(Game.contentX, Game.contentY, this.x1, this.y2 + this.wallThickness, 0.9, 0, this.collisionTypeWall), // left
-			Game.createPhysicsBox(this.x2, Game.contentY, this.x2 + this.wallThickness, this.y2 + this.wallThickness, 0.9, 0, this.collisionTypeWall) // right
-		];
-	
-		// Ball
-		this.ball = Game.createPhysicsSprite("Ball.png", 1, 0, true, this.collisionTypeBall);
-		this.ball.body.setPos(cp.v(Game.winSize.width * .5, Game.winSize.height * .5));
-		this.addChild(this.ball, 1);
-		
-		// Handle collision events
-		Game.space.addCollisionHandler(this.collisionTypeBall, this.collisionTypeWall, null, null, null, function(arbiter, space){
-			Game.score += 10;
-			self.scoreLabel.setString("Score: " + Game.score);
-			Game.playEffect("Wall.mp3");
-		});
-		
-		// Handle touch events
-		Game.addTouchListeners(this, this.touchHandler);
-		
-		// World update
-		this.scheduleUpdate();
-
-		return true;
-	},
-	
-	update: function(delta) {
-		Game.stepPhysics(delta);
-		
-		// Move ball sprite with body
-		if (this.ball) {
-			var v = this.ball.body.getPos();
-			v = cp.v(v.x, v.y);
-			this.ball.setPosition(v);
-		}
-	},
-	
-	onExit: function() {
-		this.unscheduleUpdate();
-		Game.space.removeCollisionHandler(Game.space, this.collisionTypeBall, this.collisionTypeWall);
-	},
-
-	touchHandler: function(type, touches, event) {
-		var self = Game.getRunningLayer();
-		if (type === "began") {
-			Game.playEffect("Intro.mp3");
-			self.ball.body.setVel(cp.v(
-				touches[0].getLocation().x < Game.winSize.width * .5 ? -self.ballSpeed : self.ballSpeed,
-				self.ballSpeed
-			));
-		}
 	}
+}
 
-});
 
-*/
