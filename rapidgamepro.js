@@ -903,7 +903,7 @@ var getMSBuildPath = function(callback) {
 		root = '\\Software\\Microsoft\\MSBuild\\ToolsVersions',
 		regKey = new Winreg({key: root});
 	regKey.keys(function (err, items) {
-		var i, key, count = 0;
+		var i, key, highest = 0, buildPath = '', count = 0;
 		if (err) {
 			console.log(err);
 			return;
@@ -920,13 +920,20 @@ var getMSBuildPath = function(callback) {
 					console.log(err);
 				} else if (typeof item === "object" && typeof item.value === "string" && item.value.length) {
 					if (cmd.verbose) {
-						console.log("MSBuildToolsPath: " + item.value);
+						console.log("Potential MSBuildToolsPath: " + item.value);
 					}
-					callback(item.value);
-					return;
+					if (parseFloat(key) > highest) {
+						buildPath = item.value;
+						highest = parseFloat(key);
+					}
 				}
 				if (count === items.length) {
-					console.log("Unable to find MSBuild path");
+					if (buildPath.length) {
+						console.log("Final MSBuildToolsPath: " + buildPath);
+						callback(buildPath);
+					} else {
+						console.log("Unable to find MSBuild path");
+					}
 				}
 			});
 	  	}
@@ -935,12 +942,14 @@ var getMSBuildPath = function(callback) {
 
 //
 // get the VCTargetsPath
+// (todo: mine this from the registry)
 //
 var getVCTargetsPath = function() {
 	var i,
 		ret,
 		bases = [
 			"\\MSBuild\\Microsoft.Cpp\\v4.0\\V120\\",
+			"\\MSBuild\\Microsoft.Cpp\\v4.0\\V110\\",
 			"\\MSBuild\\Microsoft.Cpp\\v4.0\\"
 		],
 		names = [
@@ -964,6 +973,7 @@ var getVCTargetsPath = function() {
 
 //
 // get the vc bin dir
+// (todo: mine this from the registry)
 //
 var getVCBinDir = function() {
 	var i,

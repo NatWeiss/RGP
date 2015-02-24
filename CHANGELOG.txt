@@ -1,3 +1,8 @@
+Version 0.9.4 - February 24, 2015
+
+	Now has a separate cocos2d-x and cocos2d-js templates.
+	Fixed a bug on Windows: "Unable to find MSBuild path."
+
 Version 0.9.3 - February 19, 2015
 
 	Fixed a bug in Xcode projects (reference to the script folder).
