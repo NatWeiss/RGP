@@ -903,29 +903,33 @@ var getMSBuildPath = function(callback) {
 		root = '\\Software\\Microsoft\\MSBuild\\ToolsVersions',
 		regKey = new Winreg({key: root});
 	regKey.keys(function (err, items) {
-		var i, key;
+		var i, key, count = 0;
 		if (err) {
 			console.log(err);
 			return;
 		}
+		
+		// find path to MSBuildToolsPath
 		for (i = 0; i < items.length; i += 1) {
+			// try to get the value of MSBuildToolsPath
 			key = path.basename(items[i].key);
-			if (parseFloat(key) >= 11.0) {
-				regKey = new Winreg({key: root + '\\' + key});
-				regKey.get("MSBuildToolsPath", function(err, item) {
-					if (err) {
-						console.log(err);
-						return;
-					}
+			regKey = new Winreg({key: root + '\\' + key});
+			regKey.get("MSBuildToolsPath", function(err, item) {
+				count += 1;
+				if (err) {
+					console.log(err);
+				} else if (typeof item === "object" && typeof item.value === "string" && item.value.length) {
 					if (cmd.verbose) {
 						console.log("MSBuildToolsPath: " + item.value);
 					}
 					callback(item.value);
-				});
-				return;
-			}
+					return;
+				}
+				if (count === items.length) {
+					console.log("Unable to find MSBuild path");
+				}
+			});
 	  	}
-	  	console.log("Unable to find MSBuild path");
 	});
 };
 
@@ -934,20 +938,26 @@ var getMSBuildPath = function(callback) {
 //
 var getVCTargetsPath = function() {
 	var i,
-		base = "\\MSBuild\\Microsoft.Cpp\\v4.0\\V120\\",
-		//base = "\\MSBuild\\Microsoft.Cpp\\v4.0\\",
+		ret,
+		bases = [
+			"\\MSBuild\\Microsoft.Cpp\\v4.0\\V120\\",
+			"\\MSBuild\\Microsoft.Cpp\\v4.0\\"
+		],
 		names = [
-			"\\Program Files (x86)" + base,
-			"C:\\Program Files (x86)" + base,
-			"\\Program Files" + base,
-			"C:\\Program Files" + base
+			"\\Program Files (x86)",
+			"C:\\Program Files (x86)",
+			"\\Program Files",
+			"C:\\Program Files"
 		];
-	for (i = 0; i < names.length; i += 1) {
-		if (dirExists(names[i])) {
-			if (cmd.verbose) {
-				console.log("VCTargetsPath: " + names[i]);
+	for (j = 0; j < bases.length; j += 1) {
+		for (i = 0; i < names.length; i += 1) {
+			ret = names[i] + bases[j];
+			if (dirExists(ret)) {
+				if (cmd.verbose) {
+					console.log("VCTargetsPath: " + ret);
+				}
+				return ret;
 			}
-			return names[i];
 		}
 	}
 };
