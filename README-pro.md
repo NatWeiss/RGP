@@ -1,14 +1,13 @@
-
 RapidGamePro Setup
 ==================
 
-Thanks for purchasing a license! Here's some instructions to get RapidGamePro setup:
+Here's some instructions to get RapidGamePro setup:
 
 1. You'll need [Node.js](http://nodejs.org/download/) and [Git](http://git-scm.com/downloads).
 2. Move this folder somewhere that it can stay (`~/Library/Developer/RapidGamePro` is recommended on Macs).
 3. Install a link to the commandline app: `cd RapidGamePro && npm link . && cd ..`
 4. Change directories to where you want your new game project: `cd ~/MyGames`
-5. Create a new game project: `rapidgamepro create cocos2d "Heck Yeah" com.mycompany.heckyeah`
+5. Create a new game project: `rapidgamepro create cocos2d AwesomeGame com.mycompany.awesomegame`
 6. This will create your game's project files, then prebuild the static libraries.
 7. In the meantime, you can follow the outputted instructions on how to run your game in a browser.
 8. Once the libraries have been prebuilt, you can run the iOS, Mac and Android versions.
@@ -34,7 +33,7 @@ Folder Structure
 ----------------
 
 	RapidGamePro/
-		0.8.9/ - Prebuilt libraries, headers, java files and make files.
+		{current-version}/ - Prebuilt libraries, headers, java files and make files.
 		bin/ - Commandline app lives here and is symlinked to by `npm link`.
 		CHANGELOG.txt - Project change log.
 		cocos2d/ - Cocos2d includes, scripts, make files and prebuilt static libraries.
@@ -78,11 +77,11 @@ The default way is to create each game project with all of the files necessary f
 
 The problems are:
 
- 1. **Compilation can be a source of distraction**
- 2. Accumulated compilation time becomes significant
+ 1. Compilation can be a source of distraction.
+ 2. Accumulated compilation time becomes significant.
  3. Limited storage space is consumed by duplicate intermediate build files that can add up to tens of gigabytes.
 
-RapidGame Pro's solution is to prebuild Cocos2d-X as static libraries for all architectures and platforms. This empowers a developer to rebuild a native game client from scratch in seconds, **eliminating the distraction factor**. It also means that Cocos2d-X has to be built only once and consume only 1X the storage space.
+RapidGame Pro's solution is to prebuild Cocos2d-X as static libraries for all architectures and platforms. This empowers a developer to rebuild a native game client from scratch in seconds, eliminating the distraction factor. It also means that Cocos2d-X has to be built only once and consume only 1X the storage space.
 
 To prebuild Cocos2d-X and plugins:
 
