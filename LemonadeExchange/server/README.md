@@ -1,1 +1,1 @@
-../../templates/cocos2d/TwoScene/Server/README.md
+../../templates/cocos2djs/TwoScene/Server/README.md

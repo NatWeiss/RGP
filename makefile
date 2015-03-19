@@ -9,6 +9,7 @@ release:
 	mkdir ${dest}
 	cp -a bin ${dest}
 	cp CHANGELOG.txt ${dest}
+	# this will copy the prebuilt headers and binaries
 	#mkdir -p ${dest}${latest}/cocos2d/x
 	#cp -r ${latest}/cocos2d/html ${dest}${latest}/cocos2d/
 	#cp -r ${latest}/cocos2d/x/include ${latest}/cocos2d/x/java ${latest}/cocos2d/x/script ${dest}${latest}/cocos2d/x/

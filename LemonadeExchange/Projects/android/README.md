@@ -1,1 +1,1 @@
-../../../templates/cocos2d/TwoScene/Projects/android/README.md
+../../../templates/cocos2djs/TwoScene/Projects/android/README.md

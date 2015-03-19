@@ -1,1 +1,1 @@
-../../../templates/cocos2d/TwoScene/Projects/mac/Window.mm
+../../../templates/cocos2djs/TwoScene/Projects/mac/Window.mm

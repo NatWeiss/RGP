@@ -1,1 +1,1 @@
-../../../templates/cocos2d/TwoScene/Projects/mac/AppController.h
+../../../templates/cocos2djs/TwoScene/Projects/mac/AppController.h

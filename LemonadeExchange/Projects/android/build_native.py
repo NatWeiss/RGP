@@ -1,1 +1,1 @@
-../../../templates/cocos2d/TwoScene/Projects/android/build_native.py
+../../../templates/cocos2djs/TwoScene/Projects/android/build_native.py

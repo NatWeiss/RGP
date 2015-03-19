@@ -1,1 +1,1 @@
-../../../templates/cocos2d/TwoScene/Projects/ios/AppController.mm
+../../../templates/cocos2djs/TwoScene/Projects/ios/AppController.mm

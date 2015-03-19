@@ -1,1 +1,1 @@
-../templates/cocos2d/TwoScene/makefile
+../templates/cocos2djs/TwoScene/makefile

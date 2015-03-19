@@ -1,1 +1,1 @@
-../../../templates/cocos2d/TwoScene/Projects/html/minified-footer.js
+../../../templates/cocos2djs/TwoScene/Projects/html/minified-footer.js

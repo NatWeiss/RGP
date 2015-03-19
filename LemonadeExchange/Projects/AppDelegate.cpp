@@ -1,1 +1,1 @@
-../../templates/cocos2d/TwoScene/Projects/AppDelegate.cpp
+../../templates/cocos2djs/TwoScene/Projects/AppDelegate.cpp

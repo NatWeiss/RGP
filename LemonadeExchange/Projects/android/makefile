@@ -1,1 +1,1 @@
-../../../templates/cocos2d/TwoScene/Projects/android/makefile
+../../../templates/cocos2djs/TwoScene/Projects/android/makefile

@@ -1,1 +1,1 @@
-../../../../templates/cocos2d/TwoScene/Projects/android/jni/Application.mk
+../../../../templates/cocos2djs/TwoScene/Projects/android/jni/Application.mk

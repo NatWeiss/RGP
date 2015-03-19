@@ -1,1 +1,1 @@
-../../../templates/cocos2d/TwoScene/Projects/ios/RootViewController.h
+../../../templates/cocos2djs/TwoScene/Projects/ios/RootViewController.h

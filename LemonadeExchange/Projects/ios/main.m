@@ -1,1 +1,1 @@
-../../../templates/cocos2d/TwoScene/Projects/ios/main.m
+../../../templates/cocos2djs/TwoScene/Projects/ios/main.m

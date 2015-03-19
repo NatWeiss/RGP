@@ -1,1 +1,1 @@
-../../templates/cocos2d/TwoScene/Projects/AppDelegate.h
+../../templates/cocos2djs/TwoScene/Projects/AppDelegate.h
