@@ -1,1 +1,11 @@
-../../../templates/cocos2djs/TwoScene/Projects/html/minify
+#!/bin/bash
+
+cd "$(dirname "$0")"
+
+if hash ant 2>/dev/null; then
+	rm -f *-min.js
+	ant
+else
+	echo "Minification requires the `ant` command."
+	echo "Please install the Android SDK and NDK for your system."
+fi

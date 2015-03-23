@@ -8,7 +8,7 @@
 #include "jsb_app_bindings.h"
 #include "cocos2d_specifics.hpp"
 
-const char* const kJSNamespace = "App";
+const char* const kJSNamespace = "Game";
 
 JSClass* jsb_app_bindings_class;
 JSObject* jsb_app_bindings_prototype;

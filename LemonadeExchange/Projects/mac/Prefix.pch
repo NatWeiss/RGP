@@ -1,1 +1,4 @@
-../../../templates/cocos2djs/TwoScene/Projects/mac/Prefix.pch
+
+#ifdef __OBJC__
+	#import <Foundation/Foundation.h>
+#endif

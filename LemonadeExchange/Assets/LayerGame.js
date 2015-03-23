@@ -192,12 +192,13 @@ var LayerGame = (function(){
 				image = cc.Sprite.create("#BlankAvatar.png");
 			}
 			
-			stencil.setScale(this.playerImageWidth / stencil.width);
-			this.playerImage = cc.ClippingNode.create(stencil);
-			this.playerImage.setAlphaThreshold(0.05);
+			//stencil.setScale(this.playerImageWidth / stencil.width);
+			//this.playerImage = cc.ClippingNode.create(stencil);
+			//this.playerImage.setAlphaThreshold(0.05);
+			this.playerImage = image;
 			image.setPosition(this.playerImage.width * .5, this.playerImage.height * .5);
 			image.setScale(this.playerImageWidth / image.width);
-			this.playerImage.addChild(image, 1);
+			//this.playerImage.addChild(image, 1);
 			this.playerImage.setPosition(Game.centralize(-390, 240));
 			this.addChild(this.playerImage, 2);
 		},
@@ -245,14 +246,14 @@ var LayerGame = (function(){
 			sprite.x = this.playerImage.x;
 			sprite.y = this.playerImage.y - (this.playerImageWidth * .5);
 			this.addChild(sprite, 1);
-			
+
 			/* Create the player's name label. */
 			this.playerNameLabel = cc.LabelTTF.create(name + " ", font, Game.scale(48));
 			this.playerNameLabel.setAnchorPoint(0, .5);
 			this.playerNameLabel.x = this.playerImage.x + (this.playerImageWidth * 0.7);
 			this.playerNameLabel.y = this.playerImage.y;
 			this.addChild(this.playerNameLabel, 1);
-			
+
 			/* Currencies frame. */
 			sprite = cc.Sprite.create("#Frame.png");
 			sprite.setPosition(Game.centralize(-325, 0));
@@ -937,7 +938,7 @@ var LayerGame = (function(){
 					multiplier = 10;
 				}
 
-				if (typeof response === "undefined" || isNaN(response)) {
+				if (typeof response === "undefined" || isNaN(response) || (typeof response === "string" && response.length == 0)) {
 					response = 9.5 + (Game.rand(100) / 100);
 					cc.log("NaN exchange rate, setting to " + response);
 				}

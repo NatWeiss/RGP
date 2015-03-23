@@ -24,8 +24,6 @@
 		4110F72818C7ED7F004E9231 /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4110F71A18C7ED7F004E9231 /* Icon-76@2x.png */; };
 		411C1A78199D692E001D212A /* script in Resources */ = {isa = PBXBuildFile; fileRef = 411C1A77199D692E001D212A /* script */; };
 		411C1A79199D692E001D212A /* script in Resources */ = {isa = PBXBuildFile; fileRef = 411C1A77199D692E001D212A /* script */; };
-		412F3377192C36D2007F51FD /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 412F3375192C36D2007F51FD /* AppDelegate.cpp */; };
-		412F3378192C36D2007F51FD /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 412F3375192C36D2007F51FD /* AppDelegate.cpp */; };
 		412F337A192C36E1007F51FD /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 412F3379192C36E1007F51FD /* project.json */; };
 		412F337B192C36E1007F51FD /* project.json in Resources */ = {isa = PBXBuildFile; fileRef = 412F3379192C36E1007F51FD /* project.json */; };
 		412F337D192C3712007F51FD /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = 412F337C192C3712007F51FD /* Assets */; };
@@ -43,6 +41,9 @@
 		416D7AD518976AF300EA110C /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 416D7AD318976AF300EA110C /* EventKitUI.framework */; };
 		416D7AD718976AFB00EA110C /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 416D7AD618976AFB00EA110C /* EventKit.framework */; };
 		416D7AD918976B1200EA110C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 416D7AD818976B1200EA110C /* AdSupport.framework */; };
+		4178EF571ABFF3770052B22F /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4178EF561ABFF3770052B22F /* GameController.framework */; };
+		4178EF5A1ABFF6120052B22F /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4178EF581ABFF6120052B22F /* AppDelegate.cpp */; };
+		4178EF5B1ABFF6120052B22F /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4178EF581ABFF6120052B22F /* AppDelegate.cpp */; };
 		419921E4192DC304000FAC62 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 419921E3192DC304000FAC62 /* FacebookSDK.framework */; };
 		419E8E5D18A991E700232A34 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 419E8E5C18A991E700232A34 /* CoreMotion.framework */; };
 		419E8E5F18A9921800232A34 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 419E8E5E18A9921800232A34 /* OpenGLES.framework */; };
@@ -97,8 +98,6 @@
 		4110F71918C7ED7F004E9231 /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
 		4110F71A18C7ED7F004E9231 /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76@2x.png"; sourceTree = "<group>"; };
 		411C1A77199D692E001D212A /* script */ = {isa = PBXFileReference; lastKnownFileType = folder; name = script; path = ../../latest/cocos2d/x/script; sourceTree = "<group>"; };
-		412F3375192C36D2007F51FD /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
-		412F3376192C36D2007F51FD /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		412F3379192C36E1007F51FD /* project.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = project.json; path = ../project.json; sourceTree = "<group>"; };
 		412F337C192C3712007F51FD /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Assets; path = ../Assets; sourceTree = "<group>"; };
 		412F3380192C37F4007F51FD /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = index.html; path = html/index.html; sourceTree = "<group>"; };
@@ -119,6 +118,9 @@
 		416D7AD318976AF300EA110C /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/EventKitUI.framework; sourceTree = DEVELOPER_DIR; };
 		416D7AD618976AFB00EA110C /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		416D7AD818976B1200EA110C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/AdSupport.framework; sourceTree = DEVELOPER_DIR; };
+		4178EF561ABFF3770052B22F /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.2.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
+		4178EF581ABFF6120052B22F /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = ../AppDelegate.cpp; sourceTree = "<group>"; };
+		4178EF591ABFF6120052B22F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../AppDelegate.h; sourceTree = "<group>"; };
 		419921E3192DC304000FAC62 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../lib/frameworks/FacebookSDK.framework; sourceTree = "<group>"; };
 		419E8E5C18A991E700232A34 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		419E8E5E18A9921800232A34 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
@@ -186,6 +188,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4178EF571ABFF3770052B22F /* GameController.framework in Frameworks */,
 				413369C11940554300258BC8 /* Security.framework in Frameworks */,
 				419921E4192DC304000FAC62 /* FacebookSDK.framework in Frameworks */,
 				419E8E6118A9922800232A34 /* UIKit.framework in Frameworks */,
@@ -242,6 +245,7 @@
 		4152B64E1894756E00BEF730 /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4178EF561ABFF3770052B22F /* GameController.framework */,
 				413369C01940554300258BC8 /* Security.framework */,
 				419921E3192DC304000FAC62 /* FacebookSDK.framework */,
 				419E8EA018A9C68100232A34 /* libcurl.dylib */,
@@ -323,8 +327,8 @@
 		A92275321517C094001B78AA = {
 			isa = PBXGroup;
 			children = (
-				412F3376192C36D2007F51FD /* AppDelegate.h */,
-				412F3375192C36D2007F51FD /* AppDelegate.cpp */,
+				4178EF591ABFF6120052B22F /* AppDelegate.h */,
+				4178EF581ABFF6120052B22F /* AppDelegate.cpp */,
 				412F3379192C36E1007F51FD /* project.json */,
 				412F337C192C3712007F51FD /* Assets */,
 				412F337F192C37C4007F51FD /* Projects */,
@@ -385,7 +389,7 @@
 		A92275341517C094001B78AA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0620;
 			};
 			buildConfigurationList = A92275371517C094001B78AA /* Build configuration list for PBXProject "LemonadeExchange" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -481,7 +485,7 @@
 			files = (
 				41F1A4EA1894BBE3006E818E /* main.mm in Sources */,
 				41F1A4E51894BBE3006E818E /* AppController.mm in Sources */,
-				412F3378192C36D2007F51FD /* AppDelegate.cpp in Sources */,
+				4178EF5B1ABFF6120052B22F /* AppDelegate.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,7 +493,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				412F3377192C36D2007F51FD /* AppDelegate.cpp in Sources */,
+				4178EF5A1ABFF6120052B22F /* AppDelegate.cpp in Sources */,
 				4152B89018949C3F00BEF730 /* AppController.mm in Sources */,
 				4152B89A18949C3F00BEF730 /* RootViewController.mm in Sources */,
 				4152B89918949C3F00BEF730 /* main.m in Sources */,

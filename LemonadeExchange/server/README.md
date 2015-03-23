@@ -1,1 +1,4 @@
-../../templates/cocos2djs/TwoScene/Server/README.md
+Game Server
+-----------
+
+A simple Node.js game server.
