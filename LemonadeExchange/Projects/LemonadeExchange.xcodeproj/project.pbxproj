@@ -42,8 +42,8 @@
 		416D7AD718976AFB00EA110C /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 416D7AD618976AFB00EA110C /* EventKit.framework */; };
 		416D7AD918976B1200EA110C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 416D7AD818976B1200EA110C /* AdSupport.framework */; };
 		4178EF571ABFF3770052B22F /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4178EF561ABFF3770052B22F /* GameController.framework */; };
-		4178EF5A1ABFF6120052B22F /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4178EF581ABFF6120052B22F /* AppDelegate.cpp */; };
-		4178EF5B1ABFF6120052B22F /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4178EF581ABFF6120052B22F /* AppDelegate.cpp */; };
+		4178EF681ABFFF380052B22F /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4178EF661ABFFF380052B22F /* AppDelegate.cpp */; };
+		4178EF691ABFFF380052B22F /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4178EF661ABFFF380052B22F /* AppDelegate.cpp */; };
 		419921E4192DC304000FAC62 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 419921E3192DC304000FAC62 /* FacebookSDK.framework */; };
 		419E8E5D18A991E700232A34 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 419E8E5C18A991E700232A34 /* CoreMotion.framework */; };
 		419E8E5F18A9921800232A34 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 419E8E5E18A9921800232A34 /* OpenGLES.framework */; };
@@ -119,8 +119,8 @@
 		416D7AD618976AFB00EA110C /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		416D7AD818976B1200EA110C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/AdSupport.framework; sourceTree = DEVELOPER_DIR; };
 		4178EF561ABFF3770052B22F /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.2.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
-		4178EF581ABFF6120052B22F /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppDelegate.cpp; path = ../AppDelegate.cpp; sourceTree = "<group>"; };
-		4178EF591ABFF6120052B22F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../AppDelegate.h; sourceTree = "<group>"; };
+		4178EF661ABFFF380052B22F /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
+		4178EF671ABFFF380052B22F /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		419921E3192DC304000FAC62 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../lib/frameworks/FacebookSDK.framework; sourceTree = "<group>"; };
 		419E8E5C18A991E700232A34 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		419E8E5E18A9921800232A34 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
@@ -327,8 +327,8 @@
 		A92275321517C094001B78AA = {
 			isa = PBXGroup;
 			children = (
-				4178EF591ABFF6120052B22F /* AppDelegate.h */,
-				4178EF581ABFF6120052B22F /* AppDelegate.cpp */,
+				4178EF671ABFFF380052B22F /* AppDelegate.h */,
+				4178EF661ABFFF380052B22F /* AppDelegate.cpp */,
 				412F3379192C36E1007F51FD /* project.json */,
 				412F337C192C3712007F51FD /* Assets */,
 				412F337F192C37C4007F51FD /* Projects */,
@@ -485,7 +485,7 @@
 			files = (
 				41F1A4EA1894BBE3006E818E /* main.mm in Sources */,
 				41F1A4E51894BBE3006E818E /* AppController.mm in Sources */,
-				4178EF5B1ABFF6120052B22F /* AppDelegate.cpp in Sources */,
+				4178EF691ABFFF380052B22F /* AppDelegate.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,7 +493,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4178EF5A1ABFF6120052B22F /* AppDelegate.cpp in Sources */,
+				4178EF681ABFFF380052B22F /* AppDelegate.cpp in Sources */,
 				4152B89018949C3F00BEF730 /* AppController.mm in Sources */,
 				4152B89A18949C3F00BEF730 /* RootViewController.mm in Sources */,
 				4152B89918949C3F00BEF730 /* main.m in Sources */,
