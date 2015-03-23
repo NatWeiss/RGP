@@ -497,7 +497,7 @@ var LayerGame = (function(){
 		startDrinkingLemonade: function() {
 			var lemonades = Soomla.storeInventory.getItemBalance("currency_lemonades");
 			if (lemonades <= 0) {
-				Game.playEffect("Assets/music-stop.wav");
+				Game.playEffect("music-stop.wav");
 				return;
 			}
 
@@ -514,7 +514,7 @@ var LayerGame = (function(){
 				glassSize,
 				winSize = Game.getWinSize();
 
-			Game.playEffect("Assets/glass-sliding.wav");
+			Game.playEffect("glass-sliding.wav");
 
 			this.addCurrencies(-1, 0);
 
@@ -593,7 +593,7 @@ var LayerGame = (function(){
 				i,
 				len = Game.config["total-drinking-streaks"];
 
-			Game.playEffect("Assets/drink.wav");
+			Game.playEffect("drink.wav");
 
 			this.glass.runAction(cc.Sequence.create(
 				cc.DelayTime.create(3.2),
@@ -641,7 +641,7 @@ var LayerGame = (function(){
 			this.lemonade = null;
 			this.glass = null;
 			
-			Game.playEffect("Assets/glass-breaking" + (1 + this.breakCount) + ".wav");
+			Game.playEffect("glass-breaking" + (1 + this.breakCount) + ".wav");
 			cc.audioEngine.setMusicVolume(1);
 
 			Game.requestUrl("api/drink", this.onGetExchangeRate);

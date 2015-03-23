@@ -64,6 +64,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	const char* paths[] =
 	{
 		"script",
+		"Assets",
 	};
 	for(auto& path : paths)
 		fileUtils->addSearchPath(path);
@@ -110,7 +111,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	sc->runScript("script/jsb_boot.js");
 
 	ScriptEngineManager::getInstance()->setScriptEngine(sc);
-	sc->runScript("Assets/lib/Game.js");
+	sc->runScript("lib/Game.js");
 
 	return true;
 }

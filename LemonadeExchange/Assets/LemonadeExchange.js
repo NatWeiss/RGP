@@ -170,7 +170,7 @@ Game.startMusic = function() {
 		this._songNumber = this._songNumber || 0;
 		song = Game.config["songs"][this._songNumber]
 		
-		Game.playEffect("Assets/music-start.wav");
+		Game.playEffect("music-start.wav");
 		Game.playMusic(song.file);
 		
 		this._songNumber = (this._songNumber + 1) % Game.config["songs"].length;

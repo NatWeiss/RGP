@@ -372,11 +372,10 @@ Game.isSoundEnabled = function() {
 ///
 Game.playEffect = function(filename) {
 	if (this.isSoundEnabled()) {
-		/* Automatically prefix with resource path. */
-		if (cc.loader.resPath && filename.indexOf("/") < 0) {
-			filename = cc.loader.resPath + "/" + filename;
+		/* cc.audioEngine is buggy in latest release */
+		if (!this.isHtml5()) {
+			return cc.audioEngine.playEffect(filename);
 		}
-		return cc.audioEngine.playEffect(filename);
 	}
 	return -1;
 };
@@ -397,12 +396,11 @@ Game.stopEffect = function(audioId) {
 ///
 Game.playMusic = function(filename) {
 	if (this.isSoundEnabled()) {
-		/* Automatically prefix with resource path. */
-		if (cc.loader.resPath && filename.indexOf("/") < 0) {
-			filename = cc.loader.resPath + "/" + filename;
+		/* cc.audioEngine is buggy in latest release */
+		if (!this.isHtml5()) {
+			cc.audioEngine.stopMusic();
+			cc.audioEngine.playMusic(filename, true);
 		}
-		cc.audioEngine.stopMusic();
-		cc.audioEngine.playMusic(filename, true);
 	}
 };
 

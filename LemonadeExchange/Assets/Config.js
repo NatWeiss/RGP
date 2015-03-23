@@ -34,25 +34,25 @@ Game.config = {
 /// An array of click sounds to be used when tapping the Hello World layer.
 ///
 	"click-sounds": [
-		"Assets/Drop1.wav",
-		"Assets/Drop2.wav",
-		"Assets/Drop3.wav"
+		"Drop1.wav",
+		"Drop2.wav",
+		"Drop3.wav"
 	],
 
 	"songs": [
-		{file: "Assets/3 Ragga C Jump Beat.mp3", bpm: 113, intro: 4.437},
-		{file: "Assets/2 Beat One.mp3", bpm: 120},
-		{file: "Assets/1 Island Mystery.mp3", bpm: 120, intro: 12.0}
+		{file: "3 Ragga C Jump Beat.mp3", bpm: 113, intro: 4.437},
+		{file: "2 Beat One.mp3", bpm: 120},
+		{file: "1 Island Mystery.mp3", bpm: 120, intro: 12.0}
 	],
 	
 	"bux-sounds": [
-		"Assets/Bux1.wav",
-		"Assets/Bux2.wav",
-		"Assets/Bux3.wav"
+		"Bux1.wav",
+		"Bux2.wav",
+		"Bux3.wav"
 	],
 
 	"glass-sounds": [
-		"Assets/Glass1.wav"
+		"Glass1.wav"
 	],
 
 	"anonymous-friends": [

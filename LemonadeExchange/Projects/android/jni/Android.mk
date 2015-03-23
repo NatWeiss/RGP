@@ -24,7 +24,7 @@ LOCAL_MODULE := cocos2djs_shared
 LOCAL_MODULE_FILENAME := libcocos2djs
 
 LOCAL_SRC_FILES := main.cpp \
-                   ../../AppDelegate.cpp
+                   ../../../AppDelegate.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../.. \
 				$(LOCAL_PATH)/../../../lib/cocos2d/x/include \
@@ -51,7 +51,8 @@ LOCAL_WHOLE_STATIC_LIBRARIES := libcocos2dx-prebuilt
 # begin pro
 LOCAL_WHOLE_STATIC_LIBRARIES += libcocos2dx-plugins
 # end pro
-LOCAL_WHOLE_STATIC_LIBRARIES += cocos_png_static cocos_jpeg_static cocos_tiff_static cocos_webp_static cocos_curl_static cocos_freetype2_static spidermonkey_static websockets_static
+LOCAL_WHOLE_STATIC_LIBRARIES += cocos_png_static cocos_jpeg_static cocos_tiff_static cocos_webp_static \
+	cocos_curl_static cocos_freetype2_static spidermonkey_static websockets_static cocos_chipmunk_static
 
 # cocos2d-x/cocos/2d/Android.mk
 LOCAL_CFLAGS   := -Wno-psabi -DUSE_FILE32API
@@ -68,24 +69,15 @@ LOCAL_LDLIBS := -lGLESv1_CM \
 	-lEGL \
 	-llog \
 	-lz \
+	-lOpenSLES \
 	-landroid
 
 include $(BUILD_SHARED_LIBRARY)
 
 
-#$(call import-module,2d)
 $(call import-module,audio/android)
 $(call import-module,bindings)
-$(call import-module,bindings/manual/chipmunk)
-$(call import-module,bindings/manual/extension)
-$(call import-module,bindings/manual/localstorage)
-$(call import-module,bindings/manual/network)
-$(call import-module,bindings/manual/cocosbuilder)
-$(call import-module,bindings/manual/ui)
-$(call import-module,bindings/manual/cocostudio)
-$(call import-module,bindings/manual/spine)
 # begin pro
-#$(call import-module,plugin/protocols/proj.android/jni) # bindings now include protocols
 $(call import-module,plugin/jsbindings)
 $(call import-module,cocos2dx-store/android/jni)
 $(call import-module,facebook/proj.android/jni)

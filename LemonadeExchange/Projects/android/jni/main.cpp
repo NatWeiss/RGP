@@ -4,7 +4,7 @@
 //  Developed by Nat Weiss.
 //
 
-#include "AppDelegate.h"
+#include "../../../AppDelegate.h"
 #include "cocos2d.h"
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>

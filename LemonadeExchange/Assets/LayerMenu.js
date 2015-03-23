@@ -192,7 +192,7 @@ var LayerMenu = (function(){
 			}
 			else if (tag == TAG_TOGGLE_SOUND) {
 				if (Game.isSoundEnabled()) {
-					Game.playEffect("Assets/music-stop.wav");
+					Game.playEffect("music-stop.wav");
 				}
 				Game.toggleSoundEnabled();
 				this.buttonSound.setVisible(Game.isSoundEnabled());
