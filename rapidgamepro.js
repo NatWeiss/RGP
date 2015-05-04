@@ -7,6 +7,7 @@
 //   - Mention how to use a manual download of cocos2d-js.
 //   - Fix Mac project name search and replace so names with spaces work.
 //   - Fix Mac temp dir if changed to relative to project
+//   - Why did `sudo npm unlink rapidgame -g; sudo npm link .` fix "Error: Cannot find module 'path-extra'"?
 //
 
 var http = require("http"),

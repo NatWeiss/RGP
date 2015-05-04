@@ -76,6 +76,7 @@ public:
      @param value Value to be sent, support float, int, Vec2/3/4, Mat4.
      */
     void setFloat(float value);
+    void setFloatArray(float* array, int count);
     void setInt(int value);
     void setVec2(const Vec2& value);
     void setVec3(const Vec3& value);
@@ -107,12 +108,14 @@ protected:
     GLProgram* _glprogram;
     /**Whether or not callback is used.*/
     bool _useCallback;
+    int _arrayCount;
     /**
      @name Uniform Value Uniform
      @{
      */
     union U{
         float floatValue;
+        float* floatArray;
         int intValue;
         float v2Value[2];
         float v3Value[3];
@@ -266,6 +269,7 @@ public:
      */
     void setUniformInt(const std::string &uniformName, int value);
     void setUniformFloat(const std::string &uniformName, float value);
+    void setUniformFloatArray(const std::string &uniformName, float* array, int count);
     void setUniformVec2(const std::string &uniformName, const Vec2& value);
     void setUniformVec3(const std::string &uniformName, const Vec3& value);
     void setUniformVec4(const std::string &uniformName, const Vec4& value);
@@ -280,6 +284,7 @@ public:
      */
     void setUniformInt(GLint uniformLocation, int value);
     void setUniformFloat(GLint uniformLocation, float value);
+    void setUniformFloatArray(GLint uniformLocation, float* array, int count);
     void setUniformVec2(GLint uniformLocation, const Vec2& value);
     void setUniformVec3(GLint uniformLocation, const Vec3& value);
     void setUniformVec4(GLint uniformLocation, const Vec4& value);
