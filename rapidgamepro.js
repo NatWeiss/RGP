@@ -4,7 +4,9 @@
 //  Developed by Nathanael Weiss.
 //
 //  To-do:
+//   - Mention how to use a manual download of cocos2d-js.
 //   - Fix Mac project name search and replace so names with spaces work.
+//   - Fix Mac temp dir if changed to relative to project
 //
 
 var http = require("http"),
@@ -1004,6 +1006,7 @@ var getVCBinDir = function() {
 			return names[i];
 		}
 	}
+	return "";
 };
 
 //
