@@ -1,3 +1,8 @@
+Version 1.0.0 - June 3, 2015
+
+	Fixed the Windows Twoscene cocos2dx project cpp file references.
+	Added instructions for upgrading RapidGamePro to the readme.
+
 Version 0.9.5 - March 15, 2015
 
 	Fixed another bug related to MSBuild path on Windows (thanks, Adam Yocum).

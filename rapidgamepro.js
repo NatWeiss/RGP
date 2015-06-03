@@ -1004,6 +1004,7 @@ var getVCBinDir = function() {
 			return names[i];
 		}
 	}
+	return "";
 };
 
 //
