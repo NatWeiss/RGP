@@ -15,7 +15,8 @@ JSObject* jsb_app_bindings_prototype;
 
 bool jsval_to_binary_data(JSContext *cx, jsval v, void** ret, uint32_t *byteLength)
 {
-	JSObject* obj = JSVAL_TO_OBJECT(v);
+    JSObject* obj = v.toObjectOrNull();
+	//JSObject* obj = JSVAL_TO_OBJECT(v);
 	JSB_PRECONDITION3(obj && JS_IsTypedArrayObject(obj), cx, false, "Not a TypedArray object");
 	
 	*ret = JS_GetUint8ClampedArrayData(obj) + JS_GetTypedArrayByteOffset(obj);
@@ -29,26 +30,26 @@ bool jsb_app_bindings_addImageRaw(JSContext *cx, uint32_t argc, jsval *vp)
 	const int numArgs = 2;
 	if (argc == numArgs)
 	{
+		JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
 		bool ok = true;
-		jsval* argv = JS_ARGV(cx, vp);
-		//JSObject* obj = JS_THIS_OBJECT(cx, vp);
+		JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
 		string arg0;
 		void* arg1;
 		uint32_t arg2;
-		ok &= jsval_to_std_string(cx, argv[0], &arg0);
+		ok &= jsval_to_std_string(cx, args.get(0), &arg0);
 		JSB_PRECONDITION2(ok && arg0.size(), cx, false, "Error processing arguments 1/2");
-		ok &= jsval_to_binary_data(cx, argv[1], &arg1, &arg2);
+		ok &= jsval_to_binary_data(cx, args.get(1), &arg1, &arg2);
 		JSB_PRECONDITION2(ok && arg1 && arg2, cx, false, "Error processing arguments 2/2");
 		
 		cocos2d::Texture2D* ret = AppBindings::addImageData(arg0.c_str(), arg1, arg2);
 		if (ret)
 		{
 			js_proxy_t *proxy = js_get_or_create_proxy<cocos2d::Texture2D>(cx, ret);
-			JS_SET_RVAL(cx, vp, OBJECT_TO_JSVAL(proxy->obj));
+			args.rval().setObjectOrNull(proxy->obj);
 		}
 		else
 		{
-			JS_SET_RVAL(cx, vp, JSVAL_NULL);
+			args.rval().setNull();
 		}
 		return true;
 	}
@@ -66,7 +67,7 @@ static bool empty_constructor(JSContext *cx, uint32_t argc, jsval *vp)
 	return false;
 }
 
-void register_jsb_app_bindings(JSContext *cx, JSObject *global)
+void register_jsb_app_bindings(JSContext *cx, JS::HandleObject global)
 {
 	cocos2d::log("SpiderMonkey version %s %s", JS_GetImplementationVersion(), JS_VersionToString(JS_GetVersion(cx)));
 
@@ -100,7 +101,7 @@ void register_jsb_app_bindings(JSContext *cx, JSObject *global)
 
 	jsb_app_bindings_prototype = JS_InitClass(
 		cx, global,
-		jsb_app_bindings_prototype,
+		JS::RootedObject(cx, jsb_app_bindings_prototype),
 		jsb_app_bindings_class,
 		empty_constructor, 0, // no constructor
 		properties,

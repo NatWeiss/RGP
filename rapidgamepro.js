@@ -675,7 +675,23 @@ var runPrebuild = function(platform, config, arch, callback) {
 			});
 		}
 	} else if (process.platform === "win32") {
-		prebuildWin(config, arch, callback);
+		if (platform === "android") {
+			prebuildAndroid(config, arch, function(){
+				callback();
+			});
+		}
+		else if (platform === "windows") {
+			prebuildWin(config, arch, function(){
+				callback();
+			});
+		}
+		else {
+			prebuildWin(config, arch, function(){
+				prebuildAndroid(config, arch, function(){
+					callback();
+				});
+			});
+		}
 	} else {
 		console.log("No prebuild command written for " + process.platform + " yet");
 	}
@@ -690,7 +706,7 @@ var prebuildMac = function(platform, config, arch, callback) {
 		configs = (config ? [config] : (cmd.minimal ? ["Debug"] : ["Debug", "Release"])),
 		projs = ["cocos2dx-prebuilt"];
 // begin pro
-	projs.push("cocos2dx-plugins");
+//	projs.push("cocos2dx-plugins");
 // end pro
 
 	// create builds array

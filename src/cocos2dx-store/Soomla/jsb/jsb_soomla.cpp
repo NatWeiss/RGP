@@ -7,7 +7,7 @@
 #include "jsb_soomla.h"
 #include "cocos2d.h"
 #include "cocos2d_specifics.hpp"
-
+/*
 #ifndef JSBool
 #define JSBool bool
 #define JS_TRUE (bool)1
@@ -122,23 +122,6 @@ void js_register(JSContext* cx, JSObject* global){
 //    JSBool found;
 //FIXME: Removed in Firefox v27	
 //    JS_SetPropertyAttributes(cx, global, "JSB", JSPROP_ENUMERATE | JSPROP_READONLY, &found);
-
-/*
-	// other bindings use something like the following:
-	
-	// add the proto and JSClass to the type->js info hash table
-	TypeTest<cocos2d::Touch> t;
-	js_type_class_t *p;
-	std::string typeName = t.s_name();
-	if (_js_global_type_map.find(typeName) == _js_global_type_map.end())
-	{
-		p = (js_type_class_t *)malloc(sizeof(js_type_class_t));
-		p->jsclass = jsb_cocos2d_Touch_class;
-		p->proto = jsb_cocos2d_Touch_prototype;
-		p->parentProto = NULL;
-		_js_global_type_map.insert(std::make_pair(typeName, p));
-	}
-*/
 }
 
 // Binding JSB namespace so in JavaScript code JSB namespce can be recognized
@@ -159,5 +142,5 @@ void register_jsb_soomla(JSContext *cx, JSObject *global){
     js_register(cx, global);
 
 }
-
+*/
 #endif // COCOS2D_JAVASCRIPT
