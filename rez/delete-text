@@ -1,0 +1,38 @@
+#!/usr/bin/php
+<?php
+
+$find = $argv[1];
+$file = $argv[2];
+$includeNewlines = ($argv[3] == "--newlines");
+$text = file_get_contents($file);
+
+if (strlen($find) <= 0 || strlen($text) <= 0)
+{
+	echo("Usage: delete-text 'some string' file [--newlines]\nExample: delete-text start ./my-text-file.txt --newlines\n");
+	exit(1);
+}
+echo("Deleting '$find' in $file\n");
+if ($includeNewlines)
+{
+	$find .= "\n";
+}
+
+$count = 0;
+do
+{
+	$startPos = strpos($text, $find);
+	if ($startPos === false)
+		break;
+	
+	$endPos = $startPos + strlen($find);
+
+	$text = substr($text, 0, $startPos) .
+		substr($text, $endPos);
+
+	$count++;
+} while(true);
+
+echo(($count == 0 ? "WARNING: " : "") . "Replaced $count occurences.\n");
+file_put_contents($file, $text);
+
+?>

@@ -1,0 +1,19 @@
+Steps Required to Get Cocos2d-js Working:
+
+Unpack cocos2d-js-alpha2
+Rename to cocos2d-js
+Unpack cocos2d-x-3.0 into cocos2d-js/frameworks/js-bindings/cocos2d-x
+Edit cocos/2d/ccConfig.h: #define CC_CONSTRUCTOR_ACCESS public
+Copy jsbindings dir from latest plugin-x (https://github.com/cocos2d-x/plugin-x/tree/develop) into cocos2d-x/plugin
+Comment a line in cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/jsbindings/Android.mk #$(call import-module,.)
+Replace all android-7 targets with android-10:
+	find . -name *.properties -print -exec sed -i "" 's/target=android-7/target=android-10/g' {} \;
+Fix cocos2d-js/frameworks/js-bindings/cocos2d-x/plugin/jsbindings/manual/jsb_pluginx_basic_conversions.cpp:
+	bool jsval_to_std_string(JSContext *cx, jsval v, std::string* ret) {
+	-    JSString *tmp = JS::ToString(cx, JS::RootedValue(cx, v));
+	+    JSString *tmp = JS_ValueToString(cx, JS::RootedValue(cx, v));
+Add AdsMobFox to cocos2d-html5/extensions/pluginx/protocols/PluginFactory.js:
+    ADS:["AdSense", "AdsMobFox"],
+    case plugin.PluginType.ADS[0]:
+    case plugin.PluginType.ADS[1]:
+Remove PluginJniHelper and use JniHelper instead
