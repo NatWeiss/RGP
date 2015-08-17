@@ -1,5 +1,15 @@
+RapidGamePro History
+====================
+
+**RapidGamePro is no longer maintained.**
+
+In early 2014, there was cocos2d-html5 and cocos2d-x. Seeing the need for an all-inclusive project that merged these two game engines and also added plugins for in-app purchases, advertisements, virtual economies, et cetera, RapidGamePro was created.
+
+RapidGamePro was originally a closed-source, for-profit project. It has now been made public and open-source in the event that one would like to continue its development. Either fork this repo or contact the author to discuss transferring ownership.
+
+
 RapidGamePro Setup
-==================
+------------------
 
 Here's some instructions to get RapidGamePro setup:
 
