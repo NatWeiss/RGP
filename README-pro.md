@@ -182,3 +182,48 @@ To build via the commandline:
 
 4. Tap to start the app on your device and watch your Terminal window for logcat output.
 
+
+
+How to Upgrade
+--------------
+
+Here are the steps a developer takes to upgrade RapidGamePro:
+
+* Move old `src/cocos2d-js` folder elsewhere
+* Copy latest `cocos2d-js` folder to `src`
+* Remove `samples`, `docs`, `templates` and `tools` folders
+* Execute: `find src/cocos2d-js -name ".gitmodules" -delete`
+* Execute: `git add --all && git commit -a && git push`
+* Open `src/cocos2d.patch` and manually apply the diff to the new cocos2d-js folder as needed
+* Execute: `git commit -a && git push`
+* Upgrade `package.json` version
+* Browse `cocos2d-x.org` for the latest cocos2d-js download URL
+* Upgrade `cocos2djsUrlMac` and `cocos2djsUrlWin` in `rapidgamepro.js`
+* Upgrade `src/downloaded.txt`
+* Execute: `git commit -a && git push`
+* Verify `rapidgamepro prebuild` succeeds for all platforms and fix any bugs or other code issues that have cropped up since cocos2d-js has been upgraded
+* Execute: `git commit -a && git push`
+* (Optional) Upgrade to the latest [Soomla cocos2dx-store](https://github.com/soomla/cocos2dx-store/), [Soomla cocos2dx-core](https://github.com/soomla/soomla-cocos2dx-core/), [Facebook SDK](https://github.com/facebook/facebook-ios-sdk), [Flurry SDK](https://github.com/flurry) and [Mobfox SDK](https://github.com/mobfox), then fix any new bugs or issues that have cropped up and `git commit -a && git push`
+* Create a new `src/cocos2d.patch` file:
+	* cd /tmp
+	* cp -r ~/path/to/cocos2d-js-latest .
+	* cd cocos2d-js-latest
+	* find . -name .gitignore -delete
+	* git init .
+	* git add *
+	* git commit -a
+	* cp -r ~/path/to/cocos2d-js-patched/* .
+	* git diff > patch
+	* git diff --staged --binary >> patch
+	* cp patch ~/path/to/rapidgamepro/src/cocos2d.patch
+* Execute: `git commit -a && git push`
+* Verify cocos2d-x and cocos2d-js TwoScene projects run and operate successfully on iOS, Mac, Android and Windows, fixing any bugs or other issues that have cropped up since the latest cocos2d-js upgrade
+* Execute: `git commit -a && git push`
+* Verify LemonadeExchange project runs and operates successfully on iOS, Mac, Android and Windows, fixing any bugs or other issues that have cropped up since the latest cocos2d-js upgrade
+* Execute: `git commit -a && git push`
+* Update Changelog
+* Execute: `git commit -a && git push`
+* Update documentation as needed
+* Execute: `git commit -a && git push`
+
+
