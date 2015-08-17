@@ -100,7 +100,7 @@ static void loadPlayerImageUrl(const string& playerId)
 {
 	jsval ret;
 	ScriptingCore::getInstance()->evalString("Game.scale(Game.config[\"social-plugin-profile-image-width\"]);", &ret);
-	int dim = JSVAL_TO_INT(ret);
+	int dim = ret.toInt32();//JSVAL_TO_INT(ret);
 	if (dim < 10)
 		dim = 120;
 

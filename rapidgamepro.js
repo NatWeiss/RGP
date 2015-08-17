@@ -4,7 +4,10 @@
 //  Developed by Nathanael Weiss.
 //
 //  To-do:
+//   - Mention how to use a manual download of cocos2d-js.
 //   - Fix Mac project name search and replace so names with spaces work.
+//   - Fix Mac temp dir if changed to relative to project
+//   - Why did `sudo npm unlink rapidgame -g; sudo npm link .` fix "Error: Cannot find module 'path-extra'"?
 //
 
 var http = require("http"),
@@ -20,8 +23,8 @@ var http = require("http"),
 	packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, "package.json"))),
 	cmdName = packageJson.name,
 	version = packageJson.version,
-	cocos2djsUrlMac = "http://cdn.cocos2d-x.org/cocos2d-js-v3.2.zip",
-	cocos2djsUrlWin = "http://cdn.cocos2d-x.org/cocos2d-js-v3.2.zip",
+	cocos2djsUrlMac = "http://cdn.cocos2d-x.org/cocos2d-js-v3.6.zip", // also, http://www.cocos2d-x.org/filedown/cocos2d-js-v3.6.zip
+	cocos2djsUrlWin = "http://cdn.cocos2d-x.org/cocos2d-js-v3.6.zip",
 	cocos2djsUrl = (process.platform === "darwin" ? cocos2djsUrlMac : cocos2djsUrlWin),
 	cocos2dDirGlob = "*ocos2d-js*",
 	category,
@@ -672,7 +675,23 @@ var runPrebuild = function(platform, config, arch, callback) {
 			});
 		}
 	} else if (process.platform === "win32") {
-		prebuildWin(config, arch, callback);
+		if (platform === "android") {
+			prebuildAndroid(config, arch, function(){
+				callback();
+			});
+		}
+		else if (platform === "windows") {
+			prebuildWin(config, arch, function(){
+				callback();
+			});
+		}
+		else {
+			prebuildWin(config, arch, function(){
+				prebuildAndroid(config, arch, function(){
+					callback();
+				});
+			});
+		}
 	} else {
 		console.log("No prebuild command written for " + process.platform + " yet");
 	}
@@ -687,7 +706,7 @@ var prebuildMac = function(platform, config, arch, callback) {
 		configs = (config ? [config] : (cmd.minimal ? ["Debug"] : ["Debug", "Release"])),
 		projs = ["cocos2dx-prebuilt"];
 // begin pro
-	projs.push("cocos2dx-plugins");
+//	projs.push("cocos2dx-plugins");
 // end pro
 
 	// create builds array
@@ -861,14 +880,15 @@ var startBuild = function(platform, callback, settings) {
 var linkWin = function(config, callback) {
 	var i, src,
 		jsbindings = path.join(cmd.prefix, "src", "cocos2d-js", "frameworks", "js-bindings"),
+		runtimeDir = path.join(cmd.prefix, "src", "cocos2d-js", "templates", "js-template-runtime", "runtime", "win32"),
 		libDirs = [
-			path.join(jsbindings, "cocos2d-x", "build", config + ".win32"),
-			path.join(jsbindings, "cocos2d-x", "cocos", "2d", config + ".win32"),
-			path.join(jsbindings, "bindings", "proj.win32", config + ".win32"),
-			path.join(jsbindings, "cocos2d-x", "cocos", "editor-support", "spine", "proj.win32", config + ".win32"),
-			path.join(jsbindings, "cocos2d-x", "external", "Box2D", "proj.win32", config + ".win32"),
-			path.join(jsbindings, "external", "spidermonkey", "prebuilt", "win32"),
-			path.join(jsbindings, "cocos2d-x", "external", "websockets", "prebuilt", "win32")
+			//path.join(jsbindings, "cocos2d-x", "build", config + ".win32"),
+			path.join(jsbindings, "cocos2d-x", "cocos", "2d", config + ".win32"), // libcocos2d.dll, glew32.dll, libcurl.dll, etc.
+			path.join(jsbindings, "bindings", "proj.win32", config + ".win32"), // libjsbindings.lib, sqlite3.dll, etc.
+			path.join(jsbindings, "cocos2d-x", "cocos", "editor-support", "spine", "proj.win32", config + ".win32"), // libSpine.lib
+			path.join(jsbindings, "cocos2d-x", "external", "Box2D", "proj.win32", config + ".win32"), // libbox2d.lib
+			path.join(jsbindings, "external", "spidermonkey", "prebuilt", "win32"), // mosjs-33.dll / .lib
+			path.join(jsbindings, "cocos2d-x", "external", "websockets", "prebuilt", "win32") // websockets.dll / .lib
 		],
 		options = {
 			cwd: cmd.prefix,
@@ -883,13 +903,13 @@ var linkWin = function(config, callback) {
 			'"/OUT:' + path.join(dest, "libcocos2dx-prebuilt.lib") + '"';
 
 	// copy dlls and finish creating command
+	copyGlobbed(runtimeDir, dest, "*.dll"); // first these because we want to overwrite libcocos2d.dll
 	wrench.mkdirSyncRecursive(dest);
 	for (i = 0; i < libDirs.length; i += 1) {
 		copyGlobbed(libDirs[i], dest, "*.dll");
 		//copyGlobbed(libDirs[i], dest, "*.pdb");
 		command += " " + path.join(libDirs[i], "*.lib");
 	}
-	copyGlobbed(path.join(cmd.prefix, "src", "cocos2d-js", "templates", "js-template-runtime", "runtime", "win32"), dest, "*.dll");
 
 	// execute
 	exec(command, options, function(err){

@@ -1,47 +1,25 @@
 RapidGame upgrade instructions:
 
-* Check in existing edits to RapidGamePro and RapidGame.
+* Check in existing edits to RapidGame.
 * Move old cocos2d-js folder out.
 * Copy new cocos2d-js folder in.
 * Remove samples, docs, templates, tools.
-* ???? find src/cocos2d-js -name ".gitmodules" -delete
+* ???? find src/cocos2d-x -name ".gitmodules" -delete
 * Git add --all and commit.
 * Apply existing cocos2d.patch manually to new cocos2d-js folder.
 * Check in.
-* Upgrade package.json version and cocos2djs URL in rapidgamepro.js AND src/downloaded.txt.
+* Upgrade package.json version and cocos2djs URL in rapidgame.js AND src/downloaded.txt.
 * Check in.
-* Verify rapidgamepro prebuild (sudo npm unlink rapidgamepro -g; cd ~/code/RapidGamePro; sudo npm link .).
+* Verify rapidgame prebuild (sudo npm unlink rapidgame -g; cd ~/code/RapidGame; sudo npm link .).
 * Verify TwoScene iOS, Mac, Android.
 * Check in any tweaks.
-* Build new patch file (see bottom of rapidgamepro.js).
+* Build new patch file (see bottom of rapidgame.js).
 * Check in new patch file.
-* make rg && cd ../releases/RapidGame && sudo npm uninstall rapidgamepro -g; sudo npm uninstall rapidgame -g; sudo npm install . -g && rapidgame prebuild
+* make rg && cd ../releases/RapidGame && sudo npm uninstall rapidgame -g; sudo npm uninstall rapidgame -g; sudo npm install . -g && rapidgame prebuild
 * Test on Windows
 * Update Changelog.
-* Check in any final edits to RapidGamePro and make rg.
+* Check in any final edits to RapidGame and make rg.
 * Commit and push new RapidGame, create release on Github.
 * Publish RapidGame using sudo npm publish .
 * Update docs (na rez/docco/docco.jst && scp -r ../releases/RapidGame/docs/* ssl.wizardfu.com:w/wizardfu.com/docs/rapidgame/)
 * Update SpriteDraggerX
-
-<script>
-var clicky_custom = clicky_custom || {};
-clicky_custom.osa_disable = 1;
-var f = Function(), clicky = { log: f, goal: f }, clicky_site_id = '100747598';
-(function(d, t) {
-var c = d.createElement(t), s = d.getElementsByTagName(t)[0];
-c.async = 1;
-c.src = '//static.getclicky.com/js';
-s.parentNode.insertBefore(c, s);
-})(document, 'script');
-</script>
-<noscript><img alt="" width="1" height="1" src="//in.getclicky.com/100747598ns.gif"/></noscript>
-
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-597335-5', 'auto');
-ga('send', 'pageview');
-</script>

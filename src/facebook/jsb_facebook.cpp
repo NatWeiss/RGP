@@ -60,7 +60,7 @@ template<class T> static bool real_constructor(JSContext *cx, uint32_t argc, jsv
 		}
 	} while (0);
 
-	JS_SET_RVAL(cx, vp, jsret);
+//	JS_SET_RVAL(cx, vp, jsret);
 	return true;
 }
 
@@ -77,13 +77,13 @@ bool js_facebook_init(JSContext* cx, uint32_t argc, jsval* vp)
 	{
 		bool ok = true;
 		__Dictionary* devInfoDict = nullptr;
-		ok &= jsval_to_ccdictionary(cx, JS_ARGV(cx, vp)[0], &devInfoDict);
+//		ok &= jsval_to_ccdictionary(cx, JS_ARGV(cx, vp)[0], &devInfoDict);
 		JSB_PRECONDITION2(ok && devInfoDict, cx, false, "Error processing arguments");
 		
 		map<string,string> devInfo;
 		dictionaryToMap(devInfoDict, devInfo);
 		getNativeObj<Facebook>(cx, vp)->init(devInfo);
-		JS_SET_RVAL(cx, vp, JSVAL_VOID);
+//		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -96,7 +96,7 @@ bool js_facebook_isLoggedIn(JSContext* cx, uint32_t argc, jsval* vp)
 	if (argc == numArgs)
 	{
 		bool ret = getNativeObj<Facebook>(cx, vp)->isLoggedIn();
-		JS_SET_RVAL(cx, vp, BOOLEAN_TO_JSVAL(ret));
+//		JS_SET_RVAL(cx, vp, BOOLEAN_TO_JSVAL(ret));
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -109,7 +109,7 @@ bool js_facebook_isCanvasMode(JSContext* cx, uint32_t argc, jsval* vp)
 	if (argc == numArgs)
 	{
 		bool ret = getNativeObj<Facebook>(cx, vp)->isCanvasMode();
-		JS_SET_RVAL(cx, vp, BOOLEAN_TO_JSVAL(ret));
+//		JS_SET_RVAL(cx, vp, BOOLEAN_TO_JSVAL(ret));
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -121,9 +121,9 @@ bool js_facebook_setDebugMode(JSContext* cx, uint32_t argc, jsval* vp)
 	const int numArgs = 1;
 	if (argc == numArgs)
 	{
-		bool enabled = JSVAL_TO_BOOLEAN(JS_ARGV(cx, vp)[0]);
-		getNativeObj<Facebook>(cx, vp)->setDebugMode(enabled);
-		JS_SET_RVAL(cx, vp, JSVAL_VOID);
+//		bool enabled = JSVAL_TO_BOOLEAN(JS_ARGV(cx, vp)[0]);
+//		getNativeObj<Facebook>(cx, vp)->setDebugMode(enabled);
+//		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -136,11 +136,11 @@ bool js_facebook_login(JSContext* cx, uint32_t argc, jsval* vp)
 	if (argc <= numArgs)
 	{
 		string str;
-		if (argc > 0)
-			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
+//		if (argc > 0)
+//			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
 		
 		getNativeObj<Facebook>(cx, vp)->login(str);
-		JS_SET_RVAL(cx, vp, JSVAL_VOID);
+//		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -153,7 +153,7 @@ bool js_facebook_logout(JSContext* cx, uint32_t argc, jsval* vp)
 	if (argc == numArgs)
 	{
 		getNativeObj<Facebook>(cx, vp)->logout();
-		JS_SET_RVAL(cx, vp, JSVAL_VOID);
+//		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -166,11 +166,11 @@ bool js_facebook_requestPublishPermissions(JSContext* cx, uint32_t argc, jsval* 
 	if (argc <= numArgs)
 	{
 		string str;
-		if (argc > 0)
-			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
+//		if (argc > 0)
+//			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
 		
 		getNativeObj<Facebook>(cx, vp)->requestPublishPermissions(str);
-		JS_SET_RVAL(cx, vp, JSVAL_VOID);
+//		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -183,10 +183,10 @@ bool js_facebook_getPlayerName(JSContext* cx, uint32_t argc, jsval* vp)
 	if (argc <= numArgs)
 	{
 		string str;
-		if (argc > 0)
-			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
+//		if (argc > 0)
+//			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
 		auto& ret = getNativeObj<Facebook>(cx, vp)->getPlayerName(str);
-		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
+//		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -199,10 +199,10 @@ bool js_facebook_getPlayerFirstName(JSContext* cx, uint32_t argc, jsval* vp)
 	if (argc <= numArgs)
 	{
 		string str;
-		if (argc > 0)
-			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
+//		if (argc > 0)
+//			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
 		auto& ret = getNativeObj<Facebook>(cx, vp)->getPlayerFirstName(str);
-		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
+//		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -215,10 +215,10 @@ bool js_facebook_getPlayerImageUrl(JSContext* cx, uint32_t argc, jsval* vp)
 	if (argc <= numArgs)
 	{
 		string str;
-		if (argc > 0)
-			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
+//		if (argc > 0)
+//			jsval_to_std_string(cx, JS_ARGV(cx, vp)[0], &str);
 		auto& ret = getNativeObj<Facebook>(cx, vp)->getPlayerImageUrl(str);
-		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
+//		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting 0-%d", __func__, argc, numArgs);
@@ -230,8 +230,8 @@ bool js_facebook_getRandomFriendId(JSContext* cx, uint32_t argc, jsval* vp)
 	const int numArgs = 0;
 	if (argc == numArgs)
 	{
-		auto& ret = getNativeObj<Facebook>(cx, vp)->getRandomFriendId();
-		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
+//		auto& ret = getNativeObj<Facebook>(cx, vp)->getRandomFriendId();
+//		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -245,13 +245,13 @@ bool js_facebook_showUI(JSContext* cx, uint32_t argc, jsval* vp)
 	{
 		bool ok = true;
 		__Dictionary* infoDict = nullptr;
-		ok &= jsval_to_ccdictionary(cx, JS_ARGV(cx, vp)[0], &infoDict);
+//		ok &= jsval_to_ccdictionary(cx, JS_ARGV(cx, vp)[0], &infoDict);
 		JSB_PRECONDITION2(ok && infoDict, cx, false, "Error processing arguments");
 		
 		map<string,string> info;
 		dictionaryToMap(infoDict, info);
 		getNativeObj<Facebook>(cx, vp)->showUI(info);
-		JS_SET_RVAL(cx, vp, JSVAL_VOID);
+//		JS_SET_RVAL(cx, vp, JSVAL_VOID);
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -264,7 +264,7 @@ bool js_facebook_getSDKVersion(JSContext* cx, uint32_t argc, jsval* vp)
 	if (argc == numArgs)
 	{
 		string ret = getNativeObj<Facebook>(cx, vp)->getSDKVersion();
-		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
+//		JS_SET_RVAL(cx, vp, std_string_to_jsval(cx, ret));
 		return true;
 	}
 	JS_ReportError(cx, "%s: Wrong number of arguments: %d, was expecting %d", __func__, argc, numArgs);
@@ -278,6 +278,7 @@ void js_facebook_finalize(JSFreeOp* fop, JSObject* obj)
 
 void js_facebook_register(JSContext* cx, JSObject* global)
 {
+/*
 	jsb_facebook_class = (JSClass *)calloc(1, sizeof(JSClass));
 	jsb_facebook_class->name = "Facebook";
 	jsb_facebook_class->addProperty = JS_PropertyStub;
@@ -346,22 +347,23 @@ void js_facebook_register(JSContext* cx, JSObject* global)
 		p->parentProto = NULL;
 		_js_global_type_map.insert(std::make_pair(typeName, p));
 	}
+*/
 }
 
 void register_jsb_facebook(JSContext* cx, JSObject* global)
 {
 	JS::RootedValue nsval(cx);
 	JSObject* ns;
-	JS_GetProperty(cx, global, "plugin", &nsval);
+//	JS_GetProperty(cx, global, "plugin", &nsval);
 
 	if (nsval == JSVAL_VOID) {
-		ns = JS_NewObject(cx, NULL, NULL, NULL);
-		nsval = OBJECT_TO_JSVAL(ns);
-		JS_SetProperty(cx, global, "plugin", nsval);
+//		ns = JS_NewObject(cx, NULL, NULL, NULL);
+//		nsval = OBJECT_TO_JSVAL(ns);
+//		JS_SetProperty(cx, global, "plugin", nsval);
 	}
 	else
 	{
-		ns = JSVAL_TO_OBJECT(nsval);
+//		ns = JSVAL_TO_OBJECT(nsval);
 	}
 	global = ns;
 

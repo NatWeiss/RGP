@@ -52,7 +52,8 @@ LOCAL_WHOLE_STATIC_LIBRARIES := libcocos2dx-prebuilt
 LOCAL_WHOLE_STATIC_LIBRARIES += libcocos2dx-plugins
 # end pro
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_png_static cocos_jpeg_static cocos_tiff_static cocos_webp_static \
-	cocos_curl_static cocos_freetype2_static spidermonkey_static websockets_static cocos_chipmunk_static
+	cocos_curl_static cocos_freetype2_static spidermonkey_static websockets_static cocos_chipmunk_static \
+	cocos_zlib_static
 
 # cocos2d-x/cocos/2d/Android.mk
 LOCAL_CFLAGS   := -Wno-psabi -DUSE_FILE32API
