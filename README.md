@@ -237,3 +237,14 @@ Here are the steps a developer takes to upgrade RapidGamePro:
 * Execute: `git commit -a && git push`
 
 
+How to Integrate Additional Plugins
+-----------------------------------
+
+Here are instructions on how a developer would integrate additional plugins / modules / SDKs:
+
+1. Download the SDK and unpack it into the `src/` folder.
+2. Create separate iOS and Android projects which build the SDK, using the SDK's readmes as a guide. (See `src/facebook/proj.ios` and `src/facebook/proj.android` for examples.)
+3. Design an interface for the javascript bindings based on needed methods, then implement the javascript bindings. (See `src/facebook/jsb_facebook.*`.)
+4. Add the iOS project to `src/proj.ios_mac/cocos2dx-plugins.xcodeproj`.
+5. Add the Android project to `src/proj.android/`. (See `jni/Android.mk` and reference lines between "# begin pro" and "# end pro".
+
